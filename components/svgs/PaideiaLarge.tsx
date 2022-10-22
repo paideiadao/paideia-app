@@ -1,0 +1,45 @@
+const PaideiaLarge = () => {
+  return (
+    <svg
+      width="73"
+      height="109"
+      viewBox="0 0 73 109"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        y="0.288086"
+        width="15.991"
+        height="72.3072"
+        rx="0.5"
+        fill="white"
+      />
+      <rect
+        x="57.0088"
+        y="35.7432"
+        width="15.991"
+        height="72.3072"
+        rx="0.5"
+        fill="white"
+      />
+      <rect
+        x="28.506"
+        y="0.288086"
+        width="15.991"
+        height="43.8014"
+        rx="0.5"
+        fill="white"
+      />
+      <rect
+        x="28.506"
+        y="64.2488"
+        width="15.991"
+        height="43.8014"
+        rx="0.5"
+        fill="white"
+      />
+    </svg>
+  );
+};
+
+export default PaideiaLarge;
