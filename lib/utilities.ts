@@ -12,6 +12,17 @@ const statusLookup: IObj<number> = {
   DELETE: 204,
 };
 
+export const getObj = (lst: any[], id_field: string, id: any): any => {
+  try {
+    let index = lst.map((item: any) => item[id_field]).indexOf(id);
+    return index > -1 ? lst[index] : undefined;
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
+};
+
+
 export const getUserId = () => {
   return parseInt(localStorage.getItem("user_id"));
 };

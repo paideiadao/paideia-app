@@ -28,6 +28,8 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { isAddressValid } from "@components/wallet/AddWallet";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import { getObj } from "@lib/utilities";
 
 const BasicLink: React.FC<{
   icon: JSX.Element;
@@ -40,48 +42,30 @@ const BasicLink: React.FC<{
 }> = (props) => {
   const router = useRouter();
   const { id } = router.query;
+  const {currentDao} = useDaoSlugs()
+  
+  console.log(currentDao)
   let linkLookup = {
-    Dashboard: id === undefined ? `/dao` : `/dao/${id}`,
-    All: id === undefined ? `/dao/proposals/` : `/dao/${id}/proposals/`,
-    Following:
-      id === undefined
-        ? `/dao/proposals/following`
-        : `/dao/${id}/proposals/following`,
-    Mine:
-      id === undefined ? `/dao/proposals/mine` : `/dao/${id}/proposals/mine`,
+    Dashboard: currentDao ? `/${currentDao.dao_name}` : '',
+    All: currentDao ? `/${currentDao.dao_name}/proposals` : '',
+    Following: currentDao ? `/${currentDao.dao_name}/proposals/following` : '',
+    Mine: currentDao ? `/${currentDao.dao_name}/proposals/mine` : '',
     Past:
-      id === undefined ? `/dao/proposals/past` : `/dao/${id}/proposals/past`,
-    Treasury:
-      id === undefined
-        ? `/dao/financials/treasury`
-        : `/dao/${id}/financials/treasury`,
-    Tokenomics:
-      id === undefined
-        ? `/dao/financials/tokenomics`
-        : `/dao/${id}/financials/tokenomics`,
-    Recurring:
-      id === undefined
-        ? `/dao/financials/recurring`
-        : `/dao/${id}/financials/recurring`,
-    Token:
-      id === undefined
-        ? `/dao/financials/token`
-        : `/dao/${id}/financials/token`,
-    Distributions: "",
+    currentDao ? `/${currentDao.dao_name}/proposals/past` : '',
+    Treasury: currentDao ? `/${currentDao.dao_name}/financials/treasury` : '',
+    Tokenomics: currentDao ? `/${currentDao.dao_name}/financials/tokenomics` : '',
+    Recurring: currentDao ? `/${currentDao.dao_name}/financials/recurring` : '',
+    Token: currentDao ? `/${currentDao.dao_name}/financials/token` : '',
+    Distributions: currentDao ? `/${currentDao.dao_name}/financials/distributions` : '',
     //id === undefined ? `/dao/distributions` : `/dao/${id}/distributions`,
-    Staking: id === undefined ? `/dao/staking` : `/dao/${id}/staking`,
-    Members: id === undefined ? `/dao/members` : `/dao/${id}/members`,
-    Activity: id === undefined ? `/dao/activity` : `/dao/${id}/activity`,
-    "Edit profile":
-      id === undefined ? `/dao/profile/edit` : `/dao/${id}/profile/edit`,
-    Notifications:
-      id === undefined
-        ? `/dao/notifications/edit`
-        : `/dao/${id}/notifications/edit`,
-    Wallet: id === undefined ? `/dao/wallet` : `/dao/${id}/wallet`,
+    Staking: currentDao ? `/${currentDao.dao_name}/staking` : '',
+    Members: currentDao ? `/${currentDao.dao_name}/members` : '',
+    Activity: currentDao ? `/${currentDao.dao_name}/activity` : '',
+    "Edit profile": currentDao ? `/${currentDao.dao_name}/profile/edit` : '',
+    Notifications: currentDao ? `/${currentDao.dao_name}/notifications/edit` : '',
+    Wallet: currentDao ? `/${currentDao.dao_name}/wallet` : '',
 
-    "DAO Config":
-      id === undefined ? `/dao/dao-config` : `/dao/${id}/dao-config`,
+    "DAO Config": currentDao ? `/${currentDao.dao_name}/dao-config` : '',
   };
   return (
     <Link href={linkLookup[props.title as keyof typeof linkLookup]}>
