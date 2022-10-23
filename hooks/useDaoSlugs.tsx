@@ -1,46 +1,36 @@
-import { useMemo } from 'react';
-import useSWR from 'swr';
-import { axiosGetFetcher } from '@utils/axios';
-import { isTemplateLiteral } from 'typescript';
-import { getObj } from '@lib/utilities';
-import React from 'react';
-
-interface IDao {
-  id: number,
-  dao_name: string,
-  dao_short_description: string,
-  dao_url: string
-}
+import { useMemo } from "react";
+import useSWR from "swr";
+import { axiosGetFetcher } from "@utils/axios";
+import { getObj } from "@lib/utilities";
 
 export const useDaoSlugs = () => {
-  console.log(`${process.env.API_URL}/dao`)
-  const { data, error } = useSWR(`${process.env.API_URL}/dao`, axiosGetFetcher)
-  const [currentDao, setCurrentDao] = React.useState<IDao>(undefined)
+  const { data, error } = useSWR(
+    `${process.env.API_URL}/dao/`,
+    axiosGetFetcher
+  );
 
   const daoSlugsObject: any = useMemo(() => {
     if (data) {
-      let object = {}
-      data.map((item: any) => (
-        object = {...object, [item?.dao_url]: item?.id}
-      ))
-      
-      return object
+      let object = {};
+      data.map(
+        (item: any) => (object = { ...object, [item?.dao_url]: item?.id })
+      );
+
+      return object;
     } else {
       return [];
     }
-  }, [data])
-
-  React.useEffect(() => {
-    setCurrentDao(getObj(data, 'id', daoSlugsObject ? daoSlugsObject.dao : undefined))
-  }, [daoSlugsObject])
-
-  console.log('currentDaoState', currentDao, data)
+  }, [data]);
 
   return {
     daoSlugs: data,
     daoSlugsObject,
     daoSlugsIsLoading: !error && !data,
     daoSlugsIsError: error,
-    currentDao: currentDao, 
-  }
-}
+    currentDao: getObj(
+      data,
+      "id",
+      daoSlugsObject ? daoSlugsObject.dao : undefined
+    ),
+  };
+};

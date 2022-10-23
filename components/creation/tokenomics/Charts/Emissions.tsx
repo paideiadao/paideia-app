@@ -86,7 +86,7 @@ const getDistributedTokens = (
     data.frequency === "daily"
       ? (lengthInDays + currDay) / (totalDays + lengthInDays)
       : Math.round((lengthInDays + currDay) / temp) /
-      Math.round((totalDays + lengthInDays) / temp);
+        Math.round((totalDays + lengthInDays) / temp);
   return conversion >= 1
     ? data.balance
     : initial + (data.balance - initial) * conversion;
@@ -140,28 +140,28 @@ const getChartData = (data: any) => {
           longestEmission === undefined
             ? []
             : [...Array.from(Array(longestEmission + minDate + 1).keys())]
-              .filter(
-                (z: number) =>
-                  z %
-                  frequencyLookup[
-                  highestFrequency as keyof typeof frequencyLookup
-                  ] ===
-                  0
-              )
-              .map((j: any, c: number) => {
-                let temp = new Date();
-                temp.setDate(temp.getDate() + j);
-                return {
-                  x: new Date(temp),
-                  y: getDistributedTokens(
-                    i,
-                    initialAmt,
-                    minDate,
-                    j,
-                    totalDays
-                  ),
-                };
-              }),
+                .filter(
+                  (z: number) =>
+                    z %
+                      frequencyLookup[
+                        highestFrequency as keyof typeof frequencyLookup
+                      ] ===
+                    0
+                )
+                .map((j: any, c: number) => {
+                  let temp = new Date();
+                  temp.setDate(temp.getDate() + j);
+                  return {
+                    x: new Date(temp),
+                    y: getDistributedTokens(
+                      i,
+                      initialAmt,
+                      minDate,
+                      j,
+                      totalDays
+                    ),
+                  };
+                }),
       };
     });
 
@@ -169,34 +169,34 @@ const getChartData = (data: any) => {
     data.length === 0
       ? []
       : data
-        .filter((i: any) => i.vesting === undefined || !i.vesting)
-        .map((i: any, c: number) => {
-          let longestPeriod =
-            vestingData.length === 0 ? 10 : longestEmission + minDate;
+          .filter((i: any) => i.vesting === undefined || !i.vesting)
+          .map((i: any, c: number) => {
+            let longestPeriod =
+              vestingData.length === 0 ? 10 : longestEmission + minDate;
 
-          return {
-            id: i.distributionName,
-            color: colorLookup[c + vestingData.length],
-            label: i.distributionName,
-            data: [...Array.from(Array(longestPeriod + 1).keys())]
-              .filter(
-                (z: number) =>
-                  z %
-                  frequencyLookup[
-                  highestFrequency as keyof typeof frequencyLookup
-                  ] ===
-                  0
-              )
-              .map((j: any, c: number) => {
-                let temp = new Date();
-                temp.setDate(temp.getDate() + j);
-                return {
-                  x: new Date(temp),
-                  y: i.balance,
-                };
-              }),
-          };
-        });
+            return {
+              id: i.distributionName,
+              color: colorLookup[c + vestingData.length],
+              label: i.distributionName,
+              data: [...Array.from(Array(longestPeriod + 1).keys())]
+                .filter(
+                  (z: number) =>
+                    z %
+                      frequencyLookup[
+                        highestFrequency as keyof typeof frequencyLookup
+                      ] ===
+                    0
+                )
+                .map((j: any, c: number) => {
+                  let temp = new Date();
+                  temp.setDate(temp.getDate() + j);
+                  return {
+                    x: new Date(temp),
+                    y: i.balance,
+                  };
+                }),
+            };
+          });
 
   return nonVestingData.concat(vestingData);
 };

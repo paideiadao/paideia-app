@@ -14,7 +14,7 @@ import {
   MenuItem,
   Select,
   TextField,
-  Collapse
+  Collapse,
 } from "@mui/material";
 import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
 import AddIcon from "@mui/icons-material/Add";

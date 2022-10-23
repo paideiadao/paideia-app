@@ -327,7 +327,9 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
             </Grid>
           ))}
         </Grid>
-        <Button disabled variant="contained">Load more...</Button>
+        <Button disabled variant="contained">
+          Load more...
+        </Button>
       </Grid>
     </Grid>
   );

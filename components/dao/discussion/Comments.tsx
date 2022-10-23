@@ -6,7 +6,7 @@ import {
   IconButton,
   InputBase,
   Paper,
-  Typography
+  Typography,
 } from "@mui/material";
 import * as React from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -204,138 +204,140 @@ const BaseComment: React.FC<{
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   if (props.comment != undefined) {
-  const children = props.data.filter(
-    (i: IComment) => i?.parent === props.comment.id
-  );
-  const level = props.level;
-  const [show, setShow] = React.useState<boolean>(true);
-  const [reply, setReply] = React.useState<boolean>(false);
-  
-  return (
-    <>
-      <Box
-        sx={{
-          width: "100%",
-          mt: "1rem",
-          pl: props.level === undefined ? 0 : `${0.45}rem`,
-          fontSize: ".9rem",
-        }}
-      >
+    const children = props.data.filter(
+      (i: IComment) => i?.parent === props.comment.id
+    );
+    const level = props.level;
+    const [show, setShow] = React.useState<boolean>(true);
+    const [reply, setReply] = React.useState<boolean>(false);
+
+    return (
+      <>
         <Box
           sx={{
             width: "100%",
-            display: "flex",
-            // mr: ".5rem",
-            alignItems: deviceWrapper("center", "center"),
+            mt: "1rem",
+            pl: props.level === undefined ? 0 : `${0.45}rem`,
+            fontSize: ".9rem",
           }}
         >
-          {!show && (
-            <IconButton size="small" onClick={() => setShow(true)}>
-              <OpenInFullIcon />
-            </IconButton>
-          )}
           <Box
             sx={{
-              width: deviceWrapper("12%", "7%"),
+              width: "100%",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              flexDirection: "column",
+              // mr: ".5rem",
+              alignItems: deviceWrapper("center", "center"),
             }}
           >
-            <Avatar
-              src={props.comment.profile_img_url}
+            {!show && (
+              <IconButton size="small" onClick={() => setShow(true)}>
+                <OpenInFullIcon />
+              </IconButton>
+            )}
+            <Box
               sx={{
-                width: deviceWrapper("1.75rem", "2.25rem"),
-                height: deviceWrapper("1.75rem", "2.25rem"),
+                width: deviceWrapper("12%", "7%"),
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                flexDirection: "column",
               }}
-            />
-          </Box>
-          <Box sx={{ display: deviceWrapper("block", "none") }}>
+            >
+              <Avatar
+                src={props.comment.profile_img_url}
+                sx={{
+                  width: deviceWrapper("1.75rem", "2.25rem"),
+                  height: deviceWrapper("1.75rem", "2.25rem"),
+                }}
+              />
+            </Box>
+            <Box sx={{ display: deviceWrapper("block", "none") }}>
+              <Box
+                sx={{
+                  alignItems: "center",
+                  fontSize: deviceWrapper(".7rem", "9rem"),
+                }}
+              >
+                {props.comment.alias.length > 14
+                  ? "skeeep"
+                  : props.comment.alias}
+              </Box>
+              <Box
+                sx={{
+                  ml: "auto",
+                  color: "text.secondary",
+                  fontSize: deviceWrapper(".7rem", "9rem"),
+                }}
+              >
+                {dateFormat(props.comment.date, "mmmm dS, yyyy @ h:MM TT")}
+              </Box>
+            </Box>
             <Box
               sx={{
                 alignItems: "center",
-                fontSize: deviceWrapper(".7rem", "9rem"),
+                display: deviceWrapper("none", "flex"),
+                fontSize: "1rem",
               }}
             >
-              {props.comment.alias.length > 14 ? "skeeep" : props.comment.alias}
+              {props.comment.alias.length > 30
+                ? props.comment.alias.slice(0, 15) +
+                  "....." +
+                  props.comment.alias.slice(-15)
+                : props.comment.alias}
             </Box>
             <Box
               sx={{
                 ml: "auto",
                 color: "text.secondary",
-                fontSize: deviceWrapper(".7rem", "9rem"),
+                display: deviceWrapper("none", "flex"),
               }}
             >
               {dateFormat(props.comment.date, "mmmm dS, yyyy @ h:MM TT")}
             </Box>
           </Box>
-          <Box
-            sx={{
-              alignItems: "center",
-              display: deviceWrapper("none", "flex"),
-              fontSize: "1rem",
-            }}
-          >
-            {props.comment.alias.length > 30
-              ? props.comment.alias.slice(0, 15) +
-                "....." +
-                props.comment.alias.slice(-15)
-              : props.comment.alias}
-          </Box>
-          <Box
-            sx={{
-              ml: "auto",
-              color: "text.secondary",
-              display: deviceWrapper("none", "flex"),
-            }}
-          >
-            {dateFormat(props.comment.date, "mmmm dS, yyyy @ h:MM TT")}
-          </Box>
-        </Box>
-        {show && (
-          <Box
-            sx={{
-              width: "100%",
-              mr: ".5rem",
-              display: "flex",
-              alignContent: "stretch",
-              alignItems: "stretch",
-            }}
-          >
-            {children.length > 0 && show && (
-              <Box
-                sx={{
-                  width: ".4%",
-                  ml: "1rem",
-                  backgroundColor: "border.main",
-                  ":hover": {
-                    backgroundColor: "primary.lightOpacity",
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={() => setShow(false)}
-              ></Box>
-            )}
-            <Box sx={{ width: "99.6%" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: deviceWrapper("96%", "98.5%"),
-                  flexDirection: "column",
-                  fontSize: deviceWrapper(".8rem", "1rem"),
-                  borderColor: "border.main",
-                  ml: ".5rem",
-                  mr: 0,
-                  mt: ".25rem",
-                }}
-              >
-                {props.comment.comment}
+          {show && (
+            <Box
+              sx={{
+                width: "100%",
+                mr: ".5rem",
+                display: "flex",
+                alignContent: "stretch",
+                alignItems: "stretch",
+              }}
+            >
+              {children.length > 0 && show && (
                 <Box
-                  sx={{ display: "flex", width: "100%", mt: ".5rem", pr: 0 }}
+                  sx={{
+                    width: ".4%",
+                    ml: "1rem",
+                    backgroundColor: "border.main",
+                    ":hover": {
+                      backgroundColor: "primary.lightOpacity",
+                      cursor: "pointer",
+                    },
+                  }}
+                  onClick={() => setShow(false)}
+                ></Box>
+              )}
+              <Box sx={{ width: "99.6%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: deviceWrapper("96%", "98.5%"),
+                    flexDirection: "column",
+                    fontSize: deviceWrapper(".8rem", "1rem"),
+                    borderColor: "border.main",
+                    ml: ".5rem",
+                    mr: 0,
+                    mt: ".25rem",
+                  }}
                 >
-                  {/* {children.length > 0 && !show && (
+                  {props.comment.comment}
+                  <Box
+                    sx={{ display: "flex", width: "100%", mt: ".5rem", pr: 0 }}
+                  >
+                    {/* {children.length > 0 && !show && (
                 <Button
                   onClick={() => setShow(true)}
                   size="small"
@@ -353,65 +355,64 @@ const BaseComment: React.FC<{
                   {children.length === 1 ? "reply" : "replies"}
                 </Button>
               )} */}
-                  {!reply && (
-                    <Button
-                      onClick={() => setReply(true)}
-                      size="small"
-                      variant="text"
-                    >
-                      Reply
-                    </Button>
-                  )}
-                  <Box sx={{ ml: "auto" }}>
-                    <LikesDislikes
-                      likes={props.comment.likes.length}
-                      dislikes={props.comment.dislikes.length}
-                      userSide={getUserSide(
-                        props.comment.likes,
-                        props.comment.dislikes,
-                        globalContext.api.daoUserData == null
-                          ? null
-                          : globalContext.api.daoUserData.id
-                      )}
-                      putUrl={`/proposals/comment/like/${props.comment.id}`}
-                    />
+                    {!reply && (
+                      <Button
+                        onClick={() => setReply(true)}
+                        size="small"
+                        variant="text"
+                      >
+                        Reply
+                      </Button>
+                    )}
+                    <Box sx={{ ml: "auto" }}>
+                      <LikesDislikes
+                        likes={props.comment.likes.length}
+                        dislikes={props.comment.dislikes.length}
+                        userSide={getUserSide(
+                          props.comment.likes,
+                          props.comment.dislikes,
+                          globalContext.api.daoUserData == null
+                            ? null
+                            : globalContext.api.daoUserData.id
+                        )}
+                        putUrl={`/proposals/comment/like/${props.comment.id}`}
+                      />
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-              {reply && (
-                <CommentInput
-                  parent={props.comment.id}
-                  length={props.data.length}
-                  set={(newComment: IComment) => {
-                    props.set(newComment);
-                    setShow(true);
-                    setReply(false);
-                  }}
-                  level={level === undefined ? 1 : level + 1}
-                />
-              )}
-              <Box>
-                {children.length >= 0 &&
-                  show &&
-                  children.map((i: IComment) => (
-                    <BaseComment
-                      key={`child-comment-${i.id}-${props.comment.id}`}
-                      comment={i}
-                      data={props.data}
-                      level={level === undefined ? 1 : level + 1}
-                      set={props.set}
-                    />
-                  ))}
+                {reply && (
+                  <CommentInput
+                    parent={props.comment.id}
+                    length={props.data.length}
+                    set={(newComment: IComment) => {
+                      props.set(newComment);
+                      setShow(true);
+                      setReply(false);
+                    }}
+                    level={level === undefined ? 1 : level + 1}
+                  />
+                )}
+                <Box>
+                  {children.length >= 0 &&
+                    show &&
+                    children.map((i: IComment) => (
+                      <BaseComment
+                        key={`child-comment-${i.id}-${props.comment.id}`}
+                        comment={i}
+                        data={props.data}
+                        level={level === undefined ? 1 : level + 1}
+                        set={props.set}
+                      />
+                    ))}
+                </Box>
               </Box>
             </Box>
-          </Box>
-        )}
-      </Box>
-    </>
+          )}
+        </Box>
+      </>
     );
-  }
-  else {
-    return (<Typography>Comment not found</Typography>)
+  } else {
+    return <Typography>Comment not found</Typography>;
   }
 };
 

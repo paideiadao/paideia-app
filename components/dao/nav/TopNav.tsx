@@ -68,7 +68,7 @@ const TopNav: React.FC<INav> = (props) => {
             display: "flex",
             alignItems: "center",
             height: "2rem",
-            mr: '.5rem'
+            mr: ".5rem",
           }}
         >
           {/* <DarkSwitch /> */}

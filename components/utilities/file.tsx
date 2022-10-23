@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Avatar, Box, Button, Paper, Input, FormControl } from "@mui/material";
 import { bytesToSize } from "../../lib/creation/Utilities";
 import ImagePlaceholder from "../../public/images/image-placeholder.png";
@@ -11,29 +11,29 @@ const FileInput: React.FC<{
   fileUrl: string;
   banner?: boolean;
 }> = (props) => {
-  const [dropHover, setDropHover] = useState('fileInput.outer')
+  const [dropHover, setDropHover] = useState("fileInput.outer");
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setDropHover('fileInput.main')
+    setDropHover("fileInput.main");
     e.stopPropagation();
   };
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setDropHover('fileInput.outer')
+    setDropHover("fileInput.outer");
     e.stopPropagation();
   };
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(e.dataTransfer.files)
+    console.log(e.dataTransfer.files);
     const object = {
       currentTarget: {
-        files: e.dataTransfer.files
-      }
-    }
-    props.handleImage(object)
-    setDropHover('fileInput.outer')
+        files: e.dataTransfer.files,
+      },
+    };
+    props.handleImage(object);
+    setDropHover("fileInput.outer");
     e.stopPropagation();
-  }
+  };
   return (
     <Paper
       elevation={0}
@@ -53,22 +53,22 @@ const FileInput: React.FC<{
           borderColor: "fileInput.border",
           height: "8rem",
           display: "block",
-          position: 'relative',
+          position: "relative",
         }}
       >
         <FormControl
           sx={{
-            width: '100%',
+            width: "100%",
             height: "100%",
-            position: 'absolute',
-            display: 'flex',
-            '&:hover': {
-              cursor: 'pointer',
-            }
+            position: "absolute",
+            display: "flex",
+            "&:hover": {
+              cursor: "pointer",
+            },
           }}
-          onDragEnter={e => handleDragEnter(e)}
-          onDragLeave={e => handleDragLeave(e)}
-          onDrop={e => handleDrop(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
+          onDragLeave={(e) => handleDragLeave(e)}
+          onDrop={(e) => handleDrop(e)}
         >
           <Input
             type="file"
@@ -79,32 +79,32 @@ const FileInput: React.FC<{
             sx={{
               zIndex: 10,
               opacity: 0,
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
+              width: "100%",
+              height: "100%",
+              position: "absolute",
               top: 0,
               left: 0,
-              flexGrow: '1',
-              '& input': {
-                width: '100%',
-                height: '100%',
-                cursor: 'pointer !important',
+              flexGrow: "1",
+              "& input": {
+                width: "100%",
+                height: "100%",
+                cursor: "pointer !important",
               },
-              '&::before': {
-                display: 'none',
+              "&::before": {
+                display: "none",
               },
-              '&::after': {
-                display: 'none',
-              }
+              "&::after": {
+                display: "none",
+              },
             }}
             onChange={(e) => props.handleImage(e)}
           />
         </FormControl>
         <Box
           sx={{
-            display: 'flex',
-            height: '100%',
-            width: '100%',
+            display: "flex",
+            height: "100%",
+            width: "100%",
             alignItems: "center",
           }}
         >
@@ -124,7 +124,13 @@ const FileInput: React.FC<{
             <Box
               sx={{
                 color: "text.primary",
-                fontSize: deviceStruct(".8rem", ".8rem", ".9rem", "1rem", "1rem"),
+                fontSize: deviceStruct(
+                  ".8rem",
+                  ".8rem",
+                  ".9rem",
+                  "1rem",
+                  "1rem"
+                ),
               }}
             >
               {props.file === undefined || props.file === -1

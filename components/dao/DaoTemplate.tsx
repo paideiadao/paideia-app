@@ -12,7 +12,6 @@ import BottomNav from "./nav/BottomNav";
 import Nav from "./nav/SideNav";
 import TopNav from "./nav/TopNav";
 
-
 const DaoTemplate: React.FC = (props) => {
   const [showMobile, setShowMobile] = React.useState<boolean>(false);
   const router = useRouter();
@@ -41,9 +40,7 @@ const DaoTemplate: React.FC = (props) => {
 
   return (
     <>
-      
       <Container maxWidth="xl" disableGutters>
-
         <Box
           sx={{
             display: "flex",
@@ -64,7 +61,7 @@ const DaoTemplate: React.FC = (props) => {
           >
             <TopNav showMobile={showMobile} setShowMobile={setShowMobile} />
             <Box sx={{ width: "100%" }} onClick={() => setShowMobile(false)}>
-              {daoError ? 'error' : props.children}
+              {daoError ? "error" : props.children}
             </Box>
             <BottomNav />
           </Box>

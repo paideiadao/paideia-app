@@ -23,7 +23,13 @@ import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import { getRandomImage } from "@components/utilities/images";
 import useSWR from "swr";
-import { attrOrUndefined, fetcher, getBaseUrl, getDaoPath, getWsUrl } from "@lib/utilities";
+import {
+  attrOrUndefined,
+  fetcher,
+  getBaseUrl,
+  getDaoPath,
+  getWsUrl,
+} from "@lib/utilities";
 import Follow, { FollowMobile } from "@components/utilities/Follow";
 import Details from "@components/dao/discussion/Details";
 import useDidMountEffect from "@components/utilities/hooks";
@@ -59,12 +65,12 @@ const Discussion: React.FC = () => {
     fetcher
   );
   if (error) {
-    router.push(getDaoPath(id as string, '/404'));
+    router.push(getDaoPath(id as string, "/404"));
   }
 
   if (data !== undefined) {
     if (data.is_proposal) {
-      router.push(getDaoPath(id as string, '/404'));
+      router.push(getDaoPath(id as string, "/404"));
     }
   }
 
@@ -106,7 +112,8 @@ const Discussion: React.FC = () => {
                 position: "relative",
                 backgroundImage: deviceWrapper(
                   `linear-gradient(
-                  to bottom, transparent, ${themeContext.theme === DarkTheme ? "black" : "white"
+                  to bottom, transparent, ${
+                    themeContext.theme === DarkTheme ? "black" : "white"
                   }
                 ), url(${data.image_url})`,
                   `url(${data.image_url})`
@@ -139,17 +146,17 @@ const Discussion: React.FC = () => {
                 }}
               >
                 {globalContext.api.daoUserData != null && (
-                    <FollowMobile
-                      followed={
-                        data.followers.indexOf(
-                          globalContext.api.daoUserData
-                            ? globalContext.api.daoUserData.id
-                            : null
-                        ) > -1
-                      }
-                      putUrl={"/proposals/follow/" + discussion_id}
-                    />
-                  )}
+                  <FollowMobile
+                    followed={
+                      data.followers.indexOf(
+                        globalContext.api.daoUserData
+                          ? globalContext.api.daoUserData.id
+                          : null
+                      ) > -1
+                    }
+                    putUrl={"/proposals/follow/" + discussion_id}
+                  />
+                )}
               </Box>
               <Box
                 sx={{
@@ -170,12 +177,12 @@ const Discussion: React.FC = () => {
                     ) > -1
                       ? 1
                       : data.dislikes.indexOf(
-                        globalContext.api.daoUserData
-                          ? globalContext.api.daoUserData.id
-                          : null
-                      ) > -1
-                        ? 0
-                        : undefined
+                          globalContext.api.daoUserData
+                            ? globalContext.api.daoUserData.id
+                            : null
+                        ) > -1
+                      ? 0
+                      : undefined
                   }
                   putUrl={`/proposals/like/${discussion_id}`}
                 />
@@ -321,16 +328,16 @@ const Discussion: React.FC = () => {
                   }}
                 >
                   {globalContext.api.daoUserData != null && (
-                  <Follow
-                    followed={
-                      data.followers.indexOf(
-                        globalContext.api.daoUserData
-                          ? globalContext.api.daoUserData.id
-                          : null
-                      ) > -1
-                    }
-                    putUrl={"/proposals/follow/" + discussion_id}
-                  />
+                    <Follow
+                      followed={
+                        data.followers.indexOf(
+                          globalContext.api.daoUserData
+                            ? globalContext.api.daoUserData.id
+                            : null
+                        ) > -1
+                      }
+                      putUrl={"/proposals/follow/" + discussion_id}
+                    />
                   )}
                 </Box>
               </Box>
@@ -402,16 +409,16 @@ const Discussion: React.FC = () => {
                       }}
                     >
                       {globalContext.api.daoUserData != null && (
-                      <Follow
-                        followed={
-                          data.followers.indexOf(
-                            globalContext.api.daoUserData
-                              ? globalContext.api.daoUserData.id
-                              : null
-                          ) > -1
-                        }
-                        putUrl={"/proposals/follow/" + discussion_id}
-                      />
+                        <Follow
+                          followed={
+                            data.followers.indexOf(
+                              globalContext.api.daoUserData
+                                ? globalContext.api.daoUserData.id
+                                : null
+                            ) > -1
+                          }
+                          putUrl={"/proposals/follow/" + discussion_id}
+                        />
                       )}
                     </Box>
 
@@ -426,12 +433,12 @@ const Discussion: React.FC = () => {
                         ) > -1
                           ? 1
                           : data.dislikes.indexOf(
-                            globalContext.api.daoUserData
-                              ? globalContext.api.daoUserData.id
-                              : null
-                          ) > -1
-                            ? 0
-                            : undefined
+                              globalContext.api.daoUserData
+                                ? globalContext.api.daoUserData.id
+                                : null
+                            ) > -1
+                          ? 0
+                          : undefined
                       }
                       putUrl={`/proposals/like/${discussion_id}`}
                     />
@@ -460,8 +467,9 @@ const Discussion: React.FC = () => {
                 >
                   <Tab label="Discussion Info" value="1" />
                   <Tab
-                    label={`Comments | ${data.comments.length + liveComments.length
-                      }`}
+                    label={`Comments | ${
+                      data.comments.length + liveComments.length
+                    }`}
                     value="2"
                   />
                   <Tab

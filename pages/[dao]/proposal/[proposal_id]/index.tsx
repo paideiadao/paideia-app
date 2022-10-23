@@ -118,8 +118,9 @@ const Proposal: React.FC = () => {
                     position: "relative",
                     backgroundImage: deviceWrapper(
                       `linear-gradient(
-                  to bottom, transparent, ${themeContext.theme === DarkTheme ? "black" : "white"
-                      }
+                  to bottom, transparent, ${
+                    themeContext.theme === DarkTheme ? "black" : "white"
+                  }
                 ), url(${value.image.url})`,
                       `url(${value.image.url})`
                     ),
@@ -145,8 +146,9 @@ const Proposal: React.FC = () => {
                     >
                       <FollowMobile
                         followed={
-                          [].indexOf(parseInt(localStorage.getItem("user_id"))) >
-                          -1
+                          [].indexOf(
+                            parseInt(localStorage.getItem("user_id"))
+                          ) > -1
                         }
                         putUrl={"/proposals/follow/" + proposal_id}
                       />

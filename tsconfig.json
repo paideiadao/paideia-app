@@ -38,7 +38,8 @@
     "**/*.js",
     "**/*.jsx",
     "theme/theme.tsx",
-    "pages/_document.jsx"
-, "pages/[id]/[id].tsx.bak"  ],
+    "pages/_document.jsx",
+    "pages/[id]/[id].tsx.bak"
+  ],
   "exclude": ["node_modules"]
 }

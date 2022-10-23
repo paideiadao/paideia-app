@@ -551,39 +551,38 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
         pt: ".5rem",
         pb: ".5rem",
         mt: props.scrollable ? ".5rem" : "0",
-        minWidth: '280px',
+        minWidth: "280px",
         maxWidth: props.width,
       }}
       id={`proposal-active-${props.c}`}
     >
-      
       <Badge
         badgeContent={
           globalContext.api.daoUserData != null && (
-          <IconButton
-            sx={{
-              backgroundColor: "favoriteBackground.main",
-              color: "text.secondary",
-              p: ".2rem",
-              borderRadius: "50%",
-              width: "1.5rem",
-              height: "1.5rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              api.follow(!favorited ? "follow" : "unfollow");
-              setFavorited(!favorited);
-            }}
-          >
-            {favorited ? (
-              <FavoriteIcon sx={{ fontSize: "1rem", fill: "red" }} />
-            ) : (
-              <FavoriteBorderIcon sx={{ fontSize: "1rem", fill: "red" }} />
-            )}
-          </IconButton>
+            <IconButton
+              sx={{
+                backgroundColor: "favoriteBackground.main",
+                color: "text.secondary",
+                p: ".2rem",
+                borderRadius: "50%",
+                width: "1.5rem",
+                height: "1.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                api.follow(!favorited ? "follow" : "unfollow");
+                setFavorited(!favorited);
+              }}
+            >
+              {favorited ? (
+                <FavoriteIcon sx={{ fontSize: "1rem", fill: "red" }} />
+              ) : (
+                <FavoriteBorderIcon sx={{ fontSize: "1rem", fill: "red" }} />
+              )}
+            </IconButton>
           )
         }
         sx={{ width: "100%" }}

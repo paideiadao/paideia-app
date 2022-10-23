@@ -22,7 +22,6 @@ export const getObj = (lst: any[], id_field: string, id: any): any => {
   }
 };
 
-
 export const getUserId = () => {
   return parseInt(localStorage.getItem("user_id"));
 };
@@ -337,7 +336,7 @@ export class AbstractApi {
     //   : url.includes("8000")
     //   ? getBaseUrl() + url.split("8000")[1]
     //   : getBaseUrl() + url;
-    url = process.env.API_URL + url
+    url = process.env.API_URL + url;
     return await methods[method](url, body, defaultOptions);
   }
 }

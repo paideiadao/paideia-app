@@ -16,8 +16,8 @@ import { AddWalletProvider } from "@components/wallet/AddWalletContext";
 import { AnimatePresence, motion } from "framer-motion";
 import AbstractAlert, { IAlerts } from "@components/utilities/Alert";
 import { IDaoUserData } from "@lib/Interfaces";
-import useSWR from 'swr';
-import { useDaoSlugs } from '@hooks/useDaoSlugs'
+import useSWR from "swr";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { SlugContext } from "contexts/SlugContext";
 
 const variants = {
@@ -48,76 +48,78 @@ const App = ({ Component, pageProps }: AppProps) => {
     let temp = theme === LightTheme ? "light" : "dark";
     localStorage.setItem("theme", temp);
   }, [theme]);
-  
-  const { daoSlugsObject, daoSlugsIsLoading } = useDaoSlugs();
-  const [daoSlugs, setDaoSlugs] = useState({})
-  useEffect(() => {
-    setDaoSlugs(daoSlugsObject)
-  }, [daoSlugsObject])
 
-const api = new AppApi(
-  alert,
-  setAlert,
-  theme,
-  setTheme,
-  daoData,
-  setDaoData,
-  daoUserData,
-  setDaoUserData
-);
-return (
-  <>
-    <Head>
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes"
-      />
-    </Head>
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      <AddWalletProvider>
-        <WalletProvider>
-          <SlugContext.Provider value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading }}>
-            <GlobalContext.Provider value={{ api }}>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                {Component !== Creation ? (
-                  <>
-                    <DaoTemplate>
-                      <AnimatePresence exitBeforeEnter>
-                        <motion.main
-                          variants={daoVariants}
-                          initial="hidden"
-                          animate="enter"
-                          exit="exit"
-                          transition={{ type: "linear" }}
-                          className=""
-                          key={router.route}
-                        >
-                          <Component {...pageProps} />
-                        </motion.main>
-                      </AnimatePresence>
-                    </DaoTemplate>
-                  </>
-                ) : (
-                  <Component {...pageProps} />
-                )}
-              </ThemeProvider>
-              <AbstractAlert
-                alerts={alert}
-                set={(val: IAlerts[]) => setAlert(val)}
-                close={(c: number) => {
-                  let temp = [...alert];
-                  temp.splice(c, 1);
-                  setAlert(temp);
-                }}
-              />
-            </GlobalContext.Provider>
-          </SlugContext.Provider>
-        </WalletProvider>
-      </AddWalletProvider>
-    </ThemeContext.Provider>
-  </>
-);
-}
+  const { daoSlugsObject, daoSlugsIsLoading } = useDaoSlugs();
+  const [daoSlugs, setDaoSlugs] = useState({});
+  useEffect(() => {
+    setDaoSlugs(daoSlugsObject);
+  }, [daoSlugsObject]);
+
+  const api = new AppApi(
+    alert,
+    setAlert,
+    theme,
+    setTheme,
+    daoData,
+    setDaoData,
+    daoUserData,
+    setDaoUserData
+  );
+  return (
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes"
+        />
+      </Head>
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <AddWalletProvider>
+          <WalletProvider>
+            <SlugContext.Provider
+              value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading }}
+            >
+              <GlobalContext.Provider value={{ api }}>
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  {Component !== Creation ? (
+                    <>
+                      <DaoTemplate>
+                        <AnimatePresence exitBeforeEnter>
+                          <motion.main
+                            variants={daoVariants}
+                            initial="hidden"
+                            animate="enter"
+                            exit="exit"
+                            transition={{ type: "linear" }}
+                            className=""
+                            key={router.route}
+                          >
+                            <Component {...pageProps} />
+                          </motion.main>
+                        </AnimatePresence>
+                      </DaoTemplate>
+                    </>
+                  ) : (
+                    <Component {...pageProps} />
+                  )}
+                </ThemeProvider>
+                <AbstractAlert
+                  alerts={alert}
+                  set={(val: IAlerts[]) => setAlert(val)}
+                  close={(c: number) => {
+                    let temp = [...alert];
+                    temp.splice(c, 1);
+                    setAlert(temp);
+                  }}
+                />
+              </GlobalContext.Provider>
+            </SlugContext.Provider>
+          </WalletProvider>
+        </AddWalletProvider>
+      </ThemeContext.Provider>
+    </>
+  );
+};
 
 export default App;

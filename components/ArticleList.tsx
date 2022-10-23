@@ -115,7 +115,10 @@ const ArticleCard: FC<IArticleCard> = ({ article }) => {
         borderRadius: "16px",
       }}
     >
-      <CardActionArea sx={{ height: "100%", verticalAlign: "top" }} onClick={() => router.push(`/blog/${article?.link}`)}>
+      <CardActionArea
+        sx={{ height: "100%", verticalAlign: "top" }}
+        onClick={() => router.push(`/blog/${article?.link}`)}
+      >
         <CardContent sx={{ padding: 0, minHeight: "357px", height: "100%" }}>
           <Box
             sx={{
@@ -327,7 +330,9 @@ const ArticleList: FC<IArticleListProps> = ({ articles, sx }) => {
         ))}
       </Grid>
       <Box sx={{ width: "100%", textAlign: "center" }}>
-        <Button disabled variant="contained">Load more...</Button>
+        <Button disabled variant="contained">
+          Load more...
+        </Button>
       </Box>
     </Box>
   );

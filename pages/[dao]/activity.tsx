@@ -83,7 +83,7 @@ const Activities: React.FC = () => {
     }
   }, [error]);
 
-  console.log(data)
+  console.log(data);
 
   return (
     <Layout width="95%">
@@ -214,15 +214,16 @@ const Activities: React.FC = () => {
                 : filters.categories.indexOf(i.category) > -1) &&
               (i.name.toLowerCase().includes(filters.search) ||
                 filters.search === "" ||
-                i.action.toLowerCase().includes(filters.search) || i.value.toLowerCase().includes(filters.search))
+                i.action.toLowerCase().includes(filters.search) ||
+                i.value.toLowerCase().includes(filters.search))
             );
           })
           .sort((a: IActivity, b: IActivity) =>
             filters.sortBy === "Oldest"
-              //@ts-ignore
-              ? new Date(a.date) - new Date(b.date)
-              //@ts-ignore
-              : b.date - a.date
+              ? //@ts-ignore
+                new Date(a.date) - new Date(b.date)
+              : //@ts-ignore
+                b.date - a.date
           )
           .map((i: any, c: number) => {
             return <Activity i={i} c={c} />;

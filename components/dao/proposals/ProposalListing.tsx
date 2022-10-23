@@ -237,7 +237,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
             />
           ))}
         </Box>
-        <Grid container spacing={1} sx={{ mt: '1.5rem', }}>
+        <Grid container spacing={1} sx={{ mt: "1.5rem" }}>
           {props.proposals === undefined ? (
             <Box
               sx={{
@@ -252,17 +252,17 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
             </Box>
           ) : props.proposals.length === 0 ? (
             <Grid item>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                mt: "3rem",
-                fontSize: "1.5rem",
-                justifyContent: 'center',
-              }}
-            >
-              No Proposals Yet!
-            </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  mt: "3rem",
+                  fontSize: "1.5rem",
+                  justifyContent: "center",
+                }}
+              >
+                No Proposals Yet!
+              </Box>
             </Grid>
           ) : (
             props.proposals
@@ -270,27 +270,34 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 filters.sortBy === ""
                   ? true
                   : filters.sortBy === "Most Recent"
-                    ? new Date(a.date).getTime() - new Date(b.date).getTime()
-                    : true
+                  ? new Date(a.date).getTime() - new Date(b.date).getTime()
+                  : true
               )
               .filter((i: any) => {
                 return (
                   (filters.proposalStatus === "" ||
-                    filters.proposalStatus === "All"
+                  filters.proposalStatus === "All"
                     ? true
                     : i.status === filters.proposalStatus) &&
                   (filters.search === ""
                     ? true
                     : i.name
-                      .toLowerCase()
-                      .includes(filters.search.toLowerCase())) &&
+                        .toLowerCase()
+                        .includes(filters.search.toLowerCase())) &&
                   (filters.categories.indexOf("All") > -1
                     ? true
                     : filters.categories.indexOf(i.category) > -1)
                 );
               })
               .map((i: any, c: number) => (
-                <Grid item xs={12} sm={6} lg={4} xl={3} key={"proposal-card-key-" + c + i.id}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  lg={4}
+                  xl={3}
+                  key={"proposal-card-key-" + c + i.id}
+                >
                   <ProposalCard
                     {...i}
                     c={c}

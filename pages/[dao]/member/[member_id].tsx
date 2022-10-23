@@ -23,7 +23,7 @@ const Member: React.FC = () => {
 
   useDidMountEffect(() => {
     if (userError !== undefined) {
-      router.push(getDaoPath(id as string, '/404'));
+      router.push(getDaoPath(id as string, "/404"));
     }
   }, [userError]);
 

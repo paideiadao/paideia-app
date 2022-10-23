@@ -1,7 +1,7 @@
 import React, { createContext } from "react";
 
 export interface ISlug {
-  [key: string]: number
+  [key: string]: number;
 }
 
 export interface ISlugContext {

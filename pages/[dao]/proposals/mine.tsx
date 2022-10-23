@@ -29,18 +29,22 @@ const Mine: React.FC = () => {
 
   return (
     <Layout width={"96%"}>
-      {context.api.daoUserData ? <PropsosalListing
-        title="My proposals"
-        proposals={
-          data === undefined
-            ? undefined
-            : data.filter((i: any) =>
-                (i.user_details_id === context.api.daoUserData) == null
-                  ? null
-                  : context.api.daoUserData.id
-              )
-        }
-      /> : 'Must login to view your proposals!'}
+      {context.api.daoUserData ? (
+        <PropsosalListing
+          title="My proposals"
+          proposals={
+            data === undefined
+              ? undefined
+              : data.filter((i: any) =>
+                  (i.user_details_id === context.api.daoUserData) == null
+                    ? null
+                    : context.api.daoUserData.id
+                )
+          }
+        />
+      ) : (
+        "Must login to view your proposals!"
+      )}
     </Layout>
   );
 };

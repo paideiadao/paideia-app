@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Avatar, Box, Button, Paper, Input, FormControl } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import { bytesToSize } from "@lib/creation/Utilities";
@@ -11,29 +11,29 @@ const DiscussionBanner: React.FC<{
   fileUrl: string;
   banner?: boolean;
 }> = (props) => {
-  const [dropHover, setDropHover] = useState('fileInput.outer')
+  const [dropHover, setDropHover] = useState("fileInput.outer");
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setDropHover('fileInput.main')
+    setDropHover("fileInput.main");
     e.stopPropagation();
   };
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setDropHover('fileInput.outer')
+    setDropHover("fileInput.outer");
     e.stopPropagation();
   };
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(e.dataTransfer.files)
+    console.log(e.dataTransfer.files);
     const object = {
       currentTarget: {
-        files: e.dataTransfer.files
-      }
-    }
-    props.handleImage(object)
-    setDropHover('fileInput.outer')
+        files: e.dataTransfer.files,
+      },
+    };
+    props.handleImage(object);
+    setDropHover("fileInput.outer");
     e.stopPropagation();
-  }
+  };
   return (
     <Paper
       elevation={0}
@@ -52,7 +52,7 @@ const DiscussionBanner: React.FC<{
           border: "1px dashed",
           borderColor: "fileInput.border",
           display: "block",
-          position: 'relative',
+          position: "relative",
           // display: "flex",
           // justifyContent: "center",
           // flexDirection: "column",
@@ -65,17 +65,17 @@ const DiscussionBanner: React.FC<{
           sx={{
             mt: 0,
             // pb: "1rem",
-            width: '100%',
+            width: "100%",
             height: "100%",
-            position: 'absolute',
-            display: 'flex',
-            '&:hover': {
-              cursor: 'pointer',
-            }
+            position: "absolute",
+            display: "flex",
+            "&:hover": {
+              cursor: "pointer",
+            },
           }}
-          onDragEnter={e => handleDragEnter(e)}
-          onDragLeave={e => handleDragLeave(e)}
-          onDrop={e => handleDrop(e)}
+          onDragEnter={(e) => handleDragEnter(e)}
+          onDragLeave={(e) => handleDragLeave(e)}
+          onDrop={(e) => handleDrop(e)}
         >
           <Input
             type="file"
@@ -86,30 +86,30 @@ const DiscussionBanner: React.FC<{
             sx={{
               zIndex: 10,
               opacity: 0,
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
+              width: "100%",
+              height: "100%",
+              position: "absolute",
               top: 0,
               left: 0,
-              flexGrow: '1',
-              '& input': {
-                width: '100%',
-                height: '100%',
-                cursor: 'pointer !important',
+              flexGrow: "1",
+              "& input": {
+                width: "100%",
+                height: "100%",
+                cursor: "pointer !important",
               },
-              '&::before': {
-                display: 'none',
+              "&::before": {
+                display: "none",
               },
-              '&::after': {
-                display: 'none',
-              }
+              "&::after": {
+                display: "none",
+              },
             }}
             onChange={(e) => props.handleImage(e)}
           />
         </FormControl>
         {props.fileUrl !== "" &&
-          props.fileUrl !== undefined &&
-          props.file !== undefined ? (
+        props.fileUrl !== undefined &&
+        props.file !== undefined ? (
           <>
             <Box sx={{ width: "100%" }}>
               <img
