@@ -30,6 +30,7 @@ import { useRouter } from "next/router";
 import { isAddressValid } from "@components/wallet/AddWallet";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { getObj } from "@lib/utilities";
+import { IObj } from "@lib/Interfaces";
 
 const BasicLink: React.FC<{
   icon: JSX.Element;
@@ -42,10 +43,8 @@ const BasicLink: React.FC<{
 }> = (props) => {
   const router = useRouter();
   const { id } = router.query;
-  const {currentDao} = useDaoSlugs()
-  
-  console.log(currentDao)
-  let linkLookup = {
+  const {currentDao, daoSlugsIsLoading} = useDaoSlugs()
+  const [linkLookup, setLinkLookup] = React.useState<IObj<string>>(daoSlugsIsLoading ? undefined : {
     Dashboard: currentDao ? `/${currentDao.dao_name.toLowerCase()}` : '',
     All: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals` : '',
     Following: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/following` : '',
@@ -66,8 +65,36 @@ const BasicLink: React.FC<{
     Wallet: currentDao ? `/${currentDao.dao_name.toLowerCase()}/wallet` : '',
 
     "DAO Config": currentDao ? `/${currentDao.dao_name.toLowerCase()}/dao-config` : '',
-  };
-  return (
+  })
+
+  React.useEffect(() => {
+    setLinkLookup(daoSlugsIsLoading ? undefined : {
+      Dashboard: currentDao ? `/${currentDao.dao_name.toLowerCase()}` : '',
+      All: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals` : '',
+      Following: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/following` : '',
+      Mine: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/mine` : '',
+      Past:
+      currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/past` : '',
+      Treasury: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/treasury` : '',
+      Tokenomics: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/tokenomics` : '',
+      Recurring: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/recurring` : '',
+      Token: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/token` : '',
+      Distributions: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/distributions` : '',
+      //id === undefined ? `/dao/distributions` : `/dao/${id}/distributions`,
+      Staking: currentDao ? `/${currentDao.dao_name.toLowerCase()}/staking` : '',
+      Members: currentDao ? `/${currentDao.dao_name.toLowerCase()}/members` : '',
+      Activity: currentDao ? `/${currentDao.dao_name.toLowerCase()}/activity` : '',
+      "Edit profile": currentDao ? `/${currentDao.dao_name.toLowerCase()}/profile/edit` : '',
+      Notifications: currentDao ? `/${currentDao.dao_name.toLowerCase()}/notifications/edit` : '',
+      Wallet: currentDao ? `/${currentDao.dao_name.toLowerCase()}/wallet` : '',
+  
+      "DAO Config": currentDao ? `/${currentDao.dao_name.toLowerCase()}/dao-config` : '',
+    })
+  }, [daoSlugsIsLoading, currentDao])
+  
+  console.log(currentDao)
+
+  return linkLookup ? (
     <Link href={linkLookup[props.title as keyof typeof linkLookup]}>
       <Box
         sx={{
@@ -146,7 +173,7 @@ const BasicLink: React.FC<{
         </Box>
       </Box>
     </Link>
-  );
+  ) : <></>;
 };
 
 const DropdownLink: React.FC<{
