@@ -34,6 +34,8 @@ export const useDaoSlugs = () => {
     setCurrentDao(getObj(data, 'id', daoSlugsObject ? daoSlugsObject.dao : undefined))
   }, [daoSlugsObject])
 
+  console.log('currentDaoState', currentDao)
+
   return {
     daoSlugs: data,
     daoSlugsObject,

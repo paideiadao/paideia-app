@@ -92,7 +92,7 @@ const BasicLink: React.FC<{
     })
   }, [daoSlugsIsLoading, currentDao])
   
-  console.log(currentDao)
+  console.log(currentDao, daoSlugsIsLoading, linkLookup)
 
   return linkLookup ? (
     <Link href={linkLookup[props.title as keyof typeof linkLookup]}>
