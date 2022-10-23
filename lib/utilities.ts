@@ -66,7 +66,7 @@ export const attrOrUndefined = (
 };
 
 export const getDaoPath = (id: string, path: string) => {
-  return `/dao${id === undefined ? "" : `/${id}`}${path}`;
+  return `${id === undefined ? "" : `/${id}`}${path}`;
 };
 
 export const addDays = (days: number, date: Date = new Date()): Date => {

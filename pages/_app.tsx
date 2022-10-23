@@ -65,7 +65,6 @@ const api = new AppApi(
   daoUserData,
   setDaoUserData
 );
-
 return (
   <>
     <Head>

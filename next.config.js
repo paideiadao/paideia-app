@@ -21,6 +21,10 @@ const withTM = require("next-transpile-modules")([
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env:{
+    API_URL: process.env.API_URL,
+    WSS_URL: process.env.WSS_URL
+  },
   images: {
     domains: ["ergopad-public.s3.us-west-2.amazonaws.com"],
   },
