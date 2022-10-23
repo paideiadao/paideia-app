@@ -34,7 +34,7 @@ export const getBaseUrl = () => {
 
 export const fetcher = (url: string) =>
   axios
-    .get(getBaseUrl() + url, {
+    .get(process.env.API_URL + url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt_token_login")}`,
       },
@@ -106,7 +106,7 @@ export class AbstractApi {
   setAlert: (val: IAlerts[]) => void = undefined;
 
   webSocket(request_id: string): WebSocket {
-    const ws = new WebSocket(`${getWsUrl()}/auth/ws/${request_id}`);
+    const ws = new WebSocket(`${process.env.WSS_URL}/auth/ws/${request_id}`);
     return ws;
   }
 
@@ -131,7 +131,7 @@ export class AbstractApi {
     const formData = new FormData();
     formData.append("fileobject", file, file.name);
     return axios.post(
-      `${getBaseUrl()}/util/upload_file`,
+      `${process.env.API_URL}/util/upload_file`,
       formData,
       defaultOptions
     );
@@ -321,11 +321,12 @@ export class AbstractApi {
         "Access-Control-Allow-Credentials": true,
       },
     };
-    url = url.includes("http")
-      ? url
-      : url.includes("8000")
-      ? getBaseUrl() + url.split("8000")[1]
-      : getBaseUrl() + url;
+    // url = url.includes("http")
+    //   ? url
+    //   : url.includes("8000")
+    //   ? getBaseUrl() + url.split("8000")[1]
+    //   : getBaseUrl() + url;
+    url = process.env.API_URL + url
     return await methods[method](url, body, defaultOptions);
   }
 }
