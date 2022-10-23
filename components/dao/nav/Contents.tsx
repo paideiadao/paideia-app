@@ -46,26 +46,26 @@ const BasicLink: React.FC<{
   
   console.log(currentDao)
   let linkLookup = {
-    Dashboard: currentDao ? `/${currentDao.dao_name}` : '',
-    All: currentDao ? `/${currentDao.dao_name}/proposals` : '',
-    Following: currentDao ? `/${currentDao.dao_name}/proposals/following` : '',
-    Mine: currentDao ? `/${currentDao.dao_name}/proposals/mine` : '',
+    Dashboard: currentDao ? `/${currentDao.dao_name.toLowerCase()}` : '',
+    All: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals` : '',
+    Following: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/following` : '',
+    Mine: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/mine` : '',
     Past:
-    currentDao ? `/${currentDao.dao_name}/proposals/past` : '',
-    Treasury: currentDao ? `/${currentDao.dao_name}/financials/treasury` : '',
-    Tokenomics: currentDao ? `/${currentDao.dao_name}/financials/tokenomics` : '',
-    Recurring: currentDao ? `/${currentDao.dao_name}/financials/recurring` : '',
-    Token: currentDao ? `/${currentDao.dao_name}/financials/token` : '',
-    Distributions: currentDao ? `/${currentDao.dao_name}/financials/distributions` : '',
+    currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals/past` : '',
+    Treasury: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/treasury` : '',
+    Tokenomics: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/tokenomics` : '',
+    Recurring: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/recurring` : '',
+    Token: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/token` : '',
+    Distributions: currentDao ? `/${currentDao.dao_name.toLowerCase()}/financials/distributions` : '',
     //id === undefined ? `/dao/distributions` : `/dao/${id}/distributions`,
-    Staking: currentDao ? `/${currentDao.dao_name}/staking` : '',
-    Members: currentDao ? `/${currentDao.dao_name}/members` : '',
-    Activity: currentDao ? `/${currentDao.dao_name}/activity` : '',
-    "Edit profile": currentDao ? `/${currentDao.dao_name}/profile/edit` : '',
-    Notifications: currentDao ? `/${currentDao.dao_name}/notifications/edit` : '',
-    Wallet: currentDao ? `/${currentDao.dao_name}/wallet` : '',
+    Staking: currentDao ? `/${currentDao.dao_name.toLowerCase()}/staking` : '',
+    Members: currentDao ? `/${currentDao.dao_name.toLowerCase()}/members` : '',
+    Activity: currentDao ? `/${currentDao.dao_name.toLowerCase()}/activity` : '',
+    "Edit profile": currentDao ? `/${currentDao.dao_name.toLowerCase()}/profile/edit` : '',
+    Notifications: currentDao ? `/${currentDao.dao_name.toLowerCase()}/notifications/edit` : '',
+    Wallet: currentDao ? `/${currentDao.dao_name.toLowerCase()}/wallet` : '',
 
-    "DAO Config": currentDao ? `/${currentDao.dao_name}/dao-config` : '',
+    "DAO Config": currentDao ? `/${currentDao.dao_name.toLowerCase()}/dao-config` : '',
   };
   return (
     <Link href={linkLookup[props.title as keyof typeof linkLookup]}>
