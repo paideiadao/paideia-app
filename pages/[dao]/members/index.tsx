@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import Layout from "@components/dao/Layout";
 import {
@@ -13,7 +14,6 @@ import {
   Slide,
   Grid,
 } from "@mui/material";
-import * as React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Slider from "@mui/material/Slider";
 import Chip from "@components/utilities/Chip";
@@ -28,6 +28,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import useSWR from "swr";
 import { fetcher } from "@lib/utilities";
 import { useRouter } from "next/router";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
 
 // export const getStaticPaths = paths;
 // export const getStaticProps = props;
@@ -101,25 +102,35 @@ export interface IFilters {
 }
 
 const Members: React.FC = () => {
-  const [filters, setFilters] = React.useState<IFilters>({
+  const [filters, setFilters] = useState<IFilters>({
     search: "",
     sortBy: "Most Followers",
     categories: ["All"],
   });
-  const [value, setValue] = React.useState<number[]>([0, 10]);
+  const [value, setValue] = useState<number[]>([0, 10]);
+  const [daoId, setDaoId] = useState(1)
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
+  const { daoSlugsObject } = useDaoSlugs();
+
+  useEffect(() => {
+    if (router.isReady) {
+      setDaoId(daoSlugsObject[dao.toString()])
+    }
+    console.log(daoSlugsObject)
+  }, [router.isReady])
+  console.log(daoSlugsObject)
+
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
 
   const { data, error } = useSWR(
-    `/users/by_dao_id/${id === undefined ? 1 : id}`,
+    `/users/by_dao_id/${daoId === undefined ? 1 : daoId}`,
     fetcher
   );
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
   };
-  console.log(value);
 
   return (
     <Layout width="92.5%">

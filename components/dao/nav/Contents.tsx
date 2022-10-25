@@ -1,5 +1,6 @@
 import { Badge, Box } from "@mui/material";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import DiamondIcon from "@mui/icons-material/Diamond";
@@ -26,7 +27,6 @@ import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 
 const BasicLink: React.FC<{
@@ -38,50 +38,58 @@ const BasicLink: React.FC<{
   ml?: string;
   notifications?: number;
 }> = (props) => {
-  const { currentDao } = useDaoSlugs();
+  const router = useRouter()
+  const { dao } = router.query;
+  const [daoName, setDaoName] = useState('')
+
+  useEffect(() => {
+    if (router.isReady) {
+      setDaoName(dao.toString())
+    }
+  }, [router.isReady])
   const linkLookup = {
-    Dashboard: currentDao ? `/${currentDao.dao_name.toLowerCase()}` : "",
-    All: currentDao ? `/${currentDao.dao_name.toLowerCase()}/proposals` : "",
-    Following: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/proposals/following`
+    Dashboard: daoName ? `/${daoName}` : "",
+    All: daoName ? `/${daoName}/proposals` : "",
+    Following: daoName
+      ? `/${daoName}/proposals/following`
       : "",
-    Mine: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/proposals/mine`
+    Mine: daoName
+      ? `/${daoName}/proposals/mine`
       : "",
-    Past: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/proposals/past`
+    Past: daoName
+      ? `/${daoName}/proposals/past`
       : "",
-    Treasury: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/financials/treasury`
+    Treasury: daoName
+      ? `/${daoName}/financials/treasury`
       : "",
-    Tokenomics: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/financials/tokenomics`
+    Tokenomics: daoName
+      ? `/${daoName}/financials/tokenomics`
       : "",
-    Recurring: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/financials/recurring`
+    Recurring: daoName
+      ? `/${daoName}/financials/recurring`
       : "",
-    Token: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/financials/token`
+    Token: daoName
+      ? `/${daoName}/financials/token`
       : "",
-    Distributions: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/financials/distributions`
+    Distributions: daoName
+      ? `/${daoName}/financials/distributions`
       : "",
     //id === undefined ? `/dao/distributions` : `/dao/${id}/distributions`,
-    Staking: currentDao ? `/${currentDao.dao_name.toLowerCase()}/staking` : "",
-    Members: currentDao ? `/${currentDao.dao_name.toLowerCase()}/members` : "",
-    Activity: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/activity`
+    Staking: daoName ? `/${daoName}/staking` : "",
+    Members: daoName ? `/${daoName}/members` : "",
+    Activity: daoName
+      ? `/${daoName}/activity`
       : "",
-    "Edit profile": currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/profile/edit`
+    "Edit profile": daoName
+      ? `/${daoName}/profile/edit`
       : "",
-    Notifications: currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/notifications/edit`
+    Notifications: daoName
+      ? `/${daoName}/notifications/edit`
       : "",
-    Wallet: currentDao ? `/${currentDao.dao_name.toLowerCase()}/wallet` : "",
+    Wallet: daoName ? `/${daoName}/wallet` : "",
 
-    "DAO Config": currentDao
-      ? `/${currentDao.dao_name.toLowerCase()}/dao-config`
+    "DAO Config": daoName
+      ? `/${daoName}/dao-config`
       : "",
   };
 

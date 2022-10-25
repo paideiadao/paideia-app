@@ -27,10 +27,10 @@ export const useDaoSlugs = () => {
     daoSlugsObject,
     daoSlugsIsLoading: !error && !data,
     daoSlugsIsError: error,
-    currentDao: getObj(
-      data,
-      "id",
-      daoSlugsObject ? daoSlugsObject.dao : undefined
-    ),
+    // currentDao: getObj(
+    //   data,
+    //   "id",
+    //   daoSlugsObject ? daoSlugsObject.dao : undefined
+    // ),
   };
 };
