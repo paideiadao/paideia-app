@@ -612,7 +612,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 `${!props.is_proposal ? "discussion" : "proposal"}/${props.id}`
               }
             >
-              <Box sx={{ cursor: "pointer" }}>{props.name}</Box>
+              <Box sx={{ cursor: "pointer", overflowX: "hidden", textOverflow: "ellipsis" }}>
+                {props.name}
+              </Box>
             </Link>
             <Box sx={{ display: "flex", fontSize: "1rem" }}>
               <ProposalStatus

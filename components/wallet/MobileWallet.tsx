@@ -6,6 +6,7 @@ import {
   IconButton,
   InputAdornment,
   TextField,
+  Link,
 } from "@mui/material";
 import * as React from "react";
 import ergo from "@public/icons/ergo.png";
@@ -96,7 +97,7 @@ const MobileWallet: React.FC<{
           <DialogContentText
             sx={{ fontSize: ".9rem", mb: ".75rem", mt: ".75rem" }}
           >
-            Please use the QR code to authenticate with Ergo Mobile Wallet.
+            Scan the QR code or <Link href={props.qrCode}>click this link</Link> to authenticate with Ergo Mobile Wallet.
           </DialogContentText>
           <Box
             sx={{ display: "flex", justifyContent: "center", width: "100%" }}

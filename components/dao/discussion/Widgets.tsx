@@ -17,7 +17,7 @@ export const Overview: React.FC<{
   created: number;
 }> = (props) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
 
   return (
     <Box
@@ -115,7 +115,7 @@ export const Overview: React.FC<{
           justifyContent: "center",
         }}
       >
-        <Link href={getDaoPath(id as string, `member/${props.userDetailId}`)}>
+        <Link href={`/${dao}/members/${props.userDetailId}`}>
           <Button
             size="small"
             sx={{
