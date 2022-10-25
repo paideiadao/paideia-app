@@ -1,5 +1,11 @@
-import { Avatar, Badge, Box, Button, IconButton } from "@mui/material";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import { 
+  Avatar, 
+  Badge, 
+  Box, 
+  Button, 
+  IconButton 
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useRouter } from "next/router";
@@ -39,10 +45,20 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
     ) > -1
   );
   const router = useRouter();
-  const { id } = router.query;
   const api = new FollowApi(globalContext.api, "/users/profile/follow");
 
   useDidMountEffect(() => {}, [favorited]);
+
+  const { dao } = router.query;
+  const [daoNameWithLeadingSlash, setDaoNameWithLeadingSlash] = useState('')
+
+  useEffect(() => {
+    if (router.isReady) {
+      setDaoNameWithLeadingSlash('/' + dao.toString())
+    }
+  }, [router.isReady])
+
+  
   return (
     <Box
       sx={{
@@ -170,13 +186,7 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
               borderColor: "border.main",
             }}
           >
-            <Link
-              href={
-                id === undefined
-                  ? `/dao/member/${props.user_id}`
-                  : `/dao/${id}/member/${props.user_id}`
-              }
-            >
+              <Link href={`${daoNameWithLeadingSlash}/members/${props.user_id}`}>
               <Button
                 variant="text"
                 sx={{
