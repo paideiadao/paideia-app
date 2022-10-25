@@ -37,19 +37,21 @@ const daos: IDao[] = [
   {
     id: 1,
     name: "Paideia",
-    url: "paideia.im/dao",
+    url: "app.paideia.im/paideia",
     href: "",
     img: PaideiaLogo.src,
     token: "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489",
     ticker: "Paideia",
   },
-  // {
-  //   id: 5,
-  //   name: "Spreadly",
-  //   url: "paideia.im/dao/spreadly",
-  //   href: "spreadly",
-  //   img: Spreadly.src,
-  // },
+  {
+    id: 2,
+    name: "EGIO",
+    url: "app.paideia.im/egio",
+    href: "egio",
+    img: "https://ergopad-public.s3.us-west-2.amazonaws.com/assets.logo.1666366935479758.png",
+    token: "00b1e236b60b95c2c6f8007a9d89bc460fc9e78f98b09faec9449007b40bccf3",
+    ticker: 'EGIO'
+  },
   // {
   //   id: 2,
   //   name: "Ergo Lend",
@@ -74,7 +76,9 @@ const daos: IDao[] = [
 ];
 
 const DaoBio: React.FC<ISideNavComponent> = (props) => {
-  return (
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const daoData = globalContext.api.daoData;
+  return daoData ? (
     <Box
       sx={{
         width: "100%",
@@ -90,11 +94,11 @@ const DaoBio: React.FC<ISideNavComponent> = (props) => {
       }}
     >
       <Avatar sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}>
-        <img src={PaideiaLogo.src} />
+        <img src={daoData.design.logo_url} />
       </Avatar>
       <DaoSelector {...props} />
     </Box>
-  );
+  ) : null;
 };
 
 interface IDaoSelector extends ISideNavComponent {

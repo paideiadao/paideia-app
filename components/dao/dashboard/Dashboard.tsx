@@ -35,7 +35,7 @@ const Dashboard: React.FC = () => {
           display: deviceWrapper("none", "block"),
         }}
       >
-        <img src={PaideiaBanner.src} style={{ width: "100%" }} />
+        <img src={daoData.design.banner_url} style={{ width: "100%" }} />
       </Box>
       <Box
         sx={{
