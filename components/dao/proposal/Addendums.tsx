@@ -56,7 +56,7 @@ const Addendums: React.FC = () => {
               href={
                 dao === undefined
                   ? ``
-                  : `/${dao}/proposal/${proposal_id}/addendum/${i.id}`
+                  : `/${dao}/proposals/${proposal_id}/addendum/${i.id}`
               }
             >
               <Button

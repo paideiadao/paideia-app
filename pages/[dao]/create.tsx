@@ -30,7 +30,7 @@ const Create: React.FC = () => {
           href={
             dao === undefined
               ? ""
-              : `/${dao}/proposal/create`
+              : `/${dao}/proposals/create`
           }
         > */}
         <Box

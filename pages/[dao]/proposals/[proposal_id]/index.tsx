@@ -48,7 +48,7 @@ startDate.setDate(startDate.getDate() - 10);
 const Proposal: React.FC = () => {
   const themeContext = React.useContext(ThemeContext);
   const router = useRouter();
-  const { id, proposal_id } = router.query;
+  const { dao, proposal_id } = router.query;
   const [value, setValue] = React.useState<IProposal>({
     name: "",
     image: {
@@ -284,9 +284,9 @@ const Proposal: React.FC = () => {
                     </Button>
                     <Link
                       href={
-                        id === undefined
-                          ? `/dao/proposal/${proposal_id}/vote`
-                          : `/dao/${id}/proposal/${proposal_id}/vote`
+                        dao === undefined
+                          ? `/dao/proposals/${proposal_id}/vote`
+                          : `/${dao}/proposals/${proposal_id}/vote`
                       }
                     >
                       <Button
