@@ -43,7 +43,7 @@ const BasicLink: React.FC<{
   const [daoName, setDaoName] = useState('')
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && dao != undefined) {
       setDaoName(dao.toString())
     }
   }, [router.isReady])

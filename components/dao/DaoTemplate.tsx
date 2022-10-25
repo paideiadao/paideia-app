@@ -1,11 +1,10 @@
+import React, { useEffect, useState } from "react";
 import useDidMountEffect from "@components/utilities/hooks";
 import { deviceWrapper } from "@components/utilities/Style";
 import { useWallet } from "@components/wallet/WalletContext";
-import { fetcher, getDaoPath } from "@lib/utilities";
-import { axiosGetFetcher } from "@utils/axios";
+import { fetcher } from "@lib/utilities";
 import { Box, Container } from "@mui/material";
 import { useRouter } from "next/router";
-import * as React from "react";
 import useSWR from "swr";
 import { GlobalContext, IGlobalContext } from "../../lib/AppContext";
 import BottomNav from "./nav/BottomNav";
@@ -13,11 +12,17 @@ import Nav from "./nav/SideNav";
 import TopNav from "./nav/TopNav";
 
 const DaoTemplate: React.FC = (props) => {
-  const [showMobile, setShowMobile] = React.useState<boolean>(false);
+  const [showMobile, setShowMobile] = useState<boolean>(false);
   const router = useRouter();
+  const [daoSlug, setDaoSlug] = useState('')
   const { dao } = router.query;
+  useEffect(() => {
+    if (router.isReady && dao != undefined) {
+      setDaoSlug(dao.toString())
+    }
+  }, [router.isReady])
   const { data: daoData, error: daoError } = useSWR(
-    `/dao/${dao === undefined ? "paideia" : dao}`,
+    `/dao/${daoSlug}`,
     fetcher,
     {
       revalidateIfStale: false,
@@ -29,14 +34,9 @@ const DaoTemplate: React.FC = (props) => {
   const { utxos } = useWallet();
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-
-  useDidMountEffect(() => {
+  useEffect(() => {
     globalContext.api.setDaoData(daoData);
   }, [daoData]);
-
-  // useDidMountEffect(() => {
-  //   router.push(getDaoPath(id as string, '/404'));
-  // }, [daoError]);
 
   return (
     <>
