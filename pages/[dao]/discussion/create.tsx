@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from "react";
 import CreateHeader from "@components/dao/proposal/Header";
 import { Box, Button, Modal } from "@mui/material";
-import * as React from "react";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { IProposal } from "../proposal/create";
+import { IProposal } from "../proposals/create";
 import GeneralInformation from "@components/dao/discussion/GeneralInformation";
 import DiscussionApi from "@lib/dao/discussion/DiscussionApi";
 import DiscussionContext from "@lib/dao/discussion/DiscussionContext";
@@ -21,6 +21,8 @@ import { getRandomImage } from "@components/utilities/images";
 import { IFile } from "@lib/creation/Interfaces";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CancelLink from "@components/utilities/CancelLink";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import axios from "axios";
 
 export interface IDiscussion {
   name: string;
@@ -53,7 +55,15 @@ const CreateDiscussion: React.FC = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
+  const { daoSlugsObject } = useDaoSlugs();
+  const [daoId, setDaoId] = useState<number>(undefined)
+
+  useEffect(() => {
+    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+      setDaoId(daoSlugsObject[dao.toString()])
+    }
+  }, [dao]);
   const api = new DiscussionApi(globalContext.api, value, setValue);
 
   return (
@@ -107,7 +117,7 @@ const CreateDiscussion: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            <Link href={id === undefined ? "/dao/create" : `/dao/${id}/create`}>
+            <Link href={dao === undefined ? "" : `/${dao}/create`}>
               <Button
                 size="small"
                 sx={{
@@ -216,11 +226,11 @@ const CreateDiscussion: React.FC = () => {
                         let imgRes = await api.uploadFile(image);
                         let res = await api.create(
                           imgRes.data.image_url,
-                          parseInt(id as string)
+                          daoId
                         );
                         if (res.status == 200) {
                           router.push(
-                            `/dao/${id === undefined ? "" : id}/discussion/${
+                            `/${dao === undefined ? "" : dao}/discussion/${
                               res.data.id
                             }`
                           );

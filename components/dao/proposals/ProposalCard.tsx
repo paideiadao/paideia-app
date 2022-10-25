@@ -541,7 +541,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
   const api = new FollowApi(globalContext.api, "/proposals/follow/" + props.id);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
 
   // use a local state to make it dynamic...
   return (
@@ -608,7 +608,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
           >
             <Link
               href={
-                (id === undefined ? "/dao/" : `/dao/${id}/`) +
+                (dao === undefined ? "" : `/${dao}/`) +
                 `${!props.is_proposal ? "discussion" : "proposal"}/${props.id}`
               }
             >

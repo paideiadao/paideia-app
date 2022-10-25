@@ -101,7 +101,7 @@ export interface IProposal {
 
 const CreateProposal: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   const [value, setValue] = React.useState<IProposal>({
     name: "",
     image: {
@@ -179,7 +179,7 @@ const CreateProposal: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            <Link href={id === undefined ? "/dao/create" : `/dao/${id}/create`}>
+            <Link href={dao === undefined ? "/dao/create" : `/${dao}/create`}>
               <Button
                 size="small"
                 sx={{

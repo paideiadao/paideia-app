@@ -76,7 +76,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
 
   return (
     <>
@@ -90,7 +90,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
           }}
         >
           <Header large title={props.title} />
-          <Link href={id === undefined ? "/dao/create" : `/dao/${id}/create`}>
+          <Link href={dao === undefined ? "" : `/${dao}/create`}>
             <Button
               variant="contained"
               sx={{ ml: "auto" }}

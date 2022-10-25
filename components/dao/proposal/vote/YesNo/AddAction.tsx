@@ -8,7 +8,7 @@ import {
   Header,
   Subtitle,
 } from "@components/creation/utilities/HeaderComponents";
-import { IProposalAction } from "@pages/[dao]/proposal/create";
+import { IProposalAction } from "@pages/[dao]/proposals/create";
 import SearchIcon from "@mui/icons-material/Search";
 import ProposalContext, {
   IProposalContext,

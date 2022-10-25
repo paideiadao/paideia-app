@@ -13,16 +13,16 @@ import { deviceWrapper } from "@components/utilities/Style";
 
 const Token: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Layout width={deviceWrapper("94%", "97%")}>
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
         <Header title="Token Information" large />
         <Link
           href={
-            id === undefined
+            dao === undefined
               ? "/dao/financials/token/burn"
-              : `/dao/${id}/financials/token/burn`
+              : `/${dao}/financials/token/burn`
           }
         >
           <Button

@@ -20,7 +20,7 @@ import CancelLink from "@components/utilities/CancelLink";
 
 const Send: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   const [value, setValue] = React.useState<ISendFunds>({
     receivers: [
       {
@@ -46,9 +46,9 @@ const Send: React.FC = () => {
       <Layout width={deviceWrapper("92%", "60%")}>
         <Link
           href={
-            id === undefined
+            dao === undefined
               ? "/dao/financials/treasury"
-              : `/dao/${id}/financials/treasury`
+              : `/${dao}/financials/treasury`
           }
         >
           <Button variant="outlined" size="small" startIcon={<ArrowBackIcon />}>

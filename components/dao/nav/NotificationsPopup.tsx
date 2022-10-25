@@ -9,6 +9,7 @@ import {
 import { id } from "date-fns/locale";
 import Link from "next/link";
 import * as React from "react";
+import { useRouter } from 'next/router'
 
 interface INotificationsPopup {
   open: boolean;
@@ -16,6 +17,8 @@ interface INotificationsPopup {
 }
 
 const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
+  const router = useRouter();
+  const { dao } = router.query;
   return (
     <Modal open={props.open} onClose={props.close}>
       <Box
@@ -79,9 +82,9 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
         >
           <Link
             href={
-              id === undefined
-                ? "/dao/notifications"
-                : `/dao/${id}/notifications`
+              dao === undefined
+                ? ""
+                : `/${dao}/notifications`
             }
           >
             <Button

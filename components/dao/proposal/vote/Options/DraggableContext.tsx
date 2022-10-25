@@ -6,7 +6,7 @@ import {
   ActionType,
   IProposalAction,
   IProposalOption,
-} from "@pages/[dao]/proposal/create";
+} from "@pages/[dao]/proposals/create";
 import * as React from "react";
 import {
   DragDropContext,

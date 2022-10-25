@@ -6,7 +6,7 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import AddAction from "./AddAction";
-import { IProposalAction } from "@pages/[dao]/proposal/create";
+import { IProposalAction } from "@pages/[dao]/proposals/create";
 import VotingChoice from "../VotingChoice";
 
 const YesNo: React.FC = () => {

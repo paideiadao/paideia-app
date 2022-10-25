@@ -7,7 +7,7 @@ import ProposalContext, {
 } from "@lib/dao/proposal/ProposalContext";
 import { IObj } from "@lib/Interfaces";
 import { Box, Button, Typography } from "@mui/material";
-import { IProposalAction } from "@pages/[dao]/proposal/create";
+import { IProposalAction } from "@pages/[dao]/proposals/create";
 import * as React from "react";
 import Selector from "./vote/Selector";
 import YesNo from "./vote/YesNo/YesNo";

@@ -60,7 +60,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
   React.useEffect(() => {
     const load = async () => {
       let res = await appContext.api.paideiaTokenCheck([props.wallet]);
-      setUserTokens(res.data.totalTokens);
+      setUserTokens(res?.data?.totalTokens);
     };
     if (props.wallet) {
       load();
@@ -185,7 +185,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
         <Chip
           avatar={<Avatar alt="PAI" src={PaideiaTokenSymbol.src} />}
           label={
-            (props.wallet
+            (props.wallet && userTokens
               ? userTokens.toLocaleString("en-US")
               : utxos.toLocaleString("en-US")) +
             " " +

@@ -20,10 +20,6 @@ const Member: React.FC = () => {
     }
   }, [router.isReady])
 
-  useEffect(() => {
-    console.log(daoSlugsObject)
-  }, [dao])
-
   const { data: userData, error: userError } = useSWR(
     member_id !== undefined && daoId !== undefined &&
       `/users/details/${member_id}?dao_id=${daoId}`,

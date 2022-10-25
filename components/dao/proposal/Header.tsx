@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 const CreateHeader: React.FC<{ type?: string }> = (props) => {
   const router = useRouter();
 
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <>
       <Box>
@@ -19,12 +19,12 @@ const CreateHeader: React.FC<{ type?: string }> = (props) => {
           href={
             router.pathname.includes("discussion") ||
             router.pathname.includes("proposal")
-              ? id === undefined
-                ? "/dao/create"
-                : `/dao/${id}/create`
-              : id === undefined
-              ? "/dao/proposals/all"
-              : `/dao/${id}/proposals/all`
+              ? dao === undefined
+                ? ""
+                : `/${dao}/create`
+              : dao === undefined
+              ? ""
+              : `/${dao}/proposals`
           }
         >
           <Button

@@ -72,7 +72,7 @@ const LastVotes: React.FC = () => {
 const _VoteWidget: React.FC = () => {
   const router = useRouter();
 
-  const { id, proposal_id } = router.query;
+  const { dao, proposal_id } = router.query;
   return (
     <Box
       sx={{
@@ -131,9 +131,9 @@ const _VoteWidget: React.FC = () => {
       >
         <Link
           href={
-            id === undefined
-              ? `/dao/proposal/${proposal_id}/votes`
-              : `/dao/${id}/proposal/${proposal_id}/votes`
+            dao === undefined
+              ? ``
+              : `/${dao}/proposals/${proposal_id}/votes`
           }
         >
           <Button

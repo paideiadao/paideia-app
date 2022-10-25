@@ -29,7 +29,7 @@ export const StakingActivity: React.FC = () => {
 const Staking: React.FC = () => {
   const themeContext = React.useContext(ThemeContext);
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Layout width="92%">
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
@@ -37,9 +37,9 @@ const Staking: React.FC = () => {
         <Box sx={{ ml: "auto" }}>
           <Link
             href={
-              id === undefined
+              dao === undefined
                 ? "/dao/staking/manage"
-                : `/dao/${id}/staking/manage`
+                : `/${dao}/staking/manage`
             }
           >
             <Button variant="contained" size="small">

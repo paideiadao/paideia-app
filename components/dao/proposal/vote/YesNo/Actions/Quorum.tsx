@@ -6,7 +6,7 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import { Box, Slider, TextField } from "@mui/material";
-import { IProposalAction } from "@pages/[dao]/proposal/create";
+import { IProposalAction } from "@pages/[dao]/proposals/create";
 import * as React from "react";
 import Quorum from "../../Options/Actions/Quorum";
 import Layout from "./Layout";

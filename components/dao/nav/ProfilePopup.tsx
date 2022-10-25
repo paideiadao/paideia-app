@@ -30,10 +30,10 @@ interface IProfilePopupRow {
 
 const ProfilePopupRow: React.FC<IProfilePopupRow> = (props) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Link
-      href={id === undefined ? `/dao${props.link}` : `/dao/${id}${props.link}`}
+      href={dao === undefined ? `/${props.link}` : `/${dao}${props.link}`}
     >
       <Box
         sx={{

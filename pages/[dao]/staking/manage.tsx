@@ -64,10 +64,10 @@ const ManageStake: React.FC = () => {
     setValue(newValue);
   };
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Layout width={deviceWrapper("92%", "65%")}>
-      <Link href={id === undefined ? "/dao/staking" : `/dao/${id}/staking`}>
+      <Link href={dao === undefined ? "/dao/staking" : `/${dao}/staking`}>
         <Button
           variant="outlined"
           size="small"

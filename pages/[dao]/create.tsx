@@ -12,7 +12,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 const Create: React.FC = () => {
   const router = useRouter();
 
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Layout>
       {/* get last link here */}
@@ -28,9 +28,9 @@ const Create: React.FC = () => {
       >
         {/* <Link
           href={
-            id === undefined
-              ? "/dao/proposal/create"
-              : `/dao/${id}/proposal/create`
+            dao === undefined
+              ? ""
+              : `/${dao}/proposals/create`
           }
         > */}
         <Box
@@ -78,9 +78,9 @@ const Create: React.FC = () => {
         {/* </Link> */}
         <Link
           href={
-            id === undefined
-              ? "/dao/discussion/create"
-              : `/dao/${id}/discussion/create`
+            dao === undefined
+              ? ""
+              : `/${dao}/discussion/create`
           }
         >
           <Box
