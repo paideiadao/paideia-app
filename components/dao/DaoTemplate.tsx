@@ -31,8 +31,6 @@ const DaoTemplate: React.FC = (props) => {
     }
   );
 
-  const { utxos } = useWallet();
-
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   useEffect(() => {
     globalContext.api.setDaoData(daoData);

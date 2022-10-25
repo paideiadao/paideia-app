@@ -20,6 +20,7 @@ import { useWallet } from "@components/wallet/WalletContext";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { isAddressValid } from "@components/wallet/AddWallet";
 import { getUserId } from "@lib/utilities";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
 
 export interface IDao {
   name: string;
@@ -127,6 +128,8 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
 
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
+  const {daoSlugsObject} = useDaoSlugs()
+  console.log(globalContext.api.daoData)
 
   React.useEffect(() => {
     const load = async () => {

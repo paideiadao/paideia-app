@@ -336,7 +336,7 @@ export class AbstractApi {
     //   : url.includes("8000")
     //   ? getBaseUrl() + url.split("8000")[1]
     //   : getBaseUrl() + url;
-    url = process.env.API_URL + url;
+    url = url.includes('http') ? url : process.env.API_URL + url;
     return await methods[method](url, body, defaultOptions);
   }
 }

@@ -22,7 +22,6 @@ import { IFile } from "@lib/creation/Interfaces";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CancelLink from "@components/utilities/CancelLink";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
-import axios from "axios";
 
 export interface IDiscussion {
   name: string;
