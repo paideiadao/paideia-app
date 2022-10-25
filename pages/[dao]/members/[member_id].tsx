@@ -22,13 +22,23 @@ const Member: React.FC = () => {
 
   const { data: userData, error: userError } = useSWR(
     member_id !== undefined && daoId !== undefined &&
-      `/users/details/${member_id}?dao_id=${daoId}`,
+      `/users/details/${member_id}?dao_id=${daoId}&mapping=user_details_id`,
     fetcher,
     {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
+  );
+
+  const { data: activitiesData, error: activitiesError } = useSWR(
+    member_id !== undefined && `/activities/${member_id}}`,
+    fetcher
+  );
+
+  const { data: proposalsData, error: proposalsError } = useSWR(
+    member_id !== undefined && `/proposals/by_user_details_id/${member_id}`,
+    fetcher
   );
 
   // useDidMountEffect(() => {
@@ -40,8 +50,8 @@ const Member: React.FC = () => {
   return (
     <AbstractProfile
       data={userData}
-      proposals={[]}
-      activities={[]}
+      proposals={proposalsData ?? []}
+      activities={activitiesData ?? []}
       followed={
         userData === undefined
           ? undefined

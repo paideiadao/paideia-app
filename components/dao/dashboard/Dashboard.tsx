@@ -171,7 +171,6 @@ const Dashboard: React.FC = () => {
               </Box>
             </Box>
           </Box>
-
           <Box sx={{ mt: ".5rem" }}>
             <Header title={`Welcome to ${daoData.dao_name}`} />
             {/* <FinancialSummary /> */}

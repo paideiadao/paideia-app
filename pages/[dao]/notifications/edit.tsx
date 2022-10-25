@@ -138,7 +138,6 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
               </FormGroup>
             </Box>
           </Collapse>
-
           <Box
             sx={{
               width: "100%",
@@ -157,8 +156,8 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
                 Cancel
               </Button>
             </CancelLink>
-
             <LoadingButton
+              disabled
               variant="contained"
               sx={{ width: "49%" }}
               size="small"

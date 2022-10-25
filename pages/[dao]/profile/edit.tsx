@@ -279,7 +279,6 @@ const Edit: React.FC<{ params: any }> = (props) => {
                 Cancel
               </Button>
             </CancelLink>
-
             <LoadingButton
               size="small"
               variant="contained"
@@ -290,17 +289,16 @@ const Edit: React.FC<{ params: any }> = (props) => {
                 setLoading(true);
                 let imgRes;
                 if (typeof value.img !== "string") {
-                  let image = value.img.file;
+                  let image = value?.img?.file ?? -1;
                   imgRes =
                     image === undefined || image === -1
                       ? ""
                       : await appContext.api.uploadFile(image);
                 }
-
                 await appContext.api.editUser({
                   name: value.username,
                   profile_img_url:
-                    imgRes === undefined ? "" : imgRes.data.image_url,
+                    (imgRes === undefined || imgRes === "") ? "" : imgRes.data.image_url,
                   bio: value.shortBio,
                   social_links: value.socialLinks,
                 });
@@ -308,7 +306,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
                   ...appContext.api.daoUserData,
                   name: value.username,
                   profile_img_url:
-                    imgRes === undefined ? "" : imgRes.data.image_url,
+                    (imgRes === undefined || imgRes === "") ? "" : imgRes.data.image_url,
                   bio: value.shortBio,
                   social_links: value.socialLinks,
                 });

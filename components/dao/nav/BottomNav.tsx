@@ -32,7 +32,7 @@ const BottomNav: React.FC = () => {
         flexDirection: deviceWrapper("column", "row"),
       }}
     >
-      <Box sx={{ fontSize: ".9rem" }}>Visit our website at dao.paidiea.im.</Box>
+      <Box sx={{ fontSize: ".9rem" }}>Visit our website at paideia.im.</Box>
       <Box
         sx={{
           ml: deviceWrapper("", "auto"),
