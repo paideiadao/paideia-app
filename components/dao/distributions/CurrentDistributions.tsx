@@ -44,7 +44,7 @@ export interface IDistributionCard {
 
 export const DistributionCard: React.FC<IDistributionCard> = (props) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   const ticker = "PAI";
   return (
     <Box
@@ -106,9 +106,9 @@ export const DistributionCard: React.FC<IDistributionCard> = (props) => {
       <Box sx={{ width: "8%", display: "flex" }}>
         <Link
           href={
-            id === undefined
-              ? `/dao/distribution/${props.id}`
-              : `/dao/${id}/distribution/${props.id}`
+            dao === undefined
+              ? ``
+              : `/${dao}/distribution/${props.id}`
           }
         >
           <Button variant="text" sx={{ ml: "auto" }}>

@@ -128,16 +128,16 @@ const assets = [
 const FinancialSummary: React.FC = () => {
   const router = useRouter();
 
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Box sx={{ width: "100%", mt: ".5rem" }}>
       <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
         <Subheader title="Financial summary" small bold />
         <Link
           href={
-            id === undefined
-              ? "/dao/financials/treasury"
-              : `/dao/${id}/financials/treasury`
+            dao === undefined
+              ? ""
+              : `/${dao}/financials/treasury`
           }
         >
           <Button sx={{ ml: "auto", fontSize: ".8rem" }} size="small">

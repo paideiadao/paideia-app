@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useContext, FC } from "react";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import Layout from "@components/dao/Layout";
 import {
@@ -12,7 +13,6 @@ import {
   SelectChangeEvent,
   Slide,
 } from "@mui/material";
-import * as React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Chip from "@components/utilities/Chip";
 import AppsIcon from "@mui/icons-material/Apps";
@@ -29,6 +29,8 @@ import useSWR from "swr";
 import useDidMountEffect from "@components/utilities/hooks";
 import { fetcher } from "@lib/utilities";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import axios from "axios";
 
 // export const getStaticPaths = paths;
 // export const getStaticProps = props;
@@ -62,28 +64,31 @@ export interface IFilters {
   categories: string[];
 }
 
-const Activities: React.FC = () => {
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const [filters, setFilters] = React.useState<IFilters>({
+const Activities: FC = () => {
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [filters, setFilters] = useState<IFilters>({
     search: "",
     sortBy: "Newest",
     categories: ["All"],
   });
-  const [showFilters, setShowFilters] = React.useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState<boolean>(false);
   const router = useRouter();
-  const { id } = router.query;
-  const { data, error } = useSWR(
-    `/activities/by_dao_id/${id === undefined ? 1 : id}`,
-    fetcher
-  );
+  const { dao } = router.query;
+  const { daoSlugsObject } = useDaoSlugs();
+  const [data, setData] = useState(undefined)
 
-  useDidMountEffect(() => {
-    if (error) {
-      globalContext.api.showAlert("Error fetching proposals.", "error");
+  useEffect(() => {
+    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+      const url = `${process.env.API_URL}/activities/by_dao_id/${daoSlugsObject[dao.toString()]}`
+      axios.get(url)
+        .then((res) => {
+          setData(res.data); 
+        })
+        .catch((err) => {
+          globalContext.api.showAlert("Error fetching activities.", "error");
+        });
     }
-  }, [error]);
-
-  console.log(data);
+  }, [dao]);
 
   return (
     <Layout width="95%">
@@ -205,7 +210,7 @@ const Activities: React.FC = () => {
           />
         ))}
       </Box>
-      {data ? (
+      {data != undefined ? (
         data
           .filter((i: IActivity) => {
             return (
@@ -221,12 +226,12 @@ const Activities: React.FC = () => {
           .sort((a: IActivity, b: IActivity) =>
             filters.sortBy === "Oldest"
               ? //@ts-ignore
-                new Date(a.date) - new Date(b.date)
+              new Date(a.date) - new Date(b.date)
               : //@ts-ignore
-                b.date - a.date
+              b.date - a.date
           )
           .map((i: any, c: number) => {
-            return <Activity i={i} c={c} />;
+            return <Activity i={i} c={c} key={c} />;
           })
       ) : (
         <>Loading Here...</>

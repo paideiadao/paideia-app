@@ -1,13 +1,15 @@
+import React, { useEffect, useState, useContext, FC } from "react";
 import useDidMountEffect from "@components/utilities/hooks";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { fetcher } from "@lib/utilities";
 import { Box, Button, Avatar } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import * as React from "react";
 import useSWR from "swr";
 import { Subheader } from "../../creation/utilities/HeaderComponents";
 import Activity, { IActivity } from "../activity/Activity";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import axios from "axios";
 
 export const activities = [
   {
@@ -51,18 +53,22 @@ const LatestActivity: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
+  const { daoSlugsObject } = useDaoSlugs();
+  const [data, setData] = useState(undefined)
 
-  const { data, error } = useSWR(
-    `/activities/by_dao_id/${id === undefined ? 1 : id}`,
-    fetcher
-  );
-
-  useDidMountEffect(() => {
-    if (error) {
-      globalContext.api.showAlert("Error fetching proposals.", "error");
+  useEffect(() => {
+    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+      const url = `${process.env.API_URL}/activities/by_dao_id/${daoSlugsObject[dao.toString()]}`
+      axios.get(url)
+        .then((res) => {
+          setData(res.data); 
+        })
+        .catch((err) => {
+          console.log(err)
+        });
     }
-  }, [error]);
+  }, [dao]);
 
   return (
     <Box sx={{ width: "100%", pb: ".5rem" }}>
@@ -75,7 +81,7 @@ const LatestActivity: React.FC = () => {
         }}
       >
         <Subheader title="Latest activity" small bold />
-        <Link href={id === undefined ? "/dao/activity" : `/dao/${id}/activity`}>
+        <Link href={dao === undefined ? "" : `/${dao}/activity`}>
           <Button sx={{ ml: "auto", fontSize: ".8rem" }} size="small">
             View Activity Log
           </Button>

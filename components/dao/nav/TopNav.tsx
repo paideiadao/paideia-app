@@ -34,7 +34,7 @@ const TopNav: React.FC<INav> = (props) => {
   const handleOpenProfile = () => setOpenProfile(true);
   const handleCloseProfile = () => setOpenProfile(false);
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   const { wallet } = useWallet();
   const themeContext = React.useContext<IThemeContext>(ThemeContext);
   return (
@@ -85,9 +85,9 @@ const TopNav: React.FC<INav> = (props) => {
                 >
                   <Link
                     href={
-                      id === undefined
-                        ? "/dao/notifications"
-                        : `/dao/${id}/notifications`
+                      dao === undefined
+                        ? ""
+                        : `/${dao}/notifications`
                     }
                   >
                     <IconButton sx={{ display: deviceWrapper("flex", "none") }}>
@@ -121,7 +121,7 @@ const TopNav: React.FC<INav> = (props) => {
                   </IconButton>
                 </Box>
                 {/* <Link
-                href={id === undefined ? "/dao/profile" : `/dao/${id}/profile`}
+                href={dao === undefined ? "" : `${dao}/profile`}
               > */}
                 {globalContext.api.daoUserData !== undefined && (
                   <Box

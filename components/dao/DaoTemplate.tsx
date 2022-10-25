@@ -47,7 +47,10 @@ const DaoTemplate: React.FC = (props) => {
             alignItems: "flex-start",
           }}
         >
-          <Nav showMobile={showMobile} setShowMobile={setShowMobile} />
+          {/* {!(daoSlug == '' || daoSlug == undefined) && ( */}
+            <Nav showMobile={showMobile} setShowMobile={setShowMobile} />
+          {/* )} */}
+          
           <Box
             sx={{
               width: deviceWrapper("100%", "calc(100% - 14.5rem)"),

@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 
 const Distributions: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
 
   return (
     <Layout width="95%">
@@ -20,9 +20,9 @@ const Distributions: React.FC = () => {
         <Box sx={{ ml: "auto" }}>
           <Link
             href={
-              id === undefined
+              dao === undefined
                 ? "/dao/distributions/create"
-                : `/dao/${id}/distributions/create`
+                : `/${dao}/distributions/create`
             }
           >
             <Button variant="contained">

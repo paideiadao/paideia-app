@@ -17,7 +17,7 @@ export interface IAddendum {
 
 const Addendums: React.FC = () => {
   const router = useRouter();
-  const { id, proposal_id } = router.query;
+  const { dao, proposal_id } = router.query;
   const proposalContext = React.useContext<IProposalContext>(ProposalContext);
   const addendums = proposalContext.api.value.addendums;
   return (
@@ -54,9 +54,9 @@ const Addendums: React.FC = () => {
             />
             <Link
               href={
-                id === undefined
-                  ? `/dao/proposal/${proposal_id}/addendum/${i.id}`
-                  : `/dao/${id}/proposal/${proposal_id}/addendum/${i.id}`
+                dao === undefined
+                  ? ``
+                  : `/${dao}/proposal/${proposal_id}/addendum/${i.id}`
               }
             >
               <Button

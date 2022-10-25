@@ -155,7 +155,7 @@ const Notifications: React.FC<{ params: any }> = (props) => {
   const [view, setView] = React.useState<string>("All");
   const router = useRouter();
 
-  const { id } = router.query;
+  const { dao } = router.query;
 
   return (
     <Layout>
@@ -178,9 +178,9 @@ const Notifications: React.FC<{ params: any }> = (props) => {
         </Box>
         <Link
           href={
-            id === undefined
+            dao === undefined
               ? "/dao/notifications/edit"
-              : `/dao/${id}/notifications/edit`
+              : `/${dao}/notifications/edit`
           }
         >
           <Button

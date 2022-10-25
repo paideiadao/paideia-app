@@ -74,7 +74,6 @@ const BasicLink: React.FC<{
     Distributions: daoName
       ? `/${daoName}/financials/distributions`
       : "",
-    //id === undefined ? `/dao/distributions` : `/dao/${id}/distributions`,
     Staking: daoName ? `/${daoName}/staking` : "",
     Members: daoName ? `/${daoName}/members` : "",
     Activity: daoName

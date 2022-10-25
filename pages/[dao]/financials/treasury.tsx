@@ -15,15 +15,15 @@ import { deviceWrapper } from "@components/utilities/Style";
 
 const TreasuryHeader: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Box sx={{ width: "100%", alignItems: "center", display: "flex" }}>
       <Header title="Treasury" large />
       <Link
         href={
-          id === undefined
+          dao === undefined
             ? "/dao/financials/treasury/send"
-            : `/dao/${id}/financials/treasury/send`
+            : `/${dao}/financials/treasury/send`
         }
       >
         <Button

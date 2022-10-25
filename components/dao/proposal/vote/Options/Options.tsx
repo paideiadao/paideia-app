@@ -3,7 +3,7 @@ import * as React from "react";
 import ListIcon from "@mui/icons-material/List";
 import VotingChoice from "../VotingChoice";
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import { IProposalAction } from "@pages/[dao]/proposal/create";
+import { IProposalAction } from "@pages/[dao]/proposals/create";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";

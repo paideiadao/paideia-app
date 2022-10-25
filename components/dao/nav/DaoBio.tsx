@@ -394,7 +394,7 @@ const DaoSelect: React.FC<IDaoSelect> = (props) => {
     </>
   );
   return props.redirect === undefined ? (
-    <Link href={`/dao/${props.data.href}`}>{content}</Link>
+    <Link href={`/${props.data.href}`}>{content}</Link>
   ) : (
     content
   );

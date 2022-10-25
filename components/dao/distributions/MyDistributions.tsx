@@ -42,7 +42,7 @@ interface IMyDistributionCard {
 
 const MyDistributionCard: React.FC<IMyDistributionCard> = (props) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   const ticker = "PAI";
   return (
     <Box
@@ -87,9 +87,9 @@ const MyDistributionCard: React.FC<IMyDistributionCard> = (props) => {
       <Box sx={{ width: "8%", display: "flex" }}>
         <Link
           href={
-            id === undefined
-              ? `/dao/distribution/redeem/${props.id}`
-              : `/dao/${id}/distribution/redeem/${props.id}`
+            dao === undefined
+              ? ``
+              : `/${dao}/distribution/redeem/${props.id}`
           }
         >
           <Button variant="text" sx={{ ml: "auto" }}>
