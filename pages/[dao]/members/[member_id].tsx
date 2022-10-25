@@ -32,7 +32,7 @@ const Member: React.FC = () => {
   );
 
   const { data: activitiesData, error: activitiesError } = useSWR(
-    member_id !== undefined && `/activities/${member_id}}`,
+    member_id !== undefined && `/activities/${member_id}`,
     fetcher
   );
 
