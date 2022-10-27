@@ -12,8 +12,6 @@ const Profile: FC = () => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
   const userData = appContext.api.daoUserData;
 
-  // const {id} =
-
   const { data: activitiesData, error } = useSWR(
     userData !== undefined && `/activities/${userData.id}`,
     fetcher

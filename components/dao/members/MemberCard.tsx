@@ -186,7 +186,7 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
               borderColor: "border.main",
             }}
           >
-              <Link href={`${daoNameWithLeadingSlash}/members/${props.user_id}`}>
+              <Link href={`${daoNameWithLeadingSlash}/members/${props.id}`}>
               <Button
                 variant="text"
                 sx={{

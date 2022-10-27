@@ -32,7 +32,6 @@ const Details: React.FC<{ date: Date }> = (props) => {
         }}
       >
         <CapsInfo title="Details" mb={"0.5rem"} />
-
         <Box
           sx={{
             display: "flex",
@@ -44,7 +43,6 @@ const Details: React.FC<{ date: Date }> = (props) => {
           <LanIcon sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }} />
           ID: {discussion_id}
         </Box>
-
         <Box
           sx={{
             alignItems: "center",

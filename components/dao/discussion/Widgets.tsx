@@ -14,15 +14,8 @@ export const Overview: React.FC<{
   followers: number[];
   created: number;
 }> = (props) => {
-  const router = useRouter()
+  const router = useRouter();
   const { dao } = router.query;
-  const [daoName, setDaoName] = React.useState('')
-
-  React.useEffect(() => {
-    if (router.isReady && dao != undefined) {
-      setDaoName(dao.toString())
-    }
-  }, [router.isReady])
 
   return (
     <Box
@@ -120,7 +113,7 @@ export const Overview: React.FC<{
           justifyContent: "center",
         }}
       >
-        <Link href={`/${daoName}/members/${props.userDetailId}`}>
+        <Link href={`/${dao}/members/${props.userDetailId}`}>
           <Button
             size="small"
             sx={{

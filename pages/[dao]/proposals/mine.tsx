@@ -9,10 +9,9 @@ import useSWR from "swr";
 
 const Mine: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
-  const router = useRouter();
-  const { id } = router.query;
+  const userData = context.api.daoUserData;
   const { data, error } = useSWR(
-    `/proposals/by_dao_id/${id === undefined ? 1 : id}`,
+    userData?.id && `/proposals/by_user_details_id/${userData?.id}`,
     fetcher,
     {
       revalidateIfStale: false,
