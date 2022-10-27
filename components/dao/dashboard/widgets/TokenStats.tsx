@@ -98,13 +98,7 @@ const TokenStats: React.FC = () => {
           borderTopColor: "border.main",
         }}
       >
-        <Link
-          href={
-            dao === undefined
-              ? ""
-              : `/${dao}/financials/token`
-          }
-        >
+        <Link href={dao === undefined ? "" : `/${dao}/financials/token`}>
           <Button
             size="small"
             sx={{

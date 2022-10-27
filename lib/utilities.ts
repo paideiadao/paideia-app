@@ -101,7 +101,7 @@ export interface ILoginResponse {
 
 export const getWsUrl = (): string => {
   //process.env.NODE_ENV == "development"
-  return process.env.WSS_URL
+  return process.env.WSS_URL;
 };
 
 export class AbstractApi {
@@ -329,7 +329,7 @@ export class AbstractApi {
     //   : url.includes("8000")
     //   ? getBaseUrl() + url.split("8000")[1]
     //   : getBaseUrl() + url;
-    url = url.includes('http') ? url : process.env.API_URL + url;
+    url = url.includes("http") ? url : process.env.API_URL + url;
     return await methods[method](url, body, defaultOptions);
   }
 }

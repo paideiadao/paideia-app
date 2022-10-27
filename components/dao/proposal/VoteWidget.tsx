@@ -131,9 +131,7 @@ const _VoteWidget: React.FC = () => {
       >
         <Link
           href={
-            dao === undefined
-              ? ``
-              : `/${dao}/proposals/${proposal_id}/votes`
+            dao === undefined ? `` : `/${dao}/proposals/${proposal_id}/votes`
           }
         >
           <Button

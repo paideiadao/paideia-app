@@ -19,61 +19,20 @@ import { getTokenUtxos } from "@lib/wallet/Nautilus";
 import { useWallet } from "@components/wallet/WalletContext";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { isAddressValid } from "@components/wallet/AddWallet";
-import { getUserId } from "@lib/utilities";
+import { getObj, getUserId } from "@lib/utilities";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import { useRouter } from "next/router";
 
 export interface IDao {
-  name: string;
-  url: string;
+  dao_name: string;
+  dao_url: string;
   id: number;
-  href: string;
-  img: string;
-  token: string;
-  ticker: string;
+  logo_url: string;
+  token_id: string;
+  token_ticker: string;
+  member_count: number;
+  proposal_count: number;
 }
-
-// make dynamic after MVP
-const daos: IDao[] = [
-  {
-    id: 1,
-    name: "Paideia",
-    url: "app.paideia.im/paideia",
-    href: "",
-    img: PaideiaLogo.src,
-    token: "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489",
-    ticker: "Paideia",
-  },
-  {
-    id: 2,
-    name: "EGIO",
-    url: "app.paideia.im/egio",
-    href: "egio",
-    img: "https://ergopad-public.s3.us-west-2.amazonaws.com/assets.logo.1666366935479758.png",
-    token: "00b1e236b60b95c2c6f8007a9d89bc460fc9e78f98b09faec9449007b40bccf3",
-    ticker: 'EGIO'
-  },
-  // {
-  //   id: 2,
-  //   name: "Ergo Lend",
-  //   url: "paideia.im/dao/ergolend",
-  //   href: "ergolend",
-  //   img: ErgoLend.src,
-  // },
-  // {
-  //   id: 3,
-  //   name: "Ergo Pad",
-  //   url: "paideia.im/dao/ergopad",
-  //   href: "ergopad",
-  //   img: ErgoPad.src,
-  // },
-  // {
-  //   id: 4,
-  //   name: "Swamp Audio",
-  //   url: "paideia.im/dao/swamp",
-  //   href: "swamp",
-  //   img: Swamp.src,
-  // },
-];
 
 const DaoBio: React.FC<ISideNavComponent> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -94,7 +53,7 @@ const DaoBio: React.FC<ISideNavComponent> = (props) => {
       }}
     >
       <Avatar sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}>
-        <img src={daoData.design.logo_url} />
+        {daoData.design ? <img src={daoData.design.logo_url} /> : null}
       </Avatar>
       <DaoSelector {...props} />
     </Box>
@@ -108,32 +67,32 @@ interface IDaoSelector extends ISideNavComponent {
 export const DaoSelector: React.FC<IDaoSelector> = (props) => {
   const [dropdown, setDropdown] = React.useState<boolean>(false);
   const [search, setSearch] = React.useState<string>("");
-
+  const router = useRouter();
+  const { dao } = router.query;
   const [id, setId] = React.useState<number>(1);
-  // make dynamic after MVP
-  const [dao, setDao] = React.useState<IDao>({
-    id: 1,
-    name: "Paideia",
-    url: "paideia.im/dao",
-    href: "",
-    img: PaideiaLogo.src,
-    token: "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489",
-    ticker: "Paideia",
-  });
+  const [selectedDao, setSelectedDao] = React.useState<IDao>(undefined);
   const setDaoWrapper = (dao: IDao) => {
     if (props.setShowMobile !== undefined) {
       props.setShowMobile(false);
     }
     setId(dao.id);
-    setDao(dao);
+    setSelectedDao(dao);
     setDropdown(false);
   };
+
+  const { daoSlugs, daoSlugsObject } = useDaoSlugs();
+
+  console.log(daoSlugs, daoSlugsObject);
+
+  React.useEffect(() => {
+    if (router.isReady && dao != undefined) {
+      setSelectedDao(getObj(daoSlugs, "dao_url", dao));
+    }
+  }, [router.isReady]);
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
 
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
-  const {daoSlugsObject} = useDaoSlugs()
-  console.log(globalContext.api.daoData)
 
   React.useEffect(() => {
     const load = async () => {
@@ -170,59 +129,61 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
-      <Box
-        sx={{
-          width: "100%",
-          p: ".4rem",
-          pt: ".2rem",
-          pb: ".2rem",
-          backgroundColor: "fileInput.main",
-          borderRadius: ".3rem",
-          display: "flex",
-          alignItems: "center",
-          border: "1px solid",
-          borderColor: "border.main",
-          cursor: "pointer",
-        }}
-        onClick={() => setDropdown(true)}
-      >
-        {props.redirect === false && (
-          <Avatar
-            sx={{
-              width: "2rem",
-              height: "2rem",
-              mt: ".5rem",
-              mb: ".5rem",
-              mr: ".5rem",
-              backgroundColor: "transparent",
-            }}
-          >
-            <img src={dao.img} />
-          </Avatar>
-        )}
-        <Box>
-          <Box sx={{ fontSize: ".7rem" }}>{dao.name}</Box>
-          <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
-            {dao.url}
-          </Box>
-        </Box>
+      {selectedDao && (
         <Box
           sx={{
-            ml: "auto",
+            width: "100%",
+            p: ".4rem",
+            pt: ".2rem",
+            pb: ".2rem",
+            backgroundColor: "fileInput.main",
+            borderRadius: ".3rem",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
+            border: "1px solid",
+            borderColor: "border.main",
+            cursor: "pointer",
           }}
+          onClick={() => setDropdown(true)}
         >
-          <KeyboardArrowUpIcon
-            sx={{ mb: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
-          />
-          <KeyboardArrowDownIcon
-            sx={{ mt: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
-          />
+          {props.redirect === false && (
+            <Avatar
+              sx={{
+                width: "2rem",
+                height: "2rem",
+                mt: ".5rem",
+                mb: ".5rem",
+                mr: ".5rem",
+                backgroundColor: "transparent",
+              }}
+            >
+              <img src={selectedDao.logo_url} />
+            </Avatar>
+          )}
+          <Box>
+            <Box sx={{ fontSize: ".7rem" }}>{selectedDao.dao_name}</Box>
+            <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
+              app.paideia.im/{selectedDao.dao_url}
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              ml: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <KeyboardArrowUpIcon
+              sx={{ mb: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
+            />
+            <KeyboardArrowDownIcon
+              sx={{ mt: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
       {dropdown && (
         <ClickAwayListener onClickAway={() => setDropdown(false)}>
           <Box
@@ -276,7 +237,7 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
               <CapsInfo
                 title={
                   search === ""
-                    ? daos.filter((i: IDao) => utxos > 0)
+                    ? daoSlugs.filter((i: IDao) => utxos > 0)
                       ? "Daos Connected to your wallet"
                       : "Daos Connected to your wallet"
                     : "Search Results"
@@ -296,7 +257,7 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                   maxHeight: "15rem",
                 }}
               >
-                {daos.filter((i: IDao) => utxos > 0).length === 0 &&
+                {daoSlugs.filter((i: IDao) => utxos > 0).length === 0 &&
                 search === "" ? (
                   <Box
                     sx={{
@@ -308,11 +269,13 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                     No dao tokens in your wallet
                   </Box>
                 ) : (
-                  daos
+                  daoSlugs
                     .filter((i: IDao) =>
                       search === ""
                         ? utxos > 0
-                        : i.name.toLowerCase().includes(search.toLowerCase())
+                        : i.dao_name
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
                     )
                     .map((d: any, c: number) => (
                       <DaoSelect
@@ -378,13 +341,13 @@ const DaoSelect: React.FC<IDaoSelect> = (props) => {
         onClick={() => props.set(props.data)}
       >
         <Avatar
-          src={props.data.img}
+          src={props.data.logo_url}
           sx={{ width: "1.5rem", height: "1.5rem" }}
         />
         <Box sx={{ fontSize: ".7rem", ml: ".5rem" }}>
-          {props.data.name}
+          {props.data.dao_name}
           <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
-            {props.data.url}
+            app.paideia.im/{props.data.dao_url}
           </Box>
         </Box>
         {props.selected && (
@@ -395,13 +358,13 @@ const DaoSelect: React.FC<IDaoSelect> = (props) => {
       </Box>
       {!props.inWallet && (
         <Box sx={{ fontSize: ".57rem", color: "error.main" }}>
-          You don't have any {props.data.ticker} in your wallet
+          You don't have any {props.data.token_ticker} in your wallet
         </Box>
       )}
     </>
   );
   return props.redirect === undefined ? (
-    <Link href={`/${props.data.href}`}>{content}</Link>
+    <Link href={`/${props.data.dao_url}`}>{content}</Link>
   ) : (
     content
   );

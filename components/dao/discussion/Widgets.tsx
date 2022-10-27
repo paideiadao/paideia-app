@@ -45,7 +45,9 @@ export const Overview: React.FC<{
             <img src={props.img} />
           </Avatar>
           <Box sx={{ ml: "1rem" }}>
-            <Box sx={{ fontSize: "1rem" }}>{snipAddress(props.alias, 25, 10)}</Box>
+            <Box sx={{ fontSize: "1rem" }}>
+              {snipAddress(props.alias, 25, 10)}
+            </Box>
             <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
               Level {props.level} | Philosopher
             </Box>

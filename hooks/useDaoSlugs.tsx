@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import { axiosGetFetcher } from "@utils/axios";
-import { getObj } from "@lib/utilities";
 
 export const useDaoSlugs = () => {
   const { data, error } = useSWR(

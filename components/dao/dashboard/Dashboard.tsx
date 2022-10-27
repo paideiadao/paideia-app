@@ -1,8 +1,6 @@
 import { Box, Button } from "@mui/material";
 import * as React from "react";
-import PaideiaBanner from "../../../public/dao/banner/paideia-banner.png";
 import { Header } from "../../creation/utilities/HeaderComponents";
-import FinancialSummary from "./FinancialSummary";
 import About from "./widgets/About";
 import TokenStats from "./widgets/TokenStats";
 import ActiveProposals from "./ActiveProposals";
@@ -11,7 +9,6 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LightbulbCircleIcon from "@mui/icons-material/LightbulbCircle";
 import ReadingBackground from "../../../public/dao/reading/reading-background.png";
 import NewspaperFilled from "../../../public/icons/newspaper-filled.png";
-import CurrentDistributions from "./CurrentDistributions";
 import LatestActivity from "./LatestActivity";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { IThemeContext, ThemeContext } from "@lib/ThemeContext";
@@ -35,7 +32,9 @@ const Dashboard: React.FC = () => {
           display: deviceWrapper("none", "block"),
         }}
       >
-        <img src={daoData.design.banner_url} style={{ width: "100%" }} />
+        {daoData.design ? (
+          <img src={daoData.design.banner_url} style={{ width: "100%" }} />
+        ) : null}
       </Box>
       <Box
         sx={{

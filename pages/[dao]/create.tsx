@@ -76,13 +76,7 @@ const Create: React.FC = () => {
           </Box>
         </Box>
         {/* </Link> */}
-        <Link
-          href={
-            dao === undefined
-              ? ""
-              : `/${dao}/discussion/create`
-          }
-        >
+        <Link href={dao === undefined ? "" : `/${dao}/discussion/create`}>
           <Box
             sx={{
               cursor: "pointer",

@@ -11,17 +11,18 @@ const Member: React.FC = () => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const { member_id, dao } = router.query;
-  const [daoId, setDaoId] = useState(undefined)
+  const [daoId, setDaoId] = useState(undefined);
   const { daoSlugsObject } = useDaoSlugs();
 
   useEffect(() => {
     if (router.isReady) {
-      setDaoId(daoSlugsObject[dao.toString()])
+      setDaoId(daoSlugsObject[dao.toString()]);
     }
-  }, [router.isReady])
+  }, [router.isReady]);
 
   const { data: userData, error: userError } = useSWR(
-    member_id !== undefined && daoId !== undefined &&
+    member_id !== undefined &&
+      daoId !== undefined &&
       `/users/details/${member_id}?dao_id=${daoId}&mapping=user_details_id`,
     fetcher,
     {
