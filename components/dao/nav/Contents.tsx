@@ -478,7 +478,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
                   : ""}
               />
             </>
-          )}
+          )} 
           <BasicLink
             icon={<AccessTimeFilledIcon sx={{ opacity: ".8" }} />}
             title={"Past"}
