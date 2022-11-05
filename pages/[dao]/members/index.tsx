@@ -117,9 +117,7 @@ const Members: React.FC = () => {
     if (router.isReady) {
       setDaoId(daoSlugsObject[dao.toString()])
     }
-    console.log(daoSlugsObject)
   }, [router.isReady])
-  console.log(daoSlugsObject)
 
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
 
