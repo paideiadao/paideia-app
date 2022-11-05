@@ -23,6 +23,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import AppsIcon from "@mui/icons-material/Apps";
 import StarIcon from "@mui/icons-material/Star";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import GavelIcon from "@mui/icons-material/Gavel";
+import CodeIcon from "@mui/icons-material/Code";
 import ProposalCard, {
   IProposalCard,
 } from "@components/dao/proposals/ProposalCard";
@@ -40,25 +42,12 @@ export interface IFilters {
   categories: string[];
 }
 
-export const categories = [
-  { icon: <AppsIcon sx={{ fontSize: ".9rem" }} />, label: "All" },
-  {
-    icon: <AttachMoneyIcon sx={{ fontSize: ".9rem" }} />,
-    label: "Finance",
-  },
-  {
-    icon: <StarIcon sx={{ fontSize: ".9rem" }} />,
-    label: "Category 2",
-  },
-  {
-    icon: <StarIcon sx={{ fontSize: ".9rem" }} />,
-    label: "Category 3",
-  },
-  {
-    icon: <StarIcon sx={{ fontSize: ".9rem" }} />,
-    label: "Category 4",
-  },
-];
+export const categoriesMap: { [key:string]: any } = {
+  all: <AppsIcon />,
+  finance: <AttachMoneyIcon /> ,
+  governance: <GavelIcon />,
+  technical: <CodeIcon />,
+};
 
 interface IProposalListing {
   proposals: any;
@@ -77,6 +66,18 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
 
   const router = useRouter();
   const { dao } = router.query;
+
+  const categories = (props.proposals
+    ? ["All",
+      ...props.proposals
+        .map((proposal: { category: string; }) => proposal.category)
+        .filter((v: string, i: number, x: string[]) => v && x.indexOf(v) === i)
+      ]
+    : ["All"])
+    .map((category: string) => { 
+      return {icon: categoriesMap[category.toLowerCase()] ?? <StarIcon />, label: category}; 
+    })
+  ;
 
   return (
     <>
@@ -221,7 +222,6 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                     }
                   }
                 }
-
                 setFilters({
                   ...filters,
                   categories: temp,
@@ -270,7 +270,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 filters.sortBy === ""
                   ? true
                   : filters.sortBy === "Most Recent"
-                  ? new Date(a.date).getTime() - new Date(b.date).getTime()
+                  ? new Date(b.date).getTime() - new Date(a.date).getTime()
                   : true
               )
               .filter((i: any) => {
