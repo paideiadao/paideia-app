@@ -92,7 +92,7 @@ const TopNav: React.FC<INav> = (props) => {
                     }
                   >
                     <IconButton sx={{ display: deviceWrapper("flex", "none") }}>
-                      <Badge badgeContent={1} color="primary">
+                      <Badge badgeContent={undefined} color="primary">
                         <NotificationsIcon
                           sx={{
                             fontSize: "1.1rem",
