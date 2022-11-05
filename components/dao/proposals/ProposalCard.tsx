@@ -609,7 +609,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             <Link
               href={
                 (dao === undefined ? "" : `/${dao}/`) +
-                `${!props.is_proposal ? "discussion" : "proposal"}/${props.id}`
+                `${!props.is_proposal ? "discussion" : "proposal"}/${generate_slug(props.id, props.name)}`
               }
             >
               <Box sx={{ cursor: "pointer", overflowX: "hidden", textOverflow: "ellipsis" }}>
@@ -656,6 +656,19 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       </Badge>
     </Box>
   );
+};
+
+const generate_slug = (id: string | number, name: string) => {
+  const slug =
+    name
+      .toLowerCase()
+      .trim()
+      .replaceAll(/[^a-zA-Z0-9 ]/g, '')
+      .replaceAll(' ', '-') +
+    '-' +
+    id.toString();
+  if (slug.startsWith('-')) return id;
+  return slug;
 };
 
 export default ProposalCard;
