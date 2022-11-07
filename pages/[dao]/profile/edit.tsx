@@ -298,7 +298,9 @@ const Edit: React.FC<{ params: any }> = (props) => {
                 await appContext.api.editUser({
                   name: value.username,
                   profile_img_url:
-                    (imgRes === undefined || imgRes === "") ? "" : imgRes.data.image_url,
+                    imgRes === undefined || imgRes === ""
+                      ? ""
+                      : imgRes.data.image_url,
                   bio: value.shortBio,
                   social_links: value.socialLinks,
                 });
@@ -306,7 +308,9 @@ const Edit: React.FC<{ params: any }> = (props) => {
                   ...appContext.api.daoUserData,
                   name: value.username,
                   profile_img_url:
-                    (imgRes === undefined || imgRes === "") ? "" : imgRes.data.image_url,
+                    imgRes === undefined || imgRes === ""
+                      ? ""
+                      : imgRes.data.image_url,
                   bio: value.shortBio,
                   social_links: value.socialLinks,
                 });

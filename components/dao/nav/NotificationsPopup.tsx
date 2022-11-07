@@ -9,7 +9,7 @@ import {
 import { id } from "date-fns/locale";
 import Link from "next/link";
 import * as React from "react";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 interface INotificationsPopup {
   open: boolean;
@@ -80,13 +80,7 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
           }}
           onClick={props.close}
         >
-          <Link
-            href={
-              dao === undefined
-                ? ""
-                : `/${dao}/notifications`
-            }
-          >
+          <Link href={dao === undefined ? "" : `/${dao}/notifications`}>
             <Button
               sx={{
                 width: "100%",

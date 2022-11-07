@@ -87,9 +87,7 @@ const MyDistributionCard: React.FC<IMyDistributionCard> = (props) => {
       <Box sx={{ width: "8%", display: "flex" }}>
         <Link
           href={
-            dao === undefined
-              ? ``
-              : `/${dao}/distribution/redeem/${props.id}`
+            dao === undefined ? `` : `/${dao}/distribution/redeem/${props.id}`
           }
         >
           <Button variant="text" sx={{ ml: "auto" }}>

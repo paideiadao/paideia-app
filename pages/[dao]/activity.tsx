@@ -75,14 +75,17 @@ const Activities: FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [data, setData] = useState(undefined)
+  const [data, setData] = useState(undefined);
 
   useEffect(() => {
     if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      const url = `${process.env.API_URL}/activities/by_dao_id/${daoSlugsObject[dao.toString()]}`
-      axios.get(url)
+      const url = `${process.env.API_URL}/activities/by_dao_id/${
+        daoSlugsObject[dao.toString()]
+      }`;
+      axios
+        .get(url)
         .then((res) => {
-          setData(res.data); 
+          setData(res.data);
         })
         .catch((err) => {
           globalContext.api.showAlert("Error fetching activities.", "error");
@@ -226,9 +229,9 @@ const Activities: FC = () => {
           .sort((a: IActivity, b: IActivity) =>
             filters.sortBy === "Oldest"
               ? //@ts-ignore
-              new Date(a.date) - new Date(b.date)
+                new Date(a.date) - new Date(b.date)
               : //@ts-ignore
-              b.date - a.date
+                b.date - a.date
           )
           .map((i: any, c: number) => {
             return <Activity i={i} c={c} key={c} />;

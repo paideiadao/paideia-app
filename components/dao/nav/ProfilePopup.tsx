@@ -32,9 +32,7 @@ const ProfilePopupRow: React.FC<IProfilePopupRow> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
   return (
-    <Link
-      href={dao === undefined ? `/${props.link}` : `/${dao}${props.link}`}
-    >
+    <Link href={dao === undefined ? `/${props.link}` : `/${dao}${props.link}`}>
       <Box
         sx={{
           width: "100%",

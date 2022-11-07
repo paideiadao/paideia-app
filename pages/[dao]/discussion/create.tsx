@@ -22,7 +22,6 @@ import { IFile } from "@lib/creation/Interfaces";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CancelLink from "@components/utilities/CancelLink";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
-import axios from "axios";
 
 export interface IDiscussion {
   name: string;
@@ -57,11 +56,11 @@ const CreateDiscussion: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [daoId, setDaoId] = useState<number>(undefined)
+  const [daoId, setDaoId] = useState<number>(undefined);
 
   useEffect(() => {
     if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      setDaoId(daoSlugsObject[dao.toString()])
+      setDaoId(daoSlugsObject[dao.toString()]);
     }
   }, [dao]);
   const api = new DiscussionApi(globalContext.api, value, setValue);

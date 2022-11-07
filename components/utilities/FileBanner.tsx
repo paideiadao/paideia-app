@@ -25,7 +25,6 @@ const FileBanner: React.FC<{
   };
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(e.dataTransfer.files);
     const object = {
       currentTarget: {
         files: e.dataTransfer.files,

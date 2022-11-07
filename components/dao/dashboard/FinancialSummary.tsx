@@ -133,13 +133,7 @@ const FinancialSummary: React.FC = () => {
     <Box sx={{ width: "100%", mt: ".5rem" }}>
       <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
         <Subheader title="Financial summary" small bold />
-        <Link
-          href={
-            dao === undefined
-              ? ""
-              : `/${dao}/financials/treasury`
-          }
-        >
+        <Link href={dao === undefined ? "" : `/${dao}/financials/treasury`}>
           <Button sx={{ ml: "auto", fontSize: ".8rem" }} size="small">
             View More
           </Button>

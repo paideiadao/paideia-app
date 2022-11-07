@@ -108,18 +108,16 @@ const Members: React.FC = () => {
     categories: ["All"],
   });
   const [value, setValue] = useState<number[]>([0, 10]);
-  const [daoId, setDaoId] = useState(1)
+  const [daoId, setDaoId] = useState(1);
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
 
   useEffect(() => {
     if (router.isReady) {
-      setDaoId(daoSlugsObject[dao.toString()])
+      setDaoId(daoSlugsObject[dao.toString()]);
     }
-    console.log(daoSlugsObject)
-  }, [router.isReady])
-  console.log(daoSlugsObject)
+  }, [router.isReady]);
 
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
 
