@@ -18,6 +18,7 @@ import { isAddressValid } from "@components/wallet/AddWallet";
 import { ProfilePopup } from "./ProfilePopup";
 import { snipAddress } from "@lib/utilities";
 import NotificationsPopup from "./NotificationsPopup";
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -175,11 +176,10 @@ const TopNav: React.FC<INav> = (props) => {
             borderBottom: "1px solid",
             height: "100vh",
             borderBottomColor: "border.main",
-            backgroundImage: `url(${
-              themeContext.theme === DarkTheme
+            backgroundImage: `url(${themeContext.theme === DarkTheme
                 ? DarkFooter.src
                 : LightFooter.src
-            })`,
+              })`,
             backgroundPosition: "bottom 0px right 0px",
             backgroundRepeat: "no-repeat",
             backgroundSize: "16rem",
@@ -188,9 +188,9 @@ const TopNav: React.FC<INav> = (props) => {
           }}
         >
           <Box sx={{ width: "100%", position: "relative" }}>
-            {/* <IconButton onClick={props.hide} sx={{right: '.5rem', top: '.5rem', position: 'absolute'}}>
-          <CloseIcon/>
-        </IconButton> */}
+            <IconButton onClick={() => props.setShowMobile(false)} sx={{ left: '.5rem', top: '.5rem', position: 'absolute' }}>
+              <CloseIcon />
+            </IconButton>
             <DaoBio setShowMobile={props.setShowMobile} />
             <Contents setShowMobile={props.setShowMobile} />
           </Box>

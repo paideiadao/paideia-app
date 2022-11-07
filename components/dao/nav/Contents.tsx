@@ -473,7 +473,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
                 link={daoName ? `/${daoName}/proposals/mine` : ""}
               />
             </>
-          )}
+          )} 
           <BasicLink
             icon={<AccessTimeFilledIcon sx={{ opacity: ".8" }} />}
             title={"Past"}
