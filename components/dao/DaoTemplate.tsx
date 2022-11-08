@@ -14,13 +14,13 @@ import TopNav from "./nav/TopNav";
 const DaoTemplate: React.FC = (props) => {
   const [showMobile, setShowMobile] = useState<boolean>(false);
   const router = useRouter();
-  const [daoSlug, setDaoSlug] = useState('')
+  const [daoSlug, setDaoSlug] = useState("");
   const { dao } = router.query;
   useEffect(() => {
     if (router.isReady && dao != undefined) {
-      setDaoSlug(dao.toString())
+      setDaoSlug(dao.toString());
     }
-  }, [router.isReady])
+  }, [router.isReady]);
   const { data: daoData, error: daoError } = useSWR(
     `/dao/${daoSlug}`,
     fetcher,
@@ -30,8 +30,6 @@ const DaoTemplate: React.FC = (props) => {
       revalidateOnReconnect: false,
     }
   );
-
-  const { utxos } = useWallet();
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   useEffect(() => {
@@ -48,9 +46,9 @@ const DaoTemplate: React.FC = (props) => {
           }}
         >
           {/* {!(daoSlug == '' || daoSlug == undefined) && ( */}
-            <Nav showMobile={showMobile} setShowMobile={setShowMobile} />
+          <Nav showMobile={showMobile} setShowMobile={setShowMobile} />
           {/* )} */}
-          
+
           <Box
             sx={{
               width: deviceWrapper("100%", "calc(100% - 14.5rem)"),

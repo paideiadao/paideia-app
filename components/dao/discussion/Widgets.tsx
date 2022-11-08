@@ -1,10 +1,8 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Avatar, Box, Button } from "@mui/material";
 import * as React from "react";
-import Musk from "@public/profile/musk-full.png";
-import { deviceWrapper } from "@components/utilities/Style";
 import Link from "next/link";
-import { getDaoPath } from "@lib/utilities";
+import { snipAddress } from "@lib/utilities";
 import { useRouter } from "next/router";
 
 export const Overview: React.FC<{
@@ -47,7 +45,9 @@ export const Overview: React.FC<{
             <img src={props.img} />
           </Avatar>
           <Box sx={{ ml: "1rem" }}>
-            <Box sx={{ fontSize: "1rem" }}>{props.alias}</Box>
+            <Box sx={{ fontSize: "1rem" }}>
+              {snipAddress(props.alias, 25, 10)}
+            </Box>
             <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
               Level {props.level} | Philosopher
             </Box>

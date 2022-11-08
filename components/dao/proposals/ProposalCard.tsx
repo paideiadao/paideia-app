@@ -612,7 +612,13 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 `${!props.is_proposal ? "discussion" : "proposal"}/${generate_slug(props.id, props.name)}`
               }
             >
-              <Box sx={{ cursor: "pointer", overflowX: "hidden", textOverflow: "ellipsis" }}>
+              <Box
+                sx={{
+                  cursor: "pointer",
+                  overflowX: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {props.name}
               </Box>
             </Link>

@@ -1,13 +1,22 @@
-import { Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import * as React from "react";
 import RedditIcon from "@mui/icons-material/Reddit";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { deviceWrapper } from "@components/utilities/Style";
 import { useRouter } from "next/router";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { getIcon } from "@components/creation/review/Design";
+
+interface ISocialLinkGet {
+  social_network: string;
+  link_url: string;
+}
 
 const BottomNav: React.FC = () => {
   const router = useRouter();
-  return (
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const daoData = globalContext.api.daoData;
+  return daoData === undefined ? null : (
     <Box
       sx={{
         width: "calc(100%)",
@@ -32,7 +41,9 @@ const BottomNav: React.FC = () => {
         flexDirection: deviceWrapper("column", "row"),
       }}
     >
-      <Box sx={{ fontSize: ".9rem" }}>Visit our website at paideia.im.</Box>
+      <Box sx={{ fontSize: ".9rem" }}>
+        {daoData.design ? daoData.design.footer_text : ""}
+      </Box>
       <Box
         sx={{
           ml: deviceWrapper("", "auto"),
@@ -42,8 +53,15 @@ const BottomNav: React.FC = () => {
           mr: deviceWrapper("0", ".75rem"),
         }}
       >
-        <TwitterIcon color="primary" sx={{ mr: ".5rem" }} />
-        <RedditIcon color="primary" />
+        {daoData.design
+          ? daoData.design.footer_social_links.map((i: ISocialLinkGet) => {
+              return (
+                <Link href={i.link_url} sx={{ svg: { fontSize: "1.3rem" } }}>
+                  {getIcon(i.social_network.toLowerCase())}
+                </Link>
+              );
+            })
+          : null}
       </Box>
     </Box>
   );

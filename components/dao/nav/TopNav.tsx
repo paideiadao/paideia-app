@@ -84,13 +84,7 @@ const TopNav: React.FC<INav> = (props) => {
                     alignItems: "center",
                   }}
                 >
-                  <Link
-                    href={
-                      dao === undefined
-                        ? ""
-                        : `/${dao}/notifications`
-                    }
-                  >
+                  <Link href={dao === undefined ? "" : `/${dao}/notifications`}>
                     <IconButton sx={{ display: deviceWrapper("flex", "none") }}>
                       <Badge badgeContent={undefined} color="primary">
                         <NotificationsIcon

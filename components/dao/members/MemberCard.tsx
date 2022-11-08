@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Avatar, 
-  Badge, 
-  Box, 
-  Button, 
-  IconButton 
-} from "@mui/material";
+import { Avatar, Badge, Box, Button, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useRouter } from "next/router";
@@ -50,15 +44,14 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
   useDidMountEffect(() => {}, [favorited]);
 
   const { dao } = router.query;
-  const [daoNameWithLeadingSlash, setDaoNameWithLeadingSlash] = useState('')
+  const [daoNameWithLeadingSlash, setDaoNameWithLeadingSlash] = useState("");
 
   useEffect(() => {
     if (router.isReady) {
-      setDaoNameWithLeadingSlash('/' + dao.toString())
+      setDaoNameWithLeadingSlash("/" + dao.toString());
     }
-  }, [router.isReady])
+  }, [router.isReady]);
 
-  
   return (
     <Box
       sx={{
@@ -186,7 +179,7 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
               borderColor: "border.main",
             }}
           >
-              <Link href={`${daoNameWithLeadingSlash}/members/${props.id}`}>
+            <Link href={`${daoNameWithLeadingSlash}/members/${props.id}`}>
               <Button
                 variant="text"
                 sx={{

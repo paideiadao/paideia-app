@@ -36,17 +36,20 @@ const ActiveProposal: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [proposalData, setProposalData] = useState(undefined)
+  const [proposalData, setProposalData] = useState(undefined);
 
   useEffect(() => {
     if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      const url = `${process.env.API_URL}/proposals/by_dao_id/${daoSlugsObject[dao.toString()]}`
-      axios.get(url)
+      const url = `${process.env.API_URL}/proposals/by_dao_id/${
+        daoSlugsObject[dao.toString()]
+      }`;
+      axios
+        .get(url)
         .then((res) => {
-          setProposalData(res.data); 
+          setProposalData(res.data);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         });
     }
   }, [dao]);
@@ -83,13 +86,7 @@ const ActiveProposal: React.FC = () => {
             >
               <Subheader title="Active proposals" small bold />
               <Box sx={{ ml: "auto" }}>
-                <Link
-                  href={
-                    dao === undefined
-                      ? ""
-                      : `/${dao}/proposals/all`
-                  }
-                >
+                <Link href={dao === undefined ? "" : `/${dao}/proposals/all`}>
                   <Button sx={{ fontSize: ".8rem", mr: "1rem" }} size="small">
                     View All
                   </Button>
