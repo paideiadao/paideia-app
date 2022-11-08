@@ -342,6 +342,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
             close={() => setShowFilters(false)}
             set={(val: IFilters) => setFilters(val)}
             filters={filters}
+            categories={categories}
           />
         </Box>
       </Slide>

@@ -14,7 +14,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import * as React from "react";
-import { categories, IFilters } from "./ProposalListing";
+import { IFilters } from "./ProposalListing";
 import CloseIcon from "@mui/icons-material/Close";
 import { deviceWrapper } from "@components/utilities/Style";
 import { IThemeContext, ThemeContext } from "@lib/ThemeContext";
@@ -22,6 +22,7 @@ import { DarkTheme } from "@theme/theme";
 
 interface IMobileFilters {
   filters: IFilters;
+  categories: any;
   set: (val: IFilters) => void;
   close: () => void;
 }
@@ -57,7 +58,7 @@ const MobileFilters: React.FC<IMobileFilters> = (props) => {
       <Box sx={{ width: "100%", mt: ".5rem", ml: ".5rem" }}>
         <CapsInfo title="Categories" mb="0" />
         <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
-          {categories.map((i: any, c: number) => (
+          {props.categories.map((i: any, c: number) => (
             <Chip
               {...i}
               mt=".5rem"
