@@ -9,6 +9,7 @@ import {
   ITokenCheckResponse,
 } from "./Interfaces";
 
+
 export class AppApi extends AbstractApi {
   theme: Theme;
   setTheme: Function;
