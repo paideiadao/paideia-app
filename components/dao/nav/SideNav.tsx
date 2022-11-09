@@ -3,7 +3,6 @@ import * as React from "react";
 import Contents from "./Contents";
 import DaoBio from "./DaoBio";
 import Footer from "./Footer";
-
 import LightFooter from "@public/dao/light-footer.png";
 import DarkFooter from "@public/dao/dark-footer.png";
 import { ThemeContext, IThemeContext } from "@lib/ThemeContext";
@@ -21,18 +20,12 @@ const Nav: React.FC<INav> = (props) => {
         borderRight: "1px solid",
         borderRightColor: "border.main",
         color: "text.primary",
-        borderBottom: "1px solid",
         height: "100vh",
         borderBottomColor: "border.main",
         position: "sticky",
         top: 0,
-        backgroundImage: `url(${
-          themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src
-        })`,
-        backgroundPosition: "bottom 0px right 0px",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "13rem",
-        display: deviceWrapper("none", "block"),
+        display: deviceWrapper("none", "flex"),
+        flexDirection: 'column'
       }}
     >
       <DaoBio setShowMobile={props.setShowMobile} />
