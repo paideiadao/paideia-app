@@ -27,6 +27,12 @@ import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import Link from "next/link";
+import { ThemeContext, IThemeContext } from "@lib/ThemeContext";
+import LightFooter from "@public/dao/light-footer.png";
+import DarkFooter from "@public/dao/dark-footer.png";
+import { DarkTheme } from "@theme/theme";
+import Image from "next/image";
+
 
 const BasicLink: React.FC<{
   icon: JSX.Element;
@@ -473,7 +479,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
                 link={daoName ? `/${daoName}/proposals/mine` : ""}
               />
             </>
-          )} 
+          )}
           <BasicLink
             icon={<AccessTimeFilledIcon sx={{ opacity: ".8" }} />}
             title={"Past"}
@@ -550,80 +556,98 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     globalContext.api.daoUserData === undefined
       ? undefined
       : {
-          icon: <SettingsIcon sx={{ opacity: ".8" }} />,
-          label: "Settings",
-          link: "",
-          links: (
-            <>
-              <BasicLink
-                icon={<PersonIcon sx={{ opacity: ".8" }} />}
-                title={"Edit profile"}
-                selected={"Edit profile" === subSelected}
-                set={setSubWrapper}
-                ml=".5rem"
-                link={daoName ? `/${daoName}/profile/edit` : ""}
-              />
-              <BasicLink
-                icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
-                title={"Notifications"}
-                selected={"Notifications" === subSelected}
-                set={setSubWrapper}
-                ml=".5rem"
-                link={daoName ? `/${daoName}/notifications/edit` : ""}
-              />
-              <BasicLink
-                icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
-                title={"Wallet"}
-                selected={"Wallet" === subSelected}
-                set={setSubWrapper}
-                ml=".5rem"
-                link={daoName ? `/${daoName}/wallet` : ""}
-              />
-            </>
-          ),
-        },
+        icon: <SettingsIcon sx={{ opacity: ".8" }} />,
+        label: "Settings",
+        link: "",
+        links: (
+          <>
+            <BasicLink
+              icon={<PersonIcon sx={{ opacity: ".8" }} />}
+              title={"Edit profile"}
+              selected={"Edit profile" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/profile/edit` : ""}
+            />
+            <BasicLink
+              icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
+              title={"Notifications"}
+              selected={"Notifications" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/notifications/edit` : ""}
+            />
+            <BasicLink
+              icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
+              title={"Wallet"}
+              selected={"Wallet" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/wallet` : ""}
+            />
+          </>
+        ),
+      },
     {
       icon: <DisplaySettingsIcon sx={{ opacity: ".8" }} />,
       label: "DAO Config",
       link: daoName ? `/${daoName}/dao-config` : "",
     },
   ];
+  const themeContext = React.useContext<IThemeContext>(ThemeContext);
+
   return (
     <Box
       sx={{
         width: "100%",
-        mb: "1rem",
-        height: "75%",
+        flex: '1 1 auto',
         overflowY: "auto",
         overflowX: "hidden",
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      {categories
-        .filter((item: any) => item !== undefined)
-        .map((item: any, index: number) =>
-          ["Proposals", "Financials", "Settings"].indexOf(item.label) > -1 ? (
-            <DropdownLink
-              title={item.label}
-              set={setWrapper}
-              subSelected={subSelected}
-              icon={item.icon}
-              selected={item.label === selected}
-              link={item.link}
-              links={item.links}
-              key={"nav-contents-key-" + index}
-            />
-          ) : (
-            <BasicLink
-              icon={item.icon}
-              title={item.label}
-              link={item.link}
-              selected={item.label === selected}
-              set={setWrapper}
-              notifications={item.notifications}
-              key={"nav-contents-key-" + index}
-            />
-          )
-        )}
+      {/* <Box sx={{
+        backgroundImage: `url(${
+          themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src
+        })`,
+        backgroundPosition: "bottom 0px right 0px",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "13rem",
+        height: '100%'
+      }}></Box> */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}>
+        {categories
+          .filter((item: any) => item !== undefined)
+          .map((item: any, index: number) =>
+            ["Proposals", "Financials", "Settings"].indexOf(item.label) > -1 ? (
+              <DropdownLink
+                title={item.label}
+                set={setWrapper}
+                subSelected={subSelected}
+                icon={item.icon}
+                selected={item.label === selected}
+                link={item.link}
+                links={item.links}
+                key={"nav-contents-key-" + index}
+              />
+            ) : (
+              <BasicLink
+                icon={item.icon}
+                title={item.label}
+                link={item.link}
+                selected={item.label === selected}
+                set={setWrapper}
+                notifications={item.notifications}
+                key={"nav-contents-key-" + index}
+              />
+            )
+          )}
+      </Box>
+      <img
+        src={themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src}
+        style={{ width: '100%', marginTop: '-50px' }}
+      />
     </Box>
   );
 };

@@ -56,7 +56,6 @@ const DaoTemplate: React.FC = (props) => {
               left: deviceWrapper("0", "14.5rem"),
               pt: "0rem",
               pb: "1rem",
-
               zIndex: deviceWrapper("100", "1000"),
             }}
           >

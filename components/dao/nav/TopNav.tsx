@@ -1,5 +1,5 @@
 import { Avatar, Badge, Box, IconButton, Slide } from "@mui/material";
-import * as React from "react";
+import React, { useEffect } from "react";
 import { GlobalContext, IGlobalContext } from "../../../lib/AppContext";
 import { DarkTheme } from "@theme/theme";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -38,6 +38,16 @@ const TopNav: React.FC<INav> = (props) => {
   const { dao } = router.query;
   const { wallet } = useWallet();
   const themeContext = React.useContext<IThemeContext>(ThemeContext);
+
+  const closeNavOnResize = () => {
+    props.setShowMobile(false)
+  }
+  useEffect(() => {
+    window.addEventListener("resize", closeNavOnResize);
+    closeNavOnResize();
+    return () => window.removeEventListener("resize", closeNavOnResize);
+  }, []);
+
   return (
     <>
       <Box
@@ -165,6 +175,7 @@ const TopNav: React.FC<INav> = (props) => {
         </Box>
       </Box>
       <Slide direction="right" in={props.showMobile} mountOnEnter unmountOnExit>
+        
         <Box
           sx={{
             width: "16rem",
@@ -173,26 +184,34 @@ const TopNav: React.FC<INav> = (props) => {
             borderRight: "1px solid",
             borderRightColor: "border.main",
             color: "text.primary",
-            borderBottom: "1px solid",
+            // borderBottom: "1px solid",
             height: "100vh",
-            borderBottomColor: "border.main",
-            backgroundImage: `url(${themeContext.theme === DarkTheme
-                ? DarkFooter.src
-                : LightFooter.src
-              })`,
-            backgroundPosition: "bottom 0px right 0px",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "16rem",
+            // borderBottomColor: "border.main",
             position: "fixed",
             top: 0,
           }}
         >
-          <Box sx={{ width: "100%", position: "relative" }}>
-            <IconButton onClick={() => props.setShowMobile(false)} sx={{ left: '.5rem', top: '.5rem', position: 'absolute' }}>
-              <CloseIcon />
-            </IconButton>
-            <DaoBio setShowMobile={props.setShowMobile} />
-            <Contents setShowMobile={props.setShowMobile} />
+          <IconButton
+          onClick={() => props.setShowMobile(false)}
+          sx={{
+            left: '.5rem',
+            top: '.5rem',
+            position: 'absolute',
+            zIndex: 1001,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+          <Box sx={{ width: "100%", position: "relative", height: '100%' }}>
+
+            <Box sx={{
+              flexDirection: 'column',
+              display: 'flex',
+              height: '100%',
+            }}>
+              <DaoBio setShowMobile={props.setShowMobile} />
+              <Contents setShowMobile={props.setShowMobile} />
+            </Box>
           </Box>
 
           {/* <Footer /> */}
