@@ -187,7 +187,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
           label={
             (props.wallet && userTokens
               ? userTokens.toLocaleString("en-US")
-              : utxos.toLocaleString("en-US")) +
+              : utxos?.toLocaleString("en-US")) +
             " " +
             ticker
           }

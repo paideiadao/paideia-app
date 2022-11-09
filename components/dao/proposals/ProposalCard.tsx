@@ -10,7 +10,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
-import { percentage } from "../../../lib/creation/Utilities";
+import { percentage } from "@lib/creation/Utilities";
 import Link from "next/link";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useRouter } from "next/router";
@@ -19,6 +19,7 @@ import { getRandomImage } from "@components/utilities/images";
 import LikesDislikesApi from "@lib/LikesDislikesApi";
 import useDidMountEffect from "@components/utilities/hooks";
 import FollowApi from "@lib/FollowApi";
+import { generateSlug } from "@lib/utilities";
 
 export interface IProposalCard {
   id: number;
@@ -609,7 +610,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             <Link
               href={
                 (dao === undefined ? "" : `/${dao}/`) +
-                `${!props.is_proposal ? "discussion" : "proposal"}/${generate_slug(props.id, props.name)}`
+                `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}`
               }
             >
               <Box
@@ -662,19 +663,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       </Badge>
     </Box>
   );
-};
-
-const generate_slug = (id: string | number, name: string) => {
-  const slug =
-    name
-      .toLowerCase()
-      .trim()
-      .replaceAll(/[^a-zA-Z0-9 ]/g, '')
-      .replaceAll(' ', '-') +
-    '-' +
-    id.toString();
-  if (slug.startsWith('-')) return id;
-  return slug;
 };
 
 export default ProposalCard;

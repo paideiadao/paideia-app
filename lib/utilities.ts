@@ -83,6 +83,19 @@ export const addDays = (days: number, date: Date = new Date()): Date => {
   return temp;
 };
 
+export const generateSlug = (id: string | number, name: string) => {
+  const slug =
+    name
+      .toLowerCase()
+      .trim()
+      .replaceAll(/[^a-zA-Z0-9 ]/g, '')
+      .replaceAll(' ', '-') +
+    '-' +
+    id.toString();
+  if (slug.startsWith('-')) return id;
+  return slug;
+};
+
 export const clientSideOnly = (func: Function): void => {
   if (typeof window !== "undefined") {
     // Client-side-only code

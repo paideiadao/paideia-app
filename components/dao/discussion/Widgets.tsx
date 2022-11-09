@@ -2,7 +2,7 @@ import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Avatar, Box, Button } from "@mui/material";
 import * as React from "react";
 import Link from "next/link";
-import { snipAddress } from "@lib/utilities";
+import { snipAddress, generateSlug } from "@lib/utilities";
 import { useRouter } from "next/router";
 
 export const Overview: React.FC<{
@@ -115,7 +115,7 @@ export const Overview: React.FC<{
           justifyContent: "center",
         }}
       >
-        <Link href={`/${dao}/members/${props.userDetailId}`}>
+        <Link href={`/${dao}/members/${generateSlug(props.userDetailId, props.alias)}`}>
           <Button
             size="small"
             sx={{
