@@ -12,6 +12,7 @@ import { FollowMobile } from "@components/utilities/Follow";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import FollowBadge from "@components/utilities/FollowBadge";
 import FollowApi from "@lib/FollowApi";
+import { generateSlug } from "@lib/utilities";
 
 export interface IMemberCard {
   width: any;
@@ -179,7 +180,7 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
               borderColor: "border.main",
             }}
           >
-            <Link href={`${daoNameWithLeadingSlash}/members/${props.id}`}>
+            <Link href={`${daoNameWithLeadingSlash}/members/${generateSlug(props.id, props.name)}`}>
               <Button
                 variant="text"
                 sx={{

@@ -10,7 +10,7 @@ import { useDaoSlugs } from "@hooks/useDaoSlugs";
 const Member: React.FC = () => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const { member_id, dao } = router.query;
+  const { dao, member_id } = router.query;
   const [daoId, setDaoId] = useState(undefined);
   const { daoSlugsObject } = useDaoSlugs();
 
@@ -22,23 +22,17 @@ const Member: React.FC = () => {
 
   const { data: userData, error: userError } = useSWR(
     member_id !== undefined &&
-      daoId !== undefined &&
-      `/users/details/${member_id}?dao_id=${daoId}&mapping=user_details_id`,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+      `/users/details_by_slug/${member_id}`,
+    fetcher
   );
 
   const { data: activitiesData, error: activitiesError } = useSWR(
-    member_id !== undefined && `/activities/${member_id}`,
+    member_id !== undefined && `/activities/${getUserIdFromSlug(member_id)}`,
     fetcher
   );
 
   const { data: proposalsData, error: proposalsError } = useSWR(
-    member_id !== undefined && `/proposals/by_user_details_id/${member_id}`,
+    member_id !== undefined && `/proposals/by_user_details_id/${getUserIdFromSlug(member_id)}`,
     fetcher
   );
 
@@ -65,4 +59,13 @@ const Member: React.FC = () => {
     />
   );
 };
+
 export default Member;
+
+const getUserIdFromSlug = (slug: string | string[]) => {
+  if (typeof slug === "string") {
+    const slug_split = slug.split("-");
+    return slug_split.at(slug_split.length - 1);
+  }
+  return slug;
+};

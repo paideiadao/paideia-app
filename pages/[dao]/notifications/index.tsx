@@ -171,7 +171,7 @@ const Notifications: React.FC<{ params: any }> = (props) => {
         }}
       >
         <Box sx={{ display: deviceWrapper("none", "block") }}>
-          Notifications (4 new)
+          Notifications
         </Box>
         <Box sx={{ display: deviceWrapper("block", "none") }}>
           Notifications
@@ -223,10 +223,10 @@ const Notifications: React.FC<{ params: any }> = (props) => {
           width: "100%",
         }}
       >
-        <CapsInfo title="New" />
-        {newNotifications.map((i: INotification, c: number) => {
+        {/* <CapsInfo title="New" /> */}
+        {/* {newNotifications.map((i: INotification, c: number) => {
           return <Notification i={i} c={c} />;
-        })}
+        })} */}
       </Box>
       <Box
         sx={{
@@ -234,10 +234,10 @@ const Notifications: React.FC<{ params: any }> = (props) => {
           pb: "1rem",
         }}
       >
-        <CapsInfo title="Old" />
-        {oldNotifications.map((i: INotification, c: number) => {
+        {/* <CapsInfo title="Old" /> */}
+        {/* {oldNotifications.map((i: INotification, c: number) => {
           return <Notification i={i} c={c} />;
-        })}
+        })} */}
       </Box>
       <Box
         sx={{
