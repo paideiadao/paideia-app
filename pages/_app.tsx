@@ -107,11 +107,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                 </ThemeProvider>
                 <AbstractAlert
                   alerts={alert}
-                  set={(val: IAlerts[]) => setAlert(val)}
-                  close={(c: number) => {
-                    let temp = [...alert];
-                    temp.splice(c, 1);
-                    setAlert(temp);
+                  // set={(val: IAlerts[]) => setAlert(val)}
+                  close={(i: number) => {
+                    setAlert(prevState => (
+                      prevState.filter((_item, idx) => idx !== i)
+                    ))
                   }}
                 />
               </GlobalContext.Provider>

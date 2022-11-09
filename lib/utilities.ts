@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IObj } from "@lib/Interfaces";
 import { IAlerts, ValidAlert } from "@components/utilities/Alert";
+import { v4 as uuidv4 } from 'uuid';
 
 type RequestType = "POST" | "PUT" | "GET" | "PATCH" | "DELETE";
 
@@ -209,6 +210,7 @@ export class AbstractApi {
       temp.push({
         content: err,
         severity: "error",
+        id: uuidv4()
       });
       this.setAlert(temp);
     }
@@ -220,6 +222,7 @@ export class AbstractApi {
       temp.push({
         content: content,
         severity: severity,
+        id: uuidv4()
       });
       this.setAlert(temp);
     }
