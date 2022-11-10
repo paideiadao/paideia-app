@@ -1,4 +1,4 @@
-import { Box, Badge, Chip, Avatar, IconButton } from "@mui/material";
+import { Box, Badge, Chip, Avatar, IconButton, ButtonBase, Typography } from "@mui/material";
 import * as React from "react";
 import CircleIcon from "@mui/icons-material/Circle";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -20,6 +20,7 @@ import LikesDislikesApi from "@lib/LikesDislikesApi";
 import useDidMountEffect from "@components/utilities/hooks";
 import FollowApi from "@lib/FollowApi";
 import { generateSlug } from "@lib/utilities";
+import { SentimentVerySatisfiedOutlined } from "@mui/icons-material";
 
 export interface IProposalCard {
   id: number;
@@ -148,8 +149,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-    ? 0
-    : undefined;
+      ? 0
+      : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -177,13 +178,8 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
     <Box sx={{ display: "flex", alignItems: "center", fontSize: iconFont }}>
       {value.userSide === undefined ? (
         <>
-          <ThumbUpOffAltIcon
-            sx={{
-              ml: ".2rem",
-              mr: ".1rem",
-              fontSize: iconFont,
-              cursor: "pointer",
-            }}
+          <ButtonBase
+            draggable="false"
             onClick={() => {
               api.like();
               setValue({
@@ -192,15 +188,19 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 likes: value.likes + 1,
               });
             }}
-          />
-          {value.likes}
-          <ThumbDownOffAltIcon
-            sx={{
-              mr: ".1rem",
-              fontSize: iconFont,
-              cursor: "pointer",
-              ml: ".4rem",
-            }}
+          >
+            <ThumbUpOffAltIcon
+              sx={{
+                ml: ".2rem",
+                mr: ".1rem",
+                fontSize: iconFont,
+                // cursor: "pointer",
+              }}
+            />
+            {value.likes}
+          </ButtonBase>
+          <ButtonBase
+            draggable="false"
             onClick={() => {
               api.dislike();
               setValue({
@@ -209,18 +209,22 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 dislikes: value.dislikes + 1,
               });
             }}
-          />
-          {value.dislikes}
+          >
+            <ThumbDownOffAltIcon
+              sx={{
+                mr: ".1rem",
+                fontSize: iconFont,
+                // cursor: "pointer",
+                ml: ".4rem",
+              }}
+            />
+            {value.dislikes}
+          </ButtonBase>
         </>
       ) : value.userSide === 0 ? (
         <>
-          <ThumbUpOffAltIcon
-            sx={{
-              ml: ".2rem",
-              mr: ".1rem",
-              fontSize: iconFont,
-              cursor: "pointer",
-            }}
+          <ButtonBase
+            draggable="false"
             onClick={() => {
               api.like();
               setValue({
@@ -230,16 +234,19 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 dislikes: value.dislikes - 1,
               });
             }}
-          />
-          {value.likes}
-          <ThumbDownIcon
-            sx={{
-              mr: ".1rem",
-              ml: ".4rem",
-              fontSize: iconFont,
-              cursor: "pointer",
-              color: "error.light",
-            }}
+          >
+            <ThumbUpOffAltIcon
+              sx={{
+                ml: ".2rem",
+                mr: ".1rem",
+                fontSize: iconFont,
+                // cursor: "pointer",
+              }}
+            />
+            {value.likes}
+          </ButtonBase>
+          <ButtonBase
+            draggable="false"
             onClick={() => {
               api.remove();
               setValue({
@@ -249,21 +256,25 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 dislikes: value.dislikes - 1,
               });
             }}
-          />
-          <Box sx={{ color: "error.light", display: "inline" }}>
-            {value.dislikes}
-          </Box>
+          >
+            <ThumbDownIcon
+              sx={{
+                mr: ".1rem",
+                ml: ".4rem",
+                fontSize: iconFont,
+                // cursor: "pointer",
+                color: "error.light",
+              }}
+            />
+            <Box sx={{ color: "error.light", display: "inline" }}>
+              {value.dislikes}
+            </Box>
+          </ButtonBase>
         </>
       ) : (
         <>
-          <ThumbUpIcon
-            sx={{
-              ml: ".2rem",
-              mr: ".1rem",
-              fontSize: iconFont,
-              color: "success.light",
-              cursor: "pointer",
-            }}
+          <ButtonBase
+            draggable="false"
             onClick={() => {
               api.remove();
               setValue({
@@ -273,15 +284,21 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 dislikes: value.dislikes,
               });
             }}
-          />
-          <Box sx={{ color: "success.light" }}>{value.likes}</Box>
-          <ThumbDownOffAltIcon
-            sx={{
-              mr: ".1rem",
-              fontSize: iconFont,
-              cursor: "pointer",
-              ml: ".4rem",
-            }}
+          >
+            <ThumbUpIcon
+              sx={{
+                ml: ".2rem",
+                mr: ".1rem",
+                fontSize: iconFont,
+                color: "success.light",
+                cursor: "pointer",
+              }}
+
+            />
+            <Box sx={{ color: "success.light" }}>{value.likes}</Box>
+          </ButtonBase>
+          <ButtonBase
+            draggable="false"
             onClick={() => {
               api.dislike();
               setValue({
@@ -290,9 +307,18 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 dislikes: value.dislikes + 1,
                 likes: value.likes - 1,
               });
-            }}
-          />
-          {value.dislikes}
+            }}>
+            <ThumbDownOffAltIcon
+              sx={{
+                mr: ".1rem",
+                fontSize: iconFont,
+                cursor: "pointer",
+                ml: ".4rem",
+              }}
+
+            />
+            {value.dislikes}
+          </ButtonBase>
         </>
       )}
     </Box>
@@ -375,50 +401,6 @@ const CountdownTimer: React.FC<{ widget: any }> = (props) => {
   );
 };
 
-const CardContent: React.FC<{
-  category: string;
-  widget: any;
-  c: number;
-  imageUrl: string;
-}> = (props) => {
-  const [widget, setWidget] = React.useState<any>(props.widget);
-
-  return (
-    <Box
-      sx={{
-        mt: ".5rem",
-        height: "7rem",
-        backgroundColor: "fileInput.outer",
-        backgroundImage: `url(${props.imageUrl})`,
-        backgroundSize: "100%",
-        width: "100%",
-        border: "1px solid",
-        borderColor: "border.main",
-        borderRadius: ".3rem",
-        p: ".25rem",
-        position: "relative",
-      }}
-    >
-      <Box sx={{ position: "absolute", right: ".3rem" }}>
-        <CountdownTimer widget={props.widget} />
-      </Box>
-      <Box sx={{ position: "absolute", bottom: ".3rem" }}>
-        <Chip
-          label={props.category}
-          size="small"
-          sx={{
-            fontSize: ".7rem",
-            color: "primary.main",
-            backgroundColor: "backgroundColor.main",
-            border: "1px solid",
-            borderColor: "primary.main",
-          }}
-        />
-      </Box>
-    </Box>
-  );
-};
-
 const CountdownWidget: React.FC<{ date: Date }> = (props) => {
   const [time, setTime] = React.useState<string>("");
   React.useEffect(() => {
@@ -472,6 +454,7 @@ const CountdownWidget: React.FC<{ date: Date }> = (props) => {
 const ProposalCard: React.FC<IProposalCard> = (props) => {
   const [favorited, setFavorited] = React.useState<boolean>(undefined);
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
+  const [moved, setMoved] = React.useState(false)
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const getFavoritedSide = (favorites: number[]) => {
     const userId = globalContext.api.daoUserData
@@ -501,9 +484,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       xl: "1rem",
     };
     const footerSmallFont = {
-      xs: ".8rem",
-      sm: ".8rem",
-      md: ".65rem",
+      xs: ".9rem",
+      sm: ".9rem",
+      md: ".8rem",
       lg: ".7rem",
       xl: ".8rem",
     };
@@ -523,14 +506,41 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
           ...new Set(props.comments.map((item) => item.user_id)),
         ].length;
         const totalComments = props.comments.length;
+
         return (
-          <Box sx={{ width: "100%", fontSize: footerFont }}>
-            Join the Conversation
-            <Box sx={{ fontSize: footerSmallFont, color: "text.secondary" }}>
-              {totalComments} comment{totalComments === 1 ? "" : "s"} from{" "}
-              {totalUsers} user{totalUsers === 1 ? "" : "s"}
+          <ButtonBase
+            sx={{
+              p: ".5rem",
+              height: "4rem",
+              width: '100%',
+              display: "flex",
+              alignItems: "center",
+              textAlign: 'left',
+            }}
+            draggable="false"
+            onMouseDown={() => {
+              setMoved(false)
+            }}
+            onMouseMove={() => {
+              setMoved(true)
+            }}
+            onMouseUp={() => {
+              if (!moved) {
+                router.push(
+                  (dao === undefined ? "" : `/${dao}/`) +
+                  `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}?tab=comments`
+                )
+              }
+            }}
+          >
+            <Box sx={{ width: "100%", fontSize: footerFont }}>
+              <Typography sx={{ mb: '4px' }}>Join the Conversation</Typography>
+              <Box sx={{ fontSize: footerSmallFont, color: "text.secondary" }}>
+                {totalComments} comment{totalComments === 1 ? "" : "s"} from{" "}
+                {totalUsers} user{totalUsers === 1 ? "" : "s"}
+              </Box>
             </Box>
-          </Box>
+          </ButtonBase>
         );
       }
       case "Unchallenged": {
@@ -607,11 +617,32 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               p: ".5rem",
             }}
           >
-            <Link
-              href={
-                (dao === undefined ? "" : `/${dao}/`) +
-                `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}`
-              }
+            <ButtonBase
+              onMouseDown={() => {
+                setMoved(false)
+              }}
+              onMouseMove={() => {
+                setMoved(true)
+              }}
+              onMouseUp={() => {
+                if (!moved) {
+                  router.push(
+                    (dao === undefined ? "" : `/${dao}/`) +
+                    `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}`
+                  )
+                }
+              }}
+              draggable="false"
+              sx={{
+                fontSize: '1rem',
+                width: '100%',
+                height: '100%',
+                borderRadius: '3px',
+                textAlign: 'left',
+                alignItems: 'left',
+                justifyContent: 'left',
+                verticalAlign: 'top',
+              }}
             >
               <Box
                 sx={{
@@ -622,7 +653,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               >
                 {props.name}
               </Box>
-            </Link>
+            </ButtonBase>
             <Box sx={{ display: "flex", fontSize: "1rem" }}>
               <ProposalStatus
                 status={!props.is_proposal ? "Discussion" : "Active"}
@@ -642,23 +673,58 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 />
               </Box>
             </Box>
-            <CardContent
-              category={props.category}
-              widget={props.widget}
-              c={props.c}
-              imageUrl={props.image_url}
-            />
+            <ButtonBase
+              onMouseDown={() => {
+                setMoved(false)
+              }}
+              onMouseMove={() => {
+                setMoved(true)
+              }}
+              onMouseUp={() => {
+                if (!moved) {
+                  router.push(
+                    (dao === undefined ? "" : `/${dao}/`) +
+                    `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}`
+                  )
+                }
+              }}
+              draggable="false"
+              sx={{
+                mt: ".5rem",
+                height: "7rem",
+                backgroundColor: "fileInput.outer",
+                backgroundImage: `url(${props.image_url})`,
+                backgroundSize: "100%",
+                width: "100%",
+                // border: "1px solid",
+                // borderColor: "border.main",
+                borderRadius: ".3rem",
+                p: ".25rem",
+                position: "relative",
+                textAlign: 'left'
+              }}
+            >
+              <Box sx={{ position: "absolute", right: ".3rem" }}>
+                <CountdownTimer widget={props.widget} />
+              </Box>
+              <Box sx={{ position: "absolute", bottom: ".3rem", left: '0.3rem' }}>
+                <Chip
+                  label={props.category}
+                  size="small"
+                  sx={{
+                    fontSize: ".7rem",
+                    color: "primary.main",
+                    backgroundColor: "backgroundColor.main",
+                    border: "1px solid",
+                    borderColor: "primary.main",
+                  }}
+                />
+              </Box>
+            </ButtonBase>
           </Box>
-          <Box
-            sx={{
-              p: ".5rem",
-              height: "4rem",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {getFooter()}
-          </Box>
+
+          {getFooter()}
+
         </Box>
       </Badge>
     </Box>

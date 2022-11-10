@@ -55,8 +55,8 @@ const AddWallet: React.FC = () => {
     wallet !== "" && !dAppWallet.connected
       ? "mobile"
       : wallet !== "" && dAppWallet.connected
-      ? "nautilus"
-      : "listing"
+        ? "nautilus"
+        : "listing"
   );
 
   React.useEffect(() => {
@@ -356,6 +356,19 @@ const AddWallet: React.FC = () => {
                   variant="contained"
                 >
                   Confirm
+                </Button>
+              )}
+            {view === "mobile" &&
+              qrCode && (
+                <Button
+                  onClick={() => {
+                    clearWallet() 
+                    setView("listing")
+                    setQrCode(undefined);
+                  }}
+                  variant="contained"
+                >
+                  Go Back
                 </Button>
               )}
           </Box>

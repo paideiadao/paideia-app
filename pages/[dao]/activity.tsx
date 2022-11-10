@@ -139,8 +139,7 @@ const Activities: FC = () => {
             }}
             placeholder="Search by keyword or user"
             value={filters.search}
-            // @ts-ignore
-            onChange={(event: any) =>
+            onChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
               setFilters({ ...filters, search: event.target.value })
             }
           />
