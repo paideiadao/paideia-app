@@ -364,7 +364,7 @@ const AddWallet: React.FC = () => {
                   onClick={() => {
                     clearWallet() 
                     setView("listing")
-                    // setAddWalletOpen(true)
+                    setQrCode(undefined);
                   }}
                   variant="contained"
                 >
