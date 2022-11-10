@@ -54,9 +54,9 @@ const BottomNav: React.FC = () => {
         }}
       >
         {daoData.design
-          ? daoData.design.footer_social_links.map((i: ISocialLinkGet) => {
+          ? daoData.design.footer_social_links.map((i: ISocialLinkGet, index: number) => {
               return (
-                <Link href={i.link_url} sx={{ svg: { fontSize: "1.3rem" } }}>
+                <Link href={i.link_url} key={index} sx={{ svg: { fontSize: "1.3rem" } }}>
                   {getIcon(i.social_network.toLowerCase())}
                 </Link>
               );

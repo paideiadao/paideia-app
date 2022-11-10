@@ -40,7 +40,7 @@ const Discussion: React.FC = () => {
   const globalContext = React.useContext(GlobalContext);
 
   const router = useRouter();
-  const { discussion_id, id } = router.query;
+  const { discussion_id, id, tab } = router.query;
   const [loaded, setLoaded] = React.useState<boolean>(false);
   const [newestComment, setNewestComment] = React.useState<IComment>();
   const [liveComments, setLiveComments] = React.useState<IComment[]>([]);
@@ -49,13 +49,30 @@ const Discussion: React.FC = () => {
     setLoaded(true);
   }, []);
 
+  React.useEffect(() => {
+    if (tab && tab === "comments") {
+      setTab("2")
+    }
+    if (tab && tab === "referenced") {
+      setTab("3")
+    }
+    if (tab && tab === "details") {
+      setTab("4")
+    }
+  }, [router.isReady])
+
   // replace comments with global state.... duh
   // major to do... needed for api
 
-  const [tab, setTab] = React.useState("1");
+  const [tabChoice, setTab] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
+    const path = router.asPath.split('?')[0]
+    if (newValue === "1") router.replace(path.toString())
+    if (newValue === "2") router.replace(path + "?tab=comments")
+    if (newValue === "3") router.replace(path + "?tab=referenced")
+    if (newValue === "4") router.replace(path + "?tab=details")
   };
 
   const { data, error } = useSWR(
@@ -446,7 +463,7 @@ const Discussion: React.FC = () => {
                 </>
               )}
             </Box>
-            <TabContext value={tab}>
+            <TabContext value={tabChoice}>
               <Box
                 sx={{
                   borderBottom: 1,
