@@ -29,10 +29,10 @@ import FilterOptions from "@components/FilterOptions";
 import { SxProps } from "@mui/material";
 
 interface IDaosProps {
-  name: string;
-  image?: string;
-  description: string;
-  link: string;
+  dao_name: string;
+  logo_url?: string;
+  dao_short_description?: string;
+  dao_url: string;
   category?: string;
 }
 
@@ -81,7 +81,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
           )}
 
           <Avatar
-            src={dao?.image}
+            src={dao?.logo_url}
             sx={{
               width: 80,
               height: 80,
@@ -90,7 +90,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               border: "1px solid #000",
               boxShadow: "0 0 0 2px #666",
             }}
-            alt={dao.name}
+            alt={dao.dao_name}
           />
           <Typography
             sx={{
@@ -103,28 +103,33 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               letterSpacing: "0.225543px",
             }}
           >
-            {dao.name}
+            {dao.dao_name}
           </Typography>
           <Typography
             sx={{
               fontSize: "14px",
               mb: "24px",
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              '-webkit-line-clamp': '4',
+              '-webkit-box-orient': 'vertical'
             }}
           >
-            {dao.description}
+            {dao.dao_short_description}
           </Typography>
         </Grid>
         <Grid item>
           <Button
             endIcon={<ArrowForwardIcon />}
-            href={dao.link}
+            href={dao.dao_url}
             sx={{ py: "2px", ml: "-6px" }}
           >
             Learn More
           </Button>
         </Grid>
       </Grid>
-    </Box>
+    </Box >
   );
 };
 
@@ -273,65 +278,45 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
   const theme = useTheme();
 
   return (
-    <Grid container sx={sx}>
-      <Grid
-        item
-        lg={3}
-        sx={{ pr: "24px", display: { xs: "none", lg: "block" } }}
-      >
-        <FilterOptions />
-      </Grid>
-      <Grid item lg={9} xs={12} sx={{ textAlign: "center" }}>
-        {useMediaQuery(theme.breakpoints.up("lg")) ? (
-          <Grid container sx={{ mb: "32px" }} spacing={3}>
-            <Grid item md={7}>
-              <SearchBar />
-            </Grid>
-            <Grid item md={5}>
-              <SortBy />
-            </Grid>
-          </Grid>
-        ) : (
-          <Grid container sx={{ mb: "32px" }} spacing={3} direction="row">
-            <Grid item xs>
-              <SearchBar />
-            </Grid>
-            <Grid item xs="auto">
-              <Button
-                sx={{ height: "100%" }}
-                variant="outlined"
-                aria-label="filter"
-                onClick={handleDialogClick}
-              >
-                <FilterAltIcon />
-              </Button>
-              <ConfirmationDialogRaw
-                id="ringtone-menu"
-                keepMounted
-                open={filterDialogOpen}
-                onClose={handleDialogClose}
-                value={filterDialogvalue}
-              />
-            </Grid>
-          </Grid>
-        )}
-        <Grid
-          container
-          spacing={4}
-          columns={{ xs: 1, sm: 2, sm3: 3, md: 3, md2: 4, lg: 3 }}
-          sx={{ mb: "24px" }}
-        >
-          {daos.map((dao, i) => (
-            <Grid key={i} item xs={1} sx={{ textAlign: "center" }}>
-              <DaoCard dao={dao} />
-            </Grid>
-          ))}
+    <>
+      <Grid container sx={{ my: "12px" }} spacing={3} direction="row">
+        <Grid item xs>
+          <SearchBar />
         </Grid>
-        <Button disabled variant="contained">
-          Load more...
-        </Button>
+        <Grid item xs="auto">
+          <Button
+            sx={{ height: "100%" }}
+            variant="outlined"
+            aria-label="filter"
+            onClick={handleDialogClick}
+          >
+            <FilterAltIcon />
+          </Button>
+          <ConfirmationDialogRaw
+            id="ringtone-menu"
+            keepMounted
+            open={filterDialogOpen}
+            onClose={handleDialogClose}
+            value={filterDialogvalue}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+      <Grid
+        container
+        spacing={4}
+        columns={{ xs: 1, sm: 2, sm3: 3, md: 3, md2: 4, lg: 3 }}
+        sx={{ mb: "24px" }}
+      >
+        {daos.map((dao, i) => (
+          <Grid key={i} item xs={1} sx={{ textAlign: "center" }}>
+            <DaoCard dao={dao} />
+          </Grid>
+        ))}
+      </Grid>
+      <Box sx={{ width: '100%', textAlign: 'center' }}>
+        <Button disabled variant="contained">Load more...</Button>
+      </Box>
+    </>
   );
 };
 
