@@ -45,6 +45,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
     <Box
       sx={{
         height: "100%",
+        width: "100%",
       }}
       className="border-grad"
     >
@@ -107,6 +108,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
           <Typography
             sx={{
               fontSize: "14px",
+              color: "#fff",
               mb: "24px",
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -273,8 +275,6 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
       setFilterDialogValue(newValue);
     }
   };
-
-  const theme = useTheme();
 
   return (
     <>
