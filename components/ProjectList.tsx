@@ -79,7 +79,6 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               />
             </Box>
           )}
-
           <Avatar
             src={dao?.logo_url}
             sx={{

@@ -33,7 +33,7 @@ export const snipAddress = (
   showNumber: number
 ): string => {
   return val.length > maxLength
-    ? val.slice(0, showNumber) + "....." + val.slice(-showNumber)
+    ? val.slice(0, showNumber) + "..." + val.slice(-showNumber)
     : val;
 };
 
