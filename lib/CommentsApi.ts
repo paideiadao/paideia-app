@@ -34,4 +34,8 @@ export default class CommentsApi extends AbstractApi {
       "Added comment"
     );
   }
+
+  deleteComment(id: number): Promise<any> {
+    return this.delete(`/proposals/comment/${id}`, "", "Deleted comment");
+  }
 }
