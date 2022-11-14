@@ -1,15 +1,11 @@
 import { Avatar, Box, Button, LinearProgress, Modal } from "@mui/material";
 import * as React from "react";
-import Musk from "@public/profile/musk-full.png";
 import InfoIcon from "@mui/icons-material/Info";
-import Link from "next/link";
 import { GlobalContext } from "@lib/AppContext";
 import { modalBackground } from "@components/utilities/modalBackground";
 import {
   Header,
-  Subtitle,
 } from "@components/creation/utilities/HeaderComponents";
-
 import { deviceWrapper } from "@components/utilities/Style";
 import EditFollow from "./EditFollow";
 import { IDaoUserData } from "@lib/Interfaces";
@@ -75,11 +71,15 @@ const ProfileHeader: React.FC<{
           src={props.data.profile_img_url}
         ></Avatar>
         <Box
-          sx={{ fontSize: "1.3rem", display: deviceWrapper("block", "none") }}
+          sx={{
+            fontSize: "1.3rem",
+            display: deviceWrapper("block", "none"),
+            mx: 1,
+            overflow: "hidden",
+          }}
         >
-          {snipAddress(props.data.name, 25, 18)}
+          {snipAddress(props.data.name, 25, 12)}
         </Box>
-
         <Box
           sx={{
             display: deviceWrapper("block", "none"),
@@ -99,16 +99,18 @@ const ProfileHeader: React.FC<{
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              width: deviceWrapper("100%", "72%"),
+              width: deviceWrapper("100%", "75%"),
             }}
           >
             <Box
               sx={{
-                fontSize: "1.1rem",
-                display: deviceWrapper("none", "block"),
+                width: "100%",
+                display: "block",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             >
-              {snipAddress(props.data.name, 25, 18)}
+                {props.data.name}
             </Box>
             <Box
               sx={{
@@ -132,10 +134,10 @@ const ProfileHeader: React.FC<{
                 </Button>
               </Box>
             </Box>
-            <Box sx={{ width: "100%", height: ".5rem" }}>
+            <Box sx={{ width: "100%", height: ".5rem", pr: 1 }}>
               <LinearProgress variant="determinate" value={15} />
             </Box>
-            <Box sx={{ width: "100%", display: "flex" }}>
+            <Box sx={{ width: "100%", display: "flex", pr: 1 }}>
               <Box
                 sx={{ ml: "auto", color: "text.secondary", fontSize: ".7rem" }}
               >

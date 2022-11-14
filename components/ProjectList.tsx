@@ -86,7 +86,6 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               />
             </Box>
           )}
-
           <Avatar
             src={dao?.logo_url}
             sx={{
@@ -115,6 +114,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
           <Typography
             sx={{
               fontSize: "14px",
+              color: "#fff",
               mb: "24px",
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -281,8 +281,6 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
       setFilterDialogValue(newValue);
     }
   };
-
-  const theme = useTheme();
 
   return (
     <>

@@ -181,7 +181,6 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
             color="primary"
           />
         </Box>
-
         <Chip
           avatar={<Avatar alt="PAI" src={PaideiaTokenSymbol.src} />}
           label={

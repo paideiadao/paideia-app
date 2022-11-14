@@ -204,7 +204,7 @@ const WalletSelector: React.FC<{
                   <Box>
                     <Box sx={{ color: "text.primary" }}>{i.alias}</Box>
                     <Box sx={{ fontSize: ".6rem" }}>
-                      {i.address.slice(0, 18)}......
+                      {i.address.slice(0, 18)}...
                       {i.address.substr(i.address.length - 18)}
                     </Box>
                   </Box>

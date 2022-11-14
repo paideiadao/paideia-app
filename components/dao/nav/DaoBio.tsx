@@ -84,7 +84,7 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
 
   React.useEffect(() => {
     if (router.isReady && dao != undefined) {
-      setSelectedDao(getObj(daoSlugs, "dao_url", dao));
+      setSelectedDao(getObj(daoSlugs ?? [], "dao_url", dao));
     }
   }, [router.isReady]);
 

@@ -21,7 +21,7 @@ const ConnectWallet: React.FC<{ show?: boolean }> = (props) => {
         sx={{ display: props.show ? "flex" : "none" }}
       >
         {wallet
-          ? wallet.slice(0, 5) + "....." + wallet.slice(-5)
+          ? wallet.slice(0, 5) + "..." + wallet.slice(-5)
           : "Connect Wallet"}
       </Button>
     </>

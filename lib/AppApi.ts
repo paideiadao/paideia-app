@@ -72,7 +72,7 @@ export class AppApi extends AbstractApi {
     if (res !== null) {
       if (res === undefined && this.daoUserData === undefined) {
         try {
-          // check for tokens here.....
+          // check for tokens here...
           let creationRes = await this.post<IDaoUserRes>(
             "/users/create_user_profile?dao_id=" + this.daoData.id
           );

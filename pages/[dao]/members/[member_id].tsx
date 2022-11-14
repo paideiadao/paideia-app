@@ -60,8 +60,6 @@ const Member: React.FC = () => {
   );
 };
 
-export default Member;
-
 const getUserIdFromSlug = (slug: string | string[]) => {
   if (typeof slug === "string") {
     const slug_split = slug.split("-");
@@ -69,3 +67,5 @@ const getUserIdFromSlug = (slug: string | string[]) => {
   }
   return slug;
 };
+
+export default Member;
