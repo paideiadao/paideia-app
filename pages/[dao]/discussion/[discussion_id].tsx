@@ -1,4 +1,14 @@
-import { Box, Button, Chip, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Skeleton,
+  Menu,
+  MenuItem,
+  Modal,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ThemeContext } from "@lib/ThemeContext";
@@ -21,19 +31,15 @@ import Comments, { IComment } from "@components/dao/discussion/Comments";
 import DiscussionReferences from "@components/dao/discussion/DiscussionReferences";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
-import { getRandomImage } from "@components/utilities/images";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useSWR from "swr";
-import {
-  attrOrUndefined,
-  fetcher,
-  getBaseUrl,
-  getDaoPath,
-  getWsUrl,
-} from "@lib/utilities";
+import { attrOrUndefined, fetcher, getDaoPath, getWsUrl } from "@lib/utilities";
+import { modalBackground } from "@components/utilities/modalBackground";
 import Follow, { FollowMobile } from "@components/utilities/Follow";
 import Details from "@components/dao/discussion/Details";
 import useDidMountEffect from "@components/utilities/hooks";
-import { GlobalContext } from "@lib/AppContext";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import CommentsApi from "@lib/CommentsApi";
 
 const Discussion: React.FC = () => {
   const themeContext = React.useContext(ThemeContext);
@@ -209,6 +215,11 @@ const Discussion: React.FC = () => {
                   }
                   putUrl={`/proposals/like/${parsed_discussion_id}`}
                 />
+                <DiscussionOptions
+                  discussionId={parseInt(parsed_discussion_id)}
+                  userAlias={data.alias}
+                  callbackHandler={() => router.back()}
+                />
               </Box>
               <Box
                 sx={{
@@ -351,16 +362,23 @@ const Discussion: React.FC = () => {
                   }}
                 >
                   {globalContext.api.daoUserData != null && (
-                    <Follow
-                      followed={
-                        data.followers.indexOf(
-                          globalContext.api.daoUserData
-                            ? globalContext.api.daoUserData.id
-                            : null
-                        ) > -1
-                      }
-                      putUrl={"/proposals/follow/" + parsed_discussion_id}
-                    />
+                    <>
+                      <Follow
+                        followed={
+                          data.followers.indexOf(
+                            globalContext.api.daoUserData
+                              ? globalContext.api.daoUserData.id
+                              : null
+                          ) > -1
+                        }
+                        putUrl={"/proposals/follow/" + parsed_discussion_id}
+                      />
+                      <DiscussionOptions
+                        discussionId={parseInt(parsed_discussion_id)}
+                        userAlias={data.alias}
+                        callbackHandler={() => router.back()}
+                      />
+                    </>
                   )}
                 </Box>
               </Box>
@@ -444,7 +462,6 @@ const Discussion: React.FC = () => {
                         />
                       )}
                     </Box>
-
                     <LikesDislikes
                       likes={data.likes.length}
                       dislikes={data.dislikes.length}
@@ -549,6 +566,87 @@ const Discussion: React.FC = () => {
         <>Loading here....</>
       )}
     </Layout>
+  );
+};
+
+const DiscussionOptions: React.FC<{
+  discussionId: number;
+  userAlias: string;
+  callbackHandler: () => void;
+}> = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const api = new CommentsApi(globalContext.api, props.discussionId);
+  const userData = globalContext.api.daoUserData;
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+
+  const handleDelete = async () => {
+    try {
+      await api.deleteDiscussion();
+    } catch (e) {
+      console.log(e);
+    }
+    handleModalClose();
+    props.callbackHandler();
+  };
+
+  return (
+    <Box sx={{ pl: 1 }}>
+      <IconButton
+        id={`discussion-more-button-${props.discussionId}`}
+        aria-controls={
+          open ? `discussion-menu-${props.discussionId}` : undefined
+        }
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        size="small"
+        onClick={handleClick}
+      >
+        <MoreVertIcon sx={{ fontSize: "1rem" }} />
+      </IconButton>
+      <Menu
+        id={`discussion-menu-${props.discussionId}`}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": `discussion-more-button-${props.discussionId}`,
+        }}
+      >
+        <MenuItem
+          disabled={props.userAlias !== userData?.name}
+          sx={{ fontSize: "0.7rem", px: 3 }}
+          onClick={() => {
+            handleModalOpen();
+            handleClose();
+          }}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        <Box sx={{ ...modalBackground, backgroundColor: "fileInput.main" }}>
+          <Typography id="discussion-modal-modal-title">
+            Delete Discussion?
+          </Typography>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+            <Button color="error" onClick={handleDelete}>
+              Delete
+            </Button>
+            <Button onClick={handleModalClose}>Back</Button>
+          </Box>
+        </Box>
+      </Modal>
+    </Box>
   );
 };
 
