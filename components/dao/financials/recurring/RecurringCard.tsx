@@ -52,7 +52,7 @@ const RecurringCard: React.FC<IRecurringCard> = (props) => {
             color: "text.secondary",
           }}
         >
-          {props.address.slice(0, 13) + "....." + props.address.slice(-13)}
+          {props.address.slice(0, 13) + "..." + props.address.slice(-13)}
         </Box>
       </Box>
       <Box sx={{ width: deviceWrapper("100%", "18%") }}>

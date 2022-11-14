@@ -41,6 +41,9 @@ const Discussion: React.FC = () => {
 
   const router = useRouter();
   const { discussion_id, id, tab } = router.query;
+  const parsed_discussion_id = discussion_id
+    ? (discussion_id as string).split("-").reverse().at(0)
+    : null;
   const [loaded, setLoaded] = React.useState<boolean>(false);
   const [newestComment, setNewestComment] = React.useState<IComment>();
   const [liveComments, setLiveComments] = React.useState<IComment[]>([]);
@@ -51,15 +54,15 @@ const Discussion: React.FC = () => {
 
   React.useEffect(() => {
     if (tab && tab === "comments") {
-      setTab("2")
+      setTab("2");
     }
     if (tab && tab === "referenced") {
-      setTab("3")
+      setTab("3");
     }
     if (tab && tab === "details") {
-      setTab("4")
+      setTab("4");
     }
-  }, [router.isReady])
+  }, [router.isReady]);
 
   // replace comments with global state.... duh
   // major to do... needed for api
@@ -68,11 +71,11 @@ const Discussion: React.FC = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
-    const path = router.asPath.split('?')[0]
-    if (newValue === "1") router.replace(path.toString())
-    if (newValue === "2") router.replace(path + "?tab=comments")
-    if (newValue === "3") router.replace(path + "?tab=referenced")
-    if (newValue === "4") router.replace(path + "?tab=details")
+    const path = router.asPath.split("?")[0];
+    if (newValue === "1") router.replace(path.toString());
+    if (newValue === "2") router.replace(path + "?tab=comments");
+    if (newValue === "3") router.replace(path + "?tab=referenced");
+    if (newValue === "4") router.replace(path + "?tab=details");
   };
 
   const { data, error } = useSWR(
@@ -96,11 +99,14 @@ const Discussion: React.FC = () => {
   };
 
   React.useEffect(() => {
-    if (discussion_id) {
-      let ws = new WebSocket(`${getWsUrl()}/proposals/ws/${discussion_id}`);
+    if (parsed_discussion_id) {
+      //
+      const ws = new WebSocket(
+        `${getWsUrl()}/proposals/ws/${parsed_discussion_id}`
+      );
       ws.onmessage = (event: any) => {
         try {
-          let wsRes = JSON.parse(event.data);
+          const wsRes = JSON.parse(event.data);
           setWrapper(wsRes.comment);
         } catch (e) {
           console.log(e);
@@ -109,7 +115,7 @@ const Discussion: React.FC = () => {
 
       return () => ws.close();
     }
-  }, [discussion_id]);
+  }, [parsed_discussion_id]);
 
   useDidMountEffect(() => {
     let temp = [...liveComments];
@@ -171,7 +177,7 @@ const Discussion: React.FC = () => {
                           : null
                       ) > -1
                     }
-                    putUrl={"/proposals/follow/" + discussion_id}
+                    putUrl={"/proposals/follow/" + parsed_discussion_id}
                   />
                 )}
               </Box>
@@ -201,7 +207,7 @@ const Discussion: React.FC = () => {
                       ? 0
                       : undefined
                   }
-                  putUrl={`/proposals/like/${discussion_id}`}
+                  putUrl={`/proposals/like/${parsed_discussion_id}`}
                 />
               </Box>
               <Box
@@ -353,7 +359,7 @@ const Discussion: React.FC = () => {
                             : null
                         ) > -1
                       }
-                      putUrl={"/proposals/follow/" + discussion_id}
+                      putUrl={"/proposals/follow/" + parsed_discussion_id}
                     />
                   )}
                 </Box>
@@ -434,7 +440,7 @@ const Discussion: React.FC = () => {
                                 : null
                             ) > -1
                           }
-                          putUrl={"/proposals/follow/" + discussion_id}
+                          putUrl={"/proposals/follow/" + parsed_discussion_id}
                         />
                       )}
                     </Box>
@@ -457,7 +463,7 @@ const Discussion: React.FC = () => {
                           ? 0
                           : undefined
                       }
-                      putUrl={`/proposals/like/${discussion_id}`}
+                      putUrl={`/proposals/like/${parsed_discussion_id}`}
                     />
                   </Box>
                 </>
@@ -506,7 +512,7 @@ const Discussion: React.FC = () => {
               <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
                 <Comments
                   data={data.comments.concat(liveComments)}
-                  id={parseInt(discussion_id as string)}
+                  id={parseInt(parsed_discussion_id)}
                 />
               </TabPanel>
               <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>

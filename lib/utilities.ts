@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IObj } from "@lib/Interfaces";
 import { IAlerts, ValidAlert } from "@components/utilities/Alert";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 type RequestType = "POST" | "PUT" | "GET" | "PATCH" | "DELETE";
 
@@ -89,11 +89,11 @@ export const generateSlug = (id: string | number, name: string) => {
     name
       .toLowerCase()
       .trim()
-      .replaceAll(/[^a-zA-Z0-9 ]/g, '')
-      .replaceAll(' ', '-') +
-    '-' +
+      .replaceAll(/[^a-zA-Z0-9 ]/g, "")
+      .replaceAll(" ", "-") +
+    "-" +
     id.toString();
-  if (slug.startsWith('-')) return id;
+  if (slug.startsWith("-")) return id;
   return slug;
 };
 
@@ -210,7 +210,7 @@ export class AbstractApi {
       temp.push({
         content: err,
         severity: "error",
-        id: uuidv4()
+        id: uuidv4(),
       });
       this.setAlert(temp);
     }
@@ -222,7 +222,7 @@ export class AbstractApi {
       temp.push({
         content: content,
         severity: severity,
-        id: uuidv4()
+        id: uuidv4(),
       });
       this.setAlert(temp);
     }
@@ -340,12 +340,12 @@ export class AbstractApi {
         "Access-Control-Allow-Credentials": true,
       },
     };
-    // url = url.includes("http")
-    //   ? url
-    //   : url.includes("8000")
-    //   ? getBaseUrl() + url.split("8000")[1]
-    //   : getBaseUrl() + url;
     url = url.includes("http") ? url : process.env.API_URL + url;
-    return await methods[method](url, body, defaultOptions);
+    if (["GET", "DELETE"].includes(method)) {
+      // GET and DELETE don't have body
+      return await methods[method](url, defaultOptions);
+    } else {
+      return await methods[method](url, body, defaultOptions);
+    }
   }
 }
