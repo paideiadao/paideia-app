@@ -103,7 +103,6 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               fontWeight: "700",
               lineHeight: "42px",
               mb: "24px",
-              color: "#fff",
               fontFamily: '"Space Grotesk", sans-serif',
               fontSize: "34px",
               letterSpacing: "0.225543px",
@@ -114,7 +113,6 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
           <Typography
             sx={{
               fontSize: "14px",
-              color: "#fff",
               mb: "24px",
               overflow: 'hidden',
               textOverflow: 'ellipsis',
