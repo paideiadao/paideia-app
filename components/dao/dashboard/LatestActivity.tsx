@@ -11,6 +11,7 @@ import Activity, { IActivity } from "../activity/Activity";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
 
+
 export const activities = [
   {
     date: new Date(),
@@ -58,6 +59,7 @@ const LatestActivity: React.FC = () => {
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
+    let isMounted = true;
     if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
       const url = `${process.env.API_URL}/activities/by_dao_id/${
         daoSlugsObject[dao.toString()]
@@ -65,12 +67,13 @@ const LatestActivity: React.FC = () => {
       axios
         .get(url)
         .then((res) => {
-          setData(res.data);
+          if (isMounted) setData(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
+    return () => { isMounted = false };
   }, [dao]);
 
   return (

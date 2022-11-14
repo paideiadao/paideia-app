@@ -39,6 +39,7 @@ const ActiveProposal: React.FC = () => {
   const [proposalData, setProposalData] = useState(undefined);
 
   useEffect(() => {
+    let isMounted = true;
     if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
       const url = `${process.env.API_URL}/proposals/by_dao_id/${
         daoSlugsObject[dao.toString()]
@@ -46,12 +47,13 @@ const ActiveProposal: React.FC = () => {
       axios
         .get(url)
         .then((res) => {
-          setProposalData(res.data);
+          if (isMounted) setProposalData(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
+    return () => { isMounted = false };
   }, [dao]);
 
   return (
