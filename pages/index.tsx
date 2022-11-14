@@ -18,6 +18,7 @@ export default function Projects() {
   );
   
   const daos = daoData ? daoData.map((dao: any) => { return { ...dao, category: "Default" }; }) : [];
+
   return (
     <Container sx={{ pb: "240px" }}>
       <ProjectList daos={daos} />

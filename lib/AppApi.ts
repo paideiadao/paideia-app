@@ -57,7 +57,7 @@ export class AppApi extends AbstractApi {
 
   async getDaoUser(): Promise<IDaoUserRes> {
     let userId = getUserId();
-    if (userId != null && this.daoData !== undefined && !isNaN(userId)) {
+    if (userId != null && this.daoData !== undefined && !isNaN(userId) && this.daoData.id !== undefined) {
       return this.get<IDaoUserRes>(
         `/users/details/${userId}?dao_id=${this.daoData.id}`
       );

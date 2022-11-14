@@ -24,6 +24,8 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
 import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import TransformIcon from '@mui/icons-material/Transform';
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import Link from "next/link";
@@ -394,6 +396,10 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       return "Notifications";
     } else if (path.includes("/wallet")) {
       return "Wallet";
+    } else if (path.includes("staking") && path.includes("manage")) {
+      return "Manage Stake";
+    } else if (path.includes("staking")) {
+      return "Staking";
     } else if (path.includes("/financials/tokenomics")) {
       return "Tokenomics";
     } else if (path.includes("/financials/recurring")) {
@@ -423,7 +429,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     if (v !== "Distributions") {
       setSubSelected(undefined);
       setSelected(v);
-      if (["Proposals", "Financials", "Settings"].indexOf(v) === -1) {
+      if (["Proposals", "Financials", "Staking", "Settings"].indexOf(v) === -1) {
         props.setShowMobile(false);
       }
     }
@@ -541,6 +547,26 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       icon: <DiamondIcon sx={{ opacity: ".8" }} />,
       label: "Staking",
       link: daoName ? `/${daoName}/staking` : "",
+      links: (
+        <>
+          <BasicLink
+            icon={<AutoGraphIcon sx={{ opacity: ".8" }} />}
+            title={"Staking"}
+            selected={"Staking" === subSelected}
+            set={setSubWrapper}
+            ml=".5rem"
+            link={daoName ? `/${daoName}/staking` : ""}
+          />
+          <BasicLink
+            icon={<TransformIcon sx={{ opacity: ".8" }} />}
+            title={"Manage Stake"}
+            selected={"Manage Stake" === subSelected}
+            set={setSubWrapper}
+            ml=".5rem"
+            link={daoName ? `/${daoName}/staking/manage` : ""}
+          />
+        </>
+      )
     },
     {
       icon: <GroupsIcon sx={{ opacity: ".8" }} />,
@@ -620,7 +646,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
         {categories
           .filter((item: any) => item !== undefined)
           .map((item: any, index: number) =>
-            ["Proposals", "Financials", "Settings"].indexOf(item.label) > -1 ? (
+            ["Proposals", "Financials", "Staking", "Settings"].indexOf(item.label) > -1 ? (
               <DropdownLink
                 title={item.label}
                 set={setWrapper}
