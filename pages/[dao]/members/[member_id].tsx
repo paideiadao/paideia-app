@@ -22,17 +22,17 @@ const Member: React.FC = () => {
 
   const { data: userData, error: userError } = useSWR(
     member_id !== undefined &&
-      `/users/details_by_slug/${member_id}`,
+      `/users/details_by_slug/${dao}-${member_id}`,
     fetcher
   );
 
   const { data: activitiesData, error: activitiesError } = useSWR(
-    member_id !== undefined && `/activities/${getUserIdFromSlug(member_id)}`,
+    userData !== undefined && `/activities/${userData?.id}`,
     fetcher
   );
 
   const { data: proposalsData, error: proposalsError } = useSWR(
-    member_id !== undefined && `/proposals/by_user_details_id/${getUserIdFromSlug(member_id)}`,
+    userData !== undefined && `/proposals/by_user_details_id/${userData?.id}`,
     fetcher
   );
 
