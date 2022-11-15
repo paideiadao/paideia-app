@@ -589,12 +589,11 @@ const DiscussionOptions: React.FC<{
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
-  const handleDelete = async () => {
-    try {
-      await api.deleteDiscussion();
-    } catch (e) {
-      console.log(e);
-    }
+  const handleDelete = () => {
+    api
+      .deleteDiscussion()
+      .then()
+      .catch((e) => console.log(e));
     handleModalClose();
     props.callbackHandler();
   };

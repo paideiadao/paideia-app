@@ -180,7 +180,7 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
               borderColor: "border.main",
             }}
           >
-            <Link href={`${daoNameWithLeadingSlash}/members/${generateSlug(props.id, props.name)}`}>
+            <Link href={`${daoNameWithLeadingSlash}/members/${props.name}`}>
               <Button
                 variant="text"
                 sx={{

@@ -115,7 +115,7 @@ export const Overview: React.FC<{
           justifyContent: "center",
         }}
       >
-        <Link href={`/${dao}/members/${generateSlug(props.userDetailId, props.alias)}`}>
+        <Link href={`/${dao}/members/${props.alias}`}>
           <Button
             size="small"
             sx={{

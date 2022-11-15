@@ -465,13 +465,12 @@ const CommentOptions: React.FC<{
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
+    api
+      .deleteComment(props.commentId)
+      .then()
+      .catch((e) => console.log(e));
     props.callbackHandler();
-    try {
-      await api.deleteComment(props.commentId);
-    } catch (e) {
-      console.log(e);
-    }
     handleModalClose();
   };
 
