@@ -220,6 +220,8 @@ const BaseComment: React.FC<{
     const [show, setShow] = React.useState<boolean>(true);
     const [reply, setReply] = React.useState<boolean>(false);
 
+    const commentStringArray = props.comment.comment.split('\n\n')
+
     return (
       <>
         {!filter && (
@@ -291,8 +293,8 @@ const BaseComment: React.FC<{
               >
                 {props.comment.alias.length > 30
                   ? props.comment.alias.slice(0, 15) +
-                    "....." +
-                    props.comment.alias.slice(-15)
+                  "....." +
+                  props.comment.alias.slice(-15)
                   : props.comment.alias}
               </Box>
               <Box
@@ -358,7 +360,21 @@ const BaseComment: React.FC<{
                       mt: ".25rem",
                     }}
                   >
-                    {props.comment.comment}
+                    {commentStringArray.map((string, i) => {
+                      const breaks = string.split('\n')
+                      return (
+                        <Typography key={i} sx={{ mb: '16px' }}>
+                          {breaks.map((str, i) => {
+                            return (
+                              <>
+                                {str}
+                                <br />
+                              </>
+                            )
+                          })}
+                        </Typography>
+                      )
+                    })}
                     <Box
                       sx={{
                         display: "flex",

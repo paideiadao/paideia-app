@@ -339,7 +339,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       return "Settings";
     } else if (path.includes("config")) {
       return "DAO Config";
-    } else {
+    } else if (path.split("/").length === 2 ) {
       return "Dashboard";
     }
   };
@@ -588,7 +588,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
         flexDirection: 'column',
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto', zIndex: 10 }}>
         {daoName != undefined && (
           categories
             .filter((item: any) => item !== undefined)
@@ -618,10 +618,12 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             )
         )}
       </Box>
+      <Box sx={{ zIndex: 1 }}>
       <img
         src={themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src}
-        style={{ width: '100%', marginTop: '-50px' }}
+        style={{ width: '100%', marginTop: '-100px' }}
       />
+      </Box>
     </Box>
   );
 };
