@@ -366,10 +366,10 @@ const BaseComment: React.FC<{
                         <Typography key={i} sx={{ mb: '16px' }}>
                           {breaks.map((str, i) => {
                             return (
-                              <>
+                              <React.Fragment key={i}>
                                 {str}
                                 <br />
-                              </>
+                              </React.Fragment>
                             )
                           })}
                         </Typography>
