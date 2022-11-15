@@ -259,7 +259,6 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                   pl: ".5rem",
                   pr: ".5rem",
                   overflowY: "auto",
-
                   maxHeight: "15rem",
                 }}
               >

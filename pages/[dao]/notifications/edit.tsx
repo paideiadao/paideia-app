@@ -118,13 +118,13 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
                 {notifications.map((i: INotification) => (
                   <FormControlLabel
                     disableTypography
-                    onClick={() =>
-                      setValue({ ...value, [i.value]: !value[i.value] })
-                    }
                     control={
                       <Checkbox
                         checked={value[i.value] as boolean}
                         size="small"
+                        onClick={() =>
+                          setValue({ ...value, [i.value]: !value[i.value] })
+                        }
                       />
                     }
                     label={i.label}
