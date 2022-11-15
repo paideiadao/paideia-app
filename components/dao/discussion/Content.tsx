@@ -4,10 +4,11 @@ import DiscussionContext, {
   IDiscussionContext,
 } from "@lib/dao/discussion/DiscussionContext";
 import { Box, useTheme } from "@mui/material";
-import React, { useState, useCallback } from "react";
+import React, { useMemo } from "react";
 // import SimpleMdeReact from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import dynamic from "next/dynamic";
+import { SimpleMDEReactProps } from "react-simplemde-editor";
 
 const SimpleMdeEditor = dynamic(
   () => import("react-simplemde-editor"),
@@ -17,6 +18,13 @@ const SimpleMdeEditor = dynamic(
 const Content: React.FC = () => {
   const theme = useTheme()
   const context = React.useContext<IDiscussionContext>(DiscussionContext);
+
+  const mdeOptions = useMemo(() => {
+    return {
+      showIcons: ["code", "table"],
+      spellChecker: false,
+    } as SimpleMDEReactProps["options"]
+  }, []);
 
   return (
     <Box
@@ -53,9 +61,12 @@ const Content: React.FC = () => {
               },
               '& button.active': {
                 background: theme.palette.background.paper,
-                '& :hover': {
+                '& button:hover': {
                   background: theme.palette.background.paper
                 }
+              },
+              '& .editor-toolbar button:hover': {
+                background: theme.palette.background.paper
               },
               '& .CodeMirror': {
                 color: theme.palette.text.primary,
@@ -66,18 +77,18 @@ const Content: React.FC = () => {
                 borderColor: theme.palette.primary.main,
               },
               '& .CodeMirror-cursor': {
-                color: theme.palette.text.secondary,
+                borderColor: theme.palette.text.secondary,
               },
               '& .editor-preview': {
                 background: theme.palette.background.paper,
               }
-
             }
           }
         }
       >
         <SimpleMdeEditor
           value={context.api.value.content}
+          options={mdeOptions}
           onChange={(value: any) =>
             context.api.setValue({ ...context.api.value, content: value })
           }

@@ -8,10 +8,17 @@ body {
   font-size: 18px;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+th {
+  border-bottom-width: 2px !important;
+}
+
 tr {
   text-align: left;
   font-size: 0.9rem;
-  color: black;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
