@@ -4,11 +4,13 @@ import DiscussionContext, {
   IDiscussionContext,
 } from "@lib/dao/discussion/DiscussionContext";
 import { Box } from "@mui/material";
-import * as React from "react";
+import React, { useState, useCallback } from "react";
+import SimpleMdeReact from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 
 const Content: React.FC = () => {
   const context = React.useContext<IDiscussionContext>(DiscussionContext);
-
+  
   return (
     <Box
       sx={{
@@ -25,12 +27,18 @@ const Content: React.FC = () => {
         />
       </Box>
 
-      <TextEditor
+      <SimpleMdeReact
+        value={context.api.value.content}
+        onChange={(value: any) =>
+          context.api.setValue({ ...context.api.value, content: value })
+        }
+      />;
+      {/* <TextEditor
         onChange={(value: any) =>
           context.api.setValue({ ...context.api.value, content: value })
         }
         initial={context.api.value.content}
-      />
+      /> */}
     </Box>
   );
 };
