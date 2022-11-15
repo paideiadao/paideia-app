@@ -5,9 +5,9 @@ import {
   ClickAwayListener,
   InputAdornment,
   TextField,
+  Typography
 } from "@mui/material";
 import * as React from "react";
-import PaideiaLogo from "@public/dao/bio-image/paideia-logo.png";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckIcon from "@mui/icons-material/Check";
@@ -15,7 +15,6 @@ import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { ISideNavComponent } from "./Contents";
-import { getTokenUtxos } from "@lib/wallet/Nautilus";
 import { useWallet } from "@components/wallet/WalletContext";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { isAddressValid } from "@components/wallet/AddWallet";
@@ -52,9 +51,11 @@ const DaoBio: React.FC<ISideNavComponent> = (props) => {
         zIndex: 100,
       }}
     >
-      <Avatar sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}>
-        {daoData.design ? <img src={daoData.design.logo_url} /> : null}
-      </Avatar>
+      {daoData.design &&
+        <Avatar sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}>
+          <img src={daoData.design.logo_url} />
+        </Avatar>
+      }
       <DaoSelector {...props} />
     </Box>
   ) : null;
@@ -125,63 +126,70 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
     load();
   }, [wallet, dAppWallet, globalContext.api.daoData]);
 
+
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
-      {selectedDao && (
+      <Box
+        sx={{
+          width: "100%",
+          p: ".4rem",
+          pt: ".2rem",
+          pb: ".2rem",
+          backgroundColor: "fileInput.main",
+          borderRadius: ".3rem",
+          display: "flex",
+          alignItems: "center",
+          border: "1px solid",
+          borderColor: "border.main",
+          cursor: "pointer",
+        }}
+        onClick={() => setDropdown(true)}
+      >
+        {selectedDao ? (
+          <>
+            {props.redirect === false && (
+              <Avatar
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                  mt: ".5rem",
+                  mb: ".5rem",
+                  mr: ".5rem",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <img src={selectedDao.logo_url} />
+              </Avatar>
+            )}
+            <Box>
+              <Box sx={{ fontSize: ".7rem" }}>{selectedDao.dao_name}</Box>
+              <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
+                app.paideia.im/{selectedDao.dao_url}
+              </Box>
+            </Box>
+          </>
+        ) : (
+          <Typography sx={{ fontSize: ".6rem", color: "text.secondary" }}>Choose a DAO</Typography>
+        )}
         <Box
           sx={{
-            width: "100%",
-            p: ".4rem",
-            pt: ".2rem",
-            pb: ".2rem",
-            backgroundColor: "fileInput.main",
-            borderRadius: ".3rem",
+            ml: "auto",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            border: "1px solid",
-            borderColor: "border.main",
-            cursor: "pointer",
+            justifyContent: "center",
           }}
-          onClick={() => setDropdown(true)}
         >
-          {props.redirect === false && (
-            <Avatar
-              sx={{
-                width: "2rem",
-                height: "2rem",
-                mt: ".5rem",
-                mb: ".5rem",
-                mr: ".5rem",
-                backgroundColor: "transparent",
-              }}
-            >
-              <img src={selectedDao.logo_url} />
-            </Avatar>
-          )}
-          <Box>
-            <Box sx={{ fontSize: ".7rem" }}>{selectedDao.dao_name}</Box>
-            <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
-              app.paideia.im/{selectedDao.dao_url}
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              ml: "auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <KeyboardArrowUpIcon
-              sx={{ mb: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
-            />
-            <KeyboardArrowDownIcon
-              sx={{ mt: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
-            />
-          </Box>
+          <KeyboardArrowUpIcon
+            sx={{ mb: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
+          />
+          <KeyboardArrowDownIcon
+            sx={{ mt: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
+          />
         </Box>
-      )}
+
+      </Box>
+
       {dropdown && (
         <ClickAwayListener onClickAway={() => setDropdown(false)}>
           <Box
@@ -256,7 +264,7 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                 }}
               >
                 {daoSlugs.filter((i: IDao) => utxos > 0).length === 0 &&
-                search === "" ? (
+                  search === "" ? (
                   <Box
                     sx={{
                       textAlign: "center",
@@ -272,8 +280,8 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                       search === ""
                         ? utxos > 0
                         : i.dao_name
-                            .toLowerCase()
-                            .includes(search.toLowerCase())
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
                     )
                     .map((d: any, c: number) => (
                       <DaoSelect
@@ -299,7 +307,7 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                 borderColor: "border.main",
                 borderRadius: 0,
               }}
-              disabled
+              href="/"
             >
               View complete dao list
             </Button>

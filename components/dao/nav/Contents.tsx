@@ -1,4 +1,4 @@
-import { Badge, Box } from "@mui/material";
+import { Badge, Box, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -34,6 +34,7 @@ import LightFooter from "@public/dao/light-footer.png";
 import DarkFooter from "@public/dao/dark-footer.png";
 import { DarkTheme } from "@theme/theme";
 import Image from "next/image";
+import { da } from "date-fns/locale";
 
 
 const BasicLink: React.FC<{
@@ -55,52 +56,6 @@ const BasicLink: React.FC<{
       setDaoName(dao.toString());
     }
   }, [router.isReady]);
-  // const linkLookup = {
-  //   Dashboard: daoName ? `/${daoName}` : "",
-  //   All: daoName ? `/${daoName}/proposals` : "",
-  //   Following: daoName
-  //     ? `/${daoName}/proposals/following`
-  //     : "",
-  //   Mine: daoName
-  //     ? `/${daoName}/proposals/mine`
-  //     : "",
-  //   Past: daoName
-  //     ? `/${daoName}/proposals/past`
-  //     : "",
-
-  //     link={}
-  //   Treasury: daoName
-  //     ? `/${daoName}/financials/treasury`
-  //     : "",
-  //   Tokenomics: daoName
-  //     ? `/${daoName}/financials/tokenomics`
-  //     : "",
-  //   Recurring: daoName
-  //     ? `/${daoName}/financials/recurring`
-  //     : "",
-  //   Token: daoName
-  //     ? `/${daoName}/financials/token`
-  //     : "",
-  //   Distributions: daoName
-  //     ? `/${daoName}/distributions`
-  //     : "",
-  //   Staking: daoName ? `/${daoName}/staking` : "",
-  //   Members: daoName ? `/${daoName}/members` : "",
-  //   Activity: daoName
-  //     ? `/${daoName}/activity`
-  //     : "",
-  //   "Edit profile": daoName
-  //     ? `/${daoName}/profile/edit`
-  //     : "",
-  //   Notifications: daoName
-  //     ? `/${daoName}/notifications/edit`
-  //     : "",
-  //   Wallet: daoName ? `/${daoName}/wallet` : "",
-
-  //   "DAO Config": daoName
-  //     ? `/${daoName}/dao-config`
-  //     : "",
-  // };
 
   return (
     <Link href={props.link}>
@@ -633,42 +588,35 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
         flexDirection: 'column',
       }}
     >
-      {/* <Box sx={{
-        backgroundImage: `url(${
-          themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src
-        })`,
-        backgroundPosition: "bottom 0px right 0px",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "13rem",
-        height: '100%'
-      }}></Box> */}
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}>
-        {categories
-          .filter((item: any) => item !== undefined)
-          .map((item: any, index: number) =>
-            ["Proposals", "Financials", "Staking", "Settings"].indexOf(item.label) > -1 ? (
-              <DropdownLink
-                title={item.label}
-                set={setWrapper}
-                subSelected={subSelected}
-                icon={item.icon}
-                selected={item.label === selected}
-                link={item.link}
-                links={item.links}
-                key={"nav-contents-key-" + index}
-              />
-            ) : (
-              <BasicLink
-                icon={item.icon}
-                title={item.label}
-                link={item.link}
-                selected={item.label === selected}
-                set={setWrapper}
-                notifications={item.notifications}
-                key={"nav-contents-key-" + index}
-              />
+        {daoName != undefined && (
+          categories
+            .filter((item: any) => item !== undefined)
+            .map((item: any, index: number) =>
+              ["Proposals", "Financials", "Staking", "Settings"].indexOf(item.label) > -1 ? (
+                <DropdownLink
+                  title={item.label}
+                  set={setWrapper}
+                  subSelected={subSelected}
+                  icon={item.icon}
+                  selected={item.label === selected}
+                  link={item.link}
+                  links={item.links}
+                  key={"nav-contents-key-" + index}
+                />
+              ) : (
+                <BasicLink
+                  icon={item.icon}
+                  title={item.label}
+                  link={item.link}
+                  selected={item.label === selected}
+                  set={setWrapper}
+                  notifications={item.notifications}
+                  key={"nav-contents-key-" + index}
+                />
+              )
             )
-          )}
+        )}
       </Box>
       <img
         src={themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src}

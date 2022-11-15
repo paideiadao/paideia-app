@@ -24,6 +24,7 @@ const Nav: React.FC<INav> = (props) => {
         borderBottomColor: "border.main",
         position: "sticky",
         top: 0,
+        pt: '12px',
         display: deviceWrapper("none", "flex"),
         flexDirection: 'column'
       }}
