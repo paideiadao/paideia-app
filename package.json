@@ -8,6 +8,7 @@
     "mobile": "next build && next export && npx cap sync"
   },
   "dependencies": {
+    "@babel/runtime": "^7.20.1",
     "@capacitor/android": "^3.6.0",
     "@capacitor/core": "^3.6.0",
     "@capacitor/ios": "^3.6.0",
