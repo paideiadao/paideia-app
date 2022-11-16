@@ -21,6 +21,12 @@ tr {
   font-size: 0.9rem;
 }
 
+pre {
+  background: rgba(144,144,144,0.2) !important;
+  padding: 12px;
+  border-radius: 6px;
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

@@ -81,6 +81,12 @@ const Content: React.FC = () => {
               },
               '& .editor-preview': {
                 background: theme.palette.background.paper,
+                '& a': {
+                  color: theme.palette.primary.main
+                },
+                '& a:visited': {
+                  color: theme.palette.primary.main
+                },
               }
             }
           }
