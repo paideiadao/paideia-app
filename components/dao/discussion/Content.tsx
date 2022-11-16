@@ -22,6 +22,7 @@ const Content: React.FC = () => {
   const mdeOptions = useMemo(() => {
     return {
       showIcons: ["code", "table"],
+      hideIcons: ["side-by-side", "fullscreen"],
       spellChecker: false,
     } as SimpleMDEReactProps["options"]
   }, []);
@@ -43,9 +44,12 @@ const Content: React.FC = () => {
       </Box>
       <Box
         sx={
-          theme.palette.mode === 'dark' &&
+          // theme.palette.mode === 'dark' &&
           {
             '& .EasyMDEContainer': {
+              '& .cm-formatting-code-block, .cm-comment': {
+                background: 'none',
+              },
               '& .editor-toolbar': {
                 borderColor: 'rgba(133, 133, 133, 0.2)',
               },
@@ -87,6 +91,14 @@ const Content: React.FC = () => {
                 '& a:visited': {
                   color: theme.palette.primary.main
                 },
+                '& pre': {
+                  background: 'rgba(144,144,144,0.2)',
+                  padding: '12px',
+                  borderRadius: '6px'
+                },
+                '& table td, table th': {
+                  borderColor: 'rgba(144,144,144,0.5)',
+                }
               }
             }
           }
