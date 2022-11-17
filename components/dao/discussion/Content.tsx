@@ -1,5 +1,4 @@
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import TextEditor from "@components/utilities/TextEditor";
 import DiscussionContext, {
   IDiscussionContext,
 } from "@lib/dao/discussion/DiscussionContext";
@@ -29,7 +28,6 @@ const Content: React.FC = () => {
       hideIcons: ["side-by-side", "fullscreen"],
       spellChecker: false,
       uploadImage: true,
-      // imageUploadEndpoint: process.env.API_URL + '/util/upload_image_markdown',
       imageUploadFunction: (file: File, onSuccess, onError) => {
         const defaultOptions = {
           headers: {
@@ -66,7 +64,7 @@ const Content: React.FC = () => {
       <Box sx={{ mb: "1rem" }}>
         <Header
           title="Discussion content"
-          subtitle="Write about your discussion, you can add videos, links, images, code snippets, and format your content using the editor below."
+          subtitle="Write about your discussion. You can drag and drop or copy/paste images, and use any standard markdown commands (or use the toolbar below to help with formatting)"
         />
       </Box>
       <Box
@@ -139,12 +137,6 @@ const Content: React.FC = () => {
           }
         />
       </Box>
-      {/* <TextEditor
-        onChange={(value: any) =>
-          context.api.setValue({ ...context.api.value, content: value })
-        }
-        initial={context.api.value.content}
-      /> */}
     </Box>
   );
 };
