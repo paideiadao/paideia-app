@@ -8,10 +8,34 @@ body {
   font-size: 18px;
 }
 
+body {
+  overflow-y: overlay;
+  overflow-x: hidden;
+  /* background-image: url(/main-bg.png); */
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  border-bottom-width: 2px !important;
+}
+
+th, td {
+  padding: 3px 6px;
+  border: 1px solid rgba(144,144,144,0.5);
+}
+
 tr {
   text-align: left;
   font-size: 0.9rem;
-  color: black;
+}
+
+pre {
+  background: none;
+  /* padding: 12px;
+  border-radius: 6px;  */
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -67,12 +91,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .react-financial-charts svg {
   top: 0;
   left: 0;
-}
-
-body {
-  overflow-y: overlay;
-  overflow-x: hidden;
-  /* background-image: url(/main-bg.png); */
 }
 
 .react-financial-charts-tooltip {
@@ -155,4 +173,9 @@ img {
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+}
+
+codeStyle {
+  padding: 0;
+  margin: 0;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, List, ListItem, useTheme } from "@mui/material";
+import { Typography, List, ListItem, useTheme, Box } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "@components/Link";
@@ -136,7 +136,7 @@ const MarkdownRender = (props: { description: string }) => {
         a: ({ node, ...props }) => (
           <Link sx={{ wordBreak: "break-all" }} href={props.href} {...props} />
         ),
-        blockquote: ({ node, ...props }) => <Blockquote {...props} />,
+        blockquote: ({ node, ...props }) => <Box component="blockquote" sx={{ borderLeft: '3px solid', pl: '12px', mb: '24px' }} {...props} />,
         code({ node, inline, className, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           const hasMeta = node?.data?.meta;

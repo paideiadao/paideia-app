@@ -147,7 +147,7 @@ export const LightTheme = createTheme({
       main: "#FFFFFF",
     },
     background: {
-      paper: "rgba(0,0,0,0.1)",
+      paper: "rgb(229,229,229)",
     },
     primary: {
       // light: will be calculated from palette.primary.main,
