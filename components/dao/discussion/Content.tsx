@@ -24,6 +24,9 @@ const Content: React.FC = () => {
       showIcons: ["code", "table"],
       hideIcons: ["side-by-side", "fullscreen"],
       spellChecker: false,
+      uploadImage: true,
+      imageUploadEndpoint: process.env.API_URL + '/util/upload_image_markdown',
+      imagePathAbsolute: true
     } as SimpleMDEReactProps["options"]
   }, []);
 
