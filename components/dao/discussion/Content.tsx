@@ -1,5 +1,4 @@
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import TextEditor from "@components/utilities/TextEditor";
 import DiscussionContext, {
   IDiscussionContext,
 } from "@lib/dao/discussion/DiscussionContext";
@@ -9,6 +8,9 @@ import React, { useMemo } from "react";
 import "easymde/dist/easymde.min.css";
 import dynamic from "next/dynamic";
 import { SimpleMDEReactProps } from "react-simplemde-editor";
+import axios from "axios";
+import { parseJSON } from "date-fns";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const SimpleMdeEditor = dynamic(
   () => import("react-simplemde-editor"),
@@ -16,6 +18,7 @@ const SimpleMdeEditor = dynamic(
 );
 
 const Content: React.FC = () => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const theme = useTheme()
   const context = React.useContext<IDiscussionContext>(DiscussionContext);
 
@@ -25,7 +28,26 @@ const Content: React.FC = () => {
       hideIcons: ["side-by-side", "fullscreen"],
       spellChecker: false,
       uploadImage: true,
-      imageUploadEndpoint: process.env.API_URL + '/util/upload_image_markdown',
+      imageUploadFunction: (file: File, onSuccess, onError) => {
+        const defaultOptions = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt_token_login")}`,
+            "Content-Type": file.type,
+          },
+        };
+        const formData = new FormData();
+        formData.append("fileobject", file, file.name);
+        axios
+          .post(process.env.API_URL + '/util/upload_image_markdown', formData, defaultOptions)
+          .then((res) => {
+            console.log(res)
+            onSuccess(res.data.filePath);
+          })
+          .catch((error) => {
+            console.log('Error ' + error.response.status + ': ' + error.response.data)
+            globalContext.api.error('Error ' + error.response.status + ': ' + error.response.data);
+          });
+      },
       imagePathAbsolute: true
     } as SimpleMDEReactProps["options"]
   }, []);
@@ -42,7 +64,7 @@ const Content: React.FC = () => {
       <Box sx={{ mb: "1rem" }}>
         <Header
           title="Discussion content"
-          subtitle="Write about your discussion, you can add videos, links, images, code snippets, and format your content using the editor below."
+          subtitle="Write about your discussion. You can drag and drop or copy/paste images, and use any standard markdown commands (or use the toolbar below to help with formatting)"
         />
       </Box>
       <Box
@@ -115,12 +137,6 @@ const Content: React.FC = () => {
           }
         />
       </Box>
-      {/* <TextEditor
-        onChange={(value: any) =>
-          context.api.setValue({ ...context.api.value, content: value })
-        }
-        initial={context.api.value.content}
-      /> */}
     </Box>
   );
 };
