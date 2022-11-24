@@ -1,4 +1,4 @@
-import { Box, Link } from "@mui/material";
+import { Box, Link, useTheme } from "@mui/material";
 import * as React from "react";
 import RedditIcon from "@mui/icons-material/Reddit";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -16,6 +16,7 @@ const BottomNav: React.FC = () => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const daoData = globalContext.api.daoData;
+  const theme = useTheme()
   return daoData === undefined ? null : (
     <Box
       sx={{
@@ -33,10 +34,10 @@ const BottomNav: React.FC = () => {
             ? deviceWrapper(".5rem", ".75rem")
             : router.pathname.includes("notifications") &&
               !router.pathname.includes("edit")
-            ? deviceWrapper("4rem", ".75rem")
-            : router.pathname.includes("proposal/")
-            ? deviceWrapper("3rem", ".75rem")
-            : deviceWrapper(".5rem", ".75rem"),
+              ? deviceWrapper("4rem", ".75rem")
+              : router.pathname.includes("proposal/")
+                ? deviceWrapper("3rem", ".75rem")
+                : deviceWrapper(".5rem", ".75rem"),
         pt: deviceWrapper(".5rem", ".75rem"),
         flexDirection: deviceWrapper("column", "row"),
       }}
@@ -55,12 +56,22 @@ const BottomNav: React.FC = () => {
       >
         {daoData.design
           ? daoData.design.footer_social_links.map((i: ISocialLinkGet, index: number) => {
-              return (
-                <Link href={i.link_url} key={index} sx={{ svg: { fontSize: "1.3rem" } }}>
-                  {getIcon(i.social_network.toLowerCase())}
-                </Link>
-              );
-            })
+            return (
+              <Link
+                href={i.link_url}
+                key={index}
+                sx={{ 
+                  svg: { fontSize: "1.3rem" }, 
+                  ml: '6px', 
+                  '&:hover': {
+                    color: theme.palette.text.primary
+                  }
+                }}
+              >
+                {getIcon(i.social_network.toLowerCase())}
+              </Link>
+            );
+          })
           : null}
       </Box>
     </Box>

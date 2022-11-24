@@ -17,6 +17,8 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import RedditIcon from "@mui/icons-material/Reddit";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import DiscordIcon from "@components/svgs/DiscordIcon";
+import MediumIcon from "@components/svgs/MediumIcon";
 import { IThemeContext, ThemeContext } from "@lib/ThemeContext";
 import { LightTheme } from "@theme/theme";
 
@@ -128,10 +130,10 @@ export const getIcon = (network: string) => {
       return <TwitterIcon sx={fontSize} />;
     }
     case "discord": {
-      return <TelegramIcon sx={fontSize} />;
+      return <DiscordIcon sx={fontSize} />;
     }
     case "medium": {
-      return <TelegramIcon sx={fontSize} />;
+      return <MediumIcon sx={fontSize} />;
     }
     case "github": {
       return <GitHubIcon sx={fontSize} />;
