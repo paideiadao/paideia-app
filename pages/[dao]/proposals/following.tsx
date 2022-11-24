@@ -1,40 +1,47 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import PropsosalListing from "@components/dao/proposals/ProposalListing";
-import Layout from "@components/dao/Layout";
-import useDidMountEffect from "@components/utilities/hooks";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { fetcher } from "@lib/utilities";
+import { fetcher, getBaseUrl } from "@lib/utilities";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import useDidMountEffect from "@components/utilities/hooks";
+import Layout from "@components/dao/Layout";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import axios from "axios";
 
 const Following: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
-  const { id } = router.query;
-  const { data, error } = useSWR(
-    `/proposals/by_dao_id/${id === undefined ? 1 : id}`,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
+  const { dao } = router.query;
+  const { daoSlugsObject } = useDaoSlugs();
+  const [proposalData, setProposalData] = useState(undefined);
 
-  useDidMountEffect(() => {
-    if (error) {
-      context.api.showAlert("Error fetching proposals.", "error");
+  useEffect(() => {
+    let isMounted = true;
+    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+      const url = `${process.env.API_URL}/proposals/by_dao_id/${
+        daoSlugsObject[dao.toString()]
+      }`;
+      axios
+        .get(url)
+        .then((res) => {
+          if (isMounted) setProposalData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  }, [error]);
+    return () => { isMounted = false };
+  }, [dao]);
 
   return (
     <Layout width={"96%"}>
       <PropsosalListing
         title="Following proposals"
         proposals={
-          data === undefined
+          proposalData === undefined
             ? undefined
-            : data.filter(
+            : proposalData.filter(
                 (i: any) =>
                   i.followers.indexOf(
                     context.api.daoUserData == null
