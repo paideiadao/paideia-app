@@ -7,7 +7,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import * as React from "react";
+import React, { useEffect, useState, useContext, FC } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckIcon from "@mui/icons-material/Check";
@@ -21,6 +21,7 @@ import { isAddressValid } from "@components/wallet/AddWallet";
 import { getObj, getUserId } from "@lib/utilities";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 export interface IDao {
   dao_name: string;
@@ -33,8 +34,8 @@ export interface IDao {
   proposal_count: number;
 }
 
-const DaoBio: React.FC<ISideNavComponent> = (props) => {
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+const DaoBio: FC<ISideNavComponent> = (props) => {
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const daoData = globalContext.api.daoData;
   return daoData ? (
     <Box
@@ -65,13 +66,13 @@ interface IDaoSelector extends ISideNavComponent {
   redirect?: boolean;
 }
 
-export const DaoSelector: React.FC<IDaoSelector> = (props) => {
-  const [dropdown, setDropdown] = React.useState<boolean>(false);
-  const [search, setSearch] = React.useState<string>("");
+export const DaoSelector: FC<IDaoSelector> = (props) => {
+  const [dropdown, setDropdown] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
   const router = useRouter();
   const { dao } = router.query;
-  const [id, setId] = React.useState<number>(1);
-  const [selectedDao, setSelectedDao] = React.useState<IDao>(undefined);
+  const [id, setId] = useState<number>(1);
+  const [selectedDao, setSelectedDao] = useState<IDao>(undefined);
   const setDaoWrapper = (dao: IDao) => {
     if (props.setShowMobile !== undefined) {
       props.setShowMobile(false);
@@ -83,17 +84,35 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
 
   const { daoSlugs, daoSlugsObject } = useDaoSlugs();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.isReady && dao != undefined) {
+      
       setSelectedDao(getObj(daoSlugs ?? [], "dao_url", dao));
     }
   }, [router.isReady]);
 
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  useEffect(() => {
+    let isMounted = true;
+    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+      const url = `${process.env.API_URL}/dao/${
+        daoSlugsObject[dao.toString()]
+      }`;
+      axios
+        .get(url)
+        .then((res) => {
+          if (isMounted) globalContext.api.setDaoData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return () => { isMounted = false };
+  }, [dao]);
 
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const load = async () => {
       try {
         if (dAppWallet.connected) {
@@ -289,7 +308,7 @@ export const DaoSelector: React.FC<IDaoSelector> = (props) => {
                         key={`dao-select-key-${c}`}
                         selected={id === d.id && utxos > 0}
                         inWallet={utxos > 0}
-                        redirect={props.redirect}
+                        // redirect={props.redirect}
                       />
                     ))
                 )}{" "}
@@ -324,8 +343,9 @@ interface IDaoSelect extends IDaoSelector {
   inWallet: boolean;
 }
 
-const DaoSelect: React.FC<IDaoSelect> = (props) => {
-  const content = (
+const DaoSelect: FC<IDaoSelect> = (props) => {
+  const router = useRouter();
+  return (
     <>
       <Box
         sx={{
@@ -343,7 +363,10 @@ const DaoSelect: React.FC<IDaoSelect> = (props) => {
             : "fileInput.main",
           pr: ".25rem",
         }}
-        onClick={() => props.set(props.data)}
+        onClick={() => {
+          props.set(props.data)
+          router.push('/' + props.data.dao_url)
+        }}
       >
         <Avatar
           src={props.data.logo_url}
@@ -367,12 +390,7 @@ const DaoSelect: React.FC<IDaoSelect> = (props) => {
         </Box>
       )}
     </>
-  );
-  return props.redirect === undefined ? (
-    <Link href={`/${props.data.dao_url}`}>{content}</Link>
-  ) : (
-    content
-  );
+  )
 };
 
 export default DaoBio;

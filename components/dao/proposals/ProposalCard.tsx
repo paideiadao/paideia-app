@@ -554,6 +554,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
 
+  
   // use a local state to make it dynamic...
   return (
     <Box
@@ -708,7 +709,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 <CountdownTimer widget={props.widget} />
               </Box>
               <Box sx={{ position: "absolute", bottom: ".3rem", left: '0.3rem' }}>
-                <Chip
+                {props.category && (
+                  <Chip
                   label={props.category}
                   size="small"
                   sx={{
@@ -719,6 +721,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                     borderColor: "primary.main",
                   }}
                 />
+                )}
               </Box>
             </ButtonBase>
           </Box>

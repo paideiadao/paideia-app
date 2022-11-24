@@ -22,7 +22,7 @@ export type ValidAlert = "error" | "warning" | "info" | "success";
 
 const AbstractAlert: FC<IAbstractAlert> = (props) => {
   useEffect(() => {
-    setTimeout(() => props.close(0), 5000);
+    setTimeout(() => props.close(0), 15000);
   }, [])
   return (
 
