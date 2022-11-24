@@ -9,7 +9,7 @@ import Layout from "@components/dao/Layout";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
 
-const All: React.FC = () => {
+const Past: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
   const { dao } = router.query;
@@ -43,4 +43,4 @@ const All: React.FC = () => {
   );
 };
 
-export default All;
+export default Past;
