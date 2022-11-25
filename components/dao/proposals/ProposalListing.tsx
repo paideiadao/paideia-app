@@ -12,7 +12,10 @@ import {
   IconButton,
   Grid,
   CircularProgress,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import * as React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
@@ -34,6 +37,7 @@ import { useRouter } from "next/router";
 import { deviceStruct, deviceWrapper } from "@components/utilities/Style";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import MobileFilters from "./MobileFilters";
+import Tooltip from '@mui/material/Tooltip';
 
 export interface IFilters {
   search: string;
@@ -42,9 +46,9 @@ export interface IFilters {
   categories: string[];
 }
 
-export const categoriesMap: { [key:string]: any } = {
+export const categoriesMap: { [key: string]: any } = {
   all: <AppsIcon />,
-  finance: <AttachMoneyIcon /> ,
+  finance: <AttachMoneyIcon />,
   governance: <GavelIcon />,
   technical: <CodeIcon />,
 };
@@ -55,6 +59,7 @@ interface IProposalListing {
 }
 
 const ProposalListing: React.FC<IProposalListing> = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [filters, setFilters] = React.useState<IFilters>({
     search: "",
     proposalStatus: "",
@@ -72,12 +77,15 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
       ...props.proposals
         .map((proposal: { category: string; }) => proposal.category)
         .filter((v: string, i: number, x: string[]) => v && x.indexOf(v) === i)
-      ]
+    ]
     : ["All"])
-    .map((category: string) => { 
-      return {icon: categoriesMap[category.toLowerCase()] ?? <StarIcon />, label: category}; 
+    .map((category: string) => {
+      return { icon: categoriesMap[category.toLowerCase()] ?? <StarIcon />, label: category };
     })
-  ;
+    ;
+
+  const theme = useTheme()
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>
@@ -91,19 +99,34 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
           }}
         >
           <Header large title={props.title} />
-          <Link href={dao === undefined ? "" : `/${dao}/create`}>
-            <Button
-              variant="contained"
-              sx={{ ml: "auto" }}
-              endIcon={<AddIcon />}
-              size="small"
-            >
-              <Box sx={{ display: deviceWrapper("none", "block") }}>
-                Create New
-              </Box>
-              <Box sx={{ display: deviceWrapper("block", "none") }}>New</Box>
-            </Button>
-          </Link>
+          {globalContext.api.daoUserData != undefined ? (
+            <Link href={dao === undefined ? "" : `/${dao}/create`}>
+              <Button
+                variant="contained"
+                sx={{ ml: "auto" }}
+                endIcon={<AddIcon />}
+                size="small"
+              >
+                {!mobile && 'Create '}
+                New
+              </Button>
+            </Link>
+          ) : (
+            <Tooltip title="Connect wallet to create proposal" arrow placement="left">
+              <span style={{ marginLeft: 'auto' }}>
+                <Button
+                  variant="contained"
+                  sx={{ ml: "auto" }}
+                  endIcon={<AddIcon />}
+                  size="small"
+                  disabled
+                >
+                  {!mobile && 'Create '}
+                  New
+                </Button>
+              </span>
+            </Tooltip>
+          )}
         </Box>
         <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
           <Paper
@@ -270,20 +293,20 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 filters.sortBy === ""
                   ? true
                   : filters.sortBy === "Most Recent"
-                  ? new Date(b.date).getTime() - new Date(a.date).getTime()
-                  : true
+                    ? new Date(b.date).getTime() - new Date(a.date).getTime()
+                    : true
               )
               .filter((i: any) => {
                 return (
                   (filters.proposalStatus === "" ||
-                  filters.proposalStatus === "All"
+                    filters.proposalStatus === "All"
                     ? true
                     : i.status === filters.proposalStatus) &&
                   (filters.search === ""
                     ? true
                     : i.name
-                        .toLowerCase()
-                        .includes(filters.search.toLowerCase())) &&
+                      .toLowerCase()
+                      .includes(filters.search.toLowerCase())) &&
                   (filters.categories.indexOf("All") > -1
                     ? true
                     : filters.categories.indexOf(i.category) > -1)
