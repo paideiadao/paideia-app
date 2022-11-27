@@ -85,8 +85,10 @@ export class AppApi extends AbstractApi {
       }
       this.setDaoUserData(res.data);
       return;
-    } else if (this.daoData != null && userId != null && !isNaN(userId)) {
-      this.error("Please add Paideia tokens to participate");
-    }
+    } 
+    // else if (this.daoData != null && userId != null && !isNaN(userId)) {
+    //   this.error('Please add ' + this.daoData.name + ' tokens to participate');
+    //   console.log(this.daoData.id + ' ID')
+    // }
   }
 }

@@ -19,6 +19,7 @@ import { ProfilePopup } from "./ProfilePopup";
 import { snipAddress } from "@lib/utilities";
 import NotificationsPopup from "./NotificationsPopup";
 import CloseIcon from '@mui/icons-material/Close';
+import ThemeToggle from "./ThemeToggle";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -82,7 +83,11 @@ const TopNav: React.FC<INav> = (props) => {
             mr: ".5rem",
           }}
         >
-          {/* <DarkSwitch /> */}
+          {globalContext.api.daoUserData === undefined && (
+            <Box sx={{ width: '200px' }}>
+          <ThemeToggle />
+          </Box>
+        )}
           {globalContext.api.daoUserData !== undefined &&
             isAddressValid(wallet) && (
               <>

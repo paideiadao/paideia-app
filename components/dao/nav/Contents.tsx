@@ -315,6 +315,12 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     }
   }, [router.isReady]);
 
+  useEffect(() => {
+    if (router.isReady && dao != undefined) {
+      setDaoName(dao.toString());
+    }
+  }, [dao])
+
   const path = router.asPath;
 
   const getSelected = (): string => {
@@ -339,7 +345,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       return "Settings";
     } else if (path.includes("config")) {
       return "DAO Config";
-    } else if (path.split("/").length === 2 ) {
+    } else if (path.split("/").length === 2) {
       return "Dashboard";
     }
   };
@@ -619,10 +625,10 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
         )}
       </Box>
       <Box sx={{ zIndex: 1 }}>
-      <img
-        src={themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src}
-        style={{ width: '100%', marginTop: '-100px' }}
-      />
+        <img
+          src={themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src}
+          style={{ width: '100%', marginTop: '-100px' }}
+        />
       </Box>
     </Box>
   );
