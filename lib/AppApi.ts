@@ -49,11 +49,12 @@ export class AppApi extends AbstractApi {
   }
 
   async daoTokenCheck(addresses: string[], daoTokenIds: string[]): Promise<ITokenCheckNew> {
+    const tokens = daoTokenIds.map(item => item != undefined && item)
     return this.post<ITokenCheckNew>(
       "http://52.12.102.149:2719/api/token/exists/",
       {
         "addresses": addresses,
-        "tokens": daoTokenIds
+        "tokens": tokens
       }
     )
   }
@@ -110,7 +111,7 @@ export class AppApi extends AbstractApi {
     }
 
     // console.log(response);
-    
+
     if (res !== null) {
       if (res === undefined && this.daoUserData === undefined) {
         try {

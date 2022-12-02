@@ -117,8 +117,8 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               display: '-webkit-box',
-              '-webkit-line-clamp': '4',
-              '-webkit-box-orient': 'vertical'
+              WebkitLineClamp: '4',
+              WebkitBoxOrient: 'vertical'
             }}
           >
             {dao.dao_short_description}

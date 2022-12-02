@@ -16,7 +16,7 @@ const BasicInformation: React.FC = () => {
       ...creationContext.api.data,
       basicInformation: {
         ...data,
-        daoUrl: clean === "" ? clean : "paideia.im/dao/" + clean,
+        daoUrl: clean === "" ? clean : "app.paideia.im/" + clean,
       },
     });
   }, [data.daoName]);
