@@ -29,6 +29,7 @@ import useSWR from "swr";
 import { fetcher } from "@lib/utilities";
 import { useRouter } from "next/router";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import axios from "axios";
 
 // export const getStaticPaths = paths;
 // export const getStaticProps = props;
@@ -109,6 +110,7 @@ const Members: React.FC = () => {
   });
   const [value, setValue] = useState<number[]>([0, 10]);
   const [daoId, setDaoId] = useState(1);
+  const [data, setData] = useState(undefined)
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
@@ -121,10 +123,27 @@ const Members: React.FC = () => {
 
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
 
-  const { data, error } = useSWR(
-    `/users/by_dao_id/${daoId === undefined ? 1 : daoId}`,
-    fetcher
-  );
+
+  useEffect(() => {
+    let isMounted = true;
+    if (daoId != undefined) {
+      const url = `${process.env.API_URL}/users/by_dao_id/${daoId}`;
+      axios
+        .get(url)
+        .then((res) => {
+          if (isMounted) setData(res.data)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return () => { isMounted = false };
+  }, [daoId]);
+
+  // const { data, error } = useSWR(
+  //   `/users/by_dao_id/${daoId === undefined ? 1 : daoId}`,
+  //   fetcher
+  // );
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);

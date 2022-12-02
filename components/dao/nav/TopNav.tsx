@@ -85,9 +85,9 @@ const TopNav: React.FC<INav> = (props) => {
         >
           {globalContext.api.daoUserData === undefined && (
             <Box sx={{ width: '200px' }}>
-          <ThemeToggle />
-          </Box>
-        )}
+              <ThemeToggle />
+            </Box>
+          )}
           {globalContext.api.daoUserData !== undefined &&
             isAddressValid(wallet) && (
               <>
@@ -180,7 +180,7 @@ const TopNav: React.FC<INav> = (props) => {
         </Box>
       </Box>
       <Slide direction="right" in={props.showMobile} mountOnEnter unmountOnExit>
-        
+
         <Box
           sx={{
             width: "16rem",
@@ -197,16 +197,16 @@ const TopNav: React.FC<INav> = (props) => {
           }}
         >
           <IconButton
-          onClick={() => props.setShowMobile(false)}
-          sx={{
-            left: '.5rem',
-            top: '.5rem',
-            position: 'absolute',
-            zIndex: 1001,
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
+            onClick={() => props.setShowMobile(false)}
+            sx={{
+              left: '.5rem',
+              top: '.5rem',
+              position: 'absolute',
+              zIndex: 1001,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <Box sx={{ width: "100%", position: "relative", height: '100%' }}>
 
             <Box sx={{

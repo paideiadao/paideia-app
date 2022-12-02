@@ -51,3 +51,19 @@ export interface ITokenCheckResponse {
     vested: ITokenAmount;
   };
 }
+
+export interface ITokenCheckNew {
+  data: {
+    [key: string]: {
+      [key: string]: number
+    }[]
+  }
+}
+
+export interface IDaoMembership {
+  currentDaoTokens: number;
+  membershipList: {
+    token: string;
+    value: number;
+  }[]
+}
