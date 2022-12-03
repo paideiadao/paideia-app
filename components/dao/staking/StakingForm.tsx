@@ -30,7 +30,7 @@ const StakingForm: React.FC = () => {
   return (
     <Box>
       <CapsInfo title="Staking Form" mb=".5rem" />
-      <Subtitle subtitle="Description here....." />
+      <Subtitle subtitle="Description here..." />
       <Box sx={{ mt: "1rem" }} />
       <WalletSelector
         id="staking-wallet-input"

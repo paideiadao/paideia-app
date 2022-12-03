@@ -35,7 +35,6 @@ const DaoTemplate: React.FC = (props) => {
       const daoSummary = daoList.filter(
         (dao: { dao_url: string }) => dao.dao_url === daoSlug
       )[0];
-      console.log(daoSummary)
       globalContext.api.setDaoData({
         ...daoData,
         member_count: daoSummary?.member_count,

@@ -82,7 +82,7 @@ export const WalletListing: React.FC<{ data: any }> = (props) => {
                 }}
               >
                 {i.address !== undefined &&
-                  `${i.address.slice(0, 18)}....${i.address.slice(
+                  `${i.address.slice(0, 18)}...${i.address.slice(
                     i.address.length - 18,
                     i.address.length
                   )}`}
@@ -99,7 +99,7 @@ export const WalletListing: React.FC<{ data: any }> = (props) => {
                 }}
               >
                 {i.address !== undefined &&
-                  `${i.address.slice(0, 17)}....${i.address.slice(
+                  `${i.address.slice(0, 17)}...${i.address.slice(
                     i.address.length - 17,
                     i.address.length
                   )}`}

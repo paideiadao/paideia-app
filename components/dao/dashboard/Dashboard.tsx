@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
   const daoData = globalContext.api.daoData;
 
   return daoData === undefined ? (
-    <>Loading Here...</>
+    <>Loading...</>
   ) : (
     <Box sx={{ width: "100%" }}>
       <Box
