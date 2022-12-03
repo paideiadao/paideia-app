@@ -179,7 +179,7 @@ const Dashboard: React.FC = () => {
             <Box
               sx={{ width: "100%", display: deviceWrapper("block", "none") }}
             >
-              <About />
+              <About/>
               <Box sx={{ mt: "1rem" }} />
               <TokenStats />
             </Box>

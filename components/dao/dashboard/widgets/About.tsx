@@ -1,11 +1,12 @@
 import * as React from "react";
-import { CapsInfo } from "../../../creation/utilities/HeaderComponents";
+import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Box, Paper } from "@mui/material";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const About: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const daoData = globalContext.api.daoData;
+  console.log(daoData)
   return (
     <Paper
       elevation={0}
@@ -32,7 +33,9 @@ const About: React.FC = () => {
           }}
         >
           Members
-          <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>5,130</Box>
+          <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>
+            {daoData.member_count}
+          </Box>
         </Box>
         <Box
           sx={{
@@ -43,14 +46,16 @@ const About: React.FC = () => {
           }}
         >
           Proposals
-          <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>125</Box>
+          <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>
+            {daoData.proposal_count}
+          </Box>
         </Box>
       </Box>
       <Box sx={{ width: "100%", fontSize: ".9rem", mt: ".5rem" }}>
         {daoData.dao_short_description}
       </Box>
       <Box sx={{ fontSize: ".7rem", color: "text.secondary", mt: ".5rem" }}>
-        Active since 23 March 2021
+        Active since {new Date(daoData.created_dtz).toDateString()}
       </Box>
     </Paper>
   );

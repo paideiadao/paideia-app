@@ -21,20 +21,28 @@ const DaoTemplate: React.FC = (props) => {
       setDaoSlug(dao.toString());
     }
   }, [router.isReady]);
+
+  const { data: daoList, error: daoListError } = useSWR(`/dao/`, fetcher);
+
   const { data: daoData, error: daoError } = useSWR(
-    `/dao/${daoSlug}`,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    daoSlug && `/dao/${daoSlug}`,
+    fetcher
   );
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   useEffect(() => {
-    globalContext.api.setDaoData(daoData);
-  }, [daoData]);
+    if (daoData && daoList) {
+      const daoSummary = daoList.filter(
+        (dao: { dao_url: string }) => dao.dao_url === daoSlug
+      )[0];
+      console.log(daoSummary)
+      globalContext.api.setDaoData({
+        ...daoData,
+        member_count: daoSummary?.member_count,
+        proposal_count: daoSummary?.proposal_count,
+      });
+    }
+  }, [daoData, daoList]);
 
   return (
     <>
