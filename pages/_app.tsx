@@ -16,7 +16,6 @@ import { AddWalletProvider } from "@components/wallet/AddWalletContext";
 import { AnimatePresence, motion } from "framer-motion";
 import AbstractAlert, { IAlerts } from "@components/utilities/Alert";
 import { IDaoUserData } from "@lib/Interfaces";
-import useSWR from "swr";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { SlugContext } from "contexts/SlugContext";
 

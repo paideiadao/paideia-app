@@ -25,7 +25,7 @@ const columns: GridColDef[] = [
     align: "left",
     headerAlign: "left",
     valueGetter: (params: GridValueGetterParams) =>
-      "$" + currencyFormatter(params.row.price, 4),
+      currencyFormatter(params.row.price, 4) + " ERG",
   },
   {
     field: "volume",
@@ -45,62 +45,21 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    source: "Kucoin",
-    pairs: "PTK/SigUSD",
-    price: 0.1342,
-    volume: 22.78,
-    liquidity: 343,
-  },
-  {
-    id: 2,
-    source: "Gate.io",
-    pairs: "PTK/SigUSD",
-    price: 0.1343,
-    volume: 19.44,
-    liquidity: 390,
-  },
-  {
-    id: 3,
-    source: "Kucoin",
-    pairs: "PTK/ERG",
-    price: 0.1342,
-    volume: 4.22,
-    liquidity: 263,
-  },
-  {
-    id: 4,
-    source: "Gate.io",
-    pairs: "PTK/ERG",
-    price: 0.1345,
-    volume: 1.3,
-    liquidity: 310,
-  },
-  {
-    id: 5,
-    source: "FMFW.io",
-    pairs: "PTK/ERG",
-    price: 0.1341,
-    volume: 2.39,
-    liquidity: 33,
-  },
-  {
-    id: 6,
-    source: "FMFW.io",
-    pairs: "PTK/SigUSD",
-    price: 0.1347,
-    volume: 1.3,
-    liquidity: 22,
-  },
-];
-
-const Markets: React.FC = () => {
-  const ticker = "PAI";
+const Markets: React.FC<any> = (props) => {
+  const ticker = props.data?.token_name;
+  const rows = props.data?.token_markets.map((market: any, index: number) => {
+    return {
+      id: index,
+      pairs: market.pair,
+      source: market.source,
+      price: market.price,
+      volume: "N/A",
+      liquidity: "N/A",
+    };
+  });
   return (
     <Box sx={{ width: "100%", mt: "1rem" }}>
-      <Header title={`${ticker} markets`} />
+      <Header title={`${ticker} Markets`} />
       <Box sx={{ mt: ".5rem" }} />
       <DataGrid
         rows={rows}
