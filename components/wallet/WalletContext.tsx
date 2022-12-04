@@ -1,5 +1,6 @@
 import React from "react";
 import { createContext, useContext, useState } from "react";
+import {IDaoMembership} from '@lib/Interfaces'
 
 // The Context
 const WalletContext = createContext(undefined);
@@ -12,7 +13,10 @@ const WalletProvider = ({ children }: any) => {
     connected: false,
     addresses: [],
   }); // dApp only
-  const [utxos, setUtxos] = React.useState<any[]>(undefined);
+  const [utxos, setUtxos] = React.useState<IDaoMembership>({
+    currentDaoTokens: 0,
+    membershipList: []
+  });
 
   // Context values passed to consumer
   const value = {

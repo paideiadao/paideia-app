@@ -1,5 +1,5 @@
-import { Box, Button, IconButton } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Button, IconButton, CircularProgress } from "@mui/material";
+import React, { useEffect, useState, useContext } from "react";
 import { Subheader } from "../../creation/utilities/HeaderComponents";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -13,11 +13,15 @@ import { getBaseUrl, fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { getUserId } from "@lib/utilities";
+import { useGridApiContext } from "@mui/x-data-grid";
 
 let temp = new Date();
 temp.setDate(temp.getDate() - 30);
 
 const ActiveProposal: React.FC = () => {
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const [slide, setSlide] = React.useState<number>(1);
 
   useDidMountEffect(() => {
@@ -40,10 +44,10 @@ const ActiveProposal: React.FC = () => {
 
   useEffect(() => {
     let isMounted = true;
+    globalContext.api.setLoading((current: number) => current + 1)
     if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      const url = `${process.env.API_URL}/proposals/by_dao_id/${
-        daoSlugsObject[dao.toString()]
-      }`;
+      const url = `${process.env.API_URL}/proposals/by_dao_id/${daoSlugsObject[dao.toString()]
+        }`;
       axios
         .get(url)
         .then((res) => {
@@ -53,13 +57,14 @@ const ActiveProposal: React.FC = () => {
           console.log(err);
         });
     }
+    globalContext.api.setLoading((current: number) => current - 1)
     return () => { isMounted = false };
   }, [dao]);
 
   return (
     <>
       {proposalData === undefined ? (
-        <Box>Loading Here...</Box>
+        <Box><CircularProgress color="inherit" /></Box>
       ) : proposalData.length === 0 ? (
         <Box
           sx={{

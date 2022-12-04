@@ -50,6 +50,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
         borderRadius: ".3rem",
         width: "100%",
         height: '100%',
+        position: 'relative',
         ":hover": {
           borderColor: "primary.main",
         },
@@ -67,8 +68,8 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
             <Box
               sx={{
                 position: "absolute",
-                top: "-4px",
-                right: "-6px",
+                top: "-8px",
+                right: "-12px",
                 fontSize: "12px",
               }}
             >
@@ -117,8 +118,8 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               display: '-webkit-box',
-              '-webkit-line-clamp': '4',
-              '-webkit-box-orient': 'vertical'
+              WebkitLineClamp: '4',
+              WebkitBoxOrient: 'vertical'
             }}
           >
             {dao.dao_short_description}
@@ -307,7 +308,7 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
       <Grid
         container
         spacing={4}
-        columns={{ xs: 1, sm: 2, sm3: 3, md: 3, md2: 4, lg: 3 }}
+        columns={{ xs: 1, sm: 2, lg: 3 }}
         sx={{ mb: "24px" }}
       >
         {daos.map((dao, i) => (
