@@ -295,7 +295,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                 {localLoading ? (
                   <CircularProgress />
                 ) : (
-                (utxos.membershipList == undefined || utxos.membershipList.length === 0) &&
+                (utxos?.membershipList == undefined || utxos?.membershipList.length === 0) &&
                   search === "" ? (
                   <Box
                     sx={{
