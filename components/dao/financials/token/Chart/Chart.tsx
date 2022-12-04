@@ -7,11 +7,10 @@ import ChartBase from "./ChartBase";
 import { deviceWrapper } from "@components/utilities/Style";
 import { initialData } from "./data";
 
-const Chart: React.FC = () => {
+const Chart: React.FC<any> = (props) => {
   const [view, setView] = React.useState<string>("Line");
   const [timeView, setTimeView] = React.useState<string>("90d");
   const [loaded, setLoaded] = React.useState<boolean>(false);
-  const [data, setData] = React.useState<any[]>(initialData);
   const handleView = (
     event: React.MouseEvent<HTMLElement>,
     newView: string | null
@@ -33,23 +32,22 @@ const Chart: React.FC = () => {
     setLoaded(true);
   }, []);
 
+  const rchartData =
+    props.data?.token_ohclv_1h.map((dp: { start_time: any }) => {
+      return {
+        ...dp,
+        date: new Date(dp.start_time),
+        volume: 0,
+      };
+    }) ?? [];
+  const chartData = mergeChartData(rchartData);
+  const [data, setData] = React.useState<any[]>(chartData);
+
   React.useEffect(() => {
-    if (initialData.length > 0) {
-      let temp = [...initialData];
-      let tempDate = new Date(temp[temp.length - 1].date);
+    if (rchartData.length > 0) {
+      let temp = [...rchartData];
+      let tempDate = new Date();
       switch (timeView) {
-        case "1h": {
-          tempDate.setHours(tempDate.getHours() - 1);
-          temp = temp.filter((i: any) => {
-            return new Date(i.date) > tempDate;
-          });
-        }
-        case "24h": {
-          tempDate.setHours(tempDate.getHours() - 24);
-          temp = temp.filter((i: any) => {
-            return new Date(i.date) > tempDate;
-          });
-        }
         case "7d": {
           tempDate.setDate(tempDate.getDate() - 7);
           temp = temp.filter((i: any) => {
@@ -68,7 +66,7 @@ const Chart: React.FC = () => {
             return new Date(i.date) > tempDate;
           });
         }
-        case "1yr": {
+        case "1y": {
           tempDate.setDate(tempDate.getDate() - 365);
           temp = temp.filter((i: any) => {
             return new Date(i.date) > tempDate;
@@ -76,9 +74,9 @@ const Chart: React.FC = () => {
         }
         default:
           {
-            setData(initialData);
+            setData(chartData);
           }
-          setData(temp);
+          setData(mergeChartData([...temp]));
       }
     }
   }, [timeView]);
@@ -118,12 +116,6 @@ const Chart: React.FC = () => {
             color="primary"
             onChange={handleTimeView}
           >
-            <ToggleButton value="1h" size="small">
-              1h
-            </ToggleButton>
-            <ToggleButton value="24h" size="small">
-              24h
-            </ToggleButton>
             <ToggleButton value="7d" size="small">
               7d
             </ToggleButton>
@@ -160,11 +152,31 @@ const Chart: React.FC = () => {
         {loaded ? (
           <ChartBase view={view} timeView={timeView} data={data} />
         ) : (
-          <>loading here...</>
+          <>Loading here...</>
         )}
       </Box>
     </Box>
   );
+};
+
+const mergeChartData = (data: any[], req = 100): any[] => {
+  if (data.length <= req) {
+    return [...data];
+  }
+  if (req === 1) {
+    const dp = data[0];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].high > dp.high) dp.high = data[i].high;
+      if (data[i].low < dp.low) dp.low = data[i].low;
+      dp.close = data[i].close;
+    }
+    return [dp];
+  }
+  const n = data.length;
+  const mid = Math.floor(n / 2);
+  const p1 = mergeChartData(data.slice(0, mid), Math.floor(req / 2));
+  const p2 = mergeChartData(data.slice(mid + 1), req - Math.floor(req / 2));
+  return [...p1, ...p2];
 };
 
 export default Chart;

@@ -47,16 +47,17 @@ const columns: GridColDef[] = [
 
 const Markets: React.FC<any> = (props) => {
   const ticker = props.data?.token_name;
-  const rows = props.data?.token_markets.map((market: any, index: number) => {
-    return {
-      id: index,
-      pairs: market.pair,
-      source: market.source,
-      price: market.price,
-      volume: "N/A",
-      liquidity: "N/A",
-    };
-  });
+  const rows =
+    props.data?.token_markets.map((market: any, index: number) => {
+      return {
+        id: index,
+        pairs: market.pair,
+        source: market.source,
+        price: market.price,
+        volume: "N/A",
+        liquidity: "N/A",
+      };
+    }) ?? [];
   return (
     <Box sx={{ width: "100%", mt: "1rem" }}>
       <Header title={`${ticker} Markets`} />
