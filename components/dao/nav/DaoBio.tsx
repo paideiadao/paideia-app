@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { SlugContext, ISlugContext } from "@contexts/SlugContext";
 import { IDaoMembership } from '@lib/Interfaces'
+import CircularProgress from '@mui/material/CircularProgress';
 
 export interface IDao {
   dao_name: string;
@@ -76,7 +77,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
   const [id, setId] = useState<number>(1);
   const [selectedDao, setSelectedDao] = useState<IDao>(undefined);
   const globalContext = useContext<IGlobalContext>(GlobalContext);
-  const slugContext = React.useContext<ISlugContext>(SlugContext);
+  const [localLoading, setLocalLoading] = useState(false)
 
   const setDaoWrapper = (dao: IDao) => {
     if (props.setShowMobile !== undefined) {
@@ -115,31 +116,21 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
   }, [dao]);
 
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
-  // const daoTokens = slugContext.daoTokens.map(item => item.tokenId)
-
+  
   useEffect(() => {
+    setLocalLoading(true)
     globalContext.api.setLoading((current: number) => current + 1)
-    const tokenIds = Object.values(daoTokensObject).map(item => item.tokenId)
-    const load = async () => {
+    const load = async (tokensIds: string[]) => {
       try {
         if (dAppWallet.connected) {
           if (dAppWallet.addresses.length > 0) {
             const addresses = dAppWallet.addresses.map((address: { id: number, name: string }) => address.name)
-            const membership = await globalContext.api.getOrCreateDaoUser(addresses, tokenIds);
+            const membership = await globalContext.api.getOrCreateDaoUser(addresses, tokensIds);
             setUtxos(membership);
           }
-        } else if (getUserId()) {
-          if (isAddressValid(wallet)) {
-            const membership = await globalContext.api.getOrCreateDaoUser([wallet], tokenIds);
-            setUtxos(membership);
-          }
-        } else {
-          setUtxos(
-            {
-              currentDaoTokens: 0,
-              membershipList: []
-            }
-          );
+        } else if (isAddressValid(wallet)) {
+          const membership = await globalContext.api.getOrCreateDaoUser([wallet], tokensIds);
+          setUtxos(membership);
         }
       } catch (e) {
         console.log(e);
@@ -151,9 +142,20 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
         );
       }
     };
-    load();
+    if (daoTokensObject.length > 0 && globalContext.api.daoData) {
+      const tokenIds = Object.values(daoTokensObject).map(item => item.tokenId)
+      load(tokenIds);
+    } else {
+      setUtxos(
+        {
+          currentDaoTokens: 0,
+          membershipList: []
+        }
+      );
+    }
     globalContext.api.setLoading((current: number) => current - 1)
-  }, [wallet, dAppWallet, globalContext.api.daoData]);
+    setLocalLoading(false)
+  }, [wallet, dAppWallet, globalContext.api.daoData, daoTokensObject]);
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
@@ -290,7 +292,10 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                   maxHeight: "15rem",
                 }}
               >
-                {utxos.membershipList.length === 0 &&
+                {localLoading ? (
+                  <CircularProgress />
+                ) : (
+                (utxos.membershipList == undefined || utxos.membershipList.length === 0) &&
                   search === "" ? (
                   <Box
                     sx={{
@@ -312,7 +317,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                           data={d}
                           set={(val: IDao) => setDaoWrapper(val)}
                           key={`dao-select-key-${c}`}
-                          selected={dao.toString() === d.dao_url}
+                          selected={dao != undefined && dao.toString() === d.dao_url}
                           inWallet={true}
                         // redirect={props.redirect}
                         />
@@ -335,7 +340,8 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                         />
                       ))
                   )
-                )}{" "}
+                )
+                )}
               </Box>
             </>
 

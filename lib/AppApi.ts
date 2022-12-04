@@ -11,8 +11,6 @@ import {
   IDaoMembership
 } from "./Interfaces";
 
-
-
 export class AppApi extends AbstractApi {
   theme: Theme;
   setTheme: Function;
@@ -49,14 +47,16 @@ export class AppApi extends AbstractApi {
   }
 
   async daoTokenCheck(addresses: string[], daoTokenIds: string[]): Promise<ITokenCheckNew> {
-    const tokens = daoTokenIds.map(item => item != undefined && item)
-    return this.post<ITokenCheckNew>(
-      "http://52.12.102.149:2719/api/token/exists/",
-      {
-        "addresses": addresses,
-        "tokens": tokens
-      }
-    )
+    if (daoTokenIds.length > 0 && addresses.length > 0) {
+      return this.post<ITokenCheckNew>(
+        `${process.env.API_URL}/assets/token-exists`,
+        {
+          "addresses": addresses,
+          "tokens": daoTokenIds
+        }
+      )
+    }
+    else return { data: {} }
   }
 
   async paideiaTokenCheck(addresses: string[]): Promise<ITokenCheckResponse> {
@@ -86,24 +86,31 @@ export class AppApi extends AbstractApi {
   }
 
   async getOrCreateDaoUser(addresses: string[], tokenIds: string[]): Promise<IDaoMembership> {
+    // console.log(addresses)
+    // console.log(tokenIds)
     const tokenCheck = await this.daoTokenCheck(addresses, tokenIds)
 
     const sort = [...new Set([].concat(...Object.values(tokenCheck.data)))]
-    .map((item) => {
-      return {
-        token: Object.keys(item)[0],
-        value: Object.values(item)[0]
-      }
-    })
+      .map((item) => {
+        return {
+          token: Object.keys(item)[0],
+          value: Object.values(item)[0]
+        }
+      })
     const sort1 = Array.from(sort.reduce(
-      (m, {token, value}) => m.set(token, (m.get(token) || 0) + value), new Map
-    ), ([token, value]) => ({token, value}));
+      (m, { token, value }) => m.set(token, (m.get(token) || 0) + value), new Map
+    ), ([token, value]) => ({ token, value }));
 
-    const currentTokens = sort1.filter(item => item.token == this.daoData.tokenomics.token_id)
-    
+    let currentTokens: {
+      token: string;
+      value: number;
+    }[] = []
+    if (this.daoData?.tokenomics?.token_id != undefined) {
+      currentTokens = sort1.filter(item => item.token == this.daoData.tokenomics.token_id)
+    }
+
     // check if user profile for the current dao exists and get the data
     let res = await this.getDaoUser();
-    // console.log(res.data)
 
     const response = {
       currentDaoTokens: currentTokens.length > 0 ? currentTokens[0].value : 0,
