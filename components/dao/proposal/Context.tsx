@@ -41,7 +41,6 @@ const Content: React.FC = () => {
         axios
           .post(process.env.API_URL + '/util/upload_image_markdown', formData, defaultOptions)
           .then((res) => {
-            console.log(res)
             onSuccess(res.data.filePath);
           })
           .catch((error) => {

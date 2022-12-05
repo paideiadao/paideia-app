@@ -101,7 +101,7 @@ const WalletSelector: React.FC<{
                       `${props.data.address.slice(
                         0,
                         14
-                      )}....${props.data.address.slice(
+                      )}...${props.data.address.slice(
                         props.data.address.length - 14,
                         props.data.address.length
                       )}`}

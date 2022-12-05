@@ -10,10 +10,23 @@ import Markets from "@components/dao/financials/token/Markets";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { deviceWrapper } from "@components/utilities/Style";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import useSWR from "swr";
+import { fetcher } from "@lib/utilities";
 
 const Token: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const tokenomics = globalContext.api.daoData?.tokenomics;
+
+  const { data: tokenStats, error: error } = useSWR(
+    tokenomics &&
+      tokenomics.token_id &&
+      `/assets/token_stats/${tokenomics.token_id}`,
+    fetcher
+  );
+
   return (
     <Layout width={deviceWrapper("94%", "97%")}>
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
@@ -26,6 +39,7 @@ const Token: React.FC = () => {
           }
         >
           <Button
+            disabled
             variant="contained"
             sx={{ ml: "auto" }}
             size="small"
@@ -38,10 +52,10 @@ const Token: React.FC = () => {
           </Button>
         </Link>
       </Box>
-      <InfoGrid />
-      <Chart />
-      <Statistics />
-      <Markets />
+      <InfoGrid data={tokenStats}/>
+      <Chart data={tokenStats}/>
+      <Statistics data={tokenStats}/>
+      <Markets data={tokenStats}/>
     </Layout>
   );
 };

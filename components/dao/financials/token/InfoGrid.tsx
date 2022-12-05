@@ -55,70 +55,91 @@ const InfoCard: React.FC<IInfoCard> = (props) => {
   );
 };
 
-const InfoGrid: React.FC = () => {
-  const ticker = "PAI";
+const InfoGrid: React.FC<any> = (props) => {
+  const ticker = props.data?.token_name;
   const tempDate = new Date();
   const infoCards: IInfoCard[] = [
     {
-      value: "$0.1342",
-      widget: <PerformanceWidget value={0.17} />,
+      value: `${props.data?.token_price_history_summary.hour_24.close.toLocaleString(
+        window.navigator.language,
+        {
+          maximumFractionDigits: 4,
+        }
+      )} ERG`,
+      widget: (
+        <PerformanceWidget
+          value={
+            props.data?.token_price_history_summary.hour_24.change_percentage
+          }
+        />
+      ),
       title: `${ticker} Price`,
     },
     {
-      value: "$0.2199",
+      value: `${props.data?.token_price_history_summary.hour_24.high.toLocaleString(
+        window.navigator.language,
+        {
+          maximumFractionDigits: 4,
+        }
+      )} ERG`,
       widget: <TimeWidget amount={24} unit="hrs" />,
       title: `High`,
     },
     {
-      value: "$0.0119",
+      value: `${props.data?.token_price_history_summary.hour_24.low.toLocaleString(
+        window.navigator.language,
+        {
+          maximumFractionDigits: 4,
+        }
+      )} ERG`,
       widget: <TimeWidget amount={24} unit="hrs" />,
       title: `Low`,
     },
     {
-      value: "$0.3117",
-      widget: (
-        <Box
-          sx={{
-            color: "text.secondary",
-            fontSize: deviceWrapper(".8rem", "1rem"),
-            fontWeight: 500,
-          }}
-        >
-          {dateFormat(tempDate, "mm/dd/yyyy")}
-        </Box>
-      ),
+      value: `${props.data?.token_price_history_summary.all_time.high.toLocaleString(
+        window.navigator.language,
+        {
+          maximumFractionDigits: 4,
+        }
+      )} ERG`,
+      widget: <></>,
       title: `All Time High`,
     },
-
     {
-      value: "$18,578,159",
-      widget: <PerformanceWidget value={-0.01} />,
+      value: "N/A",
+      widget: <></>,
       title: `Market Cap`,
     },
     {
-      value: "$31,009,812",
-      widget: <PerformanceWidget value={0.03} />,
+      value: `$${props.data?.market_cap.diluted_market_cap.toLocaleString(
+        window.navigator.language,
+        {
+          maximumFractionDigits: 0,
+        }
+      )}`,
+      widget: (
+        <PerformanceWidget
+          value={
+            props.data?.token_price_history_summary.hour_24.change_percentage
+          }
+        />
+      ),
       title: `Fully Diluted Market Cap`,
     },
     {
-      value: "$11,849",
-      widget: <PerformanceWidget value={0.21} />,
+      value: "N/A",
+      widget: <></>,
       title: `Volume (24hrs)`,
     },
     {
-      value: "$0.3117",
-      widget: (
-        <Box
-          sx={{
-            color: "text.secondary",
-            fontSize: deviceWrapper(".8rem", "1rem"),
-            fontWeight: 500,
-          }}
-        >
-          {dateFormat(tempDate, "mm/dd/yyyy")}
-        </Box>
-      ),
-      title: `All Time High`,
+      value: `${props.data?.token_price_history_summary.all_time.low.toLocaleString(
+        window.navigator.language,
+        {
+          maximumFractionDigits: 4,
+        }
+      )} ERG`,
+      widget: <></>,
+      title: `All Time Low`,
     },
   ];
   return (

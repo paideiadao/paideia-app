@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
   const daoData = globalContext.api.daoData;
 
   return daoData === undefined ? (
-    <>Loading Here...</>
+    <>Loading...</>
   ) : (
     <Box sx={{ width: "100%" }}>
       <Box
@@ -180,7 +180,7 @@ const Dashboard: React.FC = () => {
             <Box
               sx={{ width: "100%", display: deviceWrapper("block", "none") }}
             >
-              <About />
+              <About/>
               <Box sx={{ mt: "1rem" }} />
               <TokenStats />
             </Box>

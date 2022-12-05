@@ -14,7 +14,6 @@ export const useDaoSlugs = () => {
       data.map(
         (item: any) => (object = { ...object, [item?.dao_url]: item?.id })
       );
-
       return object;
     } else {
       return [];

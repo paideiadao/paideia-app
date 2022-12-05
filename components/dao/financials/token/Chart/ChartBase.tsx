@@ -1,6 +1,5 @@
 import React from "react";
 import { format } from "d3-format";
-import { timeFormat } from "d3-time-format";
 import {
   discontinuousTimeScaleProviderBuilder,
   Chart,
@@ -17,11 +16,9 @@ import {
   AlternatingFillAreaSeries,
   SingleValueTooltip,
 } from "react-financial-charts";
-import { initialData } from "./data";
 import { Box } from "@mui/material";
 import { IThemeContext, ThemeContext } from "@lib/ThemeContext";
 import { LightTheme } from "@theme/theme";
-import { currencyFormatter } from "@components/utilities/currency";
 import dateFormat from "dateformat";
 
 const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
@@ -52,7 +49,7 @@ const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
   const { data, xScale, xAccessor, displayXAccessor } = ScaleProvider(
     props.data
   );
-  const pricesDisplayFormat = format(".2f");
+  const pricesDisplayFormat = format(".4f");
   const max = xAccessor(data[data.length - 1]);
   const min = xAccessor(data[Math.max(0, data.length - 100)]);
   const xExtents = [min, max + 5];
@@ -62,12 +59,6 @@ const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
   const barChartHeight = gridHeight / 4;
   const barChartOrigin = (_: any, h: number) => [0, h - barChartHeight];
   const chartHeight = gridHeight;
-  const yExtents = (data: any) => {
-    return [data.high, data.low];
-  };
-
-  const dateTimeFormat = "%d %b";
-  const timeDisplayFormat = timeFormat(dateTimeFormat);
 
   const barChartExtents = (data: any) => {
     return data.volume;
@@ -90,8 +81,8 @@ const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
   const volumeSeries = (data: any) => {
     return data.volume;
   };
-  const themeContext = React.useContext<IThemeContext>(ThemeContext);
 
+  const themeContext = React.useContext<IThemeContext>(ThemeContext);
   const axisStyles = {
     strokeStyle:
       themeContext.theme === LightTheme
@@ -220,9 +211,9 @@ const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
                 yAccessor={(d) => {
                   return d.open;
                 }}
-                yDisplayFormat={format("$.2f")}
+                yDisplayFormat={x => format(".4f")(x) + " ERG"}
               />
-              <SingleValueTooltip
+              {/* <SingleValueTooltip
                 yLabel="Volume"
                 valueFill={
                   themeContext.theme === LightTheme ? "black" : "white"
@@ -234,20 +225,8 @@ const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
                 yAccessor={(d) => {
                   return d.volume;
                 }}
-                yDisplayFormat={format("$.3~s")}
-              />
-              {/* <SingleValueTooltip
-              yLabel="Volume"
-              valueFill={themeContext.theme === LightTheme ? 'black' : 'white'}
-              labelFill="grey"
-              origin={screen.width >= 900 ? [540, -25] : [180,-15]}
-              //@ts-ignore
-              fontSize={screen.width > 900 ? "1.1rem" : '.9rem'}
-              yAccessor={(d) => {
-                return d.volume;
-              }}
-              yDisplayFormat={format("$.3~s")}
-            /> */}
+                yDisplayFormat={x => format(".3~")(x) + " ERG"}
+              /> */}
             </>
           ) : (
             <OHLCTooltip
@@ -255,6 +234,7 @@ const ChartBase: React.FC<{ view: string; timeView: string; data: any }> = (
               fontSize={screen.width <= 900 ? 15 : 20}
               textFill={openCloseColor}
               labelFill="grey"
+              ohlcFormat={format(".4f")}
             />
           )}
         </Chart>

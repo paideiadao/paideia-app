@@ -293,7 +293,7 @@ const BaseComment: React.FC<{
               >
                 {props.comment.alias.length > 30
                   ? props.comment.alias.slice(0, 15) +
-                  "....." +
+                  "..." +
                   props.comment.alias.slice(-15)
                   : props.comment.alias}
               </Box>

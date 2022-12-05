@@ -5,7 +5,7 @@ import { isTemplateLiteral } from "typescript";
 
 export const useDaoData = (id: number) => {
   const { data, error } = useSWR(
-    `${process.env.API_URL}/${id.toString()}`,
+    id && `${process.env.API_URL}/${id.toString()}`,
     axiosGetFetcher
   );
 

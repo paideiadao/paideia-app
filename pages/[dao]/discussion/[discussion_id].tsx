@@ -563,7 +563,7 @@ const Discussion: React.FC = () => {
           </Box>
         </Box>
       ) : (
-        <>Loading here....</>
+        <>Loading here...</>
       )}
     </Layout>
   );
