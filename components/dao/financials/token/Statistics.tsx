@@ -66,7 +66,7 @@ const StatisticsCard: React.FC<{ title: string | JSX.Element; c: number }> = (
 };
 
 const Statistics: React.FC<any> = (props) => {
-  const ticker = props.data?.token_name;
+  const ticker = props.data?.token_name ?? "Token";
   return (
     <Box>
       <Header title={`${ticker} Statistics`} />
@@ -79,14 +79,11 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            <Box
-              sx={{ mr: ".5rem" }}
-            >{`${props.data?.token_price_history_summary.hour_24.close.toLocaleString(
-              window.navigator.language,
-              {
-                maximumFractionDigits: 4,
-              }
-            )} ERG`}</Box>
+            <Box sx={{ mr: ".5rem" }}>
+              {safeFormattedString(
+                props.data?.token_price_history_summary.hour_24.close
+              )}
+            </Box>
             <PerformanceWidget
               value={
                 props.data?.token_price_history_summary.hour_24
@@ -105,20 +102,10 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.hour_24.abs_change.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
-              )} ERG`}
+              {safeFormattedString(
+                props.data?.token_price_history_summary.hour_24.abs_change
+              )}
             </Box>
-            <PerformanceWidget
-              value={
-                props.data?.token_price_history_summary.hour_24
-                  .percentage_change
-              }
-              invert
-            />
           </Box>
         </StatisticsCard>
         <StatisticsCard title="24hr High / 24hr Low" c={2}>
@@ -130,18 +117,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.hour_24.high.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.hour_24.high,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.hour_24.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.hour_24.low
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -198,14 +180,13 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            <Box
-              sx={{ mr: ".5rem" }}
-            >{`$${props.data?.market_cap.diluted_market_cap.toLocaleString(
-              window.navigator.language,
-              {
-                maximumFractionDigits: 0,
-              }
-            )}`}</Box>
+            <Box sx={{ mr: ".5rem" }}>
+              {safeFormattedString(
+                props.data?.market_cap.diluted_market_cap,
+                "$",
+                0
+              )}
+            </Box>
             <PerformanceWidget
               value={
                 props.data?.token_price_history_summary.hour_24
@@ -226,18 +207,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.yesterday.high.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.yesterday.high,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.yesterday.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.yesterday.low
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -250,18 +226,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.hour_24.open.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.yesterday.open,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.hour_24.close.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.yesterday.close
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -273,22 +244,11 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            <Box
-              sx={{ mr: ".5rem" }}
-            >{`${props.data?.token_price_history_summary.yesterday.abs_change.toLocaleString(
-              window.navigator.language,
-              {
-                maximumFractionDigits: 4,
-              }
-            )} ERG`}</Box>
-            <PerformanceWidget
-              value={
-                props.data?.token_price_history_summary.yesterday
-                  .percentage_change
-              }
-              invert
-              places={2}
-            />
+            <Box sx={{ mr: ".5rem" }}>
+              {safeFormattedString(
+                props.data?.token_price_history_summary.yesterday.abs_change
+              )}
+            </Box>
           </Box>
         </StatisticsCard>
       </StatisticsRow>
@@ -311,12 +271,9 @@ const Statistics: React.FC<any> = (props) => {
                   alignItems: "center",
                 }}
               >
-                {`${props.data?.token_price_history_summary.all_time.high.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                {safeFormattedString(
+                  props.data?.token_price_history_summary.all_time.high
+                )}
                 <Box
                   sx={{
                     ml: ".5rem",
@@ -337,12 +294,9 @@ const Statistics: React.FC<any> = (props) => {
                   alignItems: "center",
                 }}
               >
-                {`${props.data?.token_price_history_summary.all_time.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                {safeFormattedString(
+                  props.data?.token_price_history_summary.all_time.low
+                )}
                 <Box
                   sx={{
                     ml: ".5rem",
@@ -365,8 +319,9 @@ const Statistics: React.FC<any> = (props) => {
               >
                 <PerformanceWidget
                   value={
-                    props.data?.token_price_history_summary.all_time.close /
-                    props.data?.token_price_history_summary.all_time.open
+                    (props.data?.token_price_history_summary.all_time.close ??
+                      0) /
+                    (props.data?.token_price_history_summary.all_time.open ?? 1)
                   }
                   invert
                   places={2}
@@ -386,18 +341,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.day_7.high.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.day_7.high,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.day_7.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.day_7.low
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -410,18 +360,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.day_30.high.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.day_30.high,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.day_30.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.day_30.low
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -434,18 +379,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.day_90.high.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.day_90.high,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.day_90.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.day_90.low
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -458,18 +398,13 @@ const Statistics: React.FC<any> = (props) => {
             }}
           >
             <Box sx={{ mr: ".5rem" }}>
-              {`${props.data?.token_price_history_summary.week_52.high.toLocaleString(
-                window.navigator.language,
-                {
-                  maximumFractionDigits: 4,
-                }
+              {`${safeFormattedString(
+                props.data?.token_price_history_summary.week_52.high,
+                ""
               )} /
-                ${props.data?.token_price_history_summary.week_52.low.toLocaleString(
-                  window.navigator.language,
-                  {
-                    maximumFractionDigits: 4,
-                  }
-                )} ERG`}
+                ${safeFormattedString(
+                  props.data?.token_price_history_summary.week_52.low
+                )}`}
             </Box>
           </Box>
         </StatisticsCard>
@@ -494,16 +429,33 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            {props.data?.token_supply.max_supply.toLocaleString(
-              window.navigator.language,
-              {
-                maximumFractionDigits: 0,
-              }
-            )}
+            {safeFormattedString(props.data?.token_supply.max_supply, "")}
           </Box>
         </StatisticsCard>
       </StatisticsRow>
     </Box>
+  );
+};
+
+const safeFormattedString = (
+  x: any,
+  currency: string = "ERG",
+  format: number = 4
+) => {
+  if (x === null) {
+    return "-";
+  }
+  if (x === undefined) {
+    return x;
+  }
+  const pre = currency === "$" ? currency : "";
+  const post = currency === "ERG" ? " ERG" : "";
+  return (
+    pre +
+    x.toLocaleString(window.navigator.language, {
+      maximumFractionDigits: format,
+    }) +
+    post
   );
 };
 

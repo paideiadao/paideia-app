@@ -46,7 +46,7 @@ const columns: GridColDef[] = [
 ];
 
 const Markets: React.FC<any> = (props) => {
-  const ticker = props.data?.token_name;
+  const ticker = props.data?.token_name ?? "Token";
   const rows =
     props.data?.token_markets.map((market: any, index: number) => {
       return {

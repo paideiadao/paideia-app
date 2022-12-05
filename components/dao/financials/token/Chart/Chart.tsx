@@ -33,7 +33,7 @@ const Chart: React.FC<any> = (props) => {
   }, []);
 
   const rchartData =
-    props.data?.token_ohclv_1h.map((dp: { start_time: any }) => {
+    props.data?.token_ohclv_1h.map((dp: { start_time: string }) => {
       return {
         ...dp,
         date: new Date(dp.start_time),
@@ -41,7 +41,14 @@ const Chart: React.FC<any> = (props) => {
       };
     }) ?? [];
   const chartData = mergeChartData(rchartData);
+  const [initData, setInit] = React.useState<any[]>([]);
   const [data, setData] = React.useState<any[]>(chartData);
+
+  React.useEffect(() => {
+    if (chartData.length !== initData.length) {
+      setInit(chartData);
+    }
+  }, [chartData]);
 
   React.useEffect(() => {
     if (rchartData.length > 0) {
@@ -79,7 +86,7 @@ const Chart: React.FC<any> = (props) => {
           setData(mergeChartData([...temp]));
       }
     }
-  }, [timeView]);
+  }, [timeView, initData]);
 
   return (
     <Box
