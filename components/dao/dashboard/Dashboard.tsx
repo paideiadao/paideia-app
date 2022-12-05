@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import * as React from "react";
 import { Header } from "../../creation/utilities/HeaderComponents";
 import About from "./widgets/About";
@@ -21,7 +21,17 @@ const Dashboard: React.FC = () => {
   const daoData = globalContext.api.daoData;
 
   return daoData === undefined ? (
-    <>Loading...</>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "85vh",
+      }}
+    >
+      <CircularProgress />
+    </Box>
   ) : (
     <Box sx={{ width: "100%" }}>
       <Box
@@ -179,7 +189,7 @@ const Dashboard: React.FC = () => {
             <Box
               sx={{ width: "100%", display: deviceWrapper("block", "none") }}
             >
-              <About/>
+              <About />
               <Box sx={{ mt: "1rem" }} />
               <TokenStats />
             </Box>
