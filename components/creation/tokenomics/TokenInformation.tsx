@@ -102,7 +102,7 @@ const ExistingToken: React.FC<IData<ITokenomics>> = (props) => {
 };
 
 const TokenInformation: React.FC<IData<ITokenomics>> = (props) => {
-  const [tokenType, setTokenType] = React.useState<string>("create");
+  const [tokenType, setTokenType] = React.useState<string>("existing");
   const creationContext = React.useContext(CreationContext);
 
   React.useEffect(() => {

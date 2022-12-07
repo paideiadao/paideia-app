@@ -18,6 +18,8 @@ import AbstractAlert, { IAlerts } from "@components/utilities/Alert";
 import { IDaoUserData } from "@lib/Interfaces";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { SlugContext } from "contexts/SlugContext";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -35,7 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [theme, setTheme] = useState(LightTheme);
   const [daoData, setDaoData] = useState(undefined);
   const [daoUserData, setDaoUserData] = useState<IDaoUserData>(undefined);
-
+  const [loading, setLoading] = useState(0)
   const [alert, setAlert] = useState<IAlerts[]>([]);
   const router = useRouter();
 
@@ -48,11 +50,15 @@ const App = ({ Component, pageProps }: AppProps) => {
     localStorage.setItem("theme", temp);
   }, [theme]);
 
-  const { daoSlugsObject, daoSlugsIsLoading } = useDaoSlugs();
+  const { daoSlugsObject, daoSlugsIsLoading, daoTokensObject } = useDaoSlugs();
   const [daoSlugs, setDaoSlugs] = useState({});
+  const [daoTokens, setDaoTokens] = useState([]);
   useEffect(() => {
     setDaoSlugs(daoSlugsObject);
   }, [daoSlugsObject]);
+  useEffect(() => {
+    setDaoTokens(daoTokensObject);
+  }, [daoTokensObject]);
 
   const api = new AppApi(
     alert,
@@ -62,8 +68,11 @@ const App = ({ Component, pageProps }: AppProps) => {
     daoData,
     setDaoData,
     daoUserData,
-    setDaoUserData
+    setDaoUserData,
+    loading,
+    setLoading
   );
+
   return (
     <>
       <Head>
@@ -73,11 +82,17 @@ const App = ({ Component, pageProps }: AppProps) => {
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes"
         />
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading > 0 ? true : false}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ThemeContext.Provider value={{ theme, setTheme }}>
         <AddWalletProvider>
           <WalletProvider>
             <SlugContext.Provider
-              value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading }}
+              value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading, daoTokens }}
             >
               <GlobalContext.Provider value={{ api }}>
                 <ThemeProvider theme={theme}>

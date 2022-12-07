@@ -59,7 +59,8 @@ const Dashboard: React.FC = () => {
           <Box
             sx={{
               width: "100%",
-              display: deviceWrapper("-webkit-box", "flex"),
+              // display: deviceWrapper("-webkit-box", "flex"),
+              display: 'none',
               alignItems: "center",
               overflowX: "auto",
             }}

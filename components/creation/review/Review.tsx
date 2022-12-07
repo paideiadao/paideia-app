@@ -1,10 +1,10 @@
 import { Alert, Box, Button, AlertTitle, Modal } from "@mui/material";
 import * as React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { CreationContext } from "../../../lib/creation/Context";
-import { Header } from "../utilities/HeaderComponents";
+import { CreationContext } from "@lib/creation/Context";
+import { Header } from "@components/creation/utilities/HeaderComponents";
 import ReviewDrawer from "./ReviewDrawer";
-import { modalBackground } from "../../utilities/modalBackground";
+import { modalBackground } from "@components/utilities/modalBackground";
 import Router from "next/router";
 import { deviceStruct } from "@components/utilities/Style";
 
