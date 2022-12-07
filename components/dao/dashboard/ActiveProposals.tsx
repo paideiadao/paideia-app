@@ -45,7 +45,7 @@ const ActiveProposal: React.FC = () => {
   useEffect(() => {
     let isMounted = true;
     globalContext.api.setLoading((current: number) => current + 1)
-    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+    if (dao && daoSlugsObject[dao.toString()]) {
       const url = `${process.env.API_URL}/proposals/by_dao_id/${daoSlugsObject[dao.toString()]
         }`;
       axios
@@ -59,7 +59,7 @@ const ActiveProposal: React.FC = () => {
     }
     globalContext.api.setLoading((current: number) => current - 1)
     return () => { isMounted = false };
-  }, [dao]);
+  }, [dao, daoSlugsObject]);
 
   return (
     <>

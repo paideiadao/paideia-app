@@ -60,7 +60,7 @@ const LatestActivity: React.FC = () => {
 
   useEffect(() => {
     let isMounted = true;
-    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+    if (dao && daoSlugsObject[dao.toString()]) {
       const url = `${process.env.API_URL}/activities/by_dao_id/${
         daoSlugsObject[dao.toString()]
       }`;
@@ -74,7 +74,7 @@ const LatestActivity: React.FC = () => {
         });
     }
     return () => { isMounted = false };
-  }, [dao]);
+  }, [dao, daoSlugsObject]);
 
   return (
     <Box sx={{ width: "100%", pb: ".5rem" }}>
