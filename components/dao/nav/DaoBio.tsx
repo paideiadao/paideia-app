@@ -11,7 +11,6 @@ import React, { useEffect, useState, useContext, FC } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckIcon from "@mui/icons-material/Check";
-import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { ISideNavComponent } from "./Contents";
@@ -21,8 +20,6 @@ import { isAddressValid } from "@components/wallet/AddWallet";
 import { getObj, getUserId } from "@lib/utilities";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useRouter } from "next/router";
-import { SlugContext, ISlugContext } from "@contexts/SlugContext";
-import { IDaoMembership } from '@lib/Interfaces'
 import CircularProgress from '@mui/material/CircularProgress';
 
 export interface IDao {
@@ -95,7 +92,6 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
     }
   }, [router.isReady]);
 
-  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
   
   useEffect(() => {
