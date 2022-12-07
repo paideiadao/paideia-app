@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 
 const Termination: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <>
       <Header
@@ -16,8 +16,9 @@ const Termination: React.FC = () => {
         title="DAO termination"
         subtitle="If you wish, you can terminate the DAO. This will delete it forever and divides the treasury as decided. You can either send the treasury to whitelisted addresses, or divide equally between all the members of the DAO. Keep in mind that this process would go through a proposal."
       />
-      <Link href={getDaoPath(id as string, "/dao-config/terminate")}>
+      <Link href={`/${dao}/dao-config/terminate`}>
         <Button
+          disabled
           endIcon={<DeleteIcon />}
           color="error"
           variant="contained"

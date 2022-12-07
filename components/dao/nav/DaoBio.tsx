@@ -11,7 +11,6 @@ import React, { useEffect, useState, useContext, FC } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckIcon from "@mui/icons-material/Check";
-import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { ISideNavComponent } from "./Contents";
@@ -21,9 +20,6 @@ import { isAddressValid } from "@components/wallet/AddWallet";
 import { getObj, getUserId } from "@lib/utilities";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useRouter } from "next/router";
-import axios from "axios";
-import { SlugContext, ISlugContext } from "@contexts/SlugContext";
-import { IDaoMembership } from '@lib/Interfaces'
 import CircularProgress from '@mui/material/CircularProgress';
 
 export interface IDao {
@@ -95,25 +91,6 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
       setSelectedDao(getObj(daoSlugs ?? [], "dao_url", dao));
     }
   }, [router.isReady]);
-
-  useEffect(() => {
-    globalContext.api.setLoading((current: number) => current + 1)
-    let isMounted = true;
-    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      const url = `${process.env.API_URL}/dao/${daoSlugsObject[dao.toString()]
-        }`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (isMounted) globalContext.api.setDaoData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    globalContext.api.setLoading((current: number) => current - 1)
-    return () => { isMounted = false };
-  }, [dao]);
 
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
   

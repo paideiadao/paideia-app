@@ -1,4 +1,4 @@
-import { Badge, Box, Typography } from "@mui/material";
+import { Badge, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -24,8 +24,8 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
 import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-import TransformIcon from '@mui/icons-material/Transform';
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import TransformIcon from "@mui/icons-material/Transform";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import Link from "next/link";
@@ -35,7 +35,6 @@ import DarkFooter from "@public/dao/dark-footer.png";
 import { DarkTheme } from "@theme/theme";
 import Image from "next/image";
 import { da } from "date-fns/locale";
-
 
 const BasicLink: React.FC<{
   icon: JSX.Element;
@@ -319,7 +318,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     if (router.isReady && dao != undefined) {
       setDaoName(dao.toString());
     }
-  }, [dao])
+  }, [dao]);
 
   const path = router.asPath;
 
@@ -390,7 +389,9 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     if (v !== "Distributions") {
       setSubSelected(undefined);
       setSelected(v);
-      if (["Proposals", "Financials", "Staking", "Settings"].indexOf(v) === -1) {
+      if (
+        ["Proposals", "Financials", "Staking", "Settings"].indexOf(v) === -1
+      ) {
         props.setShowMobile(false);
       }
     }
@@ -461,10 +462,10 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     {
       icon: <AttachMoneyIcon sx={{ opacity: ".8" }} />,
       label: "Financials",
-      link: daoName ? `/${daoName}/financials/treasury` : "",
+      link: daoName ? `/${daoName}/financials/token` : "",
       links: (
         <>
-          <BasicLink
+          {/* <BasicLink
             icon={<AccountBalanceIcon sx={{ opacity: ".8" }} />}
             title={"Treasury"}
             selected={"Treasury" === subSelected}
@@ -479,7 +480,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             set={setSubWrapper}
             ml=".5rem"
             link={daoName ? `/${daoName}/financials/recurring` : ""}
-          />
+          /> */}
           <BasicLink
             icon={<BoltIcon sx={{ opacity: ".8" }} />}
             title={"Token"}
@@ -488,47 +489,47 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             ml=".5rem"
             link={daoName ? `/${daoName}/financials/token` : ""}
           />
-          <BasicLink
+          {/* <BasicLink
             icon={<DonutSmallIcon sx={{ opacity: ".8" }} />}
             title={"Tokenomics"}
             selected={"Tokenomics" === subSelected}
             set={setSubWrapper}
             ml=".5rem"
             link={daoName ? `/${daoName}/financials/tokenomics` : ""}
-          />
+          /> */}
         </>
       ),
     },
-    {
-      icon: <AutoAwesomeIcon sx={{ opacity: ".8" }} />,
-      label: "Distributions",
-      link: daoName ? `/${daoName}/distributions` : "",
-    },
-    {
-      icon: <DiamondIcon sx={{ opacity: ".8" }} />,
-      label: "Staking",
-      link: daoName ? `/${daoName}/staking` : "",
-      links: (
-        <>
-          <BasicLink
-            icon={<AutoGraphIcon sx={{ opacity: ".8" }} />}
-            title={"Staking"}
-            selected={"Staking" === subSelected}
-            set={setSubWrapper}
-            ml=".5rem"
-            link={daoName ? `/${daoName}/staking` : ""}
-          />
-          <BasicLink
-            icon={<TransformIcon sx={{ opacity: ".8" }} />}
-            title={"Manage Stake"}
-            selected={"Manage Stake" === subSelected}
-            set={setSubWrapper}
-            ml=".5rem"
-            link={daoName ? `/${daoName}/staking/manage` : ""}
-          />
-        </>
-      )
-    },
+    // {
+    //   icon: <AutoAwesomeIcon sx={{ opacity: ".8" }} />,
+    //   label: "Distributions",
+    //   link: daoName ? `/${daoName}/distributions` : "",
+    // },
+    // {
+    //   icon: <DiamondIcon sx={{ opacity: ".8" }} />,
+    //   label: "Staking",
+    //   link: daoName ? `/${daoName}/staking` : "",
+    //   links: (
+    //     <>
+    //       <BasicLink
+    //         icon={<AutoGraphIcon sx={{ opacity: ".8" }} />}
+    //         title={"Staking"}
+    //         selected={"Staking" === subSelected}
+    //         set={setSubWrapper}
+    //         ml=".5rem"
+    //         link={daoName ? `/${daoName}/staking` : ""}
+    //       />
+    //       <BasicLink
+    //         icon={<TransformIcon sx={{ opacity: ".8" }} />}
+    //         title={"Manage Stake"}
+    //         selected={"Manage Stake" === subSelected}
+    //         set={setSubWrapper}
+    //         ml=".5rem"
+    //         link={daoName ? `/${daoName}/staking/manage` : ""}
+    //       />
+    //     </>
+    //   ),
+    // },
     {
       icon: <GroupsIcon sx={{ opacity: ".8" }} />,
       label: "Members",
@@ -543,38 +544,38 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     globalContext.api.daoUserData === undefined
       ? undefined
       : {
-        icon: <SettingsIcon sx={{ opacity: ".8" }} />,
-        label: "Settings",
-        link: "",
-        links: (
-          <>
-            <BasicLink
-              icon={<PersonIcon sx={{ opacity: ".8" }} />}
-              title={"Edit profile"}
-              selected={"Edit profile" === subSelected}
-              set={setSubWrapper}
-              ml=".5rem"
-              link={daoName ? `/${daoName}/profile/edit` : ""}
-            />
-            <BasicLink
-              icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
-              title={"Notifications"}
-              selected={"Notifications" === subSelected}
-              set={setSubWrapper}
-              ml=".5rem"
-              link={daoName ? `/${daoName}/notifications/edit` : ""}
-            />
-            <BasicLink
-              icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
-              title={"Wallet"}
-              selected={"Wallet" === subSelected}
-              set={setSubWrapper}
-              ml=".5rem"
-              link={daoName ? `/${daoName}/wallet` : ""}
-            />
-          </>
-        ),
-      },
+          icon: <SettingsIcon sx={{ opacity: ".8" }} />,
+          label: "Settings",
+          link: "",
+          links: (
+            <>
+              <BasicLink
+                icon={<PersonIcon sx={{ opacity: ".8" }} />}
+                title={"Edit profile"}
+                selected={"Edit profile" === subSelected}
+                set={setSubWrapper}
+                ml=".5rem"
+                link={daoName ? `/${daoName}/profile/edit` : ""}
+              />
+              <BasicLink
+                icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
+                title={"Notifications"}
+                selected={"Notifications" === subSelected}
+                set={setSubWrapper}
+                ml=".5rem"
+                link={daoName ? `/${daoName}/notifications/edit` : ""}
+              />
+              <BasicLink
+                icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
+                title={"Wallet"}
+                selected={"Wallet" === subSelected}
+                set={setSubWrapper}
+                ml=".5rem"
+                link={daoName ? `/${daoName}/wallet` : ""}
+              />
+            </>
+          ),
+        },
     {
       icon: <DisplaySettingsIcon sx={{ opacity: ".8" }} />,
       label: "DAO Config",
@@ -587,19 +588,28 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     <Box
       sx={{
         width: "100%",
-        flex: '1 1 auto',
+        flex: "1 1 auto",
         overflowY: "auto",
         overflowX: "hidden",
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto', zIndex: 10 }}>
-        {daoName != undefined && (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flex: "1 1 auto",
+          zIndex: 10,
+        }}
+      >
+        {daoName != undefined &&
           categories
             .filter((item: any) => item !== undefined)
             .map((item: any, index: number) =>
-              ["Proposals", "Financials", "Staking", "Settings"].indexOf(item.label) > -1 ? (
+              ["Proposals", "Financials", "Staking", "Settings"].indexOf(
+                item.label
+              ) > -1 ? (
                 <DropdownLink
                   title={item.label}
                   set={setWrapper}
@@ -621,13 +631,14 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
                   key={"nav-contents-key-" + index}
                 />
               )
-            )
-        )}
+            )}
       </Box>
       <Box sx={{ zIndex: 1 }}>
         <img
-          src={themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src}
-          style={{ width: '100%', marginTop: '-100px' }}
+          src={
+            themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src
+          }
+          style={{ width: "100%", marginTop: "-100px" }}
         />
       </Box>
     </Box>

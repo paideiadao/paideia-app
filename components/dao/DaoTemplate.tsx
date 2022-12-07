@@ -20,7 +20,7 @@ const DaoTemplate: React.FC = (props) => {
     if (router.isReady && dao != undefined) {
       setDaoSlug(dao.toString());
     }
-  }, [router.isReady]);
+  }, [router.isReady, dao]);
 
   const { data: daoList, error: daoListError } = useSWR(`/dao/`, fetcher);
 
@@ -31,7 +31,7 @@ const DaoTemplate: React.FC = (props) => {
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   useEffect(() => {
-    if (daoData && daoList) {
+    if (daoSlug && daoData && daoList) {
       const daoSummary = daoList.filter(
         (dao: { dao_url: string }) => dao.dao_url === daoSlug
       )[0];
@@ -41,7 +41,7 @@ const DaoTemplate: React.FC = (props) => {
         proposal_count: daoSummary?.proposal_count,
       });
     }
-  }, [daoData, daoList]);
+  }, [daoData, daoList, daoSlug]);
 
   return (
     <>
