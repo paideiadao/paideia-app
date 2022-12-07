@@ -5,8 +5,8 @@ import * as React from "react";
 
 const CancelLink: React.FC = (props) => {
   const router = useRouter();
-  const { id } = router.query;
-  return <Link href={`${getDaoPath(id as string, "")}`}>{props.children}</Link>;
+  const { dao } = router.query;
+  return <Link href={`/${dao}`}>{props.children}</Link>;
 };
 
 export default CancelLink;

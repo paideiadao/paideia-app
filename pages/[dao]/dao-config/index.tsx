@@ -98,7 +98,6 @@ const DaoConfig: React.FC = () => {
               Cancel
             </Button>
           </CancelLink>
-
           <Button
             sx={{ width: "50%" }}
             size="small"

@@ -19,7 +19,7 @@ const About: React.FC = () => {
         mb: ".5rem",
       }}
     >
-      <CapsInfo title="About Paideia" small />
+      <CapsInfo title="About Dao" small />
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
         <Box
           sx={{
@@ -33,7 +33,7 @@ const About: React.FC = () => {
         >
           Members
           <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>
-            {daoData.member_count}
+            {daoData.member_count ?? "-"}
           </Box>
         </Box>
         <Box
@@ -46,7 +46,7 @@ const About: React.FC = () => {
         >
           Proposals
           <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>
-            {daoData.proposal_count}
+            {daoData.proposal_count ?? "-"}
           </Box>
         </Box>
       </Box>

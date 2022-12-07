@@ -21,7 +21,6 @@ import { isAddressValid } from "@components/wallet/AddWallet";
 import { getObj, getUserId } from "@lib/utilities";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useRouter } from "next/router";
-import axios from "axios";
 
 export interface IDao {
   dao_name: string;
@@ -92,23 +91,6 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
   }, [router.isReady]);
 
   const globalContext = useContext<IGlobalContext>(GlobalContext);
-  useEffect(() => {
-    let isMounted = true;
-    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      const url = `${process.env.API_URL}/dao/${
-        daoSlugsObject[dao.toString()]
-      }`;
-      axios
-        .get(url)
-        .then((res) => {
-          if (isMounted) globalContext.api.setDaoData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    return () => { isMounted = false };
-  }, [dao]);
 
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
 

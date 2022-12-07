@@ -51,7 +51,7 @@ const TokenStats: React.FC = () => {
         >
           Ticker
           <Box sx={{ fontSize: "1.2rem", color: "text.primary" }}>
-            {tokenomics?.token_ticker}
+            {tokenomics?.token_ticker ?? "-"}
           </Box>
         </Box>
         <Box
@@ -112,7 +112,7 @@ const TokenStats: React.FC = () => {
             {tokenStats?.token_supply.max_supply.toLocaleString(
               window.navigator.language,
               { maximumFractionDigits: 0 }
-            )}
+            ) ?? "-"}
           </Box>
         </Box>
       </Box>
