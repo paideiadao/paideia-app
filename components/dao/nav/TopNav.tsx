@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, IconButton, Slide } from "@mui/material";
+import { Avatar, Badge, Box, IconButton, Slide, Skeleton } from "@mui/material";
 import React, { useEffect } from "react";
 import { GlobalContext, IGlobalContext } from "../../../lib/AppContext";
 import { DarkTheme } from "@theme/theme";
@@ -37,7 +37,7 @@ const TopNav: React.FC<INav> = (props) => {
   const handleCloseProfile = () => setOpenProfile(false);
   const router = useRouter();
   const { dao } = router.query;
-  const { wallet } = useWallet();
+  const { wallet, utxos } = useWallet();
   const themeContext = React.useContext<IThemeContext>(ThemeContext);
 
   const closeNavOnResize = () => {
@@ -48,6 +48,30 @@ const TopNav: React.FC<INav> = (props) => {
     closeNavOnResize();
     return () => window.removeEventListener("resize", closeNavOnResize);
   }, []);
+
+  useEffect(() => {
+    if (dao != undefined && dao != "") {
+      if (globalContext.api?.daoUserData != undefined) {
+        globalContext.api.setDaoUserData({ ...globalContext.api.daoUserData, loading: true })
+      }
+      else (globalContext.api.setDaoUserData({
+        dao_id: 0,
+        followers: [],
+        following: [],
+        id: 0,
+        level: 0,
+        name: "",
+        social_links: [],
+        user_id: 0,
+        xp: 0,
+        bio: "",
+        profile_img_url: "",
+        address: "",
+        created: 0,
+        loading: true
+      }))
+    }
+  }, [dao])
 
   return (
     <>
@@ -83,12 +107,15 @@ const TopNav: React.FC<INav> = (props) => {
             mr: ".5rem",
           }}
         >
-          {globalContext.api.daoUserData === undefined && (
+          {/* {globalContext.api.daoUserData === undefined && (
             <Box sx={{ width: '200px' }}>
               <ThemeToggle />
             </Box>
-          )}
-          {globalContext.api.daoUserData !== undefined &&
+          )} */}
+          {globalContext.api.daoUserData !== undefined && globalContext.api.daoUserData.loading === true ? (
+            <Skeleton variant="rounded" width={210} height={40} />
+          ) : (
+            globalContext.api.daoUserData !== undefined &&
             isAddressValid(wallet) && (
               <>
                 <Box
@@ -163,15 +190,15 @@ const TopNav: React.FC<INav> = (props) => {
                         {snipAddress(globalContext.api.daoUserData.name, 25, 5)}
                       </Box>
                       <Box sx={{ color: "text.secondary", fontSize: ".7rem" }}>
-                        Lvl {globalContext.api.daoUserData.level} |{" "}
-                        {globalContext.api.daoUserData.level}
+                        {utxos.currentDaoTokens} {globalContext.api.daoData.tokenomics.token_ticker}
                       </Box>
                     </Box>
                   </Box>
                 )}
                 {/* </Link> */}
               </>
-            )}
+            )
+          )}
           <ConnectWallet show={globalContext.api.daoUserData === undefined} />
         </Box>
         <Box sx={{ position: "relative" }}>

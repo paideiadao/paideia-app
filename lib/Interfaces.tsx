@@ -21,6 +21,7 @@ export interface IDaoUserData {
   profile_img_url: string;
   address: string;
   created: number;
+  loading?: boolean;
 }
 
 export interface IDaoUserRes {

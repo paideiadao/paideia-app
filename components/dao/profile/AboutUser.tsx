@@ -1,5 +1,5 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Avatar, Box, Chip } from "@mui/material";
+import { Avatar, Box, Chip, Skeleton } from "@mui/material";
 import * as React from "react";
 import PaideiaTokenSymbol from "../../../public/images/paideia-token-symbol.png";
 import RedditIcon from "@mui/icons-material/Reddit";
@@ -59,15 +59,19 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
   React.useEffect(() => {
     const load = async () => {
-      let res = await appContext.api.paideiaTokenCheck([props.wallet]);
-      setUserTokens(res?.data?.totalTokens);
+      let res = await appContext.api.daoTokenCheckSingleToken([props.wallet], props.token_id);
+      if (res != undefined) {
+        setUserTokens(res);
+      }
+      else setUserTokens(0)
     };
     if (props.wallet) {
       load();
     }
   }, []);
 
-  const ticker = "PAI";
+  const ticker = appContext.api.daoData?.tokenomics.token_ticker
+  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url
 
   return (
     <Box
@@ -181,17 +185,18 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
             color="primary"
           />
         </Box>
+        {props.wallet && userTokens ? (
         <Chip
-          avatar={<Avatar alt="PAI" src={PaideiaTokenSymbol.src} />}
-          label={
-            (props.wallet && userTokens
-              ? userTokens.toLocaleString("en-US")
-              : utxos?.toLocaleString("en-US")) +
+          avatar={<Avatar alt={ticker} src={tokenImage} />}
+          label={parseFloat(userTokens.toFixed(0)).toLocaleString("en-US") +
             " " +
             ticker
           }
           sx={{ mt: ".5rem" }}
         />
+        ) : (
+          <Skeleton variant="rounded" width={100} height={32} sx={{ mt: '12px', borderRadius: '24px' }} />
+        )}
       </Box>
     </Box>
   );

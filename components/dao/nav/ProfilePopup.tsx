@@ -1,5 +1,5 @@
 import { modalBackground } from "@components/utilities/modalBackground";
-import { Avatar, Box, Button, Modal } from "@mui/material";
+import { Avatar, Box, Button, Modal, Dialog } from "@mui/material";
 import * as React from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
@@ -98,8 +98,30 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
   const { setWallet, setDAppWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   return (
-    <Modal open={props.open} onClose={props.close}>
-      <Box
+    <Dialog
+      open={props.open}
+      onClose={props.close}
+      sx={{
+        "& .MuiDialog-container": {
+          justifyContent: "flex-start",
+          alignItems: "flex-start"
+        }
+      }}
+      PaperProps={{
+        sx: {
+          position: 'absolute',
+          width: '300px',
+          bgcolor: "fileInput.outer",
+          boxShadow: 24,
+          p: '6px',
+          borderRadius: ".3rem",
+          color: "text.primary",
+          top: 0,
+          right: 0,
+          mt: '55px',
+        }
+      }}>
+      {/* <Box
         sx={{
           ...modalBackground,
           p: 0,
@@ -120,56 +142,56 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
             pt: ".25rem",
           }}
           //   onClick={props.close}
-        >
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              borderBottom: 1,
-              borderBottomColor: "border.main",
-            }}
-            onClick={props.close}
-          >
-            {rows.map((i: IProfilePopupRow, c: number) => (
-              <ProfilePopupRow {...i} key={`profile-popup-row-${c}`} />
-            ))}
-          </Box>
-          <Box sx={{ mt: ".75rem", mb: ".75rem", ml: ".75rem" }}>
-            <CapsInfo title="Appearance" small mb=".5rem" />
-            <ThemeToggle />
-          </Box>
-          <Button
-            sx={{
-              width: "100%",
-              borderRadius: 0,
-              p: ".25rem",
-              borderBottomRightRadius: ".3rem",
-              borderBottomLeftRadius: ".3rem",
-              borderTop: 1,
-              borderTopColor: "border.main",
-            }}
-            size="small"
-            onClick={() => {
-              localStorage.setItem(WALLET_ADDRESS, "");
-              localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
-              localStorage.setItem(DAPP_CONNECTED, "false");
-              localStorage.setItem("jwt_token_login", "");
-              localStorage.setItem("user_id", "");
-              localStorage.setItem("alias", "");
-              setWallet("");
-              setDAppWallet({
-                connected: false,
-                addresses: [],
-              });
-              globalContext.api.setDaoUserData(undefined);
-              props.close();
-            }}
-          >
-            Disconnect wallet
-          </Button>
-        </Box>
+        > */}
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          borderBottom: 1,
+          borderBottomColor: "border.main",
+        }}
+        onClick={props.close}
+      >
+        {rows.map((i: IProfilePopupRow, c: number) => (
+          <ProfilePopupRow {...i} key={`profile-popup-row-${c}`} />
+        ))}
       </Box>
-    </Modal>
+      <Box sx={{ mt: ".75rem", mb: ".75rem", ml: ".75rem" }}>
+        <CapsInfo title="Appearance" small mb=".5rem" />
+        <ThemeToggle />
+      </Box>
+      <Button
+        sx={{
+          width: "100%",
+          borderRadius: 0,
+          p: ".25rem",
+          borderBottomRightRadius: ".3rem",
+          borderBottomLeftRadius: ".3rem",
+          borderTop: 1,
+          borderTopColor: "border.main",
+        }}
+        size="small"
+        onClick={() => {
+          localStorage.setItem(WALLET_ADDRESS, "");
+          localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
+          localStorage.setItem(DAPP_CONNECTED, "false");
+          localStorage.setItem("jwt_token_login", "");
+          localStorage.setItem("user_id", "");
+          localStorage.setItem("alias", "");
+          setWallet("");
+          setDAppWallet({
+            connected: false,
+            addresses: [],
+          });
+          globalContext.api.setDaoUserData(undefined);
+          props.close();
+        }}
+      >
+        Disconnect wallet
+      </Button>
+      {/* </Box>
+      </Box> */}
+    </Dialog>
   );
 };

@@ -11,14 +11,14 @@ const Member: React.FC = () => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const { dao, member_id } = router.query;
-  const [daoId, setDaoId] = useState(undefined);
-  const { daoSlugsObject } = useDaoSlugs();
+  // const [daoId, setDaoId] = useState(undefined);
+  // const { daoSlugsObject } = useDaoSlugs();
 
-  useEffect(() => {
-    if (router.isReady) {
-      setDaoId(daoSlugsObject[dao.toString()]);
-    }
-  }, [router.isReady]);
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     setDaoId(daoSlugsObject[dao.toString()]);
+  //   }
+  // }, [router.isReady]);
 
   const { data: userData, error: userError } = useSWR(
     member_id !== undefined &&
@@ -60,12 +60,12 @@ const Member: React.FC = () => {
   );
 };
 
-const getUserIdFromSlug = (slug: string | string[]) => {
-  if (typeof slug === "string") {
-    const slug_split = slug.split("-");
-    return slug_split.at(slug_split.length - 1);
-  }
-  return slug;
-};
+// const getUserIdFromSlug = (slug: string | string[]) => {
+//   if (typeof slug === "string") {
+//     const slug_split = slug.split("-");
+//     return slug_split.at(slug_split.length - 1);
+//   }
+//   return slug;
+// };
 
 export default Member;

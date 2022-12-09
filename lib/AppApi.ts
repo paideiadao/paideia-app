@@ -59,6 +59,21 @@ export class AppApi extends AbstractApi {
     else return { data: {} }
   }
 
+  async daoTokenCheckSingleToken(addresses: string[], daoTokenId: string): Promise<number> {
+    if (addresses.length > 0) {
+      const res = await this.post<ITokenCheckNew>(
+        `${process.env.API_URL}/assets/token-exists`,
+        {
+          "addresses": addresses,
+          "tokens": [daoTokenId]
+        }
+      )
+      const sort = Object.values(res.data)[0][0][daoTokenId]
+      return sort
+    }
+    else return 0
+  }
+
   async paideiaTokenCheck(addresses: string[]): Promise<ITokenCheckResponse> {
     return this.post<ITokenCheckResponse>(
       `${process.env.API_URL}/assets/locked/paideia`,
@@ -117,8 +132,6 @@ export class AppApi extends AbstractApi {
       membershipList: sort1
     }
 
-    // console.log(response);
-
     if (res !== null) {
       if (res === undefined && this.daoUserData === undefined) {
         try {
@@ -127,17 +140,23 @@ export class AppApi extends AbstractApi {
             let creationRes = await this.post<IDaoUserRes>(
               "/users/create_user_profile?dao_id=" + this.daoData.id
             );
-            this.setDaoUserData(creationRes.data);
+            this.setDaoUserData({...creationRes.data, loading: false});
           }
           else {
             this.error('Please add ' + this.daoData.dao_name + ' tokens to participate')
+            this.setDaoUserData({...this.daoUserData, loading: false})
           }
         } catch (e) {
           this.error("Error connecting to DAO");
+          this.setDaoUserData({...this.daoUserData, loading: false})
         }
       }
+      else if (res?.data != undefined) {
+        this.setDaoUserData({...res.data, loading: false});
+      }
       else {
-        this.setDaoUserData(res.data);
+        this.setDaoUserData(undefined)
+        this.error('Please add ' + this.daoData.dao_name + ' tokens to participate')
       }
     }
     return response

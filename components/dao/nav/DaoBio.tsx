@@ -95,8 +95,6 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
   const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
   
   useEffect(() => {
-    setLocalLoading(true)
-    globalContext.api.setLoading((current: number) => current + 1)
     const load = async (tokensIds: string[]) => {
       try {
         if (dAppWallet.connected) {
@@ -121,7 +119,9 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
     };
     if (daoTokensObject.length > 0 && globalContext.api.daoData) {
       const tokenIds = Object.values(daoTokensObject).map(item => item.tokenId)
+      setLocalLoading(true)
       load(tokenIds);
+      setLocalLoading(false)
     } else {
       setUtxos(
         {
@@ -130,9 +130,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
         }
       );
     }
-    globalContext.api.setLoading((current: number) => current - 1)
-    setLocalLoading(false)
-  }, [wallet, dAppWallet, globalContext.api.daoData, daoTokensObject]);
+  }, [wallet, dAppWallet, globalContext.api.daoData]);
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
@@ -296,6 +294,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                           key={`dao-select-key-${c}`}
                           selected={dao != undefined && dao.toString() === d.dao_url}
                           inWallet={true}
+                          setSearch={setSearch}
                         // redirect={props.redirect}
                         />
                       ))
@@ -313,6 +312,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                           key={`dao-select-key-${c}`}
                           selected={id === d.id && utxos > 0}
                           inWallet={utxos > 0}
+                          setSearch={setSearch}
                         // redirect={props.redirect}
                         />
                       ))
@@ -348,6 +348,7 @@ interface IDaoSelect extends IDaoSelector {
   selected: boolean;
   data: IDao;
   inWallet: boolean;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const DaoSelect: FC<IDaoSelect> = (props) => {
@@ -372,6 +373,7 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
         }}
         onClick={() => {
           props.set(props.data)
+          props.setSearch("")
           router.push('/' + props.data.dao_url)
         }}
       >
