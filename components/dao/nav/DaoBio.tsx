@@ -130,7 +130,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
         }
       );
     }
-  }, [wallet, dAppWallet, globalContext.api.daoData]);
+  }, [wallet, dAppWallet, globalContext.api.daoData]); 
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
