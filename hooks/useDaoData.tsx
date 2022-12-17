@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { axiosGetFetcher } from "@utils/axios";
-import { isTemplateLiteral } from "typescript";
+import { axiosCachedGetFetcher } from "@utils/axios";
 
 export const useDaoData = (id: number) => {
   const { data, error } = useSWR(
     id && `${process.env.API_URL}/${id.toString()}`,
-    axiosGetFetcher
+    axiosCachedGetFetcher
   );
 
   const daoDataObject = useMemo(() => {
