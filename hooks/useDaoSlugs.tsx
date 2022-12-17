@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { axiosGetFetcher } from "@utils/axios";
+import { axiosCachedGetFetcher } from "@utils/axios";
 
 export const useDaoSlugs = () => {
   const { data, error } = useSWR(
     `${process.env.API_URL}/dao/`,
-    axiosGetFetcher
+    axiosCachedGetFetcher
   );
 
   const daoSlugsObject: any = useMemo(() => {
@@ -43,10 +43,5 @@ export const useDaoSlugs = () => {
     daoTokensObject,
     daoSlugsIsLoading: !error && !data,
     daoSlugsIsError: error,
-    // currentDao: getObj(
-    //   data,
-    //   "id",
-    //   daoSlugsObject ? daoSlugsObject.dao : undefined
-    // ),
   };
 };

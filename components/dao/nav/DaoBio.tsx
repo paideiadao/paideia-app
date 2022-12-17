@@ -5,7 +5,7 @@ import {
   ClickAwayListener,
   InputAdornment,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState, useContext, FC } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -16,11 +16,10 @@ import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { ISideNavComponent } from "./Contents";
 import { useWallet } from "@components/wallet/WalletContext";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { isAddressValid } from "@components/wallet/AddWallet";
-import { getObj, getUserId } from "@lib/utilities";
+import { getObj } from "@lib/utilities";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useRouter } from "next/router";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 
 export interface IDao {
   dao_name: string;
@@ -51,11 +50,13 @@ const DaoBio: FC<ISideNavComponent> = (props) => {
         zIndex: 100,
       }}
     >
-      {daoData.design &&
-        <Avatar sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}>
+      {daoData.design && (
+        <Avatar
+          sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}
+        >
           <img src={daoData.design.logo_url} />
         </Avatar>
-      }
+      )}
       <DaoSelector {...props} />
     </Box>
   ) : null;
@@ -72,8 +73,9 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
   const { dao } = router.query;
   const [id, setId] = useState<number>(1);
   const [selectedDao, setSelectedDao] = useState<IDao>(undefined);
-  const globalContext = useContext<IGlobalContext>(GlobalContext);
-  const [localLoading, setLocalLoading] = useState(false)
+  const [localLoading, setLocalLoading] = useState(false);
+  const { daoSlugs } = useDaoSlugs();
+  const { utxos } = useWallet();
 
   const setDaoWrapper = (dao: IDao) => {
     if (props.setShowMobile !== undefined) {
@@ -84,53 +86,11 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
     setDropdown(false);
   };
 
-  const { daoSlugs, daoSlugsObject, daoTokensObject } = useDaoSlugs();
-
   useEffect(() => {
-    if (router.isReady && dao != undefined) {
+    if (router.isReady && dao !== undefined) {
       setSelectedDao(getObj(daoSlugs ?? [], "dao_url", dao));
     }
-  }, [router.isReady]);
-
-  const { wallet, utxos, setUtxos, dAppWallet } = useWallet();
-  
-  useEffect(() => {
-    const load = async (tokensIds: string[]) => {
-      try {
-        if (dAppWallet.connected) {
-          if (dAppWallet.addresses.length > 0) {
-            const addresses = dAppWallet.addresses.map((address: { id: number, name: string }) => address.name)
-            const membership = await globalContext.api.getOrCreateDaoUser(addresses, tokensIds);
-            setUtxos(membership);
-          }
-        } else if (isAddressValid(wallet)) {
-          const membership = await globalContext.api.getOrCreateDaoUser([wallet], tokensIds);
-          setUtxos(membership);
-        }
-      } catch (e) {
-        console.log(e);
-        setUtxos(
-          {
-            currentDaoTokens: 0,
-            membershipList: []
-          }
-        );
-      }
-    };
-    if (daoTokensObject.length > 0 && globalContext.api.daoData) {
-      const tokenIds = Object.values(daoTokensObject).map(item => item.tokenId)
-      setLocalLoading(true)
-      load(tokenIds);
-      setLocalLoading(false)
-    } else {
-      setUtxos(
-        {
-          currentDaoTokens: 0,
-          membershipList: []
-        }
-      );
-    }
-  }, [wallet, dAppWallet, globalContext.api.daoData]); 
+  }, [router.isReady, dao]);
 
   return (
     <Box sx={{ width: "100%", position: "relative" }}>
@@ -174,7 +134,9 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
             </Box>
           </>
         ) : (
-          <Typography sx={{ fontSize: ".6rem", color: "text.secondary" }}>Choose a DAO</Typography>
+          <Typography sx={{ fontSize: ".6rem", color: "text.secondary" }}>
+            Choose a DAO
+          </Typography>
         )}
         <Box
           sx={{
@@ -192,7 +154,6 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
             sx={{ mt: "-.3rem", opacity: ".8", fontSize: "1.2rem" }}
           />
         </Box>
-
       </Box>
 
       {dropdown && (
@@ -269,8 +230,8 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
               >
                 {localLoading ? (
                   <CircularProgress />
-                ) : (
-                (utxos?.membershipList == undefined || utxos?.membershipList.length === 0) &&
+                ) : (utxos?.membershipList == undefined ||
+                    utxos?.membershipList.length === 0) &&
                   search === "" ? (
                   <Box
                     sx={{
@@ -281,43 +242,42 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                   >
                     No dao tokens in your wallet
                   </Box>
+                ) : search === "" ? (
+                  daoSlugs
+                    .filter((i: IDao) =>
+                      utxos.membershipList
+                        .map((item: any) => item.token)
+                        .includes(i.token_id)
+                    )
+                    .map((d: any, c: number) => (
+                      <DaoSelect
+                        data={d}
+                        set={(val: IDao) => setDaoWrapper(val)}
+                        key={`dao-select-key-${c}`}
+                        selected={
+                          dao != undefined && dao.toString() === d.dao_url
+                        }
+                        inWallet={true}
+                        setSearch={setSearch}
+                        // redirect={props.redirect}
+                      />
+                    ))
                 ) : (
-                  search === "" ? (
-                    daoSlugs
-                      .filter((i: IDao) =>
-                        utxos.membershipList.map((item: any) => item.token).includes(i.token_id)
-                      )
-                      .map((d: any, c: number) => (
-                        <DaoSelect
-                          data={d}
-                          set={(val: IDao) => setDaoWrapper(val)}
-                          key={`dao-select-key-${c}`}
-                          selected={dao != undefined && dao.toString() === d.dao_url}
-                          inWallet={true}
-                          setSearch={setSearch}
+                  daoSlugs
+                    .filter((i: IDao) =>
+                      i.dao_name.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((d: any, c: number) => (
+                      <DaoSelect
+                        data={d}
+                        set={(val: IDao) => setDaoWrapper(val)}
+                        key={`dao-select-key-${c}`}
+                        selected={id === d.id && utxos > 0}
+                        inWallet={utxos > 0}
+                        setSearch={setSearch}
                         // redirect={props.redirect}
-                        />
-                      ))
-                  ) : (
-                    daoSlugs
-                      .filter((i: IDao) =>
-                        i.dao_name
-                          .toLowerCase()
-                          .includes(search.toLowerCase())
-                      )
-                      .map((d: any, c: number) => (
-                        <DaoSelect
-                          data={d}
-                          set={(val: IDao) => setDaoWrapper(val)}
-                          key={`dao-select-key-${c}`}
-                          selected={id === d.id && utxos > 0}
-                          inWallet={utxos > 0}
-                          setSearch={setSearch}
-                        // redirect={props.redirect}
-                        />
-                      ))
-                  )
-                )
+                      />
+                    ))
                 )}
               </Box>
             </>
@@ -372,9 +332,9 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
           pr: ".25rem",
         }}
         onClick={() => {
-          props.set(props.data)
-          props.setSearch("")
-          router.push('/' + props.data.dao_url)
+          props.set(props.data);
+          props.setSearch("");
+          router.push("/" + props.data.dao_url);
         }}
       >
         <Avatar
@@ -399,7 +359,7 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
         </Box>
       )}
     </>
-  )
+  );
 };
 
 export default DaoBio;
