@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const TIMEOUT = 60 * 60 * 1000; // 1h
+const TIMEOUT = 5 * 60 * 1000; // 5 min
 
 export const axiosCachedGetFetcher = (url: string) => {
   const key = `CACHE_KEY_${url}_436324`;

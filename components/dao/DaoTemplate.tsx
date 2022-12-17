@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
-import useDidMountEffect from "@components/utilities/hooks";
 import { deviceWrapper } from "@components/utilities/Style";
-import { useWallet } from "@components/wallet/WalletContext";
 import { fetcher } from "@lib/utilities";
 import { Box, Container } from "@mui/material";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { GlobalContext, IGlobalContext } from "../../lib/AppContext";
-import BottomNav from "./nav/BottomNav";
-import Nav from "./nav/SideNav";
-import TopNav from "./nav/TopNav";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import BottomNav from "@components/dao/nav/BottomNav";
+import Nav from "@components/dao/nav/SideNav";
+import TopNav from "@components/dao/nav/TopNav";
+import { isAddressValid } from "@components/wallet/AddWallet";
+import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import { useWallet } from "@components/wallet/WalletContext";
 
 const DaoTemplate: React.FC = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const { wallet, setUtxos, dAppWallet } = useWallet();
+  const { daoTokensObject } = useDaoSlugs();
   const [showMobile, setShowMobile] = useState<boolean>(false);
   const router = useRouter();
   const [daoSlug, setDaoSlug] = useState("");
@@ -29,7 +33,6 @@ const DaoTemplate: React.FC = (props) => {
     fetcher
   );
 
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   useEffect(() => {
     if (daoSlug && daoData && daoList) {
       const daoSummary = daoList.filter(
@@ -42,6 +45,48 @@ const DaoTemplate: React.FC = (props) => {
       });
     }
   }, [daoData, daoList, daoSlug]);
+
+  useEffect(() => {
+    const load = async (tokensIds: string[]) => {
+      try {
+        if (dAppWallet.connected) {
+          if (dAppWallet.addresses.length > 0) {
+            const addresses = dAppWallet.addresses.map(
+              (address: { id: number; name: string }) => address.name
+            );
+            const membership = await globalContext.api.getOrCreateDaoUser(
+              addresses,
+              tokensIds
+            );
+            setUtxos(membership);
+          }
+        } else if (isAddressValid(wallet)) {
+          const membership = await globalContext.api.getOrCreateDaoUser(
+            [wallet],
+            tokensIds
+          );
+          setUtxos(membership);
+        }
+      } catch (e) {
+        console.log(e);
+        setUtxos({
+          currentDaoTokens: 0,
+          membershipList: [],
+        });
+      }
+    };
+    if (daoTokensObject.length > 0 && globalContext.api.daoData) {
+      const tokenIds = Object.values(daoTokensObject).map(
+        (item) => item.tokenId
+      );
+      load(tokenIds);
+    } else {
+      setUtxos({
+        currentDaoTokens: 0,
+        membershipList: [],
+      });
+    }
+  }, [wallet, dAppWallet, globalContext.api.daoData]);
 
   return (
     <>
