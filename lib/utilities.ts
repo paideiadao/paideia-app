@@ -32,7 +32,7 @@ export const snipAddress = (
   maxLength: number,
   showNumber: number
 ): string => {
-  return val.length > maxLength
+  return val?.length > maxLength
     ? val.slice(0, showNumber) + "..." + val.slice(-showNumber)
     : val;
 };

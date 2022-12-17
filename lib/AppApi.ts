@@ -1,6 +1,5 @@
 import { AbstractApi, getUserId } from "./utilities";
 import { Theme } from "@mui/material";
-import { CreationApi } from "./creation/CreationApi";
 import { IAlerts } from "@components/utilities/Alert";
 import {
   IDaoUserData,
@@ -101,8 +100,6 @@ export class AppApi extends AbstractApi {
   }
 
   async getOrCreateDaoUser(addresses: string[], tokenIds: string[]): Promise<IDaoMembership> {
-    // console.log(addresses)
-    // console.log(tokenIds)
     const tokenCheck = await this.daoTokenCheck(addresses, tokenIds)
 
     const sort = [...new Set([].concat(...Object.values(tokenCheck.data)))]
@@ -151,7 +148,7 @@ export class AppApi extends AbstractApi {
           this.setDaoUserData({...this.daoUserData, loading: false})
         }
       }
-      else if (res?.data != undefined) {
+      else if (res?.data) {
         this.setDaoUserData({...res.data, loading: false});
       }
       else {
