@@ -102,7 +102,7 @@ const ActiveProposal: React.FC = () => {
             </Box>
           }
         >
-          {proposalData.map((i: any, c: number) => (
+          {proposalData.slice().reverse().slice(0, 10).map((i: any, c: number) => (
             <ProposalCard
               {...i}
               c={c}

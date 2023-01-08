@@ -130,7 +130,7 @@ export class AppApi extends AbstractApi {
     }
 
     if (res !== null) {
-      if (res === undefined && this.daoUserData === undefined) {
+      if (res === undefined && (this.daoUserData === undefined || isEmptyUserData(this.daoUserData))) {
         try {
           if (response.currentDaoTokens > 0) {
             // if they have tokens, create the user account
@@ -159,3 +159,21 @@ export class AppApi extends AbstractApi {
     return response
   }
 }
+
+const isEmptyUserData = (daoUserData: IDaoUserData) => {
+  return (
+    daoUserData.address === "" &&
+    daoUserData.bio === "" &&
+    daoUserData.created === 0 &&
+    daoUserData.dao_id === 0 &&
+    daoUserData.followers.length === 0 &&
+    daoUserData.following.length === 0 &&
+    daoUserData.id === 0 &&
+    daoUserData.level === 0 &&
+    daoUserData.name === "" &&
+    daoUserData.profile_img_url === "" &&
+    daoUserData.social_links.length === 0 &&
+    daoUserData.user_id === 0 &&
+    daoUserData.xp === 0
+  );
+};
