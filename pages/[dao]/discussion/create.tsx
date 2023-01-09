@@ -4,7 +4,6 @@ import { Box, Button, Modal } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { IProposal } from "../proposals/create";
 import GeneralInformation from "@components/dao/discussion/GeneralInformation";
 import DiscussionApi from "@lib/dao/discussion/DiscussionApi";
 import DiscussionContext from "@lib/dao/discussion/DiscussionContext";
@@ -22,6 +21,7 @@ import { IFile } from "@lib/creation/Interfaces";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CancelLink from "@components/utilities/CancelLink";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
+import { generateSlug } from "@lib/utilities";
 
 export interface IDiscussion {
   name: string;
@@ -230,7 +230,7 @@ const CreateDiscussion: React.FC = () => {
                         if (res.status == 200) {
                           router.push(
                             `/${dao === undefined ? "" : dao}/discussion/${
-                              res.data.id
+                              generateSlug(res.data.id, res.data.name)
                             }`
                           );
                         } else {

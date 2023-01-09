@@ -10,6 +10,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Link,
 } from "@mui/material";
 import * as React from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -27,6 +28,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CommentsApi from "@lib/CommentsApi";
 import { modalBackground } from "@components/utilities/modalBackground";
+import { useRouter } from "next/router";
 
 export interface IComment {
   id: number;
@@ -216,11 +218,12 @@ const BaseComment: React.FC<{
       (i: IComment) => i?.parent === props.comment.id
     );
     const level = props.level;
+    const router = useRouter();
+    const { dao } = router.query;
     const [filter, setFilter] = React.useState<boolean>(false);
     const [show, setShow] = React.useState<boolean>(true);
     const [reply, setReply] = React.useState<boolean>(false);
-
-    const commentStringArray = props.comment.comment.split('\n\n')
+    const commentStringArray = props.comment.comment.split("\n\n");
 
     return (
       <>
@@ -270,9 +273,14 @@ const BaseComment: React.FC<{
                     fontSize: deviceWrapper(".7rem", "9rem"),
                   }}
                 >
-                  {props.comment.alias.length > 14
-                    ? "[Alias Skipped]"
-                    : props.comment.alias}
+                  <Link
+                    href={`/${dao}/members/${props.comment.alias}`}
+                    underline="none"
+                  >
+                    {props.comment.alias.length > 14
+                      ? "[Alias Skipped]"
+                      : props.comment.alias}
+                  </Link>
                 </Box>
                 <Box
                   sx={{
@@ -291,11 +299,16 @@ const BaseComment: React.FC<{
                   fontSize: "1rem",
                 }}
               >
-                {props.comment.alias.length > 30
-                  ? props.comment.alias.slice(0, 15) +
-                  "..." +
-                  props.comment.alias.slice(-15)
-                  : props.comment.alias}
+                <Link
+                  href={`/${dao}/members/${props.comment.alias}`}
+                  underline="none"
+                >
+                  {props.comment.alias.length > 30
+                    ? props.comment.alias.slice(0, 15) +
+                      "..." +
+                      props.comment.alias.slice(-15)
+                    : props.comment.alias}
+                </Link>
               </Box>
               <Box
                 sx={{
@@ -361,19 +374,19 @@ const BaseComment: React.FC<{
                     }}
                   >
                     {commentStringArray.map((string, i) => {
-                      const breaks = string.split('\n')
+                      const breaks = string.split("\n");
                       return (
-                        <Typography key={i} sx={{ mb: '16px' }}>
+                        <Typography key={i} sx={{ mb: "16px" }}>
                           {breaks.map((str, i) => {
                             return (
                               <React.Fragment key={i}>
                                 {str}
                                 <br />
                               </React.Fragment>
-                            )
+                            );
                           })}
                         </Typography>
-                      )
+                      );
                     })}
                     <Box
                       sx={{
