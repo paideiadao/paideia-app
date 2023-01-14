@@ -5,6 +5,7 @@ import { DarkTheme, LightTheme } from "@theme/theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { ThemeContext } from "@lib/ThemeContext";
 import { AppApi } from "@lib/AppApi";
+import { MetaDataHandler } from "@lib/MetaDataHandler";
 import { GlobalContext } from "@lib/AppContext";
 import CssBaseline from "@mui/material/CssBaseline";
 import Creation from "@pages/creation";
@@ -18,8 +19,8 @@ import AbstractAlert, { IAlerts } from "@components/utilities/Alert";
 import { IDaoUserData } from "@lib/Interfaces";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { SlugContext } from "contexts/SlugContext";
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -37,7 +38,8 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [theme, setTheme] = useState(LightTheme);
   const [daoData, setDaoData] = useState(undefined);
   const [daoUserData, setDaoUserData] = useState<IDaoUserData>(undefined);
-  const [loading, setLoading] = useState(0)
+  const [metaData, setMetaData] = useState<any>({});
+  const [loading, setLoading] = useState(0);
   const [alert, setAlert] = useState<IAlerts[]>([]);
   const router = useRouter();
 
@@ -73,6 +75,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     setLoading
   );
 
+  const metadata = new MetaDataHandler(metaData, setMetaData);
+
   return (
     <>
       <Head>
@@ -83,7 +87,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading > 0 ? true : false}
       >
         <CircularProgress color="inherit" />
@@ -94,7 +98,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <SlugContext.Provider
               value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading, daoTokens }}
             >
-              <GlobalContext.Provider value={{ api }}>
+              <GlobalContext.Provider value={{ api, metadata }}>
                 <ThemeProvider theme={theme}>
                   <CssBaseline />
                   {Component !== Creation ? (
@@ -123,9 +127,9 @@ const App = ({ Component, pageProps }: AppProps) => {
                   alerts={alert}
                   // set={(val: IAlerts[]) => setAlert(val)}
                   close={(i: number) => {
-                    setAlert(prevState => (
+                    setAlert((prevState) =>
                       prevState.filter((_item, idx) => idx !== i)
-                    ))
+                    );
                   }}
                 />
               </GlobalContext.Provider>

@@ -1,11 +1,13 @@
-import { Theme } from "@mui/material";
 import * as React from "react";
-import { AppApi } from "./AppApi";
+import { AppApi } from "@lib/AppApi";
+import { MetaDataHandler } from "@lib/MetaDataHandler";
 
 export interface IGlobalContext {
   api: AppApi;
+  metadata: MetaDataHandler;
 }
 
 export const GlobalContext = React.createContext({
   api: undefined,
+  metadata: undefined,
 });

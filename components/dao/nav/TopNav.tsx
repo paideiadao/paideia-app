@@ -16,6 +16,8 @@ import { ProfilePopup } from "./ProfilePopup";
 import { snipAddress } from "@lib/utilities";
 import NotificationsPopup from "./NotificationsPopup";
 import CloseIcon from "@mui/icons-material/Close";
+import { fetcher } from "@lib/utilities";
+import useSWR from "swr";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -75,6 +77,26 @@ const TopNav: React.FC<INav> = (props) => {
     }
   }, [dao, wallet.connected, dAppWallet.connected]);
 
+  const { data: notifications, error: notificationsError } = useSWR(
+    globalContext.api?.daoUserData?.id &&
+      `/notificatons/${globalContext.api?.daoUserData?.id}`,
+    fetcher
+  );
+  const unreadCount = notifications
+    ? notifications
+        .map((notification: { is_read: boolean }) =>
+          notification.is_read ? 0 : 1
+        )
+        .reduce((a: number, c: number) => a + c, 0)
+    : null;
+
+  useEffect(() => {
+    globalContext.metadata.setMetadata({
+      ...globalContext.metadata.metadata,
+      unreadNotificationCount: unreadCount,
+    });
+  }, [unreadCount]);
+
   return (
     <>
       <Box
@@ -131,7 +153,13 @@ const TopNav: React.FC<INav> = (props) => {
                 >
                   <Link href={dao === undefined ? "" : `/${dao}/notifications`}>
                     <IconButton sx={{ display: deviceWrapper("flex", "none") }}>
-                      <Badge badgeContent={undefined} color="primary">
+                      <Badge
+                        badgeContent={
+                          globalContext.metadata.metadata
+                            .unreadNotificationCount
+                        }
+                        color="primary"
+                      >
                         <NotificationsIcon
                           sx={{
                             fontSize: "1.1rem",
@@ -144,12 +172,16 @@ const TopNav: React.FC<INav> = (props) => {
                       </Badge>
                     </IconButton>
                   </Link>
-
                   <IconButton
                     onClick={handleOpen}
                     sx={{ display: deviceWrapper("none", "flex") }}
                   >
-                    <Badge badgeContent={undefined} color="primary">
+                    <Badge
+                      badgeContent={
+                        globalContext.metadata.metadata.unreadNotificationCount
+                      }
+                      color="primary"
+                    >
                       <NotificationsIcon
                         sx={{
                           fontSize: "1.1rem",
@@ -207,7 +239,11 @@ const TopNav: React.FC<INav> = (props) => {
         </Box>
         <Box sx={{ position: "relative" }}>
           <ProfilePopup open={openProfile} close={handleCloseProfile} />
-          <NotificationsPopup open={open} close={handleClose} />
+          <NotificationsPopup
+            open={open}
+            close={handleClose}
+            notifications={notifications}
+          />
         </Box>
       </Box>
       <Slide direction="right" in={props.showMobile} mountOnEnter unmountOnExit>
