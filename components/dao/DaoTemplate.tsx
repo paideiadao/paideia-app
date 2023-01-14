@@ -100,7 +100,6 @@ const DaoTemplate: React.FC = (props) => {
           {/* {!(daoSlug == '' || daoSlug == undefined) && ( */}
           <Nav showMobile={showMobile} setShowMobile={setShowMobile} />
           {/* )} */}
-
           <Box
             sx={{
               width: deviceWrapper("100%", "calc(100% - 14.5rem)"),

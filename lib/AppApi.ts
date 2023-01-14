@@ -87,6 +87,13 @@ export class AppApi extends AbstractApi {
     );
   }
 
+  async markNotificationsAsRead(lastNotificationId: number): Promise<any> {
+    return this.put(
+      `/notificatons/mark_as_read/${lastNotificationId}`,
+      lastNotificationId,
+    )
+  }
+
   async editUser(data: IEditUser): Promise<any> {
     return this.put(
       `/users/details/${this.daoUserData.id}?dao_id=${this.daoUserData.dao_id}`,

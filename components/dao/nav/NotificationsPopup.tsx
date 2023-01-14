@@ -1,12 +1,8 @@
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { modalBackground } from "@components/utilities/modalBackground";
 import { Modal, Button, Box } from "@mui/material";
-import {
-  oldNotifications,
-  newNotifications,
-  Notification,
-} from "@pages/[dao]/notifications";
-import { id } from "date-fns/locale";
+import { Notification } from "@pages/[dao]/notifications";
 import Link from "next/link";
 import * as React from "react";
 import { useRouter } from "next/router";
@@ -14,11 +10,14 @@ import { useRouter } from "next/router";
 interface INotificationsPopup {
   open: boolean;
   close: () => void;
+  notifications?: any[];
 }
 
 const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
   const { dao } = router.query;
+
   return (
     <Modal open={props.open} onClose={props.close}>
       <Box
@@ -47,23 +46,44 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
         >
           <CapsInfo title="Notifications" mb={"0"} />
           <Box sx={{ ml: "auto" }}>
-            <Button size="small" sx={{ whiteSpace: "nowrap" }}>
+            <Button
+              size="small"
+              sx={{ whiteSpace: "nowrap" }}
+              onClick={() =>
+                globalContext.api
+                  ?.markNotificationsAsRead(
+                    props.notifications ? props.notifications[0].id : 0
+                  )
+                  .then(() => {
+                    globalContext.metadata.setMetadata({
+                      ...globalContext.metadata.metadata,
+                      unreadNotificationCount: 0,
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+              }
+            >
               Mark all as read
             </Button>
           </Box>
         </Box>
-
         <Box sx={{ height: "25rem", overflowY: "scroll" }}>
-          {[].map((i: any, c: number) => {
-            return (
-              <Notification
-                c={c}
-                i={i}
-                m={"0"}
-                key={"notification-key-modal-" + c}
-              />
-            );
-          })}
+          {props.notifications ? (
+            props.notifications.map((i: any, c: number) => {
+              return (
+                <Notification
+                  c={c}
+                  i={i}
+                  m={"0"}
+                  key={"notification-key-modal-" + c}
+                />
+              );
+            })
+          ) : (
+            <Box sx={{ p: 2 }}>Reading your Notifications...</Box>
+          )}
         </Box>
         <Box
           sx={{
