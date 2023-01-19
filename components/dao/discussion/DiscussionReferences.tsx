@@ -1,7 +1,6 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { getRandomImage } from "@components/utilities/images";
 import { deviceWrapper } from "@components/utilities/Style";
-import { getDaoPath } from "@lib/utilities";
+import { generateSlug, getDaoPath } from "@lib/utilities";
 import { Avatar, Box, Button } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -81,7 +80,7 @@ const DiscussionReferences: React.FC<IDataComponent> = (props) => {
 
 const DiscussionCard: React.FC<IReference> = (props) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { dao } = router.query;
   return (
     <Box
       sx={{
@@ -142,10 +141,9 @@ const DiscussionCard: React.FC<IReference> = (props) => {
         />
 
         <Link
-          href={`${getDaoPath(
-            id as string,
-            `/${props.is_proposal ? "proposal" : "discussion"}/${props.id}`
-          )}`}
+          href={`/${dao}/${
+            props.is_proposal ? "proposal" : "discussion"
+          }/${generateSlug(props.id, props.name)}`}
         >
           <Button
             size="small"

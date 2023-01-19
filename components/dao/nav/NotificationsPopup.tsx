@@ -69,14 +69,14 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
             </Button>
           </Box>
         </Box>
-        <Box sx={{ height: "25rem", overflowY: "scroll" }}>
+        <Box sx={{ height: "25rem", overflowY: "hidden" }}>
           {props.notifications ? (
             props.notifications.map((i: any, c: number) => {
               return (
                 <Notification
                   c={c}
                   i={i}
-                  m={"0"}
+                  m="0"
                   key={"notification-key-modal-" + c}
                 />
               );

@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import BackLink from "@components/utilities/BackLink";
-import { fetcher } from "@lib/utilities";
+import { fetcher, generateSlug } from "@lib/utilities";
 import useSWR from "swr";
 
 // export const getStaticPaths = paths;
@@ -36,6 +36,7 @@ export interface INotification {
   date: Date;
   is_read: boolean;
   proposal_id: number;
+  proposal_name: string;
   id: number;
 }
 
@@ -204,7 +205,7 @@ export const Notification: React.FC<{
         display: "flex",
         alignItems: "center",
         p: "1rem",
-        backgroundColor: i.is_read ? "fileInput.read" : "fileInput.outer",
+        backgroundColor: i.is_read ? "fileInput.outer" : "fileInput.read",
         borderRadius:
           props.m === undefined ? deviceWrapper("0", ".3rem") : "0rem",
         border: 1,
@@ -212,7 +213,7 @@ export const Notification: React.FC<{
         cursor: "pointer",
         ml: deviceWrapper("-1rem", "0"),
       }}
-      onClick={() => router.push(`/${dao}/discussion/${i.proposal_id}`)}
+      onClick={() => router.push(`/${dao}/discussion/${generateSlug(i.proposal_id, i.proposal_name)}`)}
     >
       {/* <Avatar src={i.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
       <Box
@@ -222,9 +223,9 @@ export const Notification: React.FC<{
           fontSize: deviceWrapper(".7rem", ".9rem"),
         }}
       >
-        <Box>
+        <Box sx={{ pb: 2 }}>
           <Box sx={{ display: "inline", color: "text.secondary" }}>
-            {i.action}
+            {i.action} {i.proposal_name}
           </Box>
         </Box>
         <Box
@@ -238,7 +239,7 @@ export const Notification: React.FC<{
           <AccessTimeIcon sx={{ fontSize: "1rem", mr: ".2rem" }} /> {i.date}
         </Box>
       </Box>
-      {i.is_read && (
+      {!i.is_read && (
         <Box sx={{ ml: "auto" }}>
           <CircleIcon
             color="primary"
