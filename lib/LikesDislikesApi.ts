@@ -18,6 +18,7 @@ export default class LikesDislikesApi extends AbstractApi {
     super();
     this.api = api;
     this.putUrl = putUrl;
+    this.setAlert = api.setAlert;
   }
 
   likeDislikeData(type: LikeDislikeAction): ILikeDislikePut {

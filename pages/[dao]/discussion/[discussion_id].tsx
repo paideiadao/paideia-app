@@ -90,6 +90,7 @@ const Discussion: React.FC = () => {
       : null,
     fetcher
   );
+
   if (error) {
     router.push(getDaoPath(id as string, "/404"));
   }

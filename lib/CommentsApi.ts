@@ -16,6 +16,7 @@ export default class CommentsApi extends AbstractApi {
     super();
     this.api = api;
     this.proposalId = proposalId;
+    this.setAlert = api.setAlert;
   }
 
   commentData(comment: IComment): ICommentPut {
@@ -27,7 +28,7 @@ export default class CommentsApi extends AbstractApi {
   }
 
   publish(comment: IComment): Promise<any> | void {
-    let data = this.commentData(comment);
+    const data = this.commentData(comment);
     return this.put(
       `/proposals/comment/${this.proposalId}`,
       data,

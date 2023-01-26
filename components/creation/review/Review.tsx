@@ -128,18 +128,9 @@ const Review: React.FC = () => {
               </Button>
               <Button
                 onClick={async () => {
-                  // creationContext.api.setData({
-                  //   ...data,
-                  //   isDraft: 0,
-                  //   isPublished: 1,
-                  // });
-                  let res = await creationContext.api.createDao(false);
+                  const res = await creationContext.api.createDao(false);
                   if (res) {
                     Router.push(`/${res.data.dao_name.toLowerCase()}`);
-                  } else {
-                    creationContext.api.api.error(
-                      "Connection issue, please submit again."
-                    );
                   }
                 }}
               >

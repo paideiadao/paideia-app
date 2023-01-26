@@ -114,13 +114,13 @@ export interface ILoginResponse {
 }
 
 export const getWsUrl = (): string => {
-  //process.env.NODE_ENV == "development"
+  // process.env.NODE_ENV == "development"
   return process.env.WSS_URL;
 };
 
 export class AbstractApi {
   alert: IAlerts[] = [];
-  setAlert: (val: IAlerts[]) => void = undefined;
+  setAlert: (val: IAlerts[]) => void = () => {};
 
   webSocket(request_id: string): WebSocket {
     const ws = new WebSocket(`${process.env.WSS_URL}/auth/ws/${request_id}`);
@@ -205,36 +205,42 @@ export class AbstractApi {
 
   error(err: any): any {
     console.log(err);
-    if (this !== undefined) {
-      let temp = [...this.alert];
-      temp.push({
-        content: err,
-        severity: "error",
-        id: uuidv4(),
-      });
-      this.setAlert(temp);
-    }
+    const message =
+      typeof err === "string"
+        ? err
+        : err?.response
+        ? err.response.status === 401
+          ? err.response.data.detail
+          : err.response.data
+        : "Oops :( Some unknown error may have occurred";
+    if (this !== undefined)
+      this.showAlert(
+        typeof message === "string" ? message : JSON.stringify(message),
+        "error"
+      );
   }
 
   showAlert = (content: string, severity: ValidAlert): boolean => {
     if (content !== "" && content !== undefined) {
-      let temp = [...this.alert];
+      const temp = [...this.alert];
       temp.push({
         content: content,
         severity: severity,
         id: uuidv4(),
       });
-      this.setAlert(temp);
+      this.setAlert && this.setAlert(temp);
     }
     return false;
   };
 
   async get<T>(url: string): Promise<T> {
-    let self = this;
-    // @ts-ignore
-    return await this.request(url, "GET").then((data: T) => {
-      return data;
-    }, self.error);
+    return await this.request(url, "GET").then(
+      // @ts-ignore
+      (data: T) => {
+        return data;
+      },
+      (e) => this.error(e)
+    );
   }
 
   async post<T>(
@@ -243,13 +249,12 @@ export class AbstractApi {
     action: string = undefined,
     current: string = ""
   ): Promise<T> {
-    let self = this;
     return await this.request(url, "POST", body).then(
       // @ts-ignore
       (data: T) => {
         return data;
       },
-      self.error
+      (e) => this.error(e)
     );
   }
 
@@ -258,11 +263,10 @@ export class AbstractApi {
     action: string,
     current: string = ""
   ): Promise<T> {
-    let self = this;
     return await this.request(url, "PATCH").then(
       // @ts-ignore
       (data: T) => data,
-      self.error
+      (e) => this.error(e)
     );
   }
 
@@ -272,11 +276,10 @@ export class AbstractApi {
     action: string = "",
     current: string = ""
   ): Promise<T> {
-    let self = this;
     return await this.request(url, "PUT", body).then(
       // @ts-ignore
       (data: T) => data,
-      self.error
+      (e) => this.error(e)
     );
   }
 
@@ -286,11 +289,10 @@ export class AbstractApi {
     action: string,
     current: string = ""
   ): Promise<T> {
-    let self = this;
     return await this.request(url, "DELETE", body).then(
       // @ts-ignore
       (data: T) => data,
-      self.error
+      (e) => this.error(e)
     );
   }
 
