@@ -19,6 +19,7 @@ export default class FollowApi extends AbstractApi {
     super();
     this.api = api;
     this.putUrl = putUrl;
+    this.setAlert = api.setAlert;
   }
 
   followData(

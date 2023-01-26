@@ -156,6 +156,7 @@ export class AppApi extends AbstractApi {
             this.setDaoUserData({...this.daoUserData, loading: false})
           }
         } catch (e) {
+          console.log(e);
           this.error("Error connecting to DAO");
           this.setDaoUserData({...this.daoUserData, loading: false})
         }

@@ -50,13 +50,9 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: number }> = (
 
   const setCommentsWrapper = async (newComment: IComment) => {
     try {
-      let res = await api.publish(newComment);
-      if (res.status !== 200) {
-        api.api.error("Error adding comment");
-      }
+      await api.publish(newComment);
     } catch (e) {
       console.log(e);
-      api.api.error("Unknown error adding comment");
     }
   };
 
