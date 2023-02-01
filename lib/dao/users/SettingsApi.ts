@@ -32,6 +32,7 @@ export default class SettingsApi extends AbstractApi {
     this.api = api;
     this.value = value;
     this.setValue = setValue;
+    this.setAlert = api.setAlert;
   }
 
   edit(): Promise<any> | void {
