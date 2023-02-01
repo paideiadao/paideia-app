@@ -204,7 +204,7 @@ export class AbstractApi {
   }
 
   error(err: any): any {
-    console.log(err);
+    console.log("func:api_error:", err);
     const message =
       typeof err === "string"
         ? err

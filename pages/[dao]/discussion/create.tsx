@@ -212,40 +212,31 @@ const CreateDiscussion: React.FC = () => {
                       try {
                         let image;
                         if (value.image.file === undefined) {
-                          let defaultImage = await fetch(value.image.url);
-                          let data = await defaultImage.blob();
-                          let metadata = {
+                          const defaultImage = await fetch(value.image.url);
+                          const data = await defaultImage.blob();
+                          const metadata = {
                             type: "image/jpeg",
                           };
-
                           image = new File([data], "test.jpg", metadata);
                         } else {
                           image = value.image.file;
                         }
-                        let imgRes = await api.uploadFile(image);
-                        let res = await api.create(
-                          imgRes.data.image_url,
+                        const imgRes = await api.uploadFile(image);
+                        const res = await api.create(
+                          imgRes.data.img_url,
                           daoId
                         );
-                        if (res.status == 200) {
+                        if (res?.status == 200) {
                           router.push(
                             `/${dao === undefined ? "" : dao}/discussion/${
                               generateSlug(res.data.id, res.data.name)
                             }`
                           );
-                        } else {
-                          api.api.showAlert(
-                            "Error adding discussion. Please try again.",
-                            "error"
-                          );
-                          setLoading(false);
                         }
+                        setLoading(false);
                       } catch (e) {
                         console.log(e);
-                        api.api.showAlert(
-                          "Unknown error adding discussion. Please try again.",
-                          "error"
-                        );
+                        api.api.error(e);
                         setLoading(false);
                       }
                     }

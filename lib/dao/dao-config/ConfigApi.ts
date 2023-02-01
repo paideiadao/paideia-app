@@ -25,5 +25,6 @@ export default class ConfigApi extends AbstractApi {
     this.api = api;
     this.data = data;
     this.setData = setData;
+    this.setAlert = api.setAlert;
   }
 }

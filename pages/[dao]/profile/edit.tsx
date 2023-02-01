@@ -289,11 +289,14 @@ const Edit: React.FC<{ params: any }> = (props) => {
                 setLoading(true);
                 let imgRes;
                 if (typeof value.img !== "string") {
-                  let image = value?.img?.file ?? -1;
+                  const image = value?.img?.file ?? -1;
                   imgRes =
                     image === undefined || image === -1
                       ? ""
-                      : await appContext.api.uploadFile(image);
+                      : await appContext.api.uploadFile(image).catch((e) => {
+                          appContext.api.error(e);
+                          return "";
+                        });
                 }
                 await appContext.api.editUser({
                   name: value.username,
