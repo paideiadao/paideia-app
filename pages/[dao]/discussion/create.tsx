@@ -223,7 +223,7 @@ const CreateDiscussion: React.FC = () => {
                         }
                         const imgRes = await api.uploadFile(image);
                         const res = await api.create(
-                          imgRes.data.img_url,
+                          imgRes.data.image_url,
                           daoId
                         );
                         if (res?.status == 200) {
