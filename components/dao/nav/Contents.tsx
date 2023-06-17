@@ -505,31 +505,31 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     //   label: "Distributions",
     //   link: daoName ? `/${daoName}/distributions` : "",
     // },
-    // {
-    //   icon: <DiamondIcon sx={{ opacity: ".8" }} />,
-    //   label: "Staking",
-    //   link: daoName ? `/${daoName}/staking` : "",
-    //   links: (
-    //     <>
-    //       <BasicLink
-    //         icon={<AutoGraphIcon sx={{ opacity: ".8" }} />}
-    //         title={"Staking"}
-    //         selected={"Staking" === subSelected}
-    //         set={setSubWrapper}
-    //         ml=".5rem"
-    //         link={daoName ? `/${daoName}/staking` : ""}
-    //       />
-    //       <BasicLink
-    //         icon={<TransformIcon sx={{ opacity: ".8" }} />}
-    //         title={"Manage Stake"}
-    //         selected={"Manage Stake" === subSelected}
-    //         set={setSubWrapper}
-    //         ml=".5rem"
-    //         link={daoName ? `/${daoName}/staking/manage` : ""}
-    //       />
-    //     </>
-    //   ),
-    // },
+    {
+      icon: <DiamondIcon sx={{ opacity: ".8" }} />,
+      label: "Staking",
+      link: daoName ? `/${daoName}/staking` : "",
+      links: (
+        <>
+          <BasicLink
+            icon={<AutoGraphIcon sx={{ opacity: ".8" }} />}
+            title={"Staking"}
+            selected={"Staking" === subSelected}
+            set={setSubWrapper}
+            ml=".5rem"
+            link={daoName ? `/${daoName}/staking` : ""}
+          />
+          <BasicLink
+            icon={<TransformIcon sx={{ opacity: ".8" }} />}
+            title={"Manage Stake"}
+            selected={"Manage Stake" === subSelected}
+            set={setSubWrapper}
+            ml=".5rem"
+            link={daoName ? `/${daoName}/staking/manage` : ""}
+          />
+        </>
+      ),
+    },
     {
       icon: <GroupsIcon sx={{ opacity: ".8" }} />,
       label: "Members",
