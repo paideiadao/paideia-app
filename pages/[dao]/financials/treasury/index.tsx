@@ -9,7 +9,7 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Funds from "@components/dao/financials/treasury/Funds";
-import Chart from "@components/dao/financials/treasury/Chart";
+// import Chart from "@components/dao/financials/treasury/Chart";
 import Transactions from "@components/dao/financials/treasury/Transactions";
 import { deviceWrapper } from "@components/utilities/Style";
 
@@ -169,7 +169,7 @@ const Treasury: React.FC = () => {
         <Box sx={{ width: deviceWrapper("100%", "72%") }}>
           <TreasuryHeader />
           <Funds />
-          <Chart />
+          {/* <Chart /> */}
           <Transactions />
           <Box
             sx={{
