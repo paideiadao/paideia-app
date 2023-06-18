@@ -387,7 +387,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             Add Another
           </Button>
         </Box>
-        <Box sx={{ ...getItemStyle(false, {}, compact), mx: ".5rem" }}>
+        <Box sx={{ ...getItemStyle(false, { transition: undefined, transform: undefined }, compact), mx: ".5rem" }}>
           <DraggableHeader
             item={declineProposal}
             index={-1}

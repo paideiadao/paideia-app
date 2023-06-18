@@ -2,9 +2,6 @@
 
 .env
 
-package-lock.json
-yarn.lock
-
 # dependencies
 /node_modules
 /.pnp

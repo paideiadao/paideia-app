@@ -20,9 +20,8 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
-            rel="preconnect"
             href="https://fonts.gstatic.com"
-            crossOrigin="true"
+            rel="preconnect"
           />
           <link
             href="https://fonts.googleapis.com/css2?family=Inter&family=Space+Grotesk&family=Viga&display=swap"
