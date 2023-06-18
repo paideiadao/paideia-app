@@ -4,58 +4,100 @@ import {
   Subtitle,
 } from "@components/creation/utilities/HeaderComponents";
 import { useWallet } from "@components/wallet/WalletContext";
-import { IWallet } from "@lib/creation/Interfaces";
-import { Box, Button, InputAdornment, TextField, Modal } from "@mui/material";
-import * as React from "react";
-import { modalBackground } from "@components/utilities/modalBackground";
+import {
+  Box,
+  Button,
+  InputAdornment,
+  TextField,
+  Modal,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import { deviceWrapper } from "@components/utilities/Style";
 import CancelLink from "@components/utilities/CancelLink";
-const WithdrawForm: React.FC = () => {
-  const { wallet } = useWallet();
-  const [holder, setHolder] = React.useState<IWallet>({
-    alias: "Alone Musk",
-    address: wallet,
-    img: "",
-  });
-  const ticker = "PAI",
-    available = "50,000";
-  const [withdraw, setWithdraw] = React.useState<boolean>(false);
-  const openWithdraw = () => setWithdraw(true);
-  const closeWithdraw = () => setWithdraw(false);
-  const [value, setValue] = React.useState<number>(100);
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { useContext, useState } from "react";
+
+interface IStakeState {
+  stake: any;
+}
+
+const WithdrawForm: React.FC<IStakeState> = (props) => {
+  const appContext = useContext<IGlobalContext>(GlobalContext);
+  const { wallet, utxos } = useWallet();
+  const ticker = "PAI";
+  const available = utxos.currentDaoTokens;
+  const [value, setValue] = useState<number>(Math.min(available, 100));
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const totalStaked = props.stake?.stake_keys
+    ?.map((key: { stake: number }) => key.stake)
+    ?.reduce((a: number, c: number) => a + c);
+  const maxStake = props.stake?.stake_keys
+    ?.map((key: { stake: number }) => key.stake)
+    ?.reduce((a: number, b: number) => Math.max(a, b), 0);
+  const totalKeys = props.stake?.stake_keys?.length;
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(parseFloat(event.target.value));
   };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const daoId = appContext.api.daoData.id;
+      const userId = appContext.api.daoUserData.user_id;
+      const stake = props.stake.stake_keys.filter(
+        (key: { stake: any }) => key.stake === maxStake
+      )[0];
+      const res = await appContext.api.put<any>("/staking/", {
+        dao_id: daoId,
+        user_id: userId,
+        new_stake_key_info: {
+          ...stake,
+          stake: stake.stake - value,
+        },
+      });
+      const tx = res.data.unsigned_transaction;
+      // @ts-ignore
+      const signed = await ergo.sign_tx(tx);
+      // @ts-ignore
+      const txId = await ergo.submit_tx(signed);
+      appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+    } catch (e: any) {
+      appContext.api.error(e);
+    }
+    setLoading(false);
+  };
+
   return (
     <Box>
       <CapsInfo title="Withdrawal Form" mb=".5rem" />
-      <Subtitle subtitle="Description here..." />
+      <Subtitle subtitle="" />
       <Box sx={{ mt: "1rem" }} />
       <WalletSelector
         id="staking-wallet-input"
         data={{
-          alias: "Alone Musk",
+          alias: appContext.api.daoUserData?.name,
           address: wallet,
-          img: "",
+          img: appContext.api.daoUserData?.profile_img_url,
         }}
         number={1}
-        set={(j: any) => {
-          setHolder(j);
-        }}
+        set={() => {}}
       />
       <Box sx={{ display: "flex", alignItems: "center", mt: "1rem" }}>
         <TextField
-          label="Amount of tokens to stake"
+          label="Amount of tokens to withdraw"
           sx={{ width: deviceWrapper("90%", "45%") }}
           size="medium"
           value={value}
           type="number"
           onChange={handleChange}
-          helperText={`${available} ${ticker} available`}
+          helperText={`${totalStaked} ${ticker} staked`}
           InputProps={{
             inputProps: {
               min: 1,
-              max: 50000,
+              max: 9999999999,
             },
             endAdornment: (
               <InputAdornment position="end">{ticker}</InputAdornment>
@@ -66,11 +108,17 @@ const WithdrawForm: React.FC = () => {
           variant="text"
           size="small"
           sx={{ ml: ".5rem" }}
-          onClick={() => setValue(50000)}
+          onClick={() => setValue(maxStake)}
         >
           Max
         </Button>
       </Box>
+      {totalKeys >= 2 && (
+        <Typography fontSize="small" sx={{ mt: 2 }}>
+          There are multiple stake keys associated with your wallet you can at
+          most withdraw {maxStake} tokens in a single transactions
+        </Typography>
+      )}
       <Box
         sx={{
           width: "100%",
@@ -88,28 +136,16 @@ const WithdrawForm: React.FC = () => {
             Cancel
           </Button>
         </CancelLink>
-
         <Button
+          disabled={loading}
           variant="contained"
           sx={{ width: "50%" }}
-          onClick={openWithdraw}
+          onClick={handleSubmit}
           size="small"
         >
-          Withdraw
+          {!loading ? "Withdraw" : <CircularProgress size={26} />}
         </Button>
       </Box>
-      {/* <Modal open={withdraw} onClose={closeWithdraw}>
-        <Box
-          sx={{
-            ...modalBackground,
-            backgroundColor: "fileInput.main",
-            width: "30rem",
-            pb: ".5rem",
-          }}
-        >
-          Withdraw confirm here...
-        </Box>
-      </Modal> */}
     </Box>
   );
 };

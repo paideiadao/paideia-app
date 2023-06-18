@@ -25,8 +25,7 @@ export class CreationApi {
   // create data checking for the dao paths
   async createDao(draft: boolean = true): Promise<any> {
     const data = this.cleanData(this.data, draft);
-    console.log(data)
-    let res = await this.api.post<any>("/dao", data);
+    const res = await this.api.post<any>("/dao", data);
     return res;
   }
 

@@ -9,7 +9,7 @@ export const getTokenAmount = async (tokenId: string): Promise<number> => {
     // @ts-ignore
     await ergoConnector.nautilus.connect();
     // @ts-ignore
-    let balance = await ergo.get_balance(tokenId);
+    const balance = await ergo.get_balance(tokenId);
     return balance;
   } else if (userId !== undefined) {
     userId = JSON.parse(userId);

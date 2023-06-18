@@ -1,15 +1,10 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Avatar, Box, Chip, Skeleton } from "@mui/material";
 import * as React from "react";
-import PaideiaTokenSymbol from "../../../public/images/paideia-token-symbol.png";
-import RedditIcon from "@mui/icons-material/Reddit";
-import TelegramIcon from "@mui/icons-material/Telegram";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { ISocialLink } from "@lib/creation/Interfaces";
 import { useWallet } from "@components/wallet/WalletContext";
 import { getIcon } from "@components/creation/review/Design";
-import { snipAddress } from "@lib/utilities";
-import { getTokenAmount } from "@lib/wallet/Utilities";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const UserSocial: React.FC<{ icon: JSX.Element; label: string }> = (props) => {
@@ -59,19 +54,23 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
   React.useEffect(() => {
     const load = async () => {
-      let res = await appContext.api.daoTokenCheckSingleToken([props.wallet], props.token_id);
-      if (res != undefined) {
+      const res = await appContext.api.daoTokenCheckSingleToken(
+        [props.wallet],
+        props.token_id
+      );
+      if (res) {
         setUserTokens(res);
-      }
-      else setUserTokens(0)
+      } else setUserTokens(utxos.currentDaoTokens);
     };
     if (props.wallet) {
       load();
     }
   }, []);
 
-  const ticker = appContext.api.daoData?.tokenomics.token_ticker
-  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url
+  const ticker =
+    appContext.api.daoData?.tokenomics.token_ticker ??
+    appContext.api.daoData?.dao_name + " DAO tokens";
+  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url;
 
   return (
     <Box
@@ -140,7 +139,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
             </Box>
           </Box>
         </Box>
-        <Box sx={{ fontSize: ".9rem" }}>{props.bio}</Box>
+        <Box sx={{ fontSize: ".9rem", mt: 1 }}>{props.bio}</Box>
         {/* <Box
           sx={{
             display: "flex",
@@ -186,16 +185,22 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
           />
         </Box>
         {props.wallet && userTokens ? (
-        <Chip
-          avatar={<Avatar alt={ticker} src={tokenImage} />}
-          label={parseFloat(userTokens.toFixed(0)).toLocaleString("en-US") +
-            " " +
-            ticker
-          }
-          sx={{ mt: ".5rem" }}
-        />
+          <Chip
+            avatar={<Avatar alt={ticker} src={tokenImage} />}
+            label={
+              parseFloat(userTokens.toFixed(0)).toLocaleString("en-US") +
+              " " +
+              ticker
+            }
+            sx={{ mt: ".5rem" }}
+          />
         ) : (
-          <Skeleton variant="rounded" width={100} height={32} sx={{ mt: '12px', borderRadius: '24px' }} />
+          <Skeleton
+            variant="rounded"
+            width={100}
+            height={32}
+            sx={{ mt: "12px", borderRadius: "24px" }}
+          />
         )}
       </Box>
     </Box>

@@ -24,7 +24,7 @@ export const getObj = (lst: any[], id_field: string, id: any): any => {
 };
 
 export const getUserId = () => {
-  return parseInt(localStorage.getItem("user_id"));
+  return localStorage.getItem("user_id");
 };
 
 export const snipAddress = (

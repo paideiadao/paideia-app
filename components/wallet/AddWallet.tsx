@@ -184,9 +184,8 @@ const AddWallet: React.FC = () => {
         .then(async (signingMessage: any) => {
           if (signingMessage !== undefined) {
             setLoading(true);
-
             // @ts-ignore
-            let response = await ergo.auth(
+            const response = await ergo.auth(
               signingMessage.data.address,
               // @ts-ignore
               signingMessage.data.signingMessage
@@ -322,15 +321,15 @@ const AddWallet: React.FC = () => {
                   onClick={async () => {
                     try {
                       // add try catch here...
-                      let res = await globalContext.api.mobileLogin(
+                      const res = await globalContext.api.mobileLogin(
                         walletInput
                       );
-                      let ws = globalContext.api.webSocket(
+                      const ws = globalContext.api.webSocket(
                         res.data.verificationId
                       );
                       ws.onmessage = async (event) => {
                         try {
-                          let wsRes = JSON.parse(event.data);
+                          const wsRes = JSON.parse(event.data);
                           localStorage.setItem(
                             "jwt_token_login",
                             wsRes.access_token
