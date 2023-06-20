@@ -61,7 +61,7 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       });
       return res.data;
     } else {
-      const res = await appContext.api.post<any>("/staking", {
+      const res = await appContext.api.post<any>("/staking/", {
         dao_id: daoId,
         user_id: userId,
         amount: value,
