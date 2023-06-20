@@ -118,7 +118,7 @@ const ManageStake: React.FC = () => {
           <TokenBanner
             amount={stakeState?.stake_keys
               ?.map((key: { stake: number }) => key.stake)
-              .reduce((a: number, c: number) => a + c)}
+              .reduce((a: number, c: number) => a + c, 0)}
             ticker="PAI"
           />
           <TabContext value={value}>

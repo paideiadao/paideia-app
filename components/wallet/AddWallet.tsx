@@ -144,7 +144,7 @@ const AddWallet: React.FC = () => {
         setLoading(false);
         return;
         //@ts-ignore
-      } else if (await ergoConnector.nautilus.connect()) {
+      } else if (await ergoConnector.nautilus.connect({ createErgoObject: false })) {
         //@ts-ignore
         if (await ergoConnector.nautilus.isConnected()) {
           await dAppLoad();
@@ -166,10 +166,9 @@ const AddWallet: React.FC = () => {
 
   const dAppLoad = async () => {
     try {
-      //@ts-ignore
-      const address_used = await ergo.get_used_addresses();
-      //@ts-ignore
-      const address_unused = await ergo.get_unused_addresses();
+      const context = await getErgoWalletContext()
+      const address_used = await context.get_used_addresses();
+      const address_unused = await context.get_unused_addresses();
       const addresses = [...address_used, ...address_unused];
       // use the first used address if available or the first unused one if not as default
       // when a user hits the signing request, it should be a list of addresses that they have connected.
@@ -184,10 +183,9 @@ const AddWallet: React.FC = () => {
         .then(async (signingMessage: any) => {
           if (signingMessage !== undefined) {
             setLoading(true);
-            // @ts-ignore
-            const response = await ergo.auth(
+            const context = await getErgoWalletContext()
+            const response = await context.auth(
               signingMessage.data.address,
-              // @ts-ignore
               signingMessage.data.signingMessage
             );
             response.proof = Buffer.from(response.proof, "hex").toString(
@@ -379,11 +377,13 @@ const AddWallet: React.FC = () => {
 
 export const isAddressValid = (address: string) => {
   return address !== undefined ? address.length > 5 : false;
-  try {
-    return new Address(address).isValid();
-  } catch (_) {
-    return false;
-  }
+};
+
+export const getErgoWalletContext = async () => {
+  // @ts-ignore
+  const walletConnector = window.ergoConnector.nautilus;
+  const context = await walletConnector.getContext();
+  return context;
 };
 
 export default AddWallet;

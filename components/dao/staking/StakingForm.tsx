@@ -16,6 +16,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 import CancelLink from "@components/utilities/CancelLink";
 import { useContext, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
 interface IStakeState {
   stake: any;
@@ -38,10 +39,9 @@ const StakingForm: React.FC<IStakeState> = (props) => {
     try {
       const stakeKey = props.stake?.stake_keys?.[0]?.key_id;
       const tx = (await get_tx(stakeKey)).unsigned_transaction;
-      // @ts-ignore
-      const signed = await ergo.sign_tx(tx);
-      // @ts-ignore
-      const txId = await ergo.submit_tx(signed);
+      const context = await getErgoWalletContext()
+      const signed = await context.sign_tx(tx);
+      const txId = await context.submit_tx(signed);
       appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
     } catch (e: any) {
       appContext.api.error(e);

@@ -9,7 +9,6 @@ import {
   Button,
   InputAdornment,
   TextField,
-  Modal,
   Typography,
   CircularProgress,
 } from "@mui/material";
@@ -17,6 +16,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 import CancelLink from "@components/utilities/CancelLink";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useContext, useState } from "react";
+import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
 interface IStakeState {
   stake: any;
@@ -24,19 +24,19 @@ interface IStakeState {
 
 const WithdrawForm: React.FC<IStakeState> = (props) => {
   const appContext = useContext<IGlobalContext>(GlobalContext);
-  const { wallet, utxos } = useWallet();
+  const { wallet } = useWallet();
   const ticker = "PAI";
-  const available = utxos.currentDaoTokens;
-  const [value, setValue] = useState<number>(Math.min(available, 100));
   const [loading, setLoading] = useState<boolean>(false);
 
   const totalStaked = props.stake?.stake_keys
     ?.map((key: { stake: number }) => key.stake)
-    ?.reduce((a: number, c: number) => a + c);
+    ?.reduce((a: number, c: number) => a + c, 0);
   const maxStake = props.stake?.stake_keys
     ?.map((key: { stake: number }) => key.stake)
     ?.reduce((a: number, b: number) => Math.max(a, b), 0);
   const totalKeys = props.stake?.stake_keys?.length;
+
+  const [value, setValue] = useState<number>(Math.min(maxStake, 100));
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(parseFloat(event.target.value));
@@ -59,10 +59,9 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
         },
       });
       const tx = res.data.unsigned_transaction;
-      // @ts-ignore
-      const signed = await ergo.sign_tx(tx);
-      // @ts-ignore
-      const txId = await ergo.submit_tx(signed);
+      const context = await getErgoWalletContext()
+      const signed = await context.sign_tx(tx);
+      const txId = await context.submit_tx(signed);
       appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
     } catch (e: any) {
       appContext.api.error(e);
@@ -116,7 +115,7 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
       {totalKeys >= 2 && (
         <Typography fontSize="small" sx={{ mt: 2 }}>
           There are multiple stake keys associated with your wallet you can at
-          most withdraw {maxStake} tokens in a single transactions
+          most withdraw {maxStake} tokens in a single transaction(s)
         </Typography>
       )}
       <Box
