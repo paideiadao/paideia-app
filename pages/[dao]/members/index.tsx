@@ -126,7 +126,7 @@ const Members: React.FC = () => {
 
   useEffect(() => {
     let isMounted = true;
-    if (daoId != undefined) {
+    if (daoId !== undefined && daoId !== 1) {
       const url = `${process.env.API_URL}/users/by_dao_id/${daoId}`;
       axios
         .get(url)
@@ -139,11 +139,6 @@ const Members: React.FC = () => {
     }
     return () => { isMounted = false };
   }, [daoId]);
-
-  // const { data, error } = useSWR(
-  //   `/users/by_dao_id/${daoId === undefined ? 1 : daoId}`,
-  //   fetcher
-  // );
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);

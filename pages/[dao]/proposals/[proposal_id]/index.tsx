@@ -404,7 +404,7 @@ const Proposal: React.FC = () => {
                     <Discussion />
                   </TabPanel>
                   <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
-                    <Comments data={[]} id={0} />
+                    <Comments data={[]} id={""} />
                   </TabPanel>
                   <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>
                     <DiscussionReferences data={[]} />

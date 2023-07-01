@@ -52,6 +52,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
   const { wallet, utxos } = useWallet();
   const [userTokens, setUserTokens] = React.useState<number>(0);
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
+
   React.useEffect(() => {
     const load = async () => {
       const res = await appContext.api.daoTokenCheckSingleToken(
@@ -65,7 +66,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
     if (props.wallet) {
       load();
     }
-  }, []);
+  }, [props.wallet, utxos.currentDaoTokens]);
 
   const ticker =
     appContext.api.daoData?.tokenomics.token_ticker ??

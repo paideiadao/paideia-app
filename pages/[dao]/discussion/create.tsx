@@ -55,14 +55,8 @@ const CreateDiscussion: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
   const { dao } = router.query;
-  const { daoSlugsObject } = useDaoSlugs();
-  const [daoId, setDaoId] = useState<number>(undefined);
+  const daoId = globalContext.api.daoData?.id;
 
-  useEffect(() => {
-    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
-      setDaoId(daoSlugsObject[dao.toString()]);
-    }
-  }, [dao]);
   const api = new DiscussionApi(globalContext.api, value, setValue);
 
   return (
@@ -147,7 +141,6 @@ const CreateDiscussion: React.FC = () => {
           <GeneralInformation />
           <DiscussionImage />
           <Box sx={{ mt: "1.5rem" }} />
-
           <Reference />
           <Content />
           <Box
@@ -174,7 +167,6 @@ const CreateDiscussion: React.FC = () => {
             </Button>
           </Box>
         </Box>
-
         <Modal
           open={publish}
           onClose={() => setPublish(false)}

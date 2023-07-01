@@ -14,7 +14,7 @@ const Discussion: React.FC = () => {
         }}
       ></Box>
       <Divider />
-      <Comments title="Dicussion Comments" data={[]} id={0} />
+      <Comments title="Dicussion Comments" data={[]} id={""} />
     </>
   );
 };

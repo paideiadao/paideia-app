@@ -22,7 +22,7 @@ export default class DiscussionApi extends AbstractApi {
 
   cleanData(image_url: string, dao_id: number): IProposalEndpointBody {
     return {
-      dao_id: isNaN(dao_id) ? 1 : dao_id,
+      dao_id: dao_id,
       user_details_id: this.api.daoUserData.id,
       name: this.value.name,
       image_url: image_url,

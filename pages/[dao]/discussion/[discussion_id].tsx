@@ -48,7 +48,7 @@ const Discussion: React.FC = () => {
   const router = useRouter();
   const { discussion_id, id, tab } = router.query;
   const parsed_discussion_id = discussion_id
-    ? (discussion_id as string).split("-").reverse().at(0)
+    ? (discussion_id as string).split("-").slice(-5).join('-')
     : null;
   const [loaded, setLoaded] = React.useState<boolean>(false);
   const [newestComment, setNewestComment] = React.useState<IComment>();
@@ -125,7 +125,7 @@ const Discussion: React.FC = () => {
   }, [parsed_discussion_id]);
 
   useDidMountEffect(() => {
-    let temp = [...liveComments];
+    const temp = [...liveComments];
     temp.push(newestComment);
     setLiveComments(temp);
   }, [newestComment]);
@@ -217,7 +217,7 @@ const Discussion: React.FC = () => {
                   putUrl={`/proposals/like/${parsed_discussion_id}`}
                 />
                 <DiscussionOptions
-                  discussionId={parseInt(parsed_discussion_id)}
+                  discussionId={parsed_discussion_id}
                   userAlias={data.alias}
                   callbackHandler={() => router.back()}
                 />
@@ -375,7 +375,7 @@ const Discussion: React.FC = () => {
                         putUrl={"/proposals/follow/" + parsed_discussion_id}
                       />
                       <DiscussionOptions
-                        discussionId={parseInt(parsed_discussion_id)}
+                        discussionId={parsed_discussion_id}
                         userAlias={data.alias}
                         callbackHandler={() => router.back()}
                       />
@@ -530,7 +530,7 @@ const Discussion: React.FC = () => {
               <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
                 <Comments
                   data={data.comments.concat(liveComments)}
-                  id={parseInt(parsed_discussion_id)}
+                  id={parsed_discussion_id}
                 />
               </TabPanel>
               <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>
@@ -571,7 +571,7 @@ const Discussion: React.FC = () => {
 };
 
 const DiscussionOptions: React.FC<{
-  discussionId: number;
+  discussionId: string;
   userAlias: string;
   callbackHandler: () => void;
 }> = (props) => {
