@@ -101,20 +101,18 @@ export const getData = (name: string): ActionType => {
     return {
       shortDescription: "",
     };
-  } else if (name === "Send funds") {
+  } else if (name === "Send Funds") {
     return {
-      tokenHolders: [
-        { alias: "", address: "", img: "", balance: 0, percentage: 0 },
-      ],
+      recipients: [{ address: "", nergs: 0, tokens: 0 }],
       recurring: false,
     };
-  } else if (name === "Create liquidity pool") {
+  } else if (name === "Create Liquidity Pool") {
     return defaultLiquidityPoolData;
-  } else if (name === "Quadratic voting") {
+  } else if (name === "Quadratic Voting") {
     return {
       isActive: false,
     };
-  } else if (name === "Vote duration") {
+  } else if (name === "Vote Duration") {
     return {
       voteDuration: 0,
       voteDurationUnits: "weeks",
@@ -127,7 +125,7 @@ export const getData = (name: string): ActionType => {
     return {
       quorum: 4,
     };
-  } else if (name === "Optimistic governance") {
+  } else if (name === "Optimistic Governance") {
     return defaultOptimisticGovernanceData;
   }
 };
@@ -181,7 +179,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             tempItems[index].data = val;
             setItems(tempItems);
           }}
-          tokenHolders={(item.data as ISendFunds).tokenHolders}
+          recipients={(item.data as ISendFunds).recipients}
           recurring={(item.data as ISendFunds).recurring}
         />
       );
@@ -387,7 +385,16 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             Add Another
           </Button>
         </Box>
-        <Box sx={{ ...getItemStyle(false, { transition: undefined, transform: undefined }, compact), mx: ".5rem" }}>
+        <Box
+          sx={{
+            ...getItemStyle(
+              false,
+              { transition: undefined, transform: undefined },
+              compact
+            ),
+            mx: ".5rem",
+          }}
+        >
           <DraggableHeader
             item={declineProposal}
             index={-1}
