@@ -8,7 +8,7 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import { Box, Button, ButtonGroup } from "@mui/material";
-import { IProposalAction } from "@pages/[dao]/proposals/create";
+import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
 import { ISendFunds } from "./SendFunds";

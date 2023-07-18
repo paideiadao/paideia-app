@@ -50,7 +50,7 @@ const DiscussionReferences: React.FC<IDataComponent> = (props) => {
         <Link
           href={getDaoPath(
             id as string,
-            `/proposals/create?r=${discussion_id}`
+            `/proposal/create?r=${discussion_id}`
           )}
         >
           <Button

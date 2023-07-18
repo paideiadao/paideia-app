@@ -7,7 +7,7 @@ import ProposalContext, {
 } from "@lib/dao/proposal/ProposalContext";
 import { IObj } from "@lib/Interfaces";
 import { Box, Button, Typography } from "@mui/material";
-import { IProposalAction } from "@pages/[dao]/proposals/create";
+import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Selector from "./vote/Selector";
 import YesNo from "./vote/YesNo/YesNo";
@@ -20,6 +20,7 @@ interface IVoteChoice {
   icon: JSX.Element;
   subtitle: string;
   change: () => void;
+  disabled?: boolean;
 }
 
 export const VoteChoice: React.FC<IVoteChoice> = (props) => {
@@ -31,12 +32,11 @@ export const VoteChoice: React.FC<IVoteChoice> = (props) => {
         width: deviceWrapper("100%", "50%"),
         p: ".5rem",
         mt: deviceWrapper("1rem", "0"),
-
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: ".3rem",
-        cursor: "pointer",
+        cursor: props.disabled ? "default " : "pointer",
         border: 1,
         borderColor: "border.main",
         flexDirection: "column",
@@ -44,6 +44,7 @@ export const VoteChoice: React.FC<IVoteChoice> = (props) => {
         ":hover": {
           borderColor: "primary.main",
         },
+        opacity: props.disabled ? 0.5 : 1,
       }}
     >
       {props.icon}
@@ -69,7 +70,7 @@ const ProposalVote: React.FC = () => {
           fontSize: "1.1rem",
         }}
       >
-        Voting system
+        Voting System
       </Typography>
       {content[votingSystem]}
       {context.api.value.actions.filter(

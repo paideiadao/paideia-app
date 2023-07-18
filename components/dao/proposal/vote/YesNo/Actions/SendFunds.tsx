@@ -9,7 +9,7 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import { Box } from "@mui/material";
-import { IProposalAction } from "@pages/[dao]/proposals/create";
+import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
 
@@ -39,7 +39,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
   return (
     <Layout>
       <Header
-        title="Send funds from treasury"
+        title="Send Funds from Treasury"
         large
         subtitle="Send funds from the DAO treasury, to any wallet or collection of wallets."
         mb="0"
@@ -85,7 +85,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
         }}
       >
         <LabeledSwitch
-          title="Set as recurring"
+          title="Set as Recurring"
           subtitle="Set and schedule this payment to be done for a determined amount of time, in any frequency you wish."
           value={value.recurring}
           onChange={() => setValue({ ...value, recurring: !value.recurring })}

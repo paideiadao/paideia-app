@@ -75,7 +75,7 @@ const Send: React.FC = () => {
         />
 
         <LabeledSwitch
-          title="Set as recurring"
+          title="Set as Recurring"
           subtitle="Set and schedule this payment to be done for a determined amount of time, in any frequency you wish."
           value={value.recurring}
           onChange={() =>

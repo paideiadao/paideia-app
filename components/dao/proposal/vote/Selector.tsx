@@ -41,14 +41,15 @@ const Selector: React.FC = () => {
     >
       <VoteChoice
         icon={<CheckIcon />}
-        title="Yes or no"
+        title="Yes or No"
         change={() => wrapper("yes/no")}
         subtitle="Vote to pass or decline the proposal. This type of proposal allows for multiple actions."
       />
       <Box sx={{ ml: "1rem" }} />
       <VoteChoice
+        disabled={true}
         icon={<ListIcon />}
-        change={() => wrapper("options")}
+        change={() => {}}
         title="Provide options"
         subtitle="Provide multiple options for users to choose from. This type of proposal only allows for a single actions to be decided on."
       />

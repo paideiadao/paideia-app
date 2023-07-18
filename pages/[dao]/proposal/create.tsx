@@ -5,13 +5,10 @@ import * as React from "react";
 import BalanceIcon from "@mui/icons-material/Balance";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import ProposalContext, {
-  IProposalContext,
-} from "@lib/dao/proposal/ProposalContext";
+import ProposalContext from "@lib/dao/proposal/ProposalContext";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ProposalApi from "@lib/dao/proposal/ProposalApi";
 import GeneralInformation from "@components/dao/proposal/GeneralInformation";
-import ProposalPlaceholder from "@public/dao/discussion-banner-placeholder.png";
 import ProposalImage from "@components/dao/proposal/ProposalImage";
 import ProposalVote from "@components/dao/proposal/ProposalVote";
 import Content from "@components/dao/proposal/Context";
@@ -48,15 +45,14 @@ export type ActionType =
 
 export interface IProposalAction {
   name:
-    | "Custom action"
-    | "Send funds"
-    | "Create liquidity pool"
-    | "Change DAO's description"
-    | "Quadratic voting"
-    | "Vote duration"
+    | "Send Funds"
+    | "Create Liquidity Pool"
+    | "Change DAO's Description"
+    | "Quadratic Voting"
+    | "Vote Duration"
     | "Support"
     | "Quorum"
-    | "Optimistic governance"
+    | "Optimistic Governance"
     | undefined;
   icon?: React.ReactNode;
   description?: string;
@@ -122,6 +118,9 @@ const CreateProposal: React.FC = () => {
     ],
     addendums: [],
   });
+
+  console.log(value)
+
   const context = React.useContext<IGlobalContext>(GlobalContext);
   const api = new ProposalApi(context.api, value, setValue);
 

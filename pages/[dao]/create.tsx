@@ -1,5 +1,4 @@
 import * as React from "react";
-import { paths, props } from "@lib/DaoPaths";
 import { Box } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,7 +16,6 @@ const Create: React.FC = () => {
     <Layout>
       {/* get last link here */}
       <CreateHeader />
-
       <Box
         sx={{
           width: "100%",
@@ -26,56 +24,49 @@ const Create: React.FC = () => {
           flexDirection: deviceWrapper("column", "row"),
         }}
       >
-        {/* <Link
-          href={
-            dao === undefined
-              ? ""
-              : `/${dao}/proposals/create`
-          }
-        > */}
-        <Box
-          sx={{
-            cursor: "pointer",
-            borderRadius: ".5rem",
-            border: "1px solid",
-            p: ".5rem",
-            backgroundColor: "fileInput.outer",
-            borderColor: "border.main",
-            width: deviceWrapper("100%", "50%"),
-            mt: deviceWrapper("1rem", "0"),
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            mr: "1rem",
-            ":hover": {
-              borderColor: "primary.main",
-            },
-            opacity: ".5",
-          }}
-        >
-          <BalanceIcon sx={{ fontSize: "2rem", opacity: ".6" }} />
+        <Link href={dao === undefined ? "" : `/${dao}/proposal/create`}>
           <Box
             sx={{
-              textAlign: "center",
-              fontSize: "1.3rem",
-              fontWeight: 350,
+              cursor: "pointer",
+              borderRadius: ".5rem",
+              border: "1px solid",
+              p: ".5rem",
+              backgroundColor: "fileInput.outer",
+              borderColor: "border.main",
+              width: deviceWrapper("100%", "50%"),
+              mt: deviceWrapper("1rem", "0"),
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              mr: "1rem",
+              ":hover": {
+                borderColor: "primary.main",
+              },
             }}
           >
-            Create a proposal
+            <BalanceIcon sx={{ fontSize: "2rem", opacity: ".6" }} />
+            <Box
+              sx={{
+                textAlign: "center",
+                fontSize: "1.3rem",
+                fontWeight: 350,
+              }}
+            >
+              Create a proposal
+            </Box>
+            <Box
+              sx={{
+                textAlign: "center",
+                fontSize: ".8rem",
+                color: "text.secondary",
+              }}
+            >
+              Provide users with different options to vote on, and the proposal
+              will either be approved or declined. Keep in mind, once you create
+              a proposal, it can't be edited or deleted.
+            </Box>
           </Box>
-          <Box
-            sx={{
-              textAlign: "center",
-              fontSize: ".8rem",
-              color: "text.secondary",
-            }}
-          >
-            Provide users with different options to vote on, and the proposal
-            will either be approved or declined. Keep in mind, once you create a
-            proposal, it can't be edited or deleted.
-          </Box>
-        </Box>
-        {/* </Link> */}
+        </Link>
         <Link href={dao === undefined ? "" : `/${dao}/discussion/create`}>
           <Box
             sx={{

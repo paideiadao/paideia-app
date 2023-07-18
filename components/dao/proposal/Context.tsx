@@ -63,7 +63,7 @@ const Content: React.FC = () => {
     >
       <Box sx={{ mb: "1rem" }}>
         <Header
-          title="Proposal content"
+          title="Proposal Content"
           subtitle="Write about your proposal. You can drag and drop or copy/paste images, and use any standard markdown commands (or use the toolbar below to help with formatting)"
         />
       </Box>

@@ -34,7 +34,7 @@ const GeneralInformation: React.FC = () => {
   };
   return (
     <>
-      <Header title="Proposal general information" />
+      <Header title="Proposal General Information" />
       <Box
         sx={{
           width: "100%",
@@ -67,9 +67,7 @@ const GeneralInformation: React.FC = () => {
             label="Category"
             onChange={handleChange}
           >
-            <MenuItem value="Category 1">Category 1</MenuItem>
-            <MenuItem value="Category 2">Category 2</MenuItem>
-            <MenuItem value="Category 3">Category 3</MenuItem>
+            <MenuItem value="Test">Test</MenuItem>
           </Select>
         </FormControl>
       </Box>

@@ -44,6 +44,9 @@ const Proposal: React.FC = () => {
   const themeContext = React.useContext(ThemeContext);
   const router = useRouter();
   const { dao, proposal_id } = router.query;
+  const parsed_proposal_id = proposal_id
+    ? (proposal_id as string).split("-").slice(-5).join('-')
+    : null;
   const [value, setValue] = React.useState<IProposal>({
     name: "",
     image: {
@@ -145,7 +148,7 @@ const Proposal: React.FC = () => {
                             parseInt(localStorage.getItem("user_id"))
                           ) > -1
                         }
-                        putUrl={"/proposals/follow/" + proposal_id}
+                        putUrl={"/proposals/follow/" + parsed_proposal_id}
                       />
                     </Box>
                   )}
@@ -237,7 +240,7 @@ const Proposal: React.FC = () => {
                       <LanIcon
                         sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }}
                       />
-                      ID: {proposal_id}
+                      ID: {parsed_proposal_id}
                     </Box>
                   </Box>
                   <Box
@@ -280,8 +283,8 @@ const Proposal: React.FC = () => {
                     <Link
                       href={
                         dao === undefined
-                          ? `/dao/proposals/${proposal_id}/vote`
-                          : `/${dao}/proposals/${proposal_id}/vote`
+                          ? `/dao/proposals/${parsed_proposal_id}/vote`
+                          : `/${dao}/proposals/${parsed_proposal_id}/vote`
                       }
                     >
                       <Button

@@ -5,7 +5,7 @@ import {
   IProposal,
   IProposalAction,
   VotingType,
-} from "@pages/[dao]/proposals/create";
+} from "@pages/[dao]/proposal/create";
 
 export interface IProposalEndpointBody {
   dao_id: number;

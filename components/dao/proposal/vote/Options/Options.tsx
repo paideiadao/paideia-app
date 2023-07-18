@@ -3,7 +3,7 @@ import * as React from "react";
 import ListIcon from "@mui/icons-material/List";
 import VotingChoice from "../VotingChoice";
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import { IProposalAction } from "@pages/[dao]/proposals/create";
+import { IProposalAction } from "@pages/[dao]/proposal/create";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
@@ -24,10 +24,10 @@ const Options: React.FC = () => {
         icon={<ListIcon />}
       />
       <Header
-        title="What should happen in the proposal is approved?"
+        title="What should happen if the proposal is approved?"
         small
         mb=".25rem"
-        subtitle="Yes or no proposals allow you to create a chain of actions to be executed if the proposal passes. To add an action, simply click below, decide the type of action you want to create, and fill up the relevant information."
+        subtitle="Yes or No proposals allow you to create a chain of actions to be executed if the proposal passes. To add an action, simply click below, decide the type of action you want to create, and fill up the relevant information."
       />
       <OptionSystemSelector
         selected={optionType}

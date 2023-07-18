@@ -8,7 +8,7 @@ import {
   Header,
   Subtitle,
 } from "@components/creation/utilities/HeaderComponents";
-import { IProposalAction } from "@pages/[dao]/proposals/create";
+import { IProposalAction } from "@pages/[dao]/proposal/create";
 import SearchIcon from "@mui/icons-material/Search";
 import ProposalContext, {
   IProposalContext,
@@ -31,15 +31,14 @@ import { getData } from "../Options/DraggableContext";
 
 export interface IActionType {
   title:
-    | "Custom action"
-    | "Send funds"
-    | "Create liquidity pool"
-    | "Change DAO's description"
-    | "Quadratic voting"
-    | "Vote duration"
+    | "Send Funds"
+    | "Create Liquidity Pool"
+    | "Change DAO's Description"
+    | "Quadratic Voting"
+    | "Vote Duration"
     | "Support"
     | "Quorum"
-    | "Optimistic governance"
+    | "Optimistic Governance"
     | undefined;
   subtitle: string;
   icon: JSX.Element;
@@ -49,21 +48,21 @@ export interface IActionType {
 
 const renderDisplay = (display: string, props: IProposalAction) => {
   switch (display) {
-    case "Quadratic voting":
+    case "Quadratic Voting":
       return <QuadraticVoting {...props} />;
-    case "Send funds":
+    case "Send Funds":
       return <SendFunds {...props} />;
-    case "Create liquidity pool":
+    case "Create Liquidity Pool":
       return <LiquidityPool {...props} />;
-    case "Change DAO's description":
+    case "Change DAO's Description":
       return <DaoDescription {...props} />;
-    case "Vote duration":
+    case "Vote Duration":
       return <VoteDuration {...props} />;
     case "Support":
       return <Support {...props} />;
     case "Quorum":
       return <Quorum {...props} />;
-    case "Optimistic governance":
+    case "Optimistic Governance":
       return <OptimisticGovernance {...props} />;
   }
 };
@@ -71,52 +70,52 @@ const renderDisplay = (display: string, props: IProposalAction) => {
 const AddAction: React.FC<IProposalAction> = (props) => {
   const actionTypes: IActionType[] = [
     {
-      title: "Send funds",
+      title: "Send Funds",
       subtitle: "Propose to send an amount of fund to one or multiple wallets",
       icon: <AttachMoneyIcon />,
       mostCommon: true,
     },
-    {
-      title: "Create liquidity pool",
-      subtitle: "Create a liquidity pool with a set amount of tokens",
-      icon: <AttachMoneyIcon />,
-      mostCommon: true,
-    },
-    {
-      title: "Change DAO's description",
-      subtitle: "Propose a different text for the DAO's description",
-      icon: <SettingsIcon />,
-      mostCommon: true,
-    },
-    {
-      title: "Quadratic voting",
-      subtitle: "Turn on or off the quadratic voting option",
-      icon: <BalanceIcon />,
-    },
-    {
-      title: "Vote duration",
-      subtitle:
-        "Create, edit, or delete the vote durations set for the DAO's governance",
-      icon: <BalanceIcon />,
-    },
-    {
-      title: "Support",
-      subtitle:
-        "Edit the minimum level of support needed for single choice voting",
-      icon: <BalanceIcon />,
-    },
-    {
-      title: "Quorum",
-      subtitle:
-        "Edit the minimum level of quorum needed fro any proposal to be approved",
-      icon: <BalanceIcon />,
-    },
-    {
-      title: "Optimistic governance",
-      subtitle:
-        "Turn on or off optimistic governance and or edit the whitelisted members",
-      icon: <BalanceIcon />,
-    },
+    // {
+    //   title: "Create Liquidity Pool",
+    //   subtitle: "Create a liquidity pool with a set amount of tokens",
+    //   icon: <AttachMoneyIcon />,
+    //   mostCommon: true,
+    // },
+    // {
+    //   title: "Change DAO's Description",
+    //   subtitle: "Propose a different text for the DAO's description",
+    //   icon: <SettingsIcon />,
+    //   mostCommon: true,
+    // },
+    // {
+    //   title: "Quadratic Voting",
+    //   subtitle: "Turn on or off the quadratic voting option",
+    //   icon: <BalanceIcon />,
+    // },
+    // {
+    //   title: "Vote Duration",
+    //   subtitle:
+    //     "Create, edit, or delete the vote durations set for the DAO's governance",
+    //   icon: <BalanceIcon />,
+    // },
+    // {
+    //   title: "Support",
+    //   subtitle:
+    //     "Edit the minimum level of support needed for single choice voting",
+    //   icon: <BalanceIcon />,
+    // },
+    // {
+    //   title: "Quorum",
+    //   subtitle:
+    //     "Edit the minimum level of quorum needed fro any proposal to be approved",
+    //   icon: <BalanceIcon />,
+    // },
+    // {
+    //   title: "Optimistic Governance",
+    //   subtitle:
+    //     "Turn on or off optimistic governance and or edit the whitelisted members",
+    //   icon: <BalanceIcon />,
+    // },
   ];
   const [search, setSearch] = React.useState<string>("");
   const [showAll, setShowAll] = React.useState<boolean>(false);
@@ -243,21 +242,6 @@ const AddAction: React.FC<IProposalAction> = (props) => {
                   />
                 );
               })}
-          </Box>
-          <Box sx={{ width: "100%", borderTop: 1, borderColor: "border.main" }}>
-            <ActionSelect
-              icon={<AddIcon />}
-              select={() => {
-                let temp = [...context.api.value.actions];
-                temp[props.c].name = "Custom action";
-                context.api.setValue({
-                  ...context.api.value,
-                  actions: temp,
-                });
-              }}
-              title="Custom action"
-              subtitle="Create your own action from scratch, you can even include a call to a custom smart contract."
-            />
           </Box>
           <Box
             sx={{

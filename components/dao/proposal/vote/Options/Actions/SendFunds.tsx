@@ -27,7 +27,7 @@ const SendFunds: React.FC<IwSendFunds> = (props) => {
         }
       />
       <LabeledSwitch
-        title="Set as recurring"
+        title="Set as Recurring"
         subtitle="Set and schedule this payment to be done for a determined amount of time, in any frequency you wish."
         value={props.recurring}
         onChange={() => set({ recurring: !props.recurring })}
