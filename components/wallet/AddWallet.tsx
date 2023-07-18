@@ -55,8 +55,8 @@ const AddWallet: React.FC = () => {
     wallet !== "" && !dAppWallet.connected
       ? "mobile"
       : wallet !== "" && dAppWallet.connected
-        ? "nautilus"
-        : "listing"
+      ? "nautilus"
+      : "listing"
   );
 
   React.useEffect(() => {
@@ -94,6 +94,7 @@ const AddWallet: React.FC = () => {
         WALLET_ADDRESS_LIST,
         JSON.stringify(dAppWallet.addresses)
       );
+      dAppRefresh();
     }
   }, [dAppWallet, init]);
 
@@ -137,25 +138,36 @@ const AddWallet: React.FC = () => {
    * dapp connector
    */
   const dAppConnect = async () => {
+    setLoading(true);
     try {
-      //@ts-ignore
+      // @ts-ignore
       if (await ergoConnector.nautilus.isConnected()) {
         await dAppLoad();
-        setLoading(false);
-        return;
-        //@ts-ignore
-      } else if (await ergoConnector.nautilus.connect({ createErgoObject: false })) {
-        //@ts-ignore
+      } else if (
+        // @ts-ignore
+        await ergoConnector.nautilus.connect({ createErgoObject: false })
+      ) {
+        // @ts-ignore
         if (await ergoConnector.nautilus.isConnected()) {
           await dAppLoad();
-          setLoading(false);
-          return;
         }
       }
     } catch (e) {
       console.log(e);
     }
     setLoading(false);
+  };
+
+  const dAppRefresh = async () => {
+    try {
+      // @ts-ignore
+      if (!(await ergoConnector.nautilus.isConnected())) {
+        // @ts-ignore
+        await ergoConnector.nautilus.connect({ createErgoObject: false });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useDidMountEffect(() => {
@@ -166,24 +178,21 @@ const AddWallet: React.FC = () => {
 
   const dAppLoad = async () => {
     try {
-      const context = await getErgoWalletContext()
+      const context = await getErgoWalletContext();
       const address_used = await context.get_used_addresses();
       const address_unused = await context.get_unused_addresses();
       const addresses = [...address_used, ...address_unused];
       // use the first used address if available or the first unused one if not as default
       // when a user hits the signing request, it should be a list of addresses that they have connected.
       // If one of them has an account, then you login using that method... don't default to 0
-
       const addressData = addresses.map((address, index) => {
         return { id: index, name: address };
       });
-
       await globalContext.api
         .signingMessage(addresses)
         .then(async (signingMessage: any) => {
           if (signingMessage !== undefined) {
-            setLoading(true);
-            const context = await getErgoWalletContext()
+            const context = await getErgoWalletContext();
             const response = await context.auth(
               signingMessage.data.address,
               signingMessage.data.signingMessage
@@ -210,7 +219,6 @@ const AddWallet: React.FC = () => {
               });
           }
         });
-
       setDAppWallet({
         connected: true,
         addresses: addressData,
@@ -355,19 +363,18 @@ const AddWallet: React.FC = () => {
                   Confirm
                 </Button>
               )}
-            {view === "mobile" &&
-              qrCode && (
-                <Button
-                  onClick={() => {
-                    clearWallet() 
-                    setView("listing")
-                    setQrCode(undefined);
-                  }}
-                  variant="contained"
-                >
-                  Go Back
-                </Button>
-              )}
+            {view === "mobile" && qrCode && (
+              <Button
+                onClick={() => {
+                  clearWallet();
+                  setView("listing");
+                  setQrCode(undefined);
+                }}
+                variant="contained"
+              >
+                Go Back
+              </Button>
+            )}
           </Box>
         </DialogActions>
       </Dialog>

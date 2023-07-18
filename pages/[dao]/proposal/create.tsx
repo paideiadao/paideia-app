@@ -1,7 +1,6 @@
 import Layout from "@components/dao/Layout";
 import CreateHeader from "@components/dao/proposal/Header";
 import { Box, Button, Modal } from "@mui/material";
-import * as React from "react";
 import BalanceIcon from "@mui/icons-material/Balance";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -34,6 +33,7 @@ import { OptionType } from "@components/dao/proposal/vote/Options/OptionSystemSe
 import CancelLink from "@components/utilities/CancelLink";
 import { bPaideiaSendFundsBasic } from "@lib/proposalActionOutputMapper";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
+import { useState, useContext, useEffect } from "react";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -100,7 +100,7 @@ export interface IProposal {
 const CreateProposal: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
-  const [value, setValue] = React.useState<IProposal>({
+  const [value, setValue] = useState<IProposal>({
     name: "",
     image: {
       url: getRandomImage(),
@@ -122,21 +122,41 @@ const CreateProposal: React.FC = () => {
     addendums: [],
   });
 
-  const context = React.useContext<IGlobalContext>(GlobalContext);
+  const context = useContext<IGlobalContext>(GlobalContext);
   const api = new ProposalApi(context.api, value, setValue);
 
-  const [publish, setPublish] = React.useState<boolean>(false);
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [publish, setPublish] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [stake, setStake] = useState<any>({});
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const stake = (
+          await context.api.post<any>("/staking/user_stake_info", {
+            dao_id: context.api.daoData?.id,
+            user_id: context.api.daoUserData?.user_id,
+          })
+        ).data;
+        setStake(stake);
+        console.log(stake);
+        if (!stake.stake_keys?.length) {
+          api.error("Stake Key is not present");
+        }
+      } catch (e: any) {
+        api.error(e);
+      }
+    };
+
+    if (context.api.daoData?.id && context.api.daoUserData?.user_id) {
+      getData();
+    }
+  }, [context.api.daoData, context.api.daoUserData]);
+
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const stake = (
-        await context.api.post<any>("/staking/user_stake_info", {
-          dao_id: context.api.daoData?.id,
-          user_id: context.api.daoUserData?.user_id,
-        })
-      ).data;
       const action = bPaideiaSendFundsBasic(
         // @ts-ignore
         value.actions[0].data.recipients[0].address,
