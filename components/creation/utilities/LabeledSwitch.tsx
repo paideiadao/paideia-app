@@ -8,6 +8,7 @@ const LabeledSwitch: React.FC<{
   onChange: Function;
   subtitle?: string;
   small?: boolean;
+  disabled?: boolean;
 }> = (props) => {
   return (
     <Box sx={{ display: "flex", alignItems: "center", mt: "1rem", mb: "1rem" }}>
@@ -24,6 +25,7 @@ const LabeledSwitch: React.FC<{
       </Box>
       <Box sx={{ ml: "auto" }}>
         <Switch
+          disabled={props.disabled}
           checked={props.value}
           onChange={() => props.onChange(!props.value)}
         />

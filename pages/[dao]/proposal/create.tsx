@@ -32,6 +32,8 @@ import { IVoteDuration } from "@components/dao/proposal/vote/YesNo/Actions/VoteD
 import { ISupport } from "@components/dao/proposal/vote/YesNo/Actions/Support";
 import { OptionType } from "@components/dao/proposal/vote/Options/OptionSystemSelector";
 import CancelLink from "@components/utilities/CancelLink";
+import { bPaideiaSendFundsBasic } from "@lib/proposalActionOutputMapper";
+import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -104,12 +106,13 @@ const CreateProposal: React.FC = () => {
       url: getRandomImage(),
       file: undefined,
     },
-    status: "",
+    status: "proposal",
     category: "",
     content: "",
     votingSystem: "unselected",
     optionType: "one-option",
     references: [],
+    attachments: [],
     actions: [
       {
         name: undefined,
@@ -119,13 +122,53 @@ const CreateProposal: React.FC = () => {
     addendums: [],
   });
 
-  console.log(value)
-
   const context = React.useContext<IGlobalContext>(GlobalContext);
   const api = new ProposalApi(context.api, value, setValue);
 
   const [publish, setPublish] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const stake = (
+        await context.api.post<any>("/staking/user_stake_info", {
+          dao_id: context.api.daoData?.id,
+          user_id: context.api.daoUserData?.user_id,
+        })
+      ).data;
+      const action = bPaideiaSendFundsBasic(
+        // @ts-ignore
+        value.actions[0].data.recipients[0].address,
+        // @ts-ignore
+        value.actions[0].data.recipients[0].nergs,
+        // @ts-ignore
+        value.actions[0].data.recipients[0].tokens
+      );
+      const proposal = {
+        dao_id: context.api.daoData?.id,
+        user_details_id: context.api.daoUserData?.id,
+        image_url: value.image.url,
+        voting_system: value.votingSystem,
+        ...value,
+        actions: [action],
+        is_proposal: true,
+        stake_key: stake.stake_keys[0].key_id,
+        end_time: action.action.activationTime,
+      };
+      const tx = (
+        await context.api.post<any>("/proposals/on_chain_proposal", proposal)
+      ).data.unsigned_transaction;
+      const ergoContext = await getErgoWalletContext();
+      const signed = await ergoContext.sign_tx(tx);
+      const txId = await ergoContext.submit_tx(signed);
+      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      setPublish(false);
+    } catch (e: any) {
+      api.error(e);
+    }
+    setLoading(false);
+  };
 
   return (
     <ProposalContext.Provider value={{ api }}>
@@ -242,7 +285,6 @@ const CreateProposal: React.FC = () => {
             variant="contained"
             sx={{ width: "50%" }}
             onClick={() => {
-              api.create();
               setPublish(true);
             }}
           >
@@ -279,7 +321,7 @@ const CreateProposal: React.FC = () => {
                   </Button>
                 )}
                 <LoadingButton
-                  onClick={() => (loading ? null : setLoading(true))}
+                  onClick={handleSubmit}
                   startIcon={<PublishIcon />}
                   loading={loading}
                   loadingPosition="start"

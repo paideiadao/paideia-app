@@ -4,7 +4,6 @@ import {
 } from "@components/creation/utilities/HeaderComponents";
 import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
 import MultiTokenHolders from "@components/utilities/MultiTokenHolders";
-import { ITokenHolder } from "@lib/creation/Interfaces";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
@@ -13,17 +12,21 @@ import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
 
+export interface ISendFundsRecipient {
+  address: string;
+  nergs: number;
+  tokens: number;
+}
+
 export interface ISendFunds {
-  tokenHolders: ITokenHolder[];
+  recipients: ISendFundsRecipient[];
   recurring: boolean;
 }
 
 const SendFunds: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<ISendFunds>({
-    tokenHolders: [
-      { alias: "", address: "", img: "", balance: 0, percentage: 0 },
-    ],
+    recipients: [{ address: "", nergs: 0, tokens: 0 }],
     recurring: false,
   });
   const treasuryAmount = 50000;
@@ -56,12 +59,12 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
       />
       <CapsInfo title="Receiving Wallets" mb=".5rem" />
       <MultiTokenHolders
-        tokenHolders={value.tokenHolders}
+        recipients={value.recipients}
         treasuryAmount={treasuryAmount}
-        set={(newTokenHolders: ITokenHolder[]) =>
+        set={(newRecipients: ISendFundsRecipient[]) =>
           setValue({
             ...value,
-            tokenHolders: newTokenHolders,
+            recipients: [...newRecipients],
           })
         }
       />
@@ -85,13 +88,13 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
         }}
       >
         <LabeledSwitch
+          disabled={true}
           title="Set as Recurring"
           subtitle="Set and schedule this payment to be done for a determined amount of time, in any frequency you wish."
           value={value.recurring}
           onChange={() => setValue({ ...value, recurring: !value.recurring })}
         />
       </Box>
-
       <Box sx={{ mb: ".5rem" }} />
     </Layout>
   );

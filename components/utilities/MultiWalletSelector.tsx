@@ -97,6 +97,7 @@ const MultiWalletSelector: React.FC<IMultiWalletSelector> = (props) => {
         }}
       >
         <Button
+          disabled
           variant="text"
           size="small"
           sx={{ mr: 2 }}
@@ -107,7 +108,7 @@ const MultiWalletSelector: React.FC<IMultiWalletSelector> = (props) => {
         >
           Add Another <AddIcon />
         </Button>
-        <Button variant="text" size="small">
+        <Button disabled variant="text" size="small">
           Add from file <FileUploadIcon />
         </Button>
       </Box>

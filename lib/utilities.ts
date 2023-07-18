@@ -205,6 +205,10 @@ export class AbstractApi {
 
   error(err: any): any {
     console.log("func:api_error:", err);
+    const bMessage =
+      typeof err?.message === "string"
+        ? err.message
+        : "Oops :( Some unknown error may have occurred";
     const message =
       typeof err === "string"
         ? err
@@ -212,7 +216,7 @@ export class AbstractApi {
         ? err.response.status === 401
           ? err.response.data.detail
           : err.response.data
-        : "Oops :( Some unknown error may have occurred";
+        : bMessage;
     if (this !== undefined)
       this.showAlert(
         typeof message === "string" ? message : JSON.stringify(message),

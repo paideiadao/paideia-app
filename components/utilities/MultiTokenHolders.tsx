@@ -1,24 +1,22 @@
-import WalletSelector from "@components/creation/governance/WalletSelector";
 import BalanceInput from "@components/creation/utilities/BalanceInput";
-import PercentageInput from "@components/creation/utilities/PercentageInput";
-import { ITokenHolder } from "@lib/creation/Interfaces";
 import { Box, Button, IconButton, TextField } from "@mui/material";
 import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { deviceWrapper } from "./Style";
+import { ISendFundsRecipient } from "@components/dao/proposal/vote/YesNo/Actions/SendFunds";
 
 interface IMultiTokenHolders {
-  tokenHolders: ITokenHolder[];
+  recipients: ISendFundsRecipient[];
   treasuryAmount: number;
-  set: (tokenHolders: ITokenHolder[]) => void;
+  set: (tokenHolders: ISendFundsRecipient[]) => void;
 }
 
 const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
   return (
     <>
-      {props.tokenHolders.map((i: ITokenHolder, c: number) => {
+      {props.recipients.map((i: ISendFundsRecipient, c: number) => {
         return (
           <Box
             sx={{
@@ -43,47 +41,63 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
                 sx={{ width: "100%" }}
                 value={i.address}
                 onChange={(e) => {
-                  const temp = [...props.tokenHolders];
+                  const temp = [...props.recipients];
                   temp[c] = { ...i, address: e.target.value };
                   props.set(temp);
                 }}
               />
             </Box>
-            <BalanceInput
-              width={deviceWrapper("100%", "50%")}
-              total={props.treasuryAmount}
-              remaining={
-                props.treasuryAmount -
-                props.tokenHolders
-                  .map((i: ITokenHolder) => i.balance)
-                  .reduce((partialSum, a) => partialSum + a, 0)
-              }
-              balance={i.balance}
-              value={i}
-              set={(newValue: any) => {
-                const temp = [...props.tokenHolders];
-                temp[c] = { ...newValue };
-                props.set(temp);
+            <Box
+              sx={{
+                width: deviceWrapper("50%", "25%"),
+                mr: ".5rem",
+                mb: deviceWrapper(".75rem", "0"),
+                display: "flex",
+                alignItems: "center",
               }}
-            />
-            {/* <PercentageInput
-              width={deviceWrapper("47.25%", "23%")}
-              total={props.treasuryAmount}
-              remaining={
-                props.treasuryAmount -
-                props.tokenHolders
-                  .map((i: ITokenHolder) => i.balance)
-                  .reduce((partialSum, a) => partialSum + a, 0)
-              }
-              percentage={i.percentage}
-              value={i}
-              set={(newValue: any) => {
-                let temp = [...props.tokenHolders];
-                temp[c] = { ...newValue };
-                props.set(temp);
+            >
+              <TextField
+                label="Nano Ergs"
+                sx={{ width: "100%" }}
+                value={i.nergs}
+                onChange={(e) => {
+                  const temp = [...props.recipients];
+                  temp[c] = {
+                    ...i,
+                    nergs: isNaN(Number(e.target.value))
+                      ? 0
+                      : Number(e.target.value),
+                  };
+                  props.set(temp);
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: deviceWrapper("50%", "25%"),
+                mr: ".5rem",
+                mb: deviceWrapper(".75rem", "0"),
+                display: "flex",
+                alignItems: "center",
               }}
-            /> */}
-            {props.tokenHolders.length > 1 && (
+            >
+              <TextField
+                label="Tokens - Decimal Adjusted"
+                sx={{ width: "100%" }}
+                value={i.tokens}
+                onChange={(e) => {
+                  const temp = [...props.recipients];
+                  temp[c] = {
+                    ...i,
+                    tokens: isNaN(Number(e.target.value))
+                      ? 0
+                      : Number(e.target.value),
+                  };
+                  props.set(temp);
+                }}
+              />
+            </Box>
+            {props.recipients.length > 1 && (
               <IconButton
                 sx={{ display: deviceWrapper("none", "flex"), ml: ".5rem" }}
                 size="small"
@@ -91,7 +105,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
                 <DeleteIcon
                   color="error"
                   onClick={() => {
-                    let temp = [...props.tokenHolders];
+                    let temp = [...props.recipients];
                     temp.splice(c, 1);
                     props.set(temp);
                   }}
@@ -110,22 +124,24 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
         }}
       >
         <Button
+          disabled
           variant="text"
           size="small"
           sx={{ mr: 2 }}
           endIcon={<AddIcon />}
           onClick={() => {
-            let temp = [...props.tokenHolders];
-            props.set(
-              temp.concat([
-                { alias: "", address: "", img: "", balance: 0, percentage: 0 },
-              ])
-            );
+            let temp = [...props.recipients];
+            props.set(temp.concat([{ address: "", nergs: 0, tokens: 0 }]));
           }}
         >
           Add Another
         </Button>
-        <Button variant="text" size="small" endIcon={<FileUploadIcon />}>
+        <Button
+          disabled
+          variant="text"
+          size="small"
+          endIcon={<FileUploadIcon />}
+        >
           Add from file
         </Button>
       </Box>

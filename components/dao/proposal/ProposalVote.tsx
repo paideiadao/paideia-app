@@ -87,6 +87,7 @@ const ProposalVote: React.FC = () => {
             }}
           >
             <Button
+              disabled={context?.api?.value?.actions?.length >= 1}
               endIcon={<AddIcon />}
               onClick={() => {
                 const temp = [...context.api.value.actions];
