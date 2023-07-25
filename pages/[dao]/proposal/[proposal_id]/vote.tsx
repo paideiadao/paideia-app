@@ -13,6 +13,7 @@ import { useContext, useEffect, useState } from "react";
 import CancelLink from "@components/utilities/CancelLink";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
 const CastVote: React.FC = () => {
   const router = useRouter();
@@ -55,6 +56,31 @@ const CastVote: React.FC = () => {
     setLoading(true);
     if (vote === null) {
       context.api.error("Please select the preferred option");
+      setLoading(false);
+      return;
+    }
+    try {
+      if (!stake.stake_keys?.length) {
+        context.api.error("No stake key present");
+        setLoading(false);
+        return;
+      }
+      const stakeKey = stake.stake_keys[0].key_id;
+      const stakeAmount = stake.stake_keys[0].stake;
+      const req = {
+        dao_id: daoId,
+        proposal_id: parsed_proposal_id,
+        stake_key: stakeKey,
+        votes: vote ? [0, stakeAmount] : [stakeAmount, 0],
+      };
+      const res = (await context.api.post<any>("/proposals/vote", req)).data;
+      const tx = res.unsigned_transaction;
+      const ergoContext = await getErgoWalletContext();
+      const signed = await ergoContext.sign_tx(tx);
+      const txId = await ergoContext.submit_tx(signed);
+      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+    } catch (e: any) {
+      context.api.error(e);
     }
     setLoading(false);
   };

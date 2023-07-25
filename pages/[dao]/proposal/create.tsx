@@ -145,7 +145,6 @@ const CreateProposal: React.FC = () => {
           })
         ).data;
         setStake(stake);
-        console.log(stake);
         if (!stake.stake_keys?.length) {
           api.error("Stake Key is not present");
         }
