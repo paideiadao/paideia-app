@@ -32,13 +32,13 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
 
   const router = useRouter();
   const { r } = router.query;
-  const [references, setReferences] = React.useState<number[]>(
+  const [references, setReferences] = React.useState<string[]>(
     context.api.value.references
   );
 
   React.useEffect(() => {
     const temp = [...references];
-    temp.push(parseInt(r as string));
+    temp.push(r.toString());
     setReferences(r === undefined ? references : temp);
   }, [r]);
 

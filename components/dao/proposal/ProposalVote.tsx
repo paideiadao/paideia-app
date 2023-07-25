@@ -60,7 +60,7 @@ const ProposalVote: React.FC = () => {
     "yes/no": <YesNo />,
     options: <Options />,
   };
-  const votingSystem = context.api.value.votingSystem;
+  const votingSystem = context.api.value.voting_system;
   return (
     <>
       <Typography
@@ -76,7 +76,7 @@ const ProposalVote: React.FC = () => {
       {context.api.value.actions.filter(
         (i: IProposalAction) => i.name === undefined
       ).length === 0 &&
-        context.api.value.votingSystem === "yes/no" && (
+        context.api.value.voting_system === "yes/no" && (
           <Box
             sx={{
               width: "100%",

@@ -47,23 +47,6 @@ const DiscussionReferences: React.FC<IDataComponent> = (props) => {
             mb="0"
           />
         </Box>
-        <Link
-          href={getDaoPath(
-            id as string,
-            `/proposal/create?r=${discussion_id}`
-          )}
-        >
-          <Button
-            sx={{
-              ml: deviceWrapper("0", "auto"),
-              mt: deviceWrapper(".5rem", "0"),
-            }}
-            variant="outlined"
-            size="small"
-          >
-            Reference this discussion
-          </Button>
-        </Link>
       </Box>
       <Box sx={{ width: "100%", mt: "1rem" }}>
         {props.data.map((i: IReference, c: number) => (

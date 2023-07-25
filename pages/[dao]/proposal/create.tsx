@@ -75,26 +75,29 @@ export interface IProposalOption {
 export type VotingType = "yes/no" | "options" | "unselected";
 
 export interface IProposal {
-  id?: number;
+  id?: string;
   name: string;
-  image?: IFile; // make optional
+  image_url?: string;
   category: string;
   content: string;
   status: string;
-  votingSystem: VotingType;
-  references: number[];
+  voting_system: VotingType;
+  references: string[];
   actions: IProposalAction[];
   date?: Date;
-  createdDate?: Date;
-  likes?: number;
-  dislikes?: number;
-  followed?: boolean;
-  tags?: any[];
-  userSide?: number;
-  comments?: IComment[];
+  created?: Date;
+  likes: string[];
+  dislikes: string[];
+  followers: string[];
+  tags?: string[];
+  comments: IComment[];
   attachments?: IFile[];
   addendums: IAddendum[];
   optionType: OptionType;
+  is_proposal: boolean;
+  userSide?: number;
+  references_meta?: string[];
+  votes: number[];
 }
 
 const CreateProposal: React.FC = () => {
@@ -102,24 +105,22 @@ const CreateProposal: React.FC = () => {
   const { dao } = router.query;
   const [value, setValue] = useState<IProposal>({
     name: "",
-    image: {
-      url: getRandomImage(),
-      file: undefined,
-    },
+    image_url: getRandomImage(),
     status: "proposal",
     category: "",
     content: "",
-    votingSystem: "unselected",
+    voting_system: "unselected",
     optionType: "one-option",
     references: [],
     attachments: [],
-    actions: [
-      {
-        name: undefined,
-        data: undefined,
-      },
-    ],
+    comments: [],
+    actions: [],
     addendums: [],
+    likes: [],
+    dislikes: [],
+    followers: [],
+    is_proposal: true,
+    votes: [0, 0]
   });
 
   const context = useContext<IGlobalContext>(GlobalContext);
@@ -153,7 +154,6 @@ const CreateProposal: React.FC = () => {
     }
   }, [context.api.daoData, context.api.daoUserData]);
 
-
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -168,8 +168,6 @@ const CreateProposal: React.FC = () => {
       const proposal = {
         dao_id: context.api.daoData?.id,
         user_details_id: context.api.daoUserData?.id,
-        image_url: value.image.url,
-        voting_system: value.votingSystem,
         ...value,
         actions: [action],
         is_proposal: true,
@@ -300,7 +298,6 @@ const CreateProposal: React.FC = () => {
               Cancel
             </Button>
           </CancelLink>
-
           <Button
             variant="contained"
             sx={{ width: "50%" }}

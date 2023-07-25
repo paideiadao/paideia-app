@@ -222,7 +222,7 @@ const AddAction: React.FC<IProposalAction> = (props) => {
                     select={() => {
                       let temp = [...context.api.value.actions];
                       temp[props.c].name = i.title;
-                      if (context.api.value.votingSystem === "options") {
+                      if (context.api.value.voting_system === "options") {
                         temp[props.c].icon = i.icon;
                         temp[props.c].description = i.subtitle;
                         temp[props.c].options = [

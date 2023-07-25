@@ -27,7 +27,7 @@ export interface IDiscussion {
   name: string;
   category: string;
   image?: IFile;
-  references: number[];
+  references: string[];
   content: string;
   date?: Date;
   likes?: number;

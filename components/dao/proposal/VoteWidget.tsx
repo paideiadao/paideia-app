@@ -8,6 +8,11 @@ import Link from "next/link";
 import { deviceWrapper } from "@components/utilities/Style";
 import { getRandomImage } from "@components/utilities/images";
 
+interface IVoteWidgetProps {
+  yes?: number;
+  no?: number;
+}
+
 interface ILastVote {
   img: string;
   name: string;
@@ -69,10 +74,10 @@ const LastVotes: React.FC = () => {
   );
 };
 
-const _VoteWidget: React.FC = () => {
+const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   const router = useRouter();
-
   const { dao, proposal_id } = router.query;
+
   return (
     <Box
       sx={{
@@ -94,7 +99,7 @@ const _VoteWidget: React.FC = () => {
         }}
       >
         <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <CapsInfo title="Votes | 206" mb={"0"} />
+          <CapsInfo title={`Votes | ${(props.no ?? 0) + (props.yes ?? 0)}`} mb={"0"} />
           <Button
             sx={{
               display: deviceWrapper("flex", "none"),
@@ -107,9 +112,9 @@ const _VoteWidget: React.FC = () => {
             View All
           </Button>
         </Box>
-        <VoteWidget yes={160} no={46} />
+        <VoteWidget yes={props.yes ?? 0} no={props.no ?? 0} />
       </Box>
-      <Box
+      {/* <Box
         sx={{
           width: "100%",
           borderBottom: deviceWrapper("0", "1px solid"),
@@ -120,7 +125,7 @@ const _VoteWidget: React.FC = () => {
       >
         <CapsInfo title="Last Votes" mb={"0"} />
         <LastVotes />
-      </Box>
+      </Box> */}
       <Box
         sx={{
           width: "100%",
@@ -131,10 +136,11 @@ const _VoteWidget: React.FC = () => {
       >
         <Link
           href={
-            dao === undefined ? `` : `/${dao}/proposals/${proposal_id}/votes`
+            dao === undefined ? `` : `/${dao}/proposal/${proposal_id}/votes`
           }
         >
           <Button
+            disabled
             size="small"
             sx={{
               borderTopRightRadius: 0,

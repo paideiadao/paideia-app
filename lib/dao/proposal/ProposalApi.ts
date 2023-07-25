@@ -15,7 +15,7 @@ export interface IProposalEndpointBody {
   category: string;
   content: string;
   voting_system?: VotingType;
-  references: number[];
+  references: string[];
   actions?: ActionType[];
   tags?: string[];
   attachments: string[];
@@ -47,7 +47,7 @@ export default class ProposalApi extends AbstractApi {
       image_url: "",
       category: this.value.category,
       content: this.value.content,
-      voting_system: this.value.votingSystem,
+      voting_system: this.value.voting_system,
       references: this.value.references,
       actions: this.value.actions.map((i: IProposalAction) => i.data),
       tags: [],

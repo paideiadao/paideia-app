@@ -46,7 +46,7 @@ const Discussion: React.FC = () => {
   const globalContext = React.useContext(GlobalContext);
 
   const router = useRouter();
-  const { discussion_id, id, tab } = router.query;
+  const { discussion_id, tab } = router.query;
   const parsed_discussion_id = discussion_id
     ? (discussion_id as string).split("-").slice(-5).join('-')
     : null;
@@ -85,21 +85,11 @@ const Discussion: React.FC = () => {
   };
 
   const { data, error } = useSWR(
-    discussion_id !== undefined && loaded
+    discussion_id && loaded
       ? `/proposals/${discussion_id}`
       : null,
     fetcher
   );
-
-  if (error) {
-    router.push(getDaoPath(id as string, "/404"));
-  }
-
-  if (data !== undefined) {
-    if (data.is_proposal) {
-      router.push(getDaoPath(id as string, "/404"));
-    }
-  }
 
   const setWrapper = (data: IComment) => {
     setNewestComment(data);
