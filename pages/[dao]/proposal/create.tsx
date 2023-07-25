@@ -76,6 +76,8 @@ export type VotingType = "yes/no" | "options" | "unselected";
 
 export interface IProposal {
   id?: string;
+  dao_id?: string;
+  user_details_id?: number;
   name: string;
   image_url?: string;
   category: string;
@@ -85,7 +87,7 @@ export interface IProposal {
   references: string[];
   actions: IProposalAction[];
   date?: Date;
-  created?: Date;
+  created?: number;
   likes: string[];
   dislikes: string[];
   followers: string[];
@@ -98,6 +100,9 @@ export interface IProposal {
   userSide?: number;
   references_meta?: string[];
   votes: number[];
+  alias?: string;
+  profile_img_url?: string;
+  user_followers?: number[];
 }
 
 const CreateProposal: React.FC = () => {

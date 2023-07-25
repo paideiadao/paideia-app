@@ -62,7 +62,7 @@ const Proposal: React.FC = () => {
     tags: [],
     followers: [],
     date: endDate,
-    created: startDate,
+    created: 0,
     addendums: [],
     is_proposal: true,
     references_meta: [],
@@ -97,10 +97,6 @@ const Proposal: React.FC = () => {
     setLiveComments(temp);
   }, [newestComment]);
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
   };
@@ -113,13 +109,14 @@ const Proposal: React.FC = () => {
   const api = new ProposalApi(context.api, value, setValue);
 
   const { data, error } = useSWR(
-    parsed_proposal_id && loaded ? `/proposals/${parsed_proposal_id}` : null,
+    parsed_proposal_id ? `/proposals/${parsed_proposal_id}` : null,
     fetcher
   );
 
   useEffect(() => {
     if (data) {
       setValue(data);
+      setLoaded(true);
     }
   }, [data]);
 
@@ -296,8 +293,8 @@ const Proposal: React.FC = () => {
                     <Link
                       href={
                         dao === undefined
-                          ? `/dao/proposal/${parsed_proposal_id}/vote`
-                          : `/${dao}/proposal/${parsed_proposal_id}/vote`
+                          ? `/dao/proposal/${proposal_id}/vote`
+                          : `/${dao}/proposal/${proposal_id}/vote`
                       }
                     >
                       <Button
@@ -389,7 +386,10 @@ const Proposal: React.FC = () => {
                     display: deviceWrapper("block", "none"),
                   }}
                 >
-                  <VoteWidget yes={value.votes[1]} no={value.votes[0]} />
+                  <VoteWidget
+                    yes={value.votes ? value.votes[1] / 10000 : 0}
+                    no={value.votes ? value.votes[0] / 10000 : 0}
+                  />
                 </Box>
                 <TabContext value={tab}>
                   <Box
@@ -462,14 +462,17 @@ const Proposal: React.FC = () => {
               >
                 <Overview
                   proposal
-                  userDetailId={0}
-                  alias={""}
+                  userDetailId={value.user_details_id}
+                  alias={value.alias}
+                  img={value.profile_img_url}
+                  followers={value.user_followers}
+                  created={value.created}
                   level={0}
-                  img={""}
-                  followers={[]}
-                  created={0}
                 />
-                <VoteWidget yes={value.votes[1] / 10000 } no={value.votes[0] / 10000} />
+                <VoteWidget
+                  yes={value.votes ? value.votes[1] / 10000 : 0}
+                  no={value.votes ? value.votes[0] / 10000 : 0}
+                />
               </Box>
             </Box>
             <Button
@@ -489,6 +492,7 @@ const Proposal: React.FC = () => {
             </Button>
           </>
         )}
+        {!loaded && <>Loading here...</>}
       </Layout>
     </ProposalContext.Provider>
   );

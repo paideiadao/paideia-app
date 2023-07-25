@@ -1,12 +1,209 @@
-import { Box } from "@mui/material";
-import * as React from "react";
-import { paths, props } from "@lib/ProposalPaths";
 import Layout from "@components/dao/Layout";
+import { useRouter } from "next/router";
+import { Box, Button, Link, Typography } from "@mui/material";
+import {
+  Header,
+  Subtitle,
+} from "@components/creation/utilities/HeaderComponents";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
+import { deviceWrapper } from "@components/utilities/Style";
+import { useContext, useEffect, useState } from "react";
+import CancelLink from "@components/utilities/CancelLink";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const CastVote: React.FC = () => {
-  return <Layout>Cast vote for individual proposal here..</Layout>;
+  const router = useRouter();
+  const { dao, proposal_id } = router.query;
+  const parsed_proposal_id = proposal_id
+    ? (proposal_id as string).split("-").slice(-5).join("-")
+    : null;
+  const context = useContext<IGlobalContext>(GlobalContext);
+  const [vote, setVote] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [stake, setStake] = useState<any>(null);
+
+  const daoId = context.api.daoData?.id;
+  const userId = context.api.daoUserData?.user_id;
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const stake = (
+          await context.api.post<any>("/staking/user_stake_info", {
+            dao_id: context.api.daoData?.id,
+            user_id: context.api.daoUserData?.user_id,
+          })
+        ).data;
+        setStake(stake);
+        if (!stake.stake_keys?.length) {
+          context.api.error("Stake Key is not present");
+        }
+      } catch (e: any) {
+        context.api.error(e);
+      }
+    };
+
+    if (daoId && userId) {
+      getData();
+    }
+  }, [daoId, userId]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (vote === null) {
+      context.api.error("Please select the preferred option");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <Layout>
+      <Link
+        href={
+          dao === undefined
+            ? "/dao/proposal"
+            : `/${dao}/proposal/${proposal_id}`
+        }
+      >
+        <Button
+          variant="outlined"
+          size="small"
+          sx={{ mb: "1rem", mt: 1 }}
+          startIcon={<ArrowBackIcon />}
+        >
+          Back
+        </Button>
+      </Link>
+      <Header title="Vote on this Proposal" large />
+      <Box sx={{ width: "100%", mt: "0.5rem" }} />
+      <Subtitle subtitle="Simply choose your preferred option and click vote." />
+      <Box
+        sx={{
+          mt: "2rem",
+          width: "100%",
+          display: "flex",
+          alignItems: "stretch",
+          flexDirection: deviceWrapper("column", "row"),
+        }}
+      >
+        <Box
+          onClick={() => setVote(true)}
+          sx={{
+            cursor: "pointer",
+            borderRadius: ".5rem",
+            border: "1px solid",
+            p: "1rem",
+            pb: "2rem",
+            backgroundColor: "fileInput.outer",
+            borderColor: vote === true ? "primary.main" : "border.main",
+            width: deviceWrapper("100%", "50%"),
+            mt: deviceWrapper("1rem", "0"),
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            mr: "1rem",
+            ":hover": {
+              borderColor: "primary.main",
+            },
+          }}
+        >
+          <DoneIcon sx={{ fontSize: "2rem", opacity: ".6" }} />
+          <Box
+            sx={{
+              textAlign: "center",
+              fontSize: "1.3rem",
+              fontWeight: 350,
+            }}
+          >
+            Approve Proposal
+          </Box>
+          <Box
+            sx={{
+              textAlign: "center",
+              fontSize: ".8rem",
+              color: "text.secondary",
+            }}
+          >
+            Select this option if you want the proposal to be approved and
+            executed.
+          </Box>
+        </Box>
+        <Box
+          onClick={() => setVote(false)}
+          sx={{
+            cursor: "pointer",
+            borderRadius: ".5rem",
+            border: "1px solid",
+            p: "1rem",
+            pb: "2rem",
+            backgroundColor: "fileInput.outer",
+            borderColor: vote === false ? "primary.main" : "border.main",
+            width: deviceWrapper("100%", "50%"),
+            mt: deviceWrapper("1rem", "0"),
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "center",
+            ":hover": {
+              borderColor: "primary.main",
+            },
+          }}
+        >
+          <CloseIcon sx={{ fontSize: "2rem", opacity: ".6" }} />
+          <Box
+            sx={{
+              textAlign: "center",
+              fontSize: "1.3rem",
+              fontWeight: 350,
+            }}
+          >
+            Decline Proposal
+          </Box>
+          <Box
+            sx={{
+              textAlign: "center",
+              fontSize: ".8rem",
+              color: "text.secondary",
+            }}
+          >
+            Select this option if you want the proposal to be rejected.
+          </Box>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mt: "2rem",
+        }}
+      >
+        <CancelLink>
+          <Button
+            variant="outlined"
+            sx={{ width: "49%", mr: ".5rem" }}
+            size="small"
+          >
+            Cancel
+          </Button>
+        </CancelLink>
+        <LoadingButton
+          variant="contained"
+          sx={{ width: "49%" }}
+          size="small"
+          loading={loading}
+          loadingPosition="center"
+          onClick={handleSubmit}
+        >
+          <Box sx={{ display: deviceWrapper("none", "block") }}>Vote</Box>
+        </LoadingButton>
+      </Box>
+    </Layout>
+  );
 };
 
 export default CastVote;
-// export const getStaticPaths = paths;
-// export const getStaticProps = props;
