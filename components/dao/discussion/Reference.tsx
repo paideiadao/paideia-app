@@ -38,7 +38,7 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
 
   React.useEffect(() => {
     const temp = [...references];
-    temp.push(r.toString());
+    if (r) temp.push(r.toString());
     setReferences(r === undefined ? references : temp);
   }, [r]);
 
