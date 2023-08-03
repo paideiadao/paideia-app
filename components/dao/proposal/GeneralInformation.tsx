@@ -67,7 +67,11 @@ const GeneralInformation: React.FC = () => {
             label="Category"
             onChange={handleChange}
           >
-            <MenuItem value="Test">Test</MenuItem>
+            <MenuItem value="New Feature">New Feature</MenuItem>
+            <MenuItem value="Finance">Finance</MenuItem>
+            <MenuItem value="General">General</MenuItem>
+            <MenuItem value="Governance">Governance</MenuItem>
+            <MenuItem value="Technical">Technical</MenuItem>
           </Select>
         </FormControl>
       </Box>

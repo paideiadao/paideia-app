@@ -146,7 +146,6 @@ const DiscussionBanner: React.FC<{
                       : bytesToSize(props.file.size)}
                   </Box>
                 </Box>
-
                 <Box sx={{ ml: "auto" }}>
                   <Button
                     variant="contained"

@@ -10,11 +10,9 @@ import { deviceWrapper } from "@components/utilities/Style";
 
 const Create: React.FC = () => {
   const router = useRouter();
-
   const { dao } = router.query;
   return (
     <Layout>
-      {/* get last link here */}
       <CreateHeader />
       <Box
         sx={{

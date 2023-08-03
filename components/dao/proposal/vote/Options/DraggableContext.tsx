@@ -103,7 +103,7 @@ export const getData = (name: string): ActionType => {
     };
   } else if (name === "Send Funds") {
     return {
-      recipients: [{ address: "", nergs: 0, tokens: 0 }],
+      recipients: [{ address: "", ergs: 0, tokens: 0 }],
       recurring: false,
     };
   } else if (name === "Create Liquidity Pool") {

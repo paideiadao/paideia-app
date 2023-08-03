@@ -1,4 +1,3 @@
-import BalanceInput from "@components/creation/utilities/BalanceInput";
 import { Box, Button, IconButton, TextField } from "@mui/material";
 import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -57,14 +56,14 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
               }}
             >
               <TextField
-                label="Nano Ergs"
+                label="Ergs"
                 sx={{ width: "100%" }}
-                value={i.nergs}
+                value={i.ergs}
                 onChange={(e) => {
                   const temp = [...props.recipients];
                   temp[c] = {
                     ...i,
-                    nergs: isNaN(Number(e.target.value))
+                    ergs: isNaN(Number(e.target.value))
                       ? 0
                       : Number(e.target.value),
                   };
@@ -82,7 +81,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
               }}
             >
               <TextField
-                label="Tokens - Decimal Adjusted"
+                label="Tokens"
                 sx={{ width: "100%" }}
                 value={i.tokens}
                 onChange={(e) => {
@@ -105,7 +104,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
                 <DeleteIcon
                   color="error"
                   onClick={() => {
-                    let temp = [...props.recipients];
+                    const temp = [...props.recipients];
                     temp.splice(c, 1);
                     props.set(temp);
                   }}
@@ -131,7 +130,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
           endIcon={<AddIcon />}
           onClick={() => {
             let temp = [...props.recipients];
-            props.set(temp.concat([{ address: "", nergs: 0, tokens: 0 }]));
+            props.set(temp.concat([{ address: "", ergs: 0, tokens: 0 }]));
           }}
         >
           Add Another

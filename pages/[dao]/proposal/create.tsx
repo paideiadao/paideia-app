@@ -74,11 +74,15 @@ export interface IProposalOption {
 
 export type VotingType = "yes/no" | "options" | "unselected";
 
+const PAIDEIA_TOKEN_ADJUST = 10000;
+const NERGs = 1000000000;
+
 export interface IProposal {
   id?: string;
   dao_id?: string;
   user_details_id?: number;
   name: string;
+  image?: IFile;
   image_url?: string;
   category: string;
   content: string;
@@ -110,7 +114,10 @@ const CreateProposal: React.FC = () => {
   const { dao } = router.query;
   const [value, setValue] = useState<IProposal>({
     name: "",
-    image_url: getRandomImage(),
+    image: {
+      url: getRandomImage(),
+      file: undefined,
+    },
     status: "proposal",
     category: "",
     content: "",
@@ -125,7 +132,7 @@ const CreateProposal: React.FC = () => {
     dislikes: [],
     followers: [],
     is_proposal: true,
-    votes: [0, 0]
+    votes: [0, 0],
   });
 
   const context = useContext<IGlobalContext>(GlobalContext);
@@ -161,18 +168,20 @@ const CreateProposal: React.FC = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      const imgUrl = await getBannerUrl();
       const action = bPaideiaSendFundsBasic(
         // @ts-ignore
         value.actions[0].data.recipients[0].address,
         // @ts-ignore
-        value.actions[0].data.recipients[0].nergs,
+        value.actions[0].data.recipients[0].ergs * NERGs,
         // @ts-ignore
-        value.actions[0].data.recipients[0].tokens
+        value.actions[0].data.recipients[0].tokens * PAIDEIA_TOKEN_ADJUST
       );
       const proposal = {
         dao_id: context.api.daoData?.id,
         user_details_id: context.api.daoUserData?.id,
         ...value,
+        image_url: imgUrl,
         actions: [action],
         is_proposal: true,
         stake_key: stake.stake_keys[0].key_id,
@@ -191,6 +200,25 @@ const CreateProposal: React.FC = () => {
     }
     setLoading(false);
   };
+
+  const getBannerUrl = async () => {
+    const image = await getImg();
+    const imgRes = await api.uploadFile(image);
+    return imgRes.data.image_url;
+  };
+
+  const getImg = async () => {
+    if (value.image.file === undefined) {
+      const defaultImage = await fetch(value.image.url);
+      const data = await defaultImage.blob();
+      const metadata = {
+        type: "image/jpeg",
+      };
+      return new File([data], "test.jpg", metadata);
+    } else {
+      return value.image.file;
+    }
+  }
 
   return (
     <ProposalContext.Provider value={{ api }}>

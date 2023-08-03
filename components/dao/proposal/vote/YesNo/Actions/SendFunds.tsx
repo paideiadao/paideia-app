@@ -14,7 +14,7 @@ import Layout from "./Layout";
 
 export interface ISendFundsRecipient {
   address: string;
-  nergs: number;
+  ergs: number;
   tokens: number;
 }
 
@@ -26,7 +26,7 @@ export interface ISendFunds {
 const SendFunds: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<ISendFunds>({
-    recipients: [{ address: "", nergs: 0, tokens: 0 }],
+    recipients: [{ address: "", ergs: 0, tokens: 0 }],
     recurring: false,
   });
   const treasuryAmount = 50000;

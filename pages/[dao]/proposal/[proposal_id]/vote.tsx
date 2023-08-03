@@ -15,6 +15,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
+const PAIDEIA_TOKEN_ADJUST = 10000;
+
 const CastVote: React.FC = () => {
   const router = useRouter();
   const { dao, proposal_id } = router.query;
@@ -66,7 +68,7 @@ const CastVote: React.FC = () => {
         return;
       }
       const stakeKey = stake.stake_keys[0].key_id;
-      const stakeAmount = stake.stake_keys[0].stake;
+      const stakeAmount = stake.stake_keys[0].stake * PAIDEIA_TOKEN_ADJUST;
       const req = {
         dao_id: daoId,
         proposal_id: parsed_proposal_id,

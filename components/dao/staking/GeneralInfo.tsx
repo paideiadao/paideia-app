@@ -123,7 +123,7 @@ export const InfoCard: React.FC<IInfoCard> = (props) => {
 const GeneralInfo: React.FC = () => {
   return (
     <Box sx={{ width: "100%", mt: "1rem" }}>
-      <Subheader title="General info" />
+      <Subheader title="General Info (Coming Soon)" />
       <Subtitle subtitle="Staking your tokens will generate new tokens daily based on the APY percentage below." />
       <Box
         sx={{
@@ -133,9 +133,9 @@ const GeneralInfo: React.FC = () => {
           flexWrap: deviceWrapper("wrap", "nowrap"),
         }}
       >
-        <InfoCard title="Number of Stakers" value="621" c={0} />
-        <InfoCard title="PTK tokens staked" value="769,382" c={1} />
-        <InfoCard title="Current APY" value="447.42" last c={2} />
+        <InfoCard title="Number of Stakers" value="-" c={0} />
+        <InfoCard title="PTK tokens staked" value="-" c={1} />
+        <InfoCard title="Current APY" value="-" last c={2} />
       </Box>
     </Box>
   );

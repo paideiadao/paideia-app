@@ -44,7 +44,6 @@ const Content: React.FC = () => {
             onSuccess(res.data.filePath);
           })
           .catch((error) => {
-            console.log('Error ' + error.response.status + ': ' + error.response.data)
             globalContext.api.error('Error ' + error.response.status + ': ' + error.response.data);
           });
       },
