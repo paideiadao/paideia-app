@@ -175,7 +175,8 @@ const CreateProposal: React.FC = () => {
         // @ts-ignore
         value.actions[0].data.recipients[0].ergs * NERGs,
         // @ts-ignore
-        value.actions[0].data.recipients[0].tokens * PAIDEIA_TOKEN_ADJUST
+        value.actions[0].data.recipients[0].tokens * PAIDEIA_TOKEN_ADJUST,
+        context.api.daoData?.tokenomics?.token_id,
       );
       const proposal = {
         dao_id: context.api.daoData?.id,

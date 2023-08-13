@@ -108,7 +108,7 @@ const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
                 sx={{ height: "1.5rem", width: "1.5rem" }}
               />
             }
-            label={utxos && utxos.toLocaleString("en-US") + " " + ticker}
+            label={utxos && utxos.currentDaoTokens.toLocaleString("en-US") + " " + ticker}
           />
         </Box>
       </Box>
