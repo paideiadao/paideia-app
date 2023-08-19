@@ -81,6 +81,7 @@ const CastVote: React.FC = () => {
       const signed = await ergoContext.sign_tx(tx);
       const txId = await ergoContext.submit_tx(signed);
       context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      router.back();
     } catch (e: any) {
       context.api.error(e);
     }

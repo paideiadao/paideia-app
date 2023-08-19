@@ -118,7 +118,7 @@ const CreateProposal: React.FC = () => {
       url: getRandomImage(),
       file: undefined,
     },
-    status: "proposal",
+    status: "draft",
     category: "",
     content: "",
     voting_system: "unselected",

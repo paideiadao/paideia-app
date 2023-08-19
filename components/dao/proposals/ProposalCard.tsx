@@ -1,4 +1,12 @@
-import { Box, Badge, Chip, Avatar, IconButton, ButtonBase, Typography } from "@mui/material";
+import {
+  Box,
+  Badge,
+  Chip,
+  Avatar,
+  IconButton,
+  ButtonBase,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
 import CircleIcon from "@mui/icons-material/Circle";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -27,6 +35,7 @@ export interface IProposalCard {
   name: string;
   image_url: string;
   is_proposal: string;
+  status?: string;
   userSide: number;
   followers: number[];
   likes: number[];
@@ -100,11 +109,16 @@ export const ProposalStatus: React.FC<{ status: string }> = (props) => {
       case "Challenged": {
         return "tokenAlert.main";
       }
-      // passed color??
+      case "Draft": {
+        return "tokenAlert.main";
+      }
       case "Passed": {
         return "success.light";
       }
       case "Active": {
+        return "success.light";
+      }
+      case "Proposal": {
         return "success.light";
       }
       case "Discussion": {
@@ -149,8 +163,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-      ? 0
-      : undefined;
+    ? 0
+    : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -293,7 +307,6 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 color: "success.light",
                 cursor: "pointer",
               }}
-
             />
             <Box sx={{ color: "success.light" }}>{value.likes}</Box>
           </ButtonBase>
@@ -307,7 +320,8 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 dislikes: value.dislikes + 1,
                 likes: value.likes - 1,
               });
-            }}>
+            }}
+          >
             <ThumbDownOffAltIcon
               sx={{
                 mr: ".1rem",
@@ -315,7 +329,6 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
                 cursor: "pointer",
                 ml: ".4rem",
               }}
-
             />
             {value.dislikes}
           </ButtonBase>
@@ -454,7 +467,7 @@ const CountdownWidget: React.FC<{ date: Date }> = (props) => {
 const ProposalCard: React.FC<IProposalCard> = (props) => {
   const [favorited, setFavorited] = React.useState<boolean>(undefined);
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
-  const [moved, setMoved] = React.useState(false)
+  const [moved, setMoved] = React.useState(false);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const getFavoritedSide = (favorites: number[]) => {
     const userId = globalContext.api.daoUserData
@@ -494,7 +507,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       case "Challenged": {
         return <VoteWidget yes={props.yes} no={props.no} />;
       }
-      // passed color??
       case "Passed": {
         return "text.secondarySuccess";
       }
@@ -512,29 +524,31 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             sx={{
               p: ".5rem",
               height: "4rem",
-              width: '100%',
+              width: "100%",
               display: "flex",
               alignItems: "center",
-              textAlign: 'left',
+              textAlign: "left",
             }}
             draggable="false"
             onMouseDown={() => {
-              setMoved(false)
+              setMoved(false);
             }}
             onMouseMove={() => {
-              setMoved(true)
+              setMoved(true);
             }}
             onMouseUp={() => {
               if (!moved) {
                 router.push(
                   (dao === undefined ? "" : `/${dao}/`) +
-                  `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}?tab=comments`
-                )
+                    `${
+                      !props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}?tab=comments`
+                );
               }
             }}
           >
             <Box sx={{ width: "100%", fontSize: footerFont }}>
-              <Typography sx={{ mb: '4px' }}>Join the Conversation</Typography>
+              <Typography sx={{ mb: "4px" }}>Join the Conversation</Typography>
               <Box sx={{ fontSize: footerSmallFont, color: "text.secondary" }}>
                 {totalComments} comment{totalComments === 1 ? "" : "s"} from{" "}
                 {totalUsers} user{totalUsers === 1 ? "" : "s"}
@@ -554,7 +568,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
 
-  
   // use a local state to make it dynamic...
   return (
     <Box
@@ -620,29 +633,31 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
           >
             <ButtonBase
               onMouseDown={() => {
-                setMoved(false)
+                setMoved(false);
               }}
               onMouseMove={() => {
-                setMoved(true)
+                setMoved(true);
               }}
               onMouseUp={() => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                    `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}`
-                  )
+                      `${
+                        !props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
+                  );
                 }
               }}
               draggable="false"
               sx={{
-                fontSize: '1rem',
-                width: '100%',
-                height: '100%',
-                borderRadius: '3px',
-                textAlign: 'left',
-                alignItems: 'left',
-                justifyContent: 'left',
-                verticalAlign: 'top',
+                fontSize: "1rem",
+                width: "100%",
+                height: "100%",
+                borderRadius: "3px",
+                textAlign: "left",
+                alignItems: "left",
+                justifyContent: "left",
+                verticalAlign: "top",
               }}
             >
               <Box
@@ -657,7 +672,13 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             </ButtonBase>
             <Box sx={{ display: "flex", fontSize: "1rem" }}>
               <ProposalStatus
-                status={!props.is_proposal ? "Discussion" : "Active"}
+                status={
+                  !props.is_proposal
+                    ? "Discussion"
+                    : props.status === "proposal"
+                    ? "Proposal"
+                    : "Draft"
+                }
               />
               <Box sx={{ ml: "auto" }}>
                 <LikesDislikes
@@ -676,17 +697,19 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             </Box>
             <ButtonBase
               onMouseDown={() => {
-                setMoved(false)
+                setMoved(false);
               }}
               onMouseMove={() => {
-                setMoved(true)
+                setMoved(true);
               }}
               onMouseUp={() => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                    `${!props.is_proposal ? "discussion" : "proposal"}/${generateSlug(props.id, props.name)}`
-                  )
+                      `${
+                        !props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
+                  );
                 }
               }}
               draggable="false"
@@ -702,32 +725,33 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 borderRadius: ".3rem",
                 p: ".25rem",
                 position: "relative",
-                textAlign: 'left'
+                textAlign: "left",
               }}
             >
               <Box sx={{ position: "absolute", right: ".3rem" }}>
                 <CountdownTimer widget={props.widget} />
               </Box>
-              <Box sx={{ position: "absolute", bottom: ".3rem", left: '0.3rem' }}>
+              <Box
+                sx={{ position: "absolute", bottom: ".3rem", left: "0.3rem" }}
+              >
                 {props.category && (
                   <Chip
-                  label={props.category}
-                  size="small"
-                  sx={{
-                    fontSize: ".7rem",
-                    color: "primary.main",
-                    backgroundColor: "backgroundColor.main",
-                    border: "1px solid",
-                    borderColor: "primary.main",
-                  }}
-                />
+                    label={props.category}
+                    size="small"
+                    sx={{
+                      fontSize: ".7rem",
+                      color: "primary.main",
+                      backgroundColor: "backgroundColor.main",
+                      border: "1px solid",
+                      borderColor: "primary.main",
+                    }}
+                  />
                 )}
               </Box>
             </ButtonBase>
           </Box>
 
           {getFooter()}
-
         </Box>
       </Badge>
     </Box>

@@ -191,7 +191,9 @@ const Proposal: React.FC = () => {
                     <Header title="Proposal name" large bold />
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Chip
-                        label={"Proposal"}
+                        label={
+                          value.status === "proposal" ? "Proposal" : "Draft"
+                        }
                         variant="outlined"
                         icon={
                           <CircleIcon
@@ -339,10 +341,12 @@ const Proposal: React.FC = () => {
                     }}
                   >
                     <CircleIcon
-                      color="success"
+                      color={
+                        value.status === "proposal" ? "success" : "warning"
+                      }
                       sx={{ mr: ".3rem", fontSize: "1rem" }}
                     />
-                    Proposal
+                    {value.status === "proposal" ? "Proposal" : "Draft"}
                   </Box>
                   <Box
                     sx={{
@@ -430,7 +434,10 @@ const Proposal: React.FC = () => {
                     </TabList>
                   </Box>
                   <TabPanel value="0" sx={{ pl: 0, pr: 0 }}>
-                    <ProposalInfo content={value.content} />
+                    <ProposalInfo
+                      content={value.content}
+                      actions={value.actions}
+                    />
                   </TabPanel>
                   <TabPanel value="1" sx={{ pl: 0, pr: 0 }}>
                     <Comments

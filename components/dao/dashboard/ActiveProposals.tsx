@@ -91,7 +91,7 @@ const ActiveProposal: React.FC = () => {
                 width: deviceWrapper("80%", "90%"),
               }}
             >
-              <Subheader title="Active proposals" small bold />
+              <Subheader title="Active Proposals" small bold />
               <Box sx={{ ml: "auto" }}>
                 <Link href={dao === undefined ? "" : `/${dao}/proposals/all`}>
                   <Button sx={{ fontSize: ".8rem", mr: "1rem" }} size="small">

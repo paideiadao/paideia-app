@@ -80,7 +80,7 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
         <>
           <Header title="Notification settings" large />
           <LabeledSwitch
-            title="Notify me through email"
+            title="Notify me through emails"
             value={value.showEmail}
             onChange={() => setValue({ ...value, showEmail: !value.showEmail })}
             small
@@ -88,19 +88,13 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
           <Collapse in={value.showEmail}>
             <TextField
               value={value.emailAddress}
-              label="Email address"
+              label="Email Address"
               sx={{ width: "100%" }}
               onChange={(e: any) =>
                 setValue({ ...value, emailAddress: e.target.value })
               }
             />
           </Collapse>
-          <LabeledSwitch
-            title="Notify me through phone"
-            value={value.showPhone}
-            small
-            onChange={() => setValue({ ...value, showPhone: !value.showPhone })}
-          />
           <Collapse in={value.showPhone}>
             <TextField
               value={value.phoneNumber}
