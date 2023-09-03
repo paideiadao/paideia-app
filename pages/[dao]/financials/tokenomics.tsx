@@ -5,7 +5,7 @@ import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import { Box, Button } from "@mui/material";
 import * as React from "react";
-import { TreasuryInfo } from "./treasury";
+// import { TreasuryInfo } from "./treasury";
 
 const Tokenomics: React.FC = () => {
   return (
@@ -21,7 +21,7 @@ const Tokenomics: React.FC = () => {
               mt: "1rem",
             }}
           >
-            <TreasuryInfo />
+            {/* <TreasuryInfo /> */}
           </Box>
         </Box>
         <Box
@@ -33,7 +33,7 @@ const Tokenomics: React.FC = () => {
             display: deviceWrapper("none", "block"),
           }}
         >
-          <TreasuryInfo />
+          {/* <TreasuryInfo /> */}
         </Box>
       </Box>
     </Layout>

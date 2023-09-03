@@ -1,10 +1,12 @@
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import { Box, Button } from "@mui/material";
-import * as React from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Collapse from "@mui/material/Collapse";
 import { deviceWrapper } from "@components/utilities/Style";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@lib/utilities";
 
 const FundCard: React.FC<{
   width: string | any;
@@ -53,80 +55,60 @@ interface IFundCard {
   usd: string;
 }
 
-const summaryCards: IFundCard[] = [
+const defaultCards: IFundCard[] = [
   {
-    value: "5,482",
-    ticker: "SigUSD",
-    percentage: "54",
-    usd: "5,482",
-  },
-  {
-    value: "1,750",
-    ticker: "PAI",
-    percentage: "27",
-    usd: "2,698",
-  },
-  {
-    value: "5,482",
-    ticker: "ERG",
-    percentage: "54",
-    usd: "1,107",
-  },
-  {
-    value: "5,482",
-    ticker: "Other (4)",
-    percentage: "7",
-    usd: "713",
-  },
-];
-
-const allCards: IFundCard[] = [
-  {
-    value: "5,482",
-    ticker: "SigUSD",
-    percentage: "54",
-    usd: "5,482",
-  },
-  {
-    value: "1,750",
-    ticker: "PAI",
-    percentage: "27",
-    usd: "2,698",
-  },
-  {
-    value: "5,482",
-    ticker: "ERG",
-    percentage: "54",
-    usd: "1,107",
-  },
-  {
-    value: "0.01",
-    ticker: "BTC",
-    percentage: "2.5",
-    usd: "210",
-  },
-  {
-    value: "0.038",
-    ticker: "ETH",
-    percentage: "2.5",
-    usd: "202",
-  },
-  {
-    value: "87",
-    ticker: "ADA",
-    percentage: "1",
-    usd: "105",
-  },
-  {
-    value: "95",
-    ticker: "UST",
-    percentage: "1",
-    usd: "95",
+    value: "",
+    ticker: "Loading...",
+    percentage: "",
+    usd: "",
   },
 ];
 
 const Funds: React.FC = () => {
-  const [show, setShow] = React.useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [funds, setFunds] = useState<IFundCard[]>(defaultCards);
+  const context = useContext<IGlobalContext>(GlobalContext);
+  const daoId = context.api.daoData?.id;
+
+  const { data: treasuryData, error: error } = useSWR(
+    daoId && `/dao/treasury/${daoId}`,
+    fetcher
+  );
+
+  useEffect(() => {
+    const getData = async () => {
+      const ergs =
+        treasuryData.balance.confirmed.nanoErgs / (1000 * 1000 * 1000);
+      const price = (
+        await context.api.get<any>("https://api.ergopad.io/asset/price/ergo")
+      ).data.price;
+      setFunds([
+        {
+          value: ergs.toString(),
+          ticker: "ERG",
+          percentage: "N/A",
+          usd: (price * ergs).toFixed(2).toString(),
+        },
+        ...[
+          ...treasuryData.balance.confirmed.tokens.map(
+            (token: { amount: number; decimals: number; name: string }) => {
+              return {
+                value: token.amount / Math.pow(10, token.decimals),
+                ticker: token.name.toUpperCase().slice(0, 3),
+                usd: "N/A",
+                percentage: "N/A",
+              };
+            }
+          ),
+        ],
+      ]);
+    };
+
+    if (treasuryData) {
+      getData();
+    }
+  }, [treasuryData]);
+
   return (
     <Box sx={{ mt: "1.25rem", width: "100%" }}>
       <Box
@@ -153,19 +135,21 @@ const Funds: React.FC = () => {
             fontWeight: 500,
           }}
         >
-          Total $10,045 USD
+          Total $N/A USD
         </Box>
       </Box>
       <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
         {!show
-          ? summaryCards.map((i: IFundCard, c: number) => (
-              <FundCard
-                {...i}
-                width={deviceWrapper("46%", "23.3%")}
-                key={`summary-financial-card-${c}`}
-              />
-            ))
-          : allCards.map((i: IFundCard, c: number) => (
+          ? funds
+              .slice(0, 4)
+              .map((i: IFundCard, c: number) => (
+                <FundCard
+                  {...i}
+                  width={deviceWrapper("46%", "23.3%")}
+                  key={`summary-financial-card-${c}`}
+                />
+              ))
+          : funds.map((i: IFundCard, c: number) => (
               <FundCard
                 {...i}
                 width={deviceWrapper("46%", "23.3%")}
@@ -175,6 +159,7 @@ const Funds: React.FC = () => {
       </Box>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
         <Button
+          disabled={funds.length <= 4}
           onClick={() => setShow(!show)}
           size="small"
           endIcon={!show ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}

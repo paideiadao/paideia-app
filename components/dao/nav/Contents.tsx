@@ -465,22 +465,6 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       link: daoName ? `/${daoName}/financials/token` : "",
       links: (
         <>
-          {/* <BasicLink
-            icon={<AccountBalanceIcon sx={{ opacity: ".8" }} />}
-            title={"Treasury"}
-            selected={"Treasury" === subSelected}
-            set={setSubWrapper}
-            ml=".5rem"
-            link={daoName ? `/${daoName}/financials/treasury` : ""}
-          />
-          <BasicLink
-            icon={<AutorenewIcon sx={{ opacity: ".8" }} />}
-            title={"Recurring"}
-            selected={"Recurring" === subSelected}
-            set={setSubWrapper}
-            ml=".5rem"
-            link={daoName ? `/${daoName}/financials/recurring` : ""}
-          /> */}
           <BasicLink
             icon={<BoltIcon sx={{ opacity: ".8" }} />}
             title={"Token"}
@@ -489,6 +473,14 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             ml=".5rem"
             link={daoName ? `/${daoName}/financials/token` : ""}
           />
+          <BasicLink
+            icon={<AccountBalanceIcon sx={{ opacity: ".8" }} />}
+            title={"Treasury"}
+            selected={"Treasury" === subSelected}
+            set={setSubWrapper}
+            ml=".5rem"
+            link={daoName ? `/${daoName}/financials/treasury` : ""}
+          />
           {/* <BasicLink
             icon={<DonutSmallIcon sx={{ opacity: ".8" }} />}
             title={"Tokenomics"}
@@ -496,6 +488,14 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             set={setSubWrapper}
             ml=".5rem"
             link={daoName ? `/${daoName}/financials/tokenomics` : ""}
+          /> */}
+          {/* <BasicLink
+            icon={<AutorenewIcon sx={{ opacity: ".8" }} />}
+            title={"Recurring"}
+            selected={"Recurring" === subSelected}
+            set={setSubWrapper}
+            ml=".5rem"
+            link={daoName ? `/${daoName}/financials/recurring` : ""}
           /> */}
         </>
       ),

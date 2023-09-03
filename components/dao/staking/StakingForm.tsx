@@ -22,10 +22,13 @@ interface IStakeState {
   stake: any;
 }
 
+const TICKER = "PAI";
+const FEE_ADJUSTMENT = 0.1;
+
 const StakingForm: React.FC<IStakeState> = (props) => {
   const appContext = useContext<IGlobalContext>(GlobalContext);
   const { wallet, utxos } = useWallet();
-  const ticker = "PAI";
+
   const available = utxos.currentDaoTokens;
   const [value, setValue] = useState<number>(Math.min(available, 100));
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,7 +42,7 @@ const StakingForm: React.FC<IStakeState> = (props) => {
     try {
       const stakeKey = props.stake?.stake_keys?.[0]?.key_id;
       const tx = (await get_tx(stakeKey)).unsigned_transaction;
-      const context = await getErgoWalletContext()
+      const context = await getErgoWalletContext();
       const signed = await context.sign_tx(tx);
       const txId = await context.submit_tx(signed);
       appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
@@ -52,11 +55,12 @@ const StakingForm: React.FC<IStakeState> = (props) => {
   const get_tx = async (stakeKey: string | undefined) => {
     const daoId = appContext.api.daoData.id;
     const userId = appContext.api.daoUserData.user_id;
+    const adjustedValue = Math.min(value, available - FEE_ADJUSTMENT);
     if (stakeKey) {
       const res = await appContext.api.post<any>("/staking/add", {
         dao_id: daoId,
         user_id: userId,
-        amount: value,
+        amount: adjustedValue,
         stake_key: stakeKey,
       });
       return res.data;
@@ -64,7 +68,7 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       const res = await appContext.api.post<any>("/staking/", {
         dao_id: daoId,
         user_id: userId,
-        amount: value,
+        amount: adjustedValue,
       });
       return res.data;
     }
@@ -93,14 +97,14 @@ const StakingForm: React.FC<IStakeState> = (props) => {
           value={value}
           type="number"
           onChange={handleChange}
-          helperText={`${available} ${ticker} available`}
+          helperText={`${available} ${TICKER} available`}
           InputProps={{
             inputProps: {
               min: 1,
               max: 9999999999,
             },
             endAdornment: (
-              <InputAdornment position="end">{ticker}</InputAdornment>
+              <InputAdornment position="end">{TICKER}</InputAdornment>
             ),
           }}
         />

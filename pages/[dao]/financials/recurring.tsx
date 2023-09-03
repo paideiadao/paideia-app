@@ -6,7 +6,7 @@ import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import { Box } from "@mui/material";
 import * as React from "react";
-import { TreasuryInfo } from "./treasury";
+// import { TreasuryInfo } from "./treasury";
 
 const recurringPayments: IRecurringCard[] = [
   {
@@ -131,7 +131,7 @@ const Recurring: React.FC = () => {
               mt: "1rem",
             }}
           >
-            <TreasuryInfo />
+            {/* <TreasuryInfo /> */}
           </Box>
         </Box>
         <Box
@@ -143,7 +143,7 @@ const Recurring: React.FC = () => {
             display: deviceWrapper("none", "block"),
           }}
         >
-          <TreasuryInfo />
+          {/* <TreasuryInfo /> */}
         </Box>
       </Box>
     </Layout>

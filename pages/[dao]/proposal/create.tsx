@@ -34,6 +34,7 @@ import CancelLink from "@components/utilities/CancelLink";
 import { bPaideiaSendFundsBasic } from "@lib/proposalActionOutputMapper";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
 import { useState, useContext, useEffect } from "react";
+import { generateSlug } from "@lib/utilities";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -176,7 +177,7 @@ const CreateProposal: React.FC = () => {
         value.actions[0].data.recipients[0].ergs * NERGs,
         // @ts-ignore
         value.actions[0].data.recipients[0].tokens * PAIDEIA_TOKEN_ADJUST,
-        context.api.daoData?.tokenomics?.token_id,
+        context.api.daoData?.tokenomics?.token_id
       );
       const proposal = {
         dao_id: context.api.daoData?.id,
@@ -188,14 +189,21 @@ const CreateProposal: React.FC = () => {
         stake_key: stake.stake_keys[0].key_id,
         end_time: action.action.activationTime,
       };
-      const tx = (
+      const data = (
         await context.api.post<any>("/proposals/on_chain_proposal", proposal)
-      ).data.unsigned_transaction;
+      ).data;
+      const tx = data.unsigned_transaction;
       const ergoContext = await getErgoWalletContext();
       const signed = await ergoContext.sign_tx(tx);
       const txId = await ergoContext.submit_tx(signed);
       context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
       setPublish(false);
+      router.push(
+        `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
+          data.proposal.id,
+          data.proposal.name
+        )}`
+      );
     } catch (e: any) {
       api.error(e);
     }
@@ -219,7 +227,7 @@ const CreateProposal: React.FC = () => {
     } else {
       return value.image.file;
     }
-  }
+  };
 
   return (
     <ProposalContext.Provider value={{ api }}>
