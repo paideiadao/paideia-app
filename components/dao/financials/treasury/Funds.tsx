@@ -12,8 +12,8 @@ const FundCard: React.FC<{
   width: string | any;
   value: string;
   ticker: string;
-  percentage: string;
-  usd: string;
+  percentage?: string;
+  usd?: string;
 }> = (props) => {
   return (
     <Box
@@ -42,7 +42,8 @@ const FundCard: React.FC<{
         </Box>
       </Box>
       <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
-        {props.percentage}% (${props.usd} USD)
+        {props.percentage}
+        {props.percentage !== undefined ? "%" : null} (${props.usd} USD)
       </Box>
     </Box>
   );
@@ -51,16 +52,14 @@ const FundCard: React.FC<{
 interface IFundCard {
   value: string;
   ticker: string;
-  percentage: string;
-  usd: string;
+  percentage?: string;
+  usd?: string;
 }
 
 const defaultCards: IFundCard[] = [
   {
     value: "",
     ticker: "Loading...",
-    percentage: "",
-    usd: "",
   },
 ];
 
@@ -86,7 +85,6 @@ const Funds: React.FC = () => {
         {
           value: ergs.toString(),
           ticker: "ERG",
-          percentage: "N/A",
           usd: (price * ergs).toFixed(2).toString(),
         },
         ...[
@@ -95,8 +93,6 @@ const Funds: React.FC = () => {
               return {
                 value: token.amount / Math.pow(10, token.decimals),
                 ticker: token.name.toUpperCase().slice(0, 3),
-                usd: "N/A",
-                percentage: "N/A",
               };
             }
           ),

@@ -65,7 +65,6 @@ const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
         </Box>
         <Subtitle subtitle="Upload your own personalized logo for your DAO or simply use the auto-generated version created from your wallet address." />
       </Box>
-
       <FileInput
         file={data.logo === undefined ? "" : data.logo.file}
         fileUrl={data.logo === undefined ? "" : data.logo.url}

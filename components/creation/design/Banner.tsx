@@ -89,6 +89,7 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
       </Box>
 
       <LabeledSwitch
+        disabled
         title="Show banner"
         value={data.banner.show}
         onChange={() =>

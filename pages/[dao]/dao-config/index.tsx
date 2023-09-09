@@ -4,6 +4,7 @@ import Design from "@components/dao/dao-config/Design";
 import Governance from "@components/dao/dao-config/Governance";
 import Termination from "@components/dao/dao-config/Termination";
 import Layout from "@components/dao/Layout";
+import VoteDuration from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import CancelLink from "@components/utilities/CancelLink";
 import Divider from "@components/utilities/Divider";
 import { deviceWrapper } from "@components/utilities/Style";
@@ -11,34 +12,27 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ConfigApi, { IConfigData } from "@lib/dao/dao-config/ConfigApi";
 import { ConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { Box, Button } from "@mui/material";
-import * as React from "react";
+import { useContext, useEffect, useState } from "react";
 
 const DaoConfig: React.FC = () => {
-  const [data, setData] = React.useState<IConfigData>({
+  const [data, setData] = useState<IConfigData>({
     basicInformation: {
-      daoName: "Paideia",
-      daoUrl: "paideia.im/dao",
-      shortDescription:
-        "This is an example description for my example DAO called 'Paideia DAO Test'. Can you guess how many times I said example, without counting the last example?",
+      daoName: "",
+      daoUrl: "",
+      shortDescription: "",
     },
     governance: {
       optimisticGovernance: false,
       quadraticVoting: false,
       timeToChallenge: 0,
       timeToChallengeUnits: "days",
-      quorum: 4,
+      quorum: 0,
       voteDuration: 0,
       voteDurationUnits: "days",
-      whitelist: [
-        {
-          alias: "",
-          address: "",
-          img: "",
-        },
-      ],
+      whitelist: [],
       amount: "",
       currency: "",
-      supportNeeded: 50,
+      supportNeeded: 0,
     },
     design: {
       logo: {
@@ -58,20 +52,32 @@ const DaoConfig: React.FC = () => {
     },
   });
 
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const api = new ConfigApi(globalContext.api, data, setData);
-  React.useEffect(() => {
-    if (globalContext.api !== undefined) {
-      api.alert = globalContext.api.alert;
-      api.setAlert = globalContext.api.setAlert;
+  const daoData = globalContext.api.daoData;
+
+  useEffect(() => {
+    if (daoData) {
+      setData({
+        ...data,
+        basicInformation: {
+          daoName: daoData.dao_name,
+          daoUrl: daoData.dao_url,
+          shortDescription: daoData.dao_short_description,
+        },
+        governance: {
+          ...data.governance,
+          supportNeeded: daoData.governance.support_needed / 10,
+          quorum: daoData.governance.quorum / 10,
+          voteDuration: daoData.governance.vote_duration__sec / 60,
+          voteDurationUnits: "minutes",
+        },
+      });
     }
-  }, [globalContext.api]);
+  }, [daoData]);
+
   return (
-    <ConfigContext.Provider
-      value={{
-        api,
-      }}
-    >
+    <ConfigContext.Provider value={{ api }}>
       <Layout>
         <Header title="DAO Config" large />
         <BasicInformation />

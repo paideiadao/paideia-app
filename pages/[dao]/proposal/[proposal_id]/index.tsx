@@ -191,9 +191,7 @@ const Proposal: React.FC = () => {
                     <Header title="Proposal name" large bold />
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Chip
-                        label={
-                          value.status === "proposal" ? "Proposal" : "Draft"
-                        }
+                        label={value.status}
                         variant="outlined"
                         icon={
                           <CircleIcon
@@ -300,6 +298,7 @@ const Proposal: React.FC = () => {
                       }
                     >
                       <Button
+                        disabled={value.status !== "Active"}
                         sx={{
                           ml: "1rem",
                           display: deviceWrapper("none", "flex"),
@@ -341,12 +340,10 @@ const Proposal: React.FC = () => {
                     }}
                   >
                     <CircleIcon
-                      color={
-                        value.status === "proposal" ? "success" : "warning"
-                      }
+                      color={getStatusColor(value.status)}
                       sx={{ mr: ".3rem", fontSize: "1rem" }}
                     />
-                    {value.status === "proposal" ? "Proposal" : "Draft"}
+                    {value.status}
                   </Box>
                   <Box
                     sx={{
@@ -483,6 +480,7 @@ const Proposal: React.FC = () => {
               </Box>
             </Box>
             <Button
+              disabled={value.status !== "Active"}
               size="small"
               startIcon={<GavelIcon />}
               sx={{
@@ -503,6 +501,35 @@ const Proposal: React.FC = () => {
       </Layout>
     </ProposalContext.Provider>
   );
+};
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Draft": {
+      return "warning";
+    }
+    case "Passed": {
+      return "success";
+    }
+    case "Active": {
+      return "success";
+    }
+    case "Proposal": {
+      return "success";
+    }
+    case "Failed": {
+      return "error";
+    }
+    case "Failed - Quorum": {
+      return "error";
+    }
+    case "Failed - Vote": {
+      return "error";
+    }
+    default: {
+      return "warning";
+    }
+  }
 };
 
 export default Proposal;

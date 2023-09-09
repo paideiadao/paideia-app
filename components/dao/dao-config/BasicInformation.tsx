@@ -60,6 +60,7 @@ const BasicInformation: React.FC = () => {
       </Box>
       <Box sx={{ width: "100%", mt: 2 }}>
         <TextField
+          disabled
           label="DAO short description"
           inputProps={{
             maxLength: 250,

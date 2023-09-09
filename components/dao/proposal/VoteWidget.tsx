@@ -1,12 +1,14 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Avatar, Box, Button } from "@mui/material";
-import * as React from "react";
 import { VoteWidget } from "../proposals/ProposalCard";
 import dateFormat from "dateformat";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { deviceWrapper } from "@components/utilities/Style";
 import { getRandomImage } from "@components/utilities/images";
+import Warning from "@components/utilities/Warning";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { useContext } from "react";
 
 interface IVoteWidgetProps {
   yes?: number;
@@ -75,46 +77,54 @@ const LastVotes: React.FC = () => {
 };
 
 const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
+  const context = useContext<IGlobalContext>(GlobalContext)
+  const governance = context.api.daoData?.governance
   const router = useRouter();
   const { dao, proposal_id } = router.query;
 
+  const quorumInfo = `For this proposal to be approved a quorum of ${governance?.quorum / 10}% and ${governance?.support_needed / 10}% support is needed.`;
+
   return (
-    <Box
-      sx={{
-        backgroundColor: "fileInput.outer",
-        border: deviceWrapper("0", "1px solid"),
-        borderColor: deviceWrapper("none", "border.main"),
-        borderRadius: ".3rem",
-        width: deviceWrapper("calc(100% + 1.5rem)", "100%"),
-        mb: "1rem",
-        ml: deviceWrapper("-.75rem", "0"),
-      }}
-    >
+    <>
       <Box
         sx={{
-          width: "100%",
-          borderBottom: deviceWrapper("0", "1px solid"),
-          borderBottomColor: deviceWrapper("none", "border.main"),
-          p: ".5rem",
+          backgroundColor: "fileInput.outer",
+          border: deviceWrapper("0", "1px solid"),
+          borderColor: deviceWrapper("none", "border.main"),
+          borderRadius: ".3rem",
+          width: deviceWrapper("calc(100% + 1.5rem)", "100%"),
+          mb: "1rem",
+          ml: deviceWrapper("-.75rem", "0"),
         }}
       >
-        <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <CapsInfo title={`Votes | ${(props.no ?? 0) + (props.yes ?? 0)}`} mb={"0"} />
-          <Button
-            sx={{
-              display: deviceWrapper("flex", "none"),
-              ml: "auto",
-              whiteSpace: "no-wrap",
-              minWidth: "max-content",
-            }}
-            size="small"
-          >
-            View All
-          </Button>
+        <Box
+          sx={{
+            width: "100%",
+            borderBottom: deviceWrapper("0", "1px solid"),
+            borderBottomColor: deviceWrapper("none", "border.main"),
+            p: ".5rem",
+          }}
+        >
+          <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
+            <CapsInfo
+              title={`Votes | ${(props.no ?? 0) + (props.yes ?? 0)}`}
+              mb={"0"}
+            />
+            <Button
+              sx={{
+                display: deviceWrapper("flex", "none"),
+                ml: "auto",
+                whiteSpace: "no-wrap",
+                minWidth: "max-content",
+              }}
+              size="small"
+            >
+              View All
+            </Button>
+          </Box>
+          <VoteWidget yes={props.yes ?? 0} no={props.no ?? 0} />
         </Box>
-        <VoteWidget yes={props.yes ?? 0} no={props.no ?? 0} />
-      </Box>
-      {/* <Box
+        {/* <Box
         sx={{
           width: "100%",
           borderBottom: deviceWrapper("0", "1px solid"),
@@ -126,33 +136,35 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
         <CapsInfo title="Last Votes" mb={"0"} />
         <LastVotes />
       </Box> */}
-      <Box
-        sx={{
-          width: "100%",
-          display: deviceWrapper("none", "flex"),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Link
-          href={
-            dao === undefined ? `` : `/${dao}/proposal/${proposal_id}/votes`
-          }
+        <Box
+          sx={{
+            width: "100%",
+            display: deviceWrapper("none", "flex"),
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Button
-            disabled
-            size="small"
-            sx={{
-              borderTopRightRadius: 0,
-              borderTopLeftRadius: 0,
-              width: "100%",
-            }}
+          <Link
+            href={
+              dao === undefined ? `` : `/${dao}/proposal/${proposal_id}/votes`
+            }
           >
-            View All Votes
-          </Button>
-        </Link>
+            <Button
+              disabled
+              size="small"
+              sx={{
+                borderTopRightRadius: 0,
+                borderTopLeftRadius: 0,
+                width: "100%",
+              }}
+            >
+              View All Votes
+            </Button>
+          </Link>
+        </Box>
       </Box>
-    </Box>
+      <Warning title="Quorum and Support Needed" subtitle={quorumInfo} />
+    </>
   );
 };
 

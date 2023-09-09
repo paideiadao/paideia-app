@@ -18,7 +18,7 @@ const Warning: React.FC<IWarning> = (props) => {
       <AlertTitle sx={{ fontSize: deviceWrapper(".8rem", ".9rem") }}>
         {props.title}
       </AlertTitle>
-      <Box sx={{ ml: "-2rem", zIndex: 101 }}>{props.subtitle}</Box>
+      <Box>{props.subtitle}</Box>
     </Alert>
   );
 };

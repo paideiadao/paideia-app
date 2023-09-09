@@ -130,6 +130,12 @@ export const ProposalStatus: React.FC<{ status: string }> = (props) => {
       case "Failed": {
         return "red";
       }
+      case "Failed - Quorum": {
+        return "red";
+      }
+      case "Failed - Vote": {
+        return "red";
+      }
     }
   };
 
@@ -672,13 +678,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             </ButtonBase>
             <Box sx={{ display: "flex", fontSize: "1rem" }}>
               <ProposalStatus
-                status={
-                  !props.is_proposal
-                    ? "Discussion"
-                    : props.status === "proposal"
-                    ? "Proposal"
-                    : "Draft"
-                }
+                status={!props.is_proposal ? "Discussion" : props.status}
               />
               <Box sx={{ ml: "auto" }}>
                 <LikesDislikes

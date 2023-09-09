@@ -35,6 +35,7 @@ const OptimisticGovernance: React.FC = () => {
       />
       <Subtitle subtitle="If active, only whitelisted members will be able to create proposals. If a proposal is not challenged, they will be approved." />
       <LabeledSwitch
+        disabled
         small
         onChange={() =>
           context.api.setData({
