@@ -7,29 +7,32 @@ import MultiTokenHolders from "@components/utilities/MultiTokenHolders";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
+import AbstractDate from "@components/creation/utilities/AbstractDate";
 
 export interface ISendFundsRecipient {
   address: string;
   ergs: number;
+  token_id: string;
   tokens: number;
 }
 
 export interface ISendFunds {
   recipients: ISendFundsRecipient[];
   recurring: boolean;
+  activation_time: number;
 }
 
 const SendFunds: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<ISendFunds>({
-    recipients: [{ address: "", ergs: 0, tokens: 0 }],
+    recipients: [{ address: "", ergs: 0, tokens: 0, token_id: "" }],
     recurring: false,
+    activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
   });
-  const treasuryAmount = 50000;
 
   React.useEffect(() => {
     const temp = [...context.api.value.actions];
@@ -60,7 +63,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
       <CapsInfo title="Receiving Wallets" mb=".5rem" />
       <MultiTokenHolders
         recipients={value.recipients}
-        treasuryAmount={treasuryAmount}
+        treasuryAmount={0}
         set={(newRecipients: ISendFundsRecipient[]) =>
           setValue({
             ...value,
@@ -79,6 +82,28 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
         }}
       />
       <CapsInfo title="Configuration" mb="-1rem" />
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          mt: "1rem",
+          pt: "1rem",
+        }}
+      >
+        <Header
+          title="Activation Time"
+          subtitle="Set time when the action will be executed"
+        />
+        <AbstractDate
+          value={new Date(value.activation_time)}
+          setValue={(newValue: Date) =>
+            setValue({ ...value, activation_time: newValue.getTime() })
+          }
+          width="50%"
+          label="Activation Time"
+        />
+      </Box>
       <Box
         sx={{
           width: "100%",

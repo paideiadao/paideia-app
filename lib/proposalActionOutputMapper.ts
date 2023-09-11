@@ -1,16 +1,15 @@
-const DAYS_2 = 2 * 24 * 60 * 60 * 1000;
-
 export const bPaideiaSendFundsBasic = (
   address: string,
   nergs: number,
   tokens: number,
   token_id: string,
+  activation_time: number,
 ): any => {
   return {
     actionType: "SendFundsBasic",
     action: {
       optionId: 1,
-      activationTime: new Date().getTime() + DAYS_2,
+      activationTime: activation_time,
       outputs: [
         {
           address: address,

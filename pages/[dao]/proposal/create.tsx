@@ -77,6 +77,7 @@ export type VotingType = "yes/no" | "options" | "unselected";
 
 const PAIDEIA_TOKEN_ADJUST = 10000;
 const NERGs = 1000000000;
+const TIME_MS = 1000;
 
 export interface IProposal {
   id?: string;
@@ -119,7 +120,7 @@ const CreateProposal: React.FC = () => {
       url: getRandomImage(),
       file: undefined,
     },
-    status: "draft",
+    status: "Draft",
     category: "",
     content: "",
     voting_system: "unselected",
@@ -142,6 +143,8 @@ const CreateProposal: React.FC = () => {
   const [publish, setPublish] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [stake, setStake] = useState<any>({});
+  const tokenomics = context.api.daoData?.tokenomics;
+  const governance = context.api.daoData?.governance;
 
   useEffect(() => {
     const getData = async () => {
@@ -176,8 +179,10 @@ const CreateProposal: React.FC = () => {
         // @ts-ignore
         value.actions[0].data.recipients[0].ergs * NERGs,
         // @ts-ignore
-        value.actions[0].data.recipients[0].tokens * PAIDEIA_TOKEN_ADJUST,
-        context.api.daoData?.tokenomics?.token_id
+        value.actions[0].data.recipients[0].tokens,
+        tokenomics?.token_id,
+        // @ts-ignore
+        value.actions[0].data.activation_time
       );
       const proposal = {
         dao_id: context.api.daoData?.id,
@@ -187,7 +192,8 @@ const CreateProposal: React.FC = () => {
         actions: [action],
         is_proposal: true,
         stake_key: stake.stake_keys[0].key_id,
-        end_time: action.action.activationTime,
+        end_time:
+          new Date().getTime() + governance?.vote_duration__sec * TIME_MS,
       };
       const data = (
         await context.api.post<any>("/proposals/on_chain_proposal", proposal)
@@ -324,7 +330,13 @@ const CreateProposal: React.FC = () => {
         <Box sx={{ mt: "1rem" }} />
         <Warning
           title="What would it take to get this proposal approved?"
-          subtitle="Because of the DAO's configuration, in order for this proposal to be approved it will need to have at least 51% support and 70% quorum of the full DAO. You can find more information about this on the DAO configuration"
+          subtitle={`Because of the DAO's configuration, in order for this proposal to be approved it will need to have at least ${
+            governance?.support_needed / 10
+          }% support and ${
+            governance?.quorum / 10
+          }% quorum of the full DAO. Voting duration is ${
+            governance?.vote_duration__sec
+          } seconds. You can find more information about this on the DAO Config.`}
         />
         <Box
           sx={{
