@@ -75,9 +75,9 @@ export interface IProposalOption {
 
 export type VotingType = "yes/no" | "options" | "unselected";
 
-const PAIDEIA_TOKEN_ADJUST = 10000;
 const NERGs = 1000000000;
 const TIME_MS = 1000;
+const BUFFER = 3600 * TIME_MS;
 
 export interface IProposal {
   id?: string;
@@ -193,7 +193,9 @@ const CreateProposal: React.FC = () => {
         is_proposal: true,
         stake_key: stake.stake_keys[0].key_id,
         end_time:
-          new Date().getTime() + governance?.vote_duration__sec * TIME_MS,
+          new Date().getTime() +
+          governance?.vote_duration__sec * TIME_MS +
+          BUFFER,
       };
       const data = (
         await context.api.post<any>("/proposals/on_chain_proposal", proposal)
