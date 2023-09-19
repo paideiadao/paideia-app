@@ -6,7 +6,7 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import { IObj } from "@lib/Interfaces";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, FormHelperText, Typography } from "@mui/material";
 import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Selector from "./vote/Selector";
@@ -105,6 +105,11 @@ const ProposalVote: React.FC = () => {
             </Button>
           </Box>
         )}
+      {context.api.errors.voting && (
+        <FormHelperText sx={{ mt: 1 }} error>
+          Voting or Action not configured
+        </FormHelperText>
+      )}
     </>
   );
 };

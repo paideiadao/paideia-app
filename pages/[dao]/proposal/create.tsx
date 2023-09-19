@@ -111,6 +111,20 @@ export interface IProposal {
   user_followers?: number[];
 }
 
+export interface ICreateProposalErrors {
+  name: boolean;
+  category: boolean;
+  voting: boolean;
+  actionConfig: boolean;
+}
+
+const defaultErrors: ICreateProposalErrors = {
+  name: false,
+  category: false,
+  voting: false,
+  actionConfig: false,
+};
+
 const CreateProposal: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
@@ -136,9 +150,10 @@ const CreateProposal: React.FC = () => {
     is_proposal: true,
     votes: [0, 0],
   });
+  const [errors, setErrors] = useState<ICreateProposalErrors>(defaultErrors);
 
   const context = useContext<IGlobalContext>(GlobalContext);
-  const api = new ProposalApi(context.api, value, setValue);
+  const api = new ProposalApi(context.api, value, setValue, errors, setErrors);
 
   const [publish, setPublish] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -172,6 +187,10 @@ const CreateProposal: React.FC = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      const error = validateErrors(value, errors, setErrors);
+      if (error) {
+        throw "Form Validation Error";
+      }
       const imgUrl = await getBannerUrl();
       const action = bPaideiaSendFundsBasic(
         // @ts-ignore
@@ -197,21 +216,21 @@ const CreateProposal: React.FC = () => {
           governance?.vote_duration__sec * TIME_MS +
           BUFFER,
       };
-      const data = (
-        await context.api.post<any>("/proposals/on_chain_proposal", proposal)
-      ).data;
-      const tx = data.unsigned_transaction;
-      const ergoContext = await getErgoWalletContext();
-      const signed = await ergoContext.sign_tx(tx);
-      const txId = await ergoContext.submit_tx(signed);
-      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      // const data = (
+      //   await context.api.post<any>("/proposals/on_chain_proposal", proposal)
+      // ).data;
+      // const tx = data.unsigned_transaction;
+      // const ergoContext = await getErgoWalletContext();
+      // const signed = await ergoContext.sign_tx(tx);
+      // const txId = await ergoContext.submit_tx(signed);
+      // context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
       setPublish(false);
-      router.push(
-        `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
-          data.proposal.id,
-          data.proposal.name
-        )}`
-      );
+      // router.push(
+      //   `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
+      //     data.proposal.id,
+      //     data.proposal.name
+      //   )}`
+      // );
     } catch (e: any) {
       api.error(e);
     }
@@ -408,6 +427,33 @@ const CreateProposal: React.FC = () => {
       </Layout>
     </ProposalContext.Provider>
   );
+};
+
+const validateErrors = (
+  value: IProposal,
+  errors: ICreateProposalErrors,
+  setErrors: Function
+) => {
+  errors.name = value.name === "";
+  errors.category = value.category === "";
+  errors.voting = // @ts-ignore
+    value.actions.length !== 1 ||
+    // @ts-ignore
+    value.actions[0].data?.recipients?.length !== 1;
+  errors.actionConfig =
+    errors.voting ||
+    // @ts-ignore
+    value.actions[0].data.recipients[0].address === "" ||
+    // @ts-ignore
+    value.actions[0].data.recipients[0].ergs === "" ||
+    // @ts-ignore
+    value.actions[0].data.recipients[0].tokens === "" ||
+    // @ts-ignore
+    isNaN(value.actions[0].data.recipients[0].ergs) ||
+    // @ts-ignore
+    isNaN(value.actions[0].data.recipients[0].tokens);
+  setErrors(errors);
+  return errors.category || errors.name || errors.voting || errors.actionConfig;
 };
 
 export default CreateProposal;

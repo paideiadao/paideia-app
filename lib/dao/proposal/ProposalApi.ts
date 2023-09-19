@@ -2,6 +2,7 @@ import { AppApi } from "@lib/AppApi";
 import { AbstractApi } from "@lib/utilities";
 import {
   ActionType,
+  ICreateProposalErrors,
   IProposal,
   IProposalAction,
   VotingType,
@@ -26,12 +27,22 @@ export default class ProposalApi extends AbstractApi {
   api: AppApi;
   value: IProposal;
   setValue: Function;
+  errors: ICreateProposalErrors;
+  setErrors: Function;
 
-  constructor(api: AppApi, value: IProposal, setValue: Function) {
+  constructor(
+    api: AppApi,
+    value: IProposal,
+    setValue: Function,
+    errors?: ICreateProposalErrors,
+    setErrors?: Function
+  ) {
     super();
     this.api = api;
     this.value = value;
     this.setValue = setValue;
+    this.errors = errors;
+    this.setErrors = setErrors;
     this.setAlert = api.setAlert;
   }
 

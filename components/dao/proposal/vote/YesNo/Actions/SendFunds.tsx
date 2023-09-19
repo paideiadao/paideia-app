@@ -7,7 +7,7 @@ import MultiTokenHolders from "@components/utilities/MultiTokenHolders";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
-import { Box, TextField } from "@mui/material";
+import { Box, FormHelperText, TextField } from "@mui/material";
 import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
@@ -71,6 +71,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
           })
         }
       />
+      {context.api.errors.actionConfig && <FormHelperText error>Validation failed for receiving wallet</FormHelperText>}
       <Box
         sx={{
           width: "calc(100% + 1rem)",

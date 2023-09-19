@@ -30,16 +30,23 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
 };
 
 const renderActions = (actions: any[]) => {
-  return `As part of this proposal the following actions will be executed.
+  try {
+    return `As part of this proposal the following actions will be executed.
   ${actions.map((action) => generateActionDescription(action))}
   `;
+  } catch (e) {
+    console.log("Parse Failed for Actions", actions, e);
+    return `Failed to parse actions - Check console for details`;
+  }
 };
 
 const generateActionDescription = (action: any) => {
   return `#### Action Type: ${action.actionType}
   Activation Time: ${new Date(action.action.activationTime)}\\
   Repeats: ${action.action.repeats}
-  ${action.action.outputs.map((output: any) => generateFormattedOutputDescription(output))}
+  ${action.action.outputs.map((output: any) =>
+    generateFormattedOutputDescription(output)
+  )}
   `;
 };
 
