@@ -23,6 +23,7 @@ export interface ISendFundsRecipient {
 export interface ISendFunds {
   recipients: ISendFundsRecipient[];
   recurring: boolean;
+  voting_duration: string;
   activation_time: number;
 }
 
@@ -31,6 +32,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
   const [value, setValue] = React.useState<ISendFunds>({
     recipients: [{ address: "", ergs: 0, tokens: 0, token_id: "" }],
     recurring: false,
+    voting_duration: (24 * 60 * 60).toString(),
     activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
   });
 
@@ -71,7 +73,11 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
           })
         }
       />
-      {context.api.errors.actionConfig && <FormHelperText error>Validation failed for receiving wallet</FormHelperText>}
+      {context.api.errors.actionConfig && (
+        <FormHelperText error>
+          Validation failed for receiving wallet
+        </FormHelperText>
+      )}
       <Box
         sx={{
           width: "calc(100% + 1rem)",
@@ -93,9 +99,46 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
         }}
       >
         <Header
+          title="Voting Duration"
+          subtitle="Set how long the voting window should be open"
+        />
+        <TextField
+          error={context.api.errors.votingDuration}
+          helperText={
+            context.api.errors.votingDuration
+              ? "Voting duration cannot be less than minimum in Dao Config"
+              : `Voting Ends at ${new Date(
+                  new Date().getTime() +
+                    Number(value.voting_duration) * 1000 +
+                    900 * 1000
+                ).toUTCString()}`
+          }
+          label="Duration in Seconds"
+          sx={{ width: "50%" }}
+          value={value.voting_duration}
+          onChange={(e) => {
+            setValue({ ...value, voting_duration: e.target.value });
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          mt: "1rem",
+          pt: "1rem",
+        }}
+      >
+        <Header
           title="Activation Time"
           subtitle="Set time when the action will be executed"
         />
+        {context.api.errors.activationTime && (
+          <FormHelperText error>
+            Activation time cannot be before voting ends
+          </FormHelperText>
+        )}
         <AbstractDate
           value={new Date(value.activation_time)}
           setValue={(newValue: Date) =>

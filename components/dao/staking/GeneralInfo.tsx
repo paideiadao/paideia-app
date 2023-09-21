@@ -123,12 +123,14 @@ export const InfoCard: React.FC<IInfoCard> = (props) => {
 interface IStakingGeneralInfo {
   numberOfStakers: string;
   tokensStaked: string;
+  apy: string;
 }
 
 const GeneralInfo: React.FC = () => {
   const [data, setData] = useState<IStakingGeneralInfo>({
     numberOfStakers: "-",
     tokensStaked: "-",
+    apy: "-",
   });
   const context = useContext<IGlobalContext>(GlobalContext);
   const daoId = context.api.daoData?.id;
@@ -144,6 +146,7 @@ const GeneralInfo: React.FC = () => {
         ...data,
         numberOfStakers: stakingData.stakers,
         tokensStaked: stakingData.total_staked,
+        apy: Number(stakingData.apy).toFixed(2)
       });
     };
 
@@ -170,7 +173,7 @@ const GeneralInfo: React.FC = () => {
           c={0}
         />
         <InfoCard title="PAI tokens staked" value={data.tokensStaked} c={1} />
-        <InfoCard title="Current APY" value="-" last c={2} />
+        <InfoCard title="Current APY" value={data.apy} last c={2} />
       </Box>
     </Box>
   );

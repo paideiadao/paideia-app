@@ -11,7 +11,12 @@ import DaoBio from "./DaoBio";
 import Contents from "./Contents";
 import { useWallet } from "@components/wallet/WalletContext";
 import ConnectWallet from "@components/wallet/ConnectWallet";
-import { isAddressValid } from "@components/wallet/AddWallet";
+import {
+  DAPP_CONNECTED,
+  WALLET_ADDRESS,
+  WALLET_ADDRESS_LIST,
+  isAddressValid,
+} from "@components/wallet/AddWallet";
 import { ProfilePopup } from "./ProfilePopup";
 import { snipAddress } from "@lib/utilities";
 import NotificationsPopup from "./NotificationsPopup";
@@ -36,6 +41,17 @@ const TopNav: React.FC<INav> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
   const { wallet, utxos, dAppWallet } = useWallet();
+
+  const clearWallet = () => {
+    // clear state and local storage
+    localStorage.setItem(WALLET_ADDRESS, "");
+    localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
+    localStorage.setItem(DAPP_CONNECTED, "false");
+    localStorage.setItem("jwt_token_login", "");
+    localStorage.setItem("user_id", "");
+    localStorage.setItem("alias", "");
+    globalContext.api.setDaoUserData(undefined);
+  };
 
   const closeNavOnResize = () => {
     props.setShowMobile(false);
@@ -103,6 +119,10 @@ const TopNav: React.FC<INav> = (props) => {
         notificationsError.response.data.detail +
           " - Please reconnect your wallet and refresh"
       );
+      setTimeout(() => {
+        clearWallet();
+        router.reload();
+      }, 2000);
     }
   }, [notificationsError]);
 

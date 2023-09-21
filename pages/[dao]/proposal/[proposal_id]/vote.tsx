@@ -42,7 +42,9 @@ const CastVote: React.FC = () => {
         ).data;
         setStake(stake);
         if (!stake.stake_keys?.length) {
-          context.api.error("Stake Key is not present");
+          context.api.error(
+            "Stake key either not present or in use on another transaction, add stake now"
+          );
         }
       } catch (e: any) {
         context.api.error(e);
@@ -63,7 +65,9 @@ const CastVote: React.FC = () => {
     }
     try {
       if (!stake.stake_keys?.length) {
-        context.api.error("No stake key present");
+        context.api.error(
+          "Stake key either not present or in use on another transaction, add stake now"
+        );
         setLoading(false);
         return;
       }

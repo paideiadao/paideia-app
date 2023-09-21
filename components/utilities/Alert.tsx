@@ -13,6 +13,7 @@ import { deviceWrapper } from "./Style";
 import CloseIcon from "@mui/icons-material/Close";
 import { TransitionGroup } from "react-transition-group";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/router";
 
 interface IAbstractAlert {
   // set: (val: IAlerts[]) => void;
@@ -65,6 +66,8 @@ const CustomAlert: FC<{ alert: IAlerts; i: number; close: Function }> = ({
     }, 10000);
     return () => clearTimeout(timer);
   }, []);
+  const router = useRouter()
+  const { dao } = router.query
   return (
     <Alert
       severity={alert.severity}
@@ -84,16 +87,23 @@ const CustomAlert: FC<{ alert: IAlerts; i: number; close: Function }> = ({
         </IconButton>
       }
     >
-      {getParsedContent(alert.content)}
+      {getParsedContent(alert.content, dao.toString())}
     </Alert>
   );
 };
 
-const getParsedContent = (rawContent: string) => {
-  const regex = "Transaction Submitted: ";
-  if (!rawContent.startsWith(regex)) {
-    return rawContent;
+const getParsedContent = (rawContent: string, dao: string) => {
+  const explorerRegex = "Transaction Submitted: ";
+  const addStakeRegex = "add stake now";
+  if (rawContent.startsWith(explorerRegex)) {
+    return getExplorerLinked(rawContent);
+  } else if (rawContent.includes(addStakeRegex)) {
+    return getAddStakeLinked(rawContent, dao);
   }
+  return rawContent;
+};
+
+const getExplorerLinked = (rawContent: string) => {
   const parse = rawContent.split(" ");
   if (!(parse.length === 3)) {
     return rawContent;
@@ -110,6 +120,18 @@ const getParsedContent = (rawContent: string) => {
       {rawContent}
     </Link>
   );
-};
+}
+
+const getAddStakeLinked = (rawContent: string, dao: string) => {
+  const href = `/${dao}/staking/manage`
+  return (
+    <Link
+      sx={{ textDecoration: "none", color: "white" }}
+      href={href}
+    >
+      {rawContent}
+    </Link>
+  );
+}
 
 export default AbstractAlert;

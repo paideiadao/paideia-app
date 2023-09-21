@@ -27,7 +27,9 @@ import { IFile } from "@lib/creation/Interfaces";
 import { ILiquidityPool } from "@components/dao/proposal/vote/YesNo/Actions/LiquidityPool";
 import { IQuadradicVoting } from "@components/dao/proposal/vote/YesNo/Actions/QuadraticVoting";
 import { IDaoDescription } from "@components/dao/proposal/vote/YesNo/Actions/DaoDescription";
-import { IVoteDuration } from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
+import VoteDuration, {
+  IVoteDuration,
+} from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import { ISupport } from "@components/dao/proposal/vote/YesNo/Actions/Support";
 import { OptionType } from "@components/dao/proposal/vote/Options/OptionSystemSelector";
 import CancelLink from "@components/utilities/CancelLink";
@@ -77,7 +79,7 @@ export type VotingType = "yes/no" | "options" | "unselected";
 
 const NERGs = 1000000000;
 const TIME_MS = 1000;
-const BUFFER = 3600 * TIME_MS;
+const BUFFER = 900 * TIME_MS;
 
 export interface IProposal {
   id?: string;
@@ -116,6 +118,8 @@ export interface ICreateProposalErrors {
   category: boolean;
   voting: boolean;
   actionConfig: boolean;
+  votingDuration: boolean;
+  activationTime: boolean;
 }
 
 const defaultErrors: ICreateProposalErrors = {
@@ -123,6 +127,8 @@ const defaultErrors: ICreateProposalErrors = {
   category: false,
   voting: false,
   actionConfig: false,
+  votingDuration: true,
+  activationTime: true,
 };
 
 const CreateProposal: React.FC = () => {
@@ -172,7 +178,9 @@ const CreateProposal: React.FC = () => {
         ).data;
         setStake(stake);
         if (!stake.stake_keys?.length) {
-          api.error("Stake Key is not present");
+          api.error(
+            "Stake key either not present or in use on another transaction, add stake now"
+          );
         }
       } catch (e: any) {
         api.error(e);
@@ -187,7 +195,7 @@ const CreateProposal: React.FC = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const error = validateErrors(value, errors, setErrors);
+      const error = validateErrors(value, governance, errors, setErrors);
       if (error) {
         throw "Form Validation Error";
       }
@@ -213,24 +221,25 @@ const CreateProposal: React.FC = () => {
         stake_key: stake.stake_keys[0].key_id,
         end_time:
           new Date().getTime() +
-          governance?.vote_duration__sec * TIME_MS +
+          // @ts-ignore
+          value.actions[0].data.voting_duration * TIME_MS +
           BUFFER,
       };
-      // const data = (
-      //   await context.api.post<any>("/proposals/on_chain_proposal", proposal)
-      // ).data;
-      // const tx = data.unsigned_transaction;
-      // const ergoContext = await getErgoWalletContext();
-      // const signed = await ergoContext.sign_tx(tx);
-      // const txId = await ergoContext.submit_tx(signed);
-      // context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      const data = (
+        await context.api.post<any>("/proposals/on_chain_proposal", proposal)
+      ).data;
+      const tx = data.unsigned_transaction;
+      const ergoContext = await getErgoWalletContext();
+      const signed = await ergoContext.sign_tx(tx);
+      const txId = await ergoContext.submit_tx(signed);
+      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
       setPublish(false);
-      // router.push(
-      //   `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
-      //     data.proposal.id,
-      //     data.proposal.name
-      //   )}`
-      // );
+      router.push(
+        `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
+          data.proposal.id,
+          data.proposal.name
+        )}`
+      );
     } catch (e: any) {
       api.error(e);
     }
@@ -355,7 +364,7 @@ const CreateProposal: React.FC = () => {
             governance?.support_needed / 10
           }% support and ${
             governance?.quorum / 10
-          }% quorum of the full DAO. Voting duration is ${
+          }% quorum of the full DAO. Minimum voting duration is ${
             governance?.vote_duration__sec
           } seconds. You can find more information about this on the DAO Config.`}
         />
@@ -431,6 +440,7 @@ const CreateProposal: React.FC = () => {
 
 const validateErrors = (
   value: IProposal,
+  governance: any,
   errors: ICreateProposalErrors,
   setErrors: Function
 ) => {
@@ -452,8 +462,30 @@ const validateErrors = (
     isNaN(value.actions[0].data.recipients[0].ergs) ||
     // @ts-ignore
     isNaN(value.actions[0].data.recipients[0].tokens);
+  if (!errors.actionConfig) {
+    const endTime =
+      new Date().getTime() +
+      // @ts-ignore
+      value.actions[0].data.voting_duration * TIME_MS +
+      BUFFER;
+    // @ts-ignore
+    const actionTime = value.actions[0].data.activation_time;
+    errors.activationTime =
+      isNaN(actionTime) || isNaN(endTime) || actionTime < endTime;
+    errors.votingDuration =
+      isNaN(endTime) ||
+      new Date().getTime() + Number(governance?.vote_duration__sec) * TIME_MS >=
+        endTime;
+  }
   setErrors(errors);
-  return errors.category || errors.name || errors.voting || errors.actionConfig;
+  return (
+    errors.category ||
+    errors.name ||
+    errors.voting ||
+    errors.actionConfig ||
+    errors.activationTime ||
+    errors.votingDuration
+  );
 };
 
 export default CreateProposal;

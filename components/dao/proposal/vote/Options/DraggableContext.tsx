@@ -106,6 +106,7 @@ export const getData = (name: string): ActionType => {
       recipients: [{ address: "", ergs: 0, tokens: 0, token_id: "" }],
       recurring: false,
       activation_time: 0,
+      voting_duration: "0",
     };
   } else if (name === "Create Liquidity Pool") {
     return defaultLiquidityPoolData;
@@ -183,6 +184,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           recipients={(item.data as ISendFunds).recipients}
           recurring={(item.data as ISendFunds).recurring}
           activation_time={0}
+          voting_duration="0"
         />
       );
     } else if (props.name === "Create liquidity pool") {
