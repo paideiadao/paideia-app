@@ -9,6 +9,8 @@ import { getRandomImage } from "@components/utilities/images";
 import Warning from "@components/utilities/Warning";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useContext } from "react";
+import { fetcher } from "@lib/utilities";
+import useSWR from "swr";
 
 interface IVoteWidgetProps {
   yes?: number;
@@ -77,12 +79,26 @@ const LastVotes: React.FC = () => {
 };
 
 const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
-  const context = useContext<IGlobalContext>(GlobalContext)
-  const governance = context.api.daoData?.governance
+  const context = useContext<IGlobalContext>(GlobalContext);
+  const governance = context.api.daoData?.governance;
+  const daoId = context.api.daoData?.id;
   const router = useRouter();
   const { dao, proposal_id } = router.query;
 
-  const quorumInfo = `For this proposal to be approved a quorum of ${governance?.quorum / 10}% and ${governance?.support_needed / 10}% support is needed.`;
+  const { data: stakingData, error: error } = useSWR(
+    daoId && `/staking/dao_stake_info/${daoId}`,
+    fetcher
+  );
+
+  const quorumInfo = `For this proposal to be approved a quorum of ${
+    governance?.quorum / 10
+  }% and ${governance?.support_needed / 10}% support is needed.`;
+  const quorumDetails = `Aleast ${(
+    (stakingData?.total_staked * governance?.quorum) /
+    1000
+  ).toFixed(0)} votes needed to meet ${
+    governance?.quorum / 10
+  }% quorum with the current number of DAO tokens staked.`;
 
   return (
     <>
@@ -163,7 +179,8 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
           </Link>
         </Box>
       </Box>
-      <Warning title="Quorum and Support Needed" subtitle={quorumInfo} />
+      <Warning title="Quorum and Support Details" subtitle={quorumInfo} />
+      <Warning title="Quorum Requirement" subtitle={quorumDetails} />
     </>
   );
 };
