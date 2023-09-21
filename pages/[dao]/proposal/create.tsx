@@ -127,8 +127,8 @@ const defaultErrors: ICreateProposalErrors = {
   category: false,
   voting: false,
   actionConfig: false,
-  votingDuration: true,
-  activationTime: true,
+  votingDuration: false,
+  activationTime: false,
 };
 
 const CreateProposal: React.FC = () => {
