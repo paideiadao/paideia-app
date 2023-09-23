@@ -1,4 +1,13 @@
-import { Avatar, Badge, Box, IconButton, Slide, Skeleton } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Box,
+  IconButton,
+  Slide,
+  Skeleton,
+  useMediaQuery,
+  useTheme
+} from "@mui/material";
 import React, { useEffect } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { DarkTheme } from "@theme/theme";
@@ -23,6 +32,7 @@ import NotificationsPopup from "./NotificationsPopup";
 import CloseIcon from "@mui/icons-material/Close";
 import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
+import DarkSwitch from "@components/utilities/DarkSwitch";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -30,15 +40,26 @@ export interface INav {
 }
 
 const TopNav: React.FC<INav> = (props) => {
+  const theme = useTheme()
+  const desktop = useMediaQuery(theme.breakpoints.up('md'))
+  const router = useRouter()
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (dao !== undefined) {
+      if (!desktop) {
+        router.push(`/${dao}/notifications`)
+      }
+      else {
+        setOpen(true)
+      }
+    }
+  };
   const handleClose = () => setOpen(false);
 
   const [openProfile, setOpenProfile] = React.useState(false);
   const handleOpenProfile = () => setOpenProfile(true);
   const handleCloseProfile = () => setOpenProfile(false);
-  const router = useRouter();
   const { dao } = router.query;
   const { wallet, utxos, dAppWallet } = useWallet();
 
@@ -95,15 +116,15 @@ const TopNav: React.FC<INav> = (props) => {
 
   const { data: notifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
-      `/notificatons/${globalContext.api?.daoUserData?.id}`,
+    `/notificatons/${globalContext.api?.daoUserData?.id}`,
     fetcher
   );
   const unreadCount = notifications
     ? notifications
-        .map((notification: { is_read: boolean }) =>
-          notification.is_read ? 0 : 1
-        )
-        .reduce((a: number, c: number) => a + c, 0)
+      .map((notification: { is_read: boolean }) =>
+        notification.is_read ? 0 : 1
+      )
+      .reduce((a: number, c: number) => a + c, 0)
     : null;
 
   useEffect(() => {
@@ -117,7 +138,7 @@ const TopNav: React.FC<INav> = (props) => {
     if (notificationsError?.response?.status === 401) {
       globalContext.api.error(
         notificationsError.response.data.detail +
-          " - Please reconnect your wallet and refresh"
+        " - Please reconnect your wallet and refresh"
       );
       setTimeout(() => {
         clearWallet();
@@ -139,109 +160,75 @@ const TopNav: React.FC<INav> = (props) => {
           zIndex: 1000,
           position: "sticky",
           top: 0,
+          justifyContent: 'flex-end',
+          alignItems: 'center'
         }}
       >
-        <IconButton
-          color="primary"
-          onClick={() => props.setShowMobile(true)}
-          sx={{ display: deviceWrapper("flex", "none") }}
-        >
-          <MenuIcon color="primary" />
-        </IconButton>
+        <Box sx={{ flexGrow: 1, display: deviceWrapper("flex", "none") }}>
+          <IconButton
+            color="primary"
+            onClick={() => props.setShowMobile(true)}
+          >
+            <MenuIcon color="primary" />
+          </IconButton>
+        </Box>
         <Box
           sx={{
             color: "text.primary",
             backgroundColor: "backgroundColor.main",
-            ml: "auto",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
-            height: "2rem",
-            mr: ".5rem",
+            height: "100%",
           }}
         >
-          {/* {globalContext.api.daoUserData === undefined && (
-            <Box sx={{ width: '200px' }}>
-              <ThemeToggle />
-            </Box>
-          )} */}
+          <Box>
+            <DarkSwitch />
+          </Box>
+          <Box sx={{ mr: '0.5rem' }}>
+            <IconButton
+              onClick={handleOpen}
+              sx={{
+                color: theme.palette.text.secondary
+              }}
+            >
+              <Badge
+                badgeContent={
+                  globalContext.metadata.metadata
+                    .unreadNotificationCount
+                }
+                color="primary"
+              >
+                <NotificationsIcon
+                  sx={{
+                    fontSize: "18px",
+                  }}
+                />
+              </Badge>
+            </IconButton>
+          </Box>
           {globalContext.api.daoUserData !== undefined &&
-          globalContext.api.daoUserData.loading === true ? (
-            <Skeleton variant="rounded" width={210} height={40} />
+            globalContext.api.daoUserData.loading === true ? (
+            <Box sx={{ width: { xs: '40px', md: '160px' } }}>
+              <Skeleton variant={desktop ? 'rounded' : 'circular'} height={40} />
+            </Box>
           ) : (
             globalContext.api.daoUserData !== undefined &&
             isAddressValid(wallet) && (
               <>
-                <Box
-                  sx={{
-                    ml: ".5rem",
-                    mr: ".5rem",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Link href={dao === undefined ? "" : `/${dao}/notifications`}>
-                    <IconButton sx={{ display: deviceWrapper("flex", "none") }}>
-                      <Badge
-                        badgeContent={
-                          globalContext.metadata.metadata
-                            .unreadNotificationCount
-                        }
-                        color="primary"
-                      >
-                        <NotificationsIcon
-                          sx={{
-                            fontSize: "1.1rem",
-                            opacity:
-                              globalContext.api.theme === DarkTheme
-                                ? "1"
-                                : ".5",
-                          }}
-                        />
-                      </Badge>
-                    </IconButton>
-                  </Link>
-                  <IconButton
-                    onClick={handleOpen}
-                    sx={{ display: deviceWrapper("none", "flex") }}
-                  >
-                    <Badge
-                      badgeContent={
-                        globalContext.metadata.metadata.unreadNotificationCount
-                      }
-                      color="primary"
-                    >
-                      <NotificationsIcon
-                        sx={{
-                          fontSize: "1.1rem",
-                          opacity:
-                            globalContext.api.theme === DarkTheme ? "1" : ".5",
-                        }}
-                      />
-                    </Badge>
-                  </IconButton>
-                </Box>
-                {/* <Link
-                href={dao === undefined ? "" : `${dao}/profile`}
-              > */}
                 {globalContext.api.daoUserData !== undefined && (
                   <Box
                     sx={{
-                      ml: ".5rem",
                       display: "flex",
                       alignItems: "center",
                       cursor: "pointer",
-                      mr: ".5rem",
+                      mr: { xs: 'none', md: ".5rem" },
                     }}
                     onClick={handleOpenProfile}
                   >
                     <Avatar
-                      sx={{ mr: ".5rem" }}
-                      src={
-                        globalContext.api.daoUserData !== undefined
-                          ? globalContext.api.daoUserData.profile_img_url
-                          : ""
-                      }
+                      sx={{ mr: { xs: 'none', md: ".5rem" }, height: '32px', width: '32px' }}
+                      src={globalContext.api.daoUserData.profile_img_url}
                     ></Avatar>
                     <Box
                       sx={{
