@@ -63,7 +63,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
   const [filters, setFilters] = React.useState<IFilters>({
     search: "",
     proposalStatus: "",
-    sortBy: "",
+    sortBy: "Most Recent",
     categories: ["All"],
   });
 

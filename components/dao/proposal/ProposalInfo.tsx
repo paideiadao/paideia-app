@@ -107,7 +107,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
             <Typography sx={{ fontWeight: 700 }}>Recurring:</Typography>
             <Typography sx={{ wordBreak: 'break-all' }}>{action.action.repeats ? action.action.repeats : 'N/A'}</Typography>
           </Box>
-          <Typography sx={{ fontWeight: 700 }}>Outputs: </Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1 }}>Outputs: </Typography>
           <Box>
             {action.action.outputs.map(output => (
               <Paper elevation={0} sx={{ background: 'rgba(120,120,120,0.08)', p: 2, borderRadius: '8px' }}>
@@ -123,19 +123,24 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
                   <>
                     <Typography sx={{ fontWeight: 700, mb: 1 }}>Additional tokens: </Typography>
                     {output.tokens.map(([tokenId, _amount]) => (
-                      <Paper elevation={0} sx={{ background: 'rgba(120,120,120,0.08)', p: 2, borderRadius: '8px' }} key={tokenId}>
+                      <Paper elevation={0} sx={{ background: 'rgba(120,120,120,0.08)', p: 2, borderRadius: '8px', mb: 2 }} key={tokenId}>
                         <Box sx={{
                           display: 'flex',
                           flexDirection: mobile ? 'column' : 'row',
                           alignItems: mobile ? 'flex-start' : 'center',
                           justifyContent: 'space-between'
                         }}>
-                          <Typography>{tokenInfos[tokenId] ? 'Name' : 'TokenId'}</Typography>
-                          <Typography sx={{ wordBreak: 'break-all', textAlign: 'right', mt: mobile ? 1 : 0 }}>
+                          <Typography>{tokenInfos[tokenId] ? 'Name:' : 'TokenId:'}</Typography>
+                          <Typography sx={{ wordBreak: 'break-all', textAlign: 'right', mb: mobile ? 1 : 0 }}>
                             {tokenInfos[tokenId] ? tokenInfos[tokenId].name : tokenId}
                           </Typography>
                         </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box sx={{
+                          display: 'flex',
+                          flexDirection: mobile ? 'column' : 'row',
+                          alignItems: mobile ? 'flex-start' : 'center',
+                          justifyContent: 'space-between'
+                        }}>
                           <Typography>Amount:</Typography>
                           <Typography>{tokenAmounts[tokenId] || 'Loading...'}</Typography>
                         </Box>

@@ -29,6 +29,7 @@ import useDidMountEffect from "@components/utilities/hooks";
 import FollowApi from "@lib/FollowApi";
 import { generateSlug } from "@lib/utilities";
 import { SentimentVerySatisfiedOutlined } from "@mui/icons-material";
+import { niceNumber } from "../proposal/VoteWidget";
 
 export interface IProposalCard {
   id: number;
@@ -96,8 +97,8 @@ export const VoteWidget: React.FC<{
           fontSize: "1rem",
         }}
       >
-        {props.yes} votes
-        <Box sx={{ ml: "auto" }}>{props.no} votes</Box>
+        {niceNumber(props.yes)} votes
+        <Box sx={{ ml: "auto" }}>{niceNumber(props.no)} votes</Box>
       </Box>
     </Box>
   );
@@ -169,8 +170,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-    ? 0
-    : undefined;
+      ? 0
+      : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -546,9 +547,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               if (!moved) {
                 router.push(
                   (dao === undefined ? "" : `/${dao}/`) +
-                    `${
-                      !props.is_proposal ? "discussion" : "proposal"
-                    }/${generateSlug(props.id, props.name)}?tab=comments`
+                  `${!props.is_proposal ? "discussion" : "proposal"
+                  }/${generateSlug(props.id, props.name)}?tab=comments`
                 );
               }
             }}
@@ -648,9 +648,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                      `${
-                        !props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                    `${!props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
@@ -706,9 +705,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                      `${
-                        !props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                    `${!props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
