@@ -103,7 +103,7 @@ export const getData = (name: string): ActionType => {
     };
   } else if (name === "Send Funds") {
     return {
-      recipients: [{ address: "", ergs: 0, tokens: 0, token_id: "" }],
+      recipients: [{ address: "", ergs: 0, tokens: [] }],
       recurring: false,
       activation_time: 0,
       voting_duration: "0",

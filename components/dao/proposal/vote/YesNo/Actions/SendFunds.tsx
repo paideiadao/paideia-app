@@ -12,12 +12,12 @@ import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
 import AbstractDate from "@components/creation/utilities/AbstractDate";
+import { ITokenAmountDetails } from "@components/utilities/MultiTokenAmountSelector";
 
 export interface ISendFundsRecipient {
   address: string;
   ergs: number;
-  token_id: string;
-  tokens: number;
+  tokens: ITokenAmountDetails[];
 }
 
 export interface ISendFunds {
@@ -30,7 +30,7 @@ export interface ISendFunds {
 const SendFunds: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<ISendFunds>({
-    recipients: [{ address: "", ergs: 0, tokens: 0, token_id: "" }],
+    recipients: [{ address: "", ergs: 0, tokens: [] }],
     recurring: false,
     voting_duration: (24 * 60 * 60).toString(),
     activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,

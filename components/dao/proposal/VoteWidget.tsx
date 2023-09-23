@@ -1,18 +1,22 @@
 import { FC, useContext, useState, useEffect } from "react";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Avatar, Box, Button, LinearProgress, LinearProgressProps, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Typography,
+} from "@mui/material";
 import { VoteWidget } from "../proposals/ProposalCard";
 import dateFormat from "dateformat";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { deviceWrapper } from "@components/utilities/Style";
 import { getRandomImage } from "@components/utilities/images";
-import Warning from "@components/utilities/Warning";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface IVoteWidgetProps {
   yes?: number;
@@ -27,8 +31,8 @@ interface ILastVote {
 }
 
 export const niceNumber = (number: number) => {
-  return Number(number.toFixed(0)).toLocaleString()
-}
+  return Number(number.toFixed(0)).toLocaleString();
+};
 
 const LastVotes: React.FC = () => {
   const lastVotes: ILastVote[] = [
@@ -96,16 +100,18 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
     fetcher
   );
 
-  // const quorumInfo = `For this proposal to be approved a quorum of 
-  // ${governance?.quorum / 10}% and ${governance?.support_needed / 10}% 
+  // const quorumInfo = `For this proposal to be approved a quorum of
+  // ${governance?.quorum / 10}% and ${governance?.support_needed / 10}%
   // support is needed.`;
 
-  const quorumNumberNeeded = ((stakingData?.total_staked * governance?.quorum) / 1000)
-  const current = (props.yes + props.no)
-  const quorumPct = (governance?.quorum / 10)
-  const percentValue = ((current) / quorumNumberNeeded * 100)
-  const supportMet = (props.yes / current * 100) >= (governance?.support_needed / 10)
-  // const quorumDetails = `Aleast ${numberNeeded.toFixed(0).toLocaleString()} votes needed to meet ${governance?.quorum / 10}% 
+  const quorumNumberNeeded =
+    (stakingData?.total_staked * governance?.quorum) / 1000;
+  const current = props.yes + props.no;
+  const quorumPct = governance?.quorum / 10;
+  const percentValue = (current / quorumNumberNeeded) * 100;
+  const supportMet =
+    (props.yes / current) * 100 >= governance?.support_needed / 10;
+  // const quorumDetails = `Aleast ${numberNeeded.toFixed(0).toLocaleString()} votes needed to meet ${governance?.quorum / 10}%
   // quorum with the current number of DAO tokens staked.`;
 
   return (
@@ -188,28 +194,34 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
         </Box>
       </Box>
       <Box>
-        <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+        <Box sx={{ display: "flex", direction: "row", alignItems: "center" }}>
           {supportMet ? <CheckIcon /> : <CloseIcon />}
-          <Typography sx={{ fontSize: '14px' }}>
-            {governance?.support_needed / 10}% support {supportMet ? 'met' : 'required'}
+          <Typography sx={{ fontSize: "14px" }}>
+            {governance?.support_needed / 10}% Support{" "}
+            {supportMet ? "Met" : "Required"}
           </Typography>
         </Box>
       </Box>
       <Box sx={{ mb: 2 }}>
         <Box>
-          {percentValue > 100
-            ? <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+          {percentValue > 100 ? (
+            <Box
+              sx={{ display: "flex", direction: "row", alignItems: "center" }}
+            >
               <CheckIcon />
-              <Typography sx={{ fontSize: '14px' }}>Quorum achieved</Typography>
+              <Typography sx={{ fontSize: "14px" }}>Quorum Achieved</Typography>
             </Box>
-            :
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+          ) : (
+            <Box
+              sx={{ display: "flex", direction: "row", alignItems: "center" }}
+            >
               <CloseIcon />
-              <Typography sx={{ fontSize: '14px' }}>
-                {niceNumber(quorumNumberNeeded - current)} more votes required to meet {quorumPct.toFixed(0)}% quorum
+              <Typography sx={{ fontSize: "14px" }}>
+                {niceNumber(quorumNumberNeeded - current)} more votes required
+                to meet {quorumPct.toFixed(0)}% Quorum
               </Typography>
             </Box>
-          }
+          )}
         </Box>
       </Box>
       {/* <Warning title="Quorum and Support Details" subtitle={quorumInfo} /> */}

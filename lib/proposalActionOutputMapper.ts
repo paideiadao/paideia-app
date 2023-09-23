@@ -1,9 +1,10 @@
+import { ITokenAmountDetails } from "@components/utilities/MultiTokenAmountSelector";
+
 export const bPaideiaSendFundsBasic = (
   address: string,
   nergs: number,
-  tokens: number,
-  token_id: string,
-  activation_time: number,
+  tokens: ITokenAmountDetails[],
+  activation_time: number
 ): any => {
   return {
     actionType: "SendFundsBasic",
@@ -14,7 +15,13 @@ export const bPaideiaSendFundsBasic = (
         {
           address: address,
           nergs: nergs + 1000000,
-          tokens: [[token_id, tokens]],
+          // tokens: [[token_id, tokens]],
+          tokens: tokens.map((token) => {
+            return [
+              token.tokenId,
+              Number(token.amount) * Math.pow(10, token.decimals),
+            ];
+          }),
           registers: [],
         },
       ],

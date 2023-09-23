@@ -17,6 +17,7 @@ import { ISendFundsRecipient } from "@components/dao/proposal/vote/YesNo/Actions
 import { IGlobalContext, GlobalContext } from "@lib/AppContext";
 import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
+import MultiTokenAmountSelector from "./MultiTokenAmountSelector";
 
 interface IMultiTokenHolders {
   recipients: ISendFundsRecipient[];
@@ -38,164 +39,88 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
     <>
       {props.recipients.map((i: ISendFundsRecipient, c: number) => {
         return (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flexWrap: deviceWrapper("wrap", "nowrap"),
-              mt: "1rem",
-            }}
-            key={`${c}-token-holder`}
-          >
+          <>
             <Box
               sx={{
-                width: deviceWrapper("100%", "50%"),
-                mr: ".5rem",
-                mb: deviceWrapper(".75rem", "0"),
                 display: "flex",
                 alignItems: "center",
+                flexWrap: deviceWrapper("wrap", "nowrap"),
+                mt: "1rem",
               }}
+              key={`${c}-token-holder`}
             >
-              <TextField
-                label="Wallet Address"
-                sx={{ width: "100%" }}
-                value={i.address}
-                onChange={(e) => {
-                  const temp = [...props.recipients];
-                  temp[c] = { ...i, address: e.target.value };
-                  props.set(temp);
+              <Box
+                sx={{
+                  width: deviceWrapper("100%", "50%"),
+                  mr: ".5rem",
+                  mb: deviceWrapper(".75rem", "0"),
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: deviceWrapper("100%", "50%"),
-                mr: ".5rem",
-                mb: deviceWrapper(".75rem", "0"),
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                label="Ergs"
-                sx={{ width: "100%" }}
-                value={i.ergs}
-                onChange={(e) => {
-                  const temp = [...props.recipients];
-                  temp[c] = {
-                    ...i,
-                    // @ts-ignore
-                    ergs: e.target.value,
-                  };
-                  props.set(temp);
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: deviceWrapper("100%", "50%"),
-                mr: ".5rem",
-                mb: deviceWrapper(".75rem", "0"),
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="token-select-label">Token Name</InputLabel>
-                <Select
-                  labelId="token-select-label"
-                  id="token-select"
+              >
+                <TextField
+                  label="Wallet Address"
                   sx={{ width: "100%" }}
-                  label="Token Name"
-                  value={i.token_id}
+                  value={i.address}
+                  onChange={(e) => {
+                    const temp = [...props.recipients];
+                    temp[c] = { ...i, address: e.target.value };
+                    props.set(temp);
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  width: deviceWrapper("100%", "50%"),
+                  mr: ".5rem",
+                  mb: deviceWrapper(".75rem", "0"),
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <TextField
+                  label="Ergs"
+                  sx={{ width: "100%" }}
+                  value={i.ergs}
                   onChange={(e) => {
                     const temp = [...props.recipients];
                     temp[c] = {
                       ...i,
                       // @ts-ignore
-                      token_id: e.target.value,
+                      ergs: e.target.value,
                     };
                     props.set(temp);
                   }}
-                >
-                  {tokens.map(
-                    (tokenDetails: { tokenId: string; name: string }) => (
-                      <MenuItem value={tokenDetails.tokenId}>
-                        {tokenDetails.name}
-                      </MenuItem>
-                    )
-                  )}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box
-              sx={{
-                width: deviceWrapper("100%", "50%"),
-                mr: ".5rem",
-                mb: deviceWrapper(".75rem", "0"),
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <TextField
-                label="Token Amount"
-                sx={{ width: "100%" }}
-                value={
-                  isNaN(
-                    i.tokens /
-                      Math.pow(
-                        10,
-                        tokens.filter(
-                          (tokenDetails: { tokenId: string }) =>
-                            tokenDetails.tokenId === i.token_id
-                        )[0]?.decimals ?? 0
-                      )
-                  )
-                    ? i.tokens
-                    : i.tokens /
-                      Math.pow(
-                        10,
-                        tokens.filter(
-                          (tokenDetails: { tokenId: string }) =>
-                            tokenDetails.tokenId === i.token_id
-                        )[0]?.decimals ?? 0
-                      )
-                }
-                onChange={(e) => {
-                  const tokenDetails = tokens.filter(
-                    (tokenDetails: { tokenId: string }) =>
-                      tokenDetails.tokenId === i.token_id
-                  )[0];
-                  const tokenDecimals = tokenDetails?.decimals ?? 0;
-                  const temp = [...props.recipients];
-                  temp[c] = {
-                    ...i,
-                    // @ts-ignore
-                    tokens: isNaN(e.target.value * Math.pow(10, tokenDecimals))
-                      ? e.target.value
-                      // @ts-ignore
-                      : e.target.value * Math.pow(10, tokenDecimals),
-                  };
-                  props.set(temp);
-                }}
-              />
-            </Box>
-            {props.recipients.length > 1 && (
-              <IconButton
-                sx={{ display: deviceWrapper("none", "flex"), ml: ".5rem" }}
-                size="small"
-              >
-                <DeleteIcon
-                  color="error"
-                  onClick={() => {
-                    const temp = [...props.recipients];
-                    temp.splice(c, 1);
-                    props.set(temp);
-                  }}
                 />
-              </IconButton>
-            )}
-          </Box>
+              </Box>
+              {props.recipients.length > 1 && (
+                <IconButton
+                  sx={{ display: deviceWrapper("none", "flex"), ml: ".5rem" }}
+                  size="small"
+                >
+                  <DeleteIcon
+                    color="error"
+                    onClick={() => {
+                      const temp = [...props.recipients];
+                      temp.splice(c, 1);
+                      props.set(temp);
+                    }}
+                  />
+                </IconButton>
+              )}
+            </Box>
+            <MultiTokenAmountSelector
+              tokens={tokens}
+              setTokens={(tokenDetails: any) => {
+                const temp = [...props.recipients];
+                temp[c] = {
+                  ...i,
+                  tokens: tokenDetails,
+                };
+                props.set(temp);
+              }}
+            />
+          </>
         );
       })}
       <Box
@@ -214,9 +139,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
           endIcon={<AddIcon />}
           onClick={() => {
             let temp = [...props.recipients];
-            props.set(
-              temp.concat([{ address: "", ergs: 0, tokens: 0, token_id: "" }])
-            );
+            props.set(temp.concat([{ address: "", ergs: 0, tokens: [] }]));
           }}
         >
           Add Another

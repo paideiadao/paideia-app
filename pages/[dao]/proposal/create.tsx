@@ -48,19 +48,17 @@ export type ActionType =
   | IVoteDuration
   | ISupport;
 
-
-
 export interface IProposalAction {
   name:
-  | "Send Funds"
-  | "Create Liquidity Pool"
-  | "Change DAO's Description"
-  | "Quadratic Voting"
-  | "Vote Duration"
-  | "Support"
-  | "Quorum"
-  | "Optimistic Governance"
-  | undefined;
+    | "Send Funds"
+    | "Create Liquidity Pool"
+    | "Change DAO's Description"
+    | "Quadratic Voting"
+    | "Vote Duration"
+    | "Support"
+    | "Quorum"
+    | "Optimistic Governance"
+    | undefined;
   icon?: React.ReactNode;
   description?: string;
   data: ActionType;
@@ -68,7 +66,7 @@ export interface IProposalAction {
   c?: number;
   options?: IProposalOption[];
   actionType?: string;
-  action?: IAction
+  action?: IAction;
 }
 
 export type Output = {
@@ -227,7 +225,6 @@ const CreateProposal: React.FC = () => {
         value.actions[0].data.recipients[0].ergs * NERGs,
         // @ts-ignore
         value.actions[0].data.recipients[0].tokens,
-        tokenomics?.token_id,
         // @ts-ignore
         value.actions[0].data.activation_time
       );
@@ -380,10 +377,13 @@ const CreateProposal: React.FC = () => {
         <Box sx={{ mt: "1rem" }} />
         <Warning
           title="What would it take to get this proposal approved?"
-          subtitle={`Because of the DAO's configuration, in order for this proposal to be approved it will need to have at least ${governance?.support_needed / 10
-            }% support and ${governance?.quorum / 10
-            }% quorum of the full DAO. Minimum voting duration is ${governance?.vote_duration__sec
-            } seconds. You can find more information about this on the DAO Config.`}
+          subtitle={`Because of the DAO's configuration, in order for this proposal to be approved it will need to have at least ${
+            governance?.support_needed / 10
+          }% support and ${
+            governance?.quorum / 10
+          }% quorum of the full DAO. Minimum voting duration is ${
+            governance?.vote_duration__sec
+          } seconds. You can find more information about this on the DAO Config.`}
         />
         <Box
           sx={{
@@ -474,11 +474,16 @@ const validateErrors = (
     // @ts-ignore
     value.actions[0].data.recipients[0].ergs === "" ||
     // @ts-ignore
-    value.actions[0].data.recipients[0].tokens === "" ||
-    // @ts-ignore
     isNaN(value.actions[0].data.recipients[0].ergs) ||
     // @ts-ignore
-    isNaN(value.actions[0].data.recipients[0].tokens);
+    value.actions[0].data.recipients[0].tokens.some(
+      // @ts-ignore
+      (token) =>
+        isNaN(token.amount) ||
+        token.amount === "" ||
+        token.amount === "0" ||
+        token.tokenId === ""
+    );
   if (!errors.actionConfig) {
     const endTime =
       new Date().getTime() +
@@ -492,7 +497,7 @@ const validateErrors = (
     errors.votingDuration =
       isNaN(endTime) ||
       new Date().getTime() + Number(governance?.vote_duration__sec) * TIME_MS >=
-      endTime;
+        endTime;
   }
   setErrors(errors);
   return (
