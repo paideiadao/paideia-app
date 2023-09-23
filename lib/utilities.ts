@@ -1,6 +1,6 @@
-import axios from "axios";
-import { IObj } from "@lib/Interfaces";
 import { IAlerts, ValidAlert } from "@components/utilities/Alert";
+import { IObj } from "@lib/Interfaces";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 type RequestType = "POST" | "PUT" | "GET" | "PATCH" | "DELETE";
@@ -120,7 +120,7 @@ export const getWsUrl = (): string => {
 
 export class AbstractApi {
   alert: IAlerts[] = [];
-  setAlert: (val: IAlerts[]) => void = () => {};
+  setAlert: (val: IAlerts[]) => void = () => { };
 
   webSocket(request_id: string): WebSocket {
     const ws = new WebSocket(`${process.env.WSS_URL}/auth/ws/${request_id}`);
@@ -213,10 +213,10 @@ export class AbstractApi {
       typeof err === "string"
         ? err
         : err?.response
-        ? err.response.status === 401
-          ? err.response.data.detail
-          : err.response.data
-        : bMessage;
+          ? err.response.status === 401
+            ? err.response.data.detail
+            : err.response.data
+          : bMessage;
     if (this !== undefined)
       this.showAlert(
         typeof message === "string" ? message : JSON.stringify(message),

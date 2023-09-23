@@ -8,7 +8,6 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import ThemeToggle from "./ThemeToggle";
 import {
   DAPP_CONNECTED,
   WALLET_ADDRESS,
@@ -157,10 +156,10 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
           <ProfilePopupRow {...i} key={`profile-popup-row-${c}`} />
         ))}
       </Box>
-      <Box sx={{ mt: ".75rem", mb: ".75rem", ml: ".75rem" }}>
+      {/* <Box sx={{ mt: ".75rem", mb: ".75rem", ml: ".75rem" }}>
         <CapsInfo title="Appearance" small mb=".5rem" />
         <ThemeToggle />
-      </Box>
+      </Box> */}
       <Button
         sx={{
           width: "100%",

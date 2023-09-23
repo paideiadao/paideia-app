@@ -105,9 +105,9 @@ const Nav: FC<INavProps> = ({ value }) => {
             <img src={logo.src} />
           </Box>
           <Box sx={{ ml: "auto", display: "flex", alignItems: "center" }}>
-            <Box sx={{ width: "180px" }}>
+            {/* <Box sx={{ width: "180px" }}>
               <ThemeToggle />
-            </Box>
+            </Box> */}
             <Button
               variant="outlined"
               color="error"
