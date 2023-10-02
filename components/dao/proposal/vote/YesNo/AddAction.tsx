@@ -28,6 +28,7 @@ import OptimisticGovernance from "./Actions/OptimisticGovernance";
 import { deviceWrapper } from "@components/utilities/Style";
 import ActionSelect from "./ActionSelect";
 import { getData } from "../Options/DraggableContext";
+import UpdateConfig from "./Actions/UpdateConfig";
 
 export interface IActionType {
   title:
@@ -39,6 +40,7 @@ export interface IActionType {
     | "Support"
     | "Quorum"
     | "Optimistic Governance"
+    | "Update DAO Config"
     | undefined;
   subtitle: string;
   icon: JSX.Element;
@@ -52,6 +54,8 @@ const renderDisplay = (display: string, props: IProposalAction) => {
       return <QuadraticVoting {...props} />;
     case "Send Funds":
       return <SendFunds {...props} />;
+    case "Update DAO Config":
+      return <UpdateConfig {...props} />;
     case "Create Liquidity Pool":
       return <LiquidityPool {...props} />;
     case "Change DAO's Description":
@@ -73,6 +77,12 @@ const AddAction: React.FC<IProposalAction> = (props) => {
       title: "Send Funds",
       subtitle: "Propose to send an amount of fund to one or multiple wallets",
       icon: <AttachMoneyIcon />,
+      mostCommon: true,
+    },
+    {
+      title: "Update DAO Config",
+      subtitle: "Propose to update the Dao Config values",
+      icon: <SettingsIcon />,
       mostCommon: true,
     },
     // {

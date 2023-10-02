@@ -30,3 +30,27 @@ export const bPaideiaSendFundsBasic = (
     },
   };
 };
+
+export const bPaideiaUpdateDAOConfig = (
+  actionType: string,
+  key: string,
+  type: string,
+  value: string,
+  activation_time: number
+): any => {
+  const field = {
+    key: key,
+    valueType: type,
+    value: value,
+  };
+  return {
+    actionType: "UpdateConfig",
+    action: {
+      optionId: 1,
+      activationTime: activation_time,
+      remove: actionType === "remove" ? [field] : [],
+      update: actionType === "update" ? [field] : [],
+      insert: actionType === "insert" ? [field] : [],
+    },
+  };
+};

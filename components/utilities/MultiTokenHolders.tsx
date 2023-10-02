@@ -39,7 +39,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
     <>
       {props.recipients.map((i: ISendFundsRecipient, c: number) => {
         return (
-          <>
+          <React.Fragment key={`${c}-token-holder-fragment`}>
             <Box
               sx={{
                 display: "flex",
@@ -120,7 +120,7 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
                 props.set(temp);
               }}
             />
-          </>
+          </React.Fragment>
         );
       })}
       <Box

@@ -33,10 +33,14 @@ import VoteDuration, {
 import { ISupport } from "@components/dao/proposal/vote/YesNo/Actions/Support";
 import { OptionType } from "@components/dao/proposal/vote/Options/OptionSystemSelector";
 import CancelLink from "@components/utilities/CancelLink";
-import { bPaideiaSendFundsBasic } from "@lib/proposalActionOutputMapper";
+import {
+  bPaideiaSendFundsBasic,
+  bPaideiaUpdateDAOConfig,
+} from "@lib/proposalActionOutputMapper";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
 import { useState, useContext, useEffect } from "react";
 import { generateSlug } from "@lib/utilities";
+import { IUpdateConfig } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -46,11 +50,13 @@ export type ActionType =
   | IQuadradicVoting
   | IDaoDescription
   | IVoteDuration
-  | ISupport;
+  | ISupport
+  | IUpdateConfig;
 
 export interface IProposalAction {
   name:
     | "Send Funds"
+    | "Update DAO Config"
     | "Create Liquidity Pool"
     | "Change DAO's Description"
     | "Quadratic Voting"
@@ -218,16 +224,32 @@ const CreateProposal: React.FC = () => {
         throw "Form Validation Error";
       }
       const imgUrl = await getBannerUrl();
-      const action = bPaideiaSendFundsBasic(
-        // @ts-ignore
-        value.actions[0].data.recipients[0].address,
-        // @ts-ignore
-        value.actions[0].data.recipients[0].ergs * NERGs,
-        // @ts-ignore
-        value.actions[0].data.recipients[0].tokens,
-        // @ts-ignore
-        value.actions[0].data.activation_time
-      );
+      const action =
+        value.actions[0].name === "Send Funds"
+          ? bPaideiaSendFundsBasic(
+              // @ts-ignore
+              value.actions[0].data.recipients[0].address,
+              // @ts-ignore
+              value.actions[0].data.recipients[0].ergs * NERGs,
+              // @ts-ignore
+              value.actions[0].data.recipients[0].tokens,
+              // @ts-ignore
+              value.actions[0].data.activation_time
+            )
+          : value.actions[0].name === "Update DAO Config"
+          ? bPaideiaUpdateDAOConfig(
+              // @ts-ignore
+              value.actions[0].data.action_type,
+              // @ts-ignore
+              value.actions[0].data.key,
+              // @ts-ignore
+              value.actions[0].data.type,
+              // @ts-ignore
+              value.actions[0].data.value,
+              // @ts-ignore
+              value.actions[0].data.activation_time
+            )
+          : {}; // should never occur
       const proposal = {
         dao_id: context.api.daoData?.id,
         user_details_id: context.api.daoUserData?.id,
@@ -466,25 +488,47 @@ const validateErrors = (
   errors.voting = // @ts-ignore
     value.actions.length !== 1 ||
     // @ts-ignore
-    value.actions[0].data?.recipients?.length !== 1;
-  errors.actionConfig =
-    errors.voting ||
-    // @ts-ignore
-    value.actions[0].data.recipients[0].address === "" ||
-    // @ts-ignore
-    value.actions[0].data.recipients[0].ergs === "" ||
-    // @ts-ignore
-    isNaN(value.actions[0].data.recipients[0].ergs) ||
-    // @ts-ignore
-    value.actions[0].data.recipients[0].tokens.some(
+    (value.actions[0].name === "Send Funds" &&
       // @ts-ignore
-      (token) =>
-        isNaN(token.amount) ||
-        token.amount === "" ||
-        token.amount === "0" ||
-        token.tokenId === ""
-    );
-  if (!errors.actionConfig) {
+      value.actions[0].data?.recipients?.length !== 1);
+  // @ts-ignore
+  if (!errors.voting && value.actions[0].name === "Send Funds") {
+    errors.actionConfig =
+      errors.voting ||
+      // @ts-ignore
+      value.actions[0].data.recipients[0].address === "" ||
+      // @ts-ignore
+      value.actions[0].data.recipients[0].ergs === "" ||
+      // @ts-ignore
+      isNaN(value.actions[0].data.recipients[0].ergs) ||
+      // @ts-ignore
+      value.actions[0].data.recipients[0].tokens.some(
+        // @ts-ignore
+        (token) =>
+          isNaN(token.amount) ||
+          token.amount === "" ||
+          token.amount === "0" ||
+          token.tokenId === ""
+      );
+  } else if (
+    !errors.voting &&
+    // @ts-ignore
+    value.actions[0].name === "Update DAO Config"
+  ) {
+    errors.actionConfig =
+      errors.voting ||
+      // @ts-ignore
+      value.actions[0].data.action_type === "" ||
+      // @ts-ignore
+      value.actions[0].data.key === "" ||
+      // @ts-ignore
+      value.actions[0].data.type === "" ||
+      // @ts-ignore
+      value.actions[0].data.value === "";
+  } else {
+    errors.voting = true; // should never occur
+  }
+  if (!errors.voting && !errors.actionConfig) {
     const endTime =
       new Date().getTime() +
       // @ts-ignore
