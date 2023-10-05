@@ -174,6 +174,7 @@ const CommentInput: React.FC<{
               <AttachFileIcon color="primary" />
             </IconButton>
             <Button
+              disabled={value.length === 0}
               variant="contained"
               size="small"
               onClick={() => {

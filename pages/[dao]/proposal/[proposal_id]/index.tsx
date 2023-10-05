@@ -92,8 +92,7 @@ const Proposal: React.FC = () => {
   }, [parsed_proposal_id]);
 
   useDidMountEffect(() => {
-    const temp = [...liveComments];
-    temp.push(newestComment);
+    const temp = [...liveComments, newestComment];
     setLiveComments(temp);
   }, [newestComment]);
 
@@ -188,7 +187,7 @@ const Proposal: React.FC = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Header title="Proposal name" large bold />
+                    <Header title={value.name} large bold />
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Chip
                         label={value.status}
@@ -414,7 +413,14 @@ const Proposal: React.FC = () => {
                       <Tab label="Proposal Info" value="0" />
                       <Tab
                         label={`Comments | ${
-                          value.comments.length + liveComments.length
+                          value.comments
+                            .concat(liveComments)
+                            .filter((x) => x)
+                            .filter(
+                              (v, i, a) =>
+                                a.map((comment) => comment.id).indexOf(v.id) ===
+                                i
+                            ).length
                         }`}
                         value="1"
                       />
@@ -438,7 +444,13 @@ const Proposal: React.FC = () => {
                   </TabPanel>
                   <TabPanel value="1" sx={{ pl: 0, pr: 0 }}>
                     <Comments
-                      data={value.comments.concat(liveComments)}
+                      data={value.comments
+                        .concat(liveComments)
+                        .filter((x) => x)
+                        .filter(
+                          (v, i, a) =>
+                            a.map((comment) => comment.id).indexOf(v.id) === i
+                        )}
                       id={parsed_proposal_id}
                     />
                   </TabPanel>

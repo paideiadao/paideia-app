@@ -10,6 +10,7 @@ import {
 import * as React from "react";
 import { IProposalAction, Output, Token } from "@pages/[dao]/proposal/create";
 import axios from "axios";
+import MarkdownRender from "@lib/MarkdownRender";
 
 interface ProposalInfoProps {
   content: string;
@@ -98,7 +99,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
         {content === undefined ? (
           <Skeleton animation="wave" width="100%" />
         ) : (
-          <Typography>{content}</Typography>
+          <MarkdownRender description={content} />
         )}
       </Box>
       <CapsInfo title="Proposal Actions" />
@@ -159,6 +160,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           <Box>
             {action.action?.outputs?.map((output) => (
               <Paper
+                key={output.address}
                 elevation={0}
                 sx={{
                   background: "rgba(120,120,120,0.08)",

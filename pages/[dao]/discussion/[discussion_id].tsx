@@ -48,7 +48,7 @@ const Discussion: React.FC = () => {
   const router = useRouter();
   const { discussion_id, tab } = router.query;
   const parsed_discussion_id = discussion_id
-    ? (discussion_id as string).split("-").slice(-5).join('-')
+    ? (discussion_id as string).split("-").slice(-5).join("-")
     : null;
   const [loaded, setLoaded] = React.useState<boolean>(false);
   const [newestComment, setNewestComment] = React.useState<IComment>();
@@ -85,9 +85,7 @@ const Discussion: React.FC = () => {
   };
 
   const { data, error } = useSWR(
-    discussion_id && loaded
-      ? `/proposals/${discussion_id}`
-      : null,
+    discussion_id && loaded ? `/proposals/${discussion_id}` : null,
     fetcher
   );
 
@@ -115,8 +113,7 @@ const Discussion: React.FC = () => {
   }, [parsed_discussion_id]);
 
   useDidMountEffect(() => {
-    const temp = [...liveComments];
-    temp.push(newestComment);
+    const temp = [...liveComments, newestComment];
     setLiveComments(temp);
   }, [newestComment]);
 
@@ -499,7 +496,15 @@ const Discussion: React.FC = () => {
                   <Tab label="Discussion Info" value="1" />
                   <Tab
                     label={`Comments | ${
-                      data.comments.length + liveComments.length
+                      data.comments
+                        .concat(liveComments)
+                        .filter((x: any) => x)
+                        .filter(
+                          (v: { id: any }, i: any, a: any[]) =>
+                            a
+                              .map((comment: { id: any }) => comment.id)
+                              .indexOf(v.id) === i
+                        ).length
                     }`}
                     value="2"
                   />
@@ -519,7 +524,15 @@ const Discussion: React.FC = () => {
               </TabPanel>
               <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
                 <Comments
-                  data={data.comments.concat(liveComments)}
+                  data={data.comments
+                    .concat(liveComments)
+                    .filter((x: any) => x)
+                    .filter(
+                      (v: { id: any }, i: any, a: any[]) =>
+                        a
+                          .map((comment: { id: any }) => comment.id)
+                          .indexOf(v.id) === i
+                    )}
                   id={parsed_discussion_id}
                 />
               </TabPanel>
