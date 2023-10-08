@@ -23,21 +23,23 @@ const Transactions: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       setTransactions(
-        transactionData.transactions.map(
-          (transaction: {
-            label: string;
-            transaction_id: string;
-            time: string | number | Date;
-          }) => {
-            return {
-              name: transaction.label,
-              action: "transaction was executed with id",
-              value: transaction.transaction_id,
-              date: new Date(transaction.time),
-              category: transaction.label,
-            };
-          }
-        )
+        transactionData.transactions
+          .map(
+            (transaction: {
+              label: string;
+              transaction_id: string;
+              time: string | number | Date;
+            }) => {
+              return {
+                name: transaction.label,
+                action: "transaction was executed with id",
+                value: transaction.transaction_id,
+                date: new Date(transaction.time),
+                category: transaction.label,
+              };
+            }
+          )
+          .slice(0, 10)
       );
     };
 

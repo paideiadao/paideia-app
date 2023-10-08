@@ -153,7 +153,7 @@ const Funds: React.FC = () => {
               />
             ))}
       </Box>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", my: "1rem" }}>
         <Button
           disabled={funds.length <= 4}
           onClick={() => setShow(!show)}

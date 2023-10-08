@@ -239,6 +239,7 @@ const Proposal: React.FC = () => {
                       likes={value.likes.length}
                       dislikes={value.dislikes.length}
                       userSide={value.userSide}
+                      putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
                   </Box>
                 </Box>
@@ -377,6 +378,7 @@ const Proposal: React.FC = () => {
                           ? 0
                           : undefined
                       }
+                      putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
                   </Box>
                 </Box>

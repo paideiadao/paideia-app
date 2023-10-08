@@ -109,7 +109,7 @@ const getExplorerLinked = (rawContent: string) => {
     return rawContent;
   }
   const txId = parse[2];
-  const href = "https://ergexplorer.com/transactions#" + txId;
+  const href = "https://explorer.ergoplatform.com/en/transactions/" + txId;
   return (
     <Link
       sx={{ textDecoration: "none", color: "white" }}
