@@ -56,9 +56,9 @@ export interface ITokenCheckResponse {
 export interface ITokenCheckNew {
   data: {
     [key: string]: {
-      [key: string]: number
-    }[]
-  }
+      [key: string]: number;
+    }[];
+  };
 }
 
 export interface IDaoMembership {
@@ -66,5 +66,5 @@ export interface IDaoMembership {
   membershipList: {
     token: string;
     value: number;
-  }[]
+  }[];
 }

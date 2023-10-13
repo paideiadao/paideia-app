@@ -12,14 +12,13 @@ import axios from "axios";
 import { parseJSON } from "date-fns";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
-const SimpleMdeEditor = dynamic(
-  () => import("react-simplemde-editor"),
-  { ssr: false }
-);
+const SimpleMdeEditor = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 const Content: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const theme = useTheme()
+  const theme = useTheme();
   const context = React.useContext<IDiscussionContext>(DiscussionContext);
 
   const mdeOptions = useMemo(() => {
@@ -38,16 +37,22 @@ const Content: React.FC = () => {
         const formData = new FormData();
         formData.append("fileobject", file, file.name);
         axios
-          .post(process.env.API_URL + '/util/upload_image_markdown', formData, defaultOptions)
+          .post(
+            process.env.API_URL + "/util/upload_image_markdown",
+            formData,
+            defaultOptions
+          )
           .then((res) => {
             onSuccess(res.data.filePath);
           })
           .catch((error) => {
-            globalContext.api.error('Error ' + error.response.status + ': ' + error.response.data);
+            globalContext.api.error(
+              "Error " + error.response.status + ": " + error.response.data
+            );
           });
       },
-      imagePathAbsolute: true
-    } as SimpleMDEReactProps["options"]
+      imagePathAbsolute: true,
+    } as SimpleMDEReactProps["options"];
   }, []);
 
   return (
@@ -69,61 +74,61 @@ const Content: React.FC = () => {
         sx={
           // theme.palette.mode === 'dark' &&
           {
-            '& .EasyMDEContainer': {
-              '& .cm-formatting-code-block, .cm-comment': {
-                background: 'none',
+            "& .EasyMDEContainer": {
+              "& .cm-formatting-code-block, .cm-comment": {
+                background: "none",
               },
-              '& .editor-toolbar': {
-                borderColor: 'rgba(133, 133, 133, 0.2)',
+              "& .editor-toolbar": {
+                borderColor: "rgba(133, 133, 133, 0.2)",
               },
-              '& .separator': {
-                borderColor: 'rgba(133, 133, 133, 0.2)',
+              "& .separator": {
+                borderColor: "rgba(133, 133, 133, 0.2)",
               },
-              '& button': {
+              "& button": {
                 color: theme.palette.text.secondary,
-                background: '',
-                '& :hover': {
-                  background: theme.palette.background.paper
-                }
+                background: "",
+                "& :hover": {
+                  background: theme.palette.background.paper,
+                },
               },
-              '& button.active': {
+              "& button.active": {
                 background: theme.palette.background.paper,
-                '& button:hover': {
-                  background: theme.palette.background.paper
-                }
+                "& button:hover": {
+                  background: theme.palette.background.paper,
+                },
               },
-              '& .editor-toolbar button:hover': {
-                background: theme.palette.background.paper
+              "& .editor-toolbar button:hover": {
+                background: theme.palette.background.paper,
               },
-              '& .CodeMirror': {
+              "& .CodeMirror": {
                 color: theme.palette.text.primary,
-                background: 'rgba(0,0,0,0)',
-                borderColor: 'rgba(133, 133, 133, 0.2)',
+                background: "rgba(0,0,0,0)",
+                borderColor: "rgba(133, 133, 133, 0.2)",
               },
-              '& .CodeMirror-focused': {
+              "& .CodeMirror-focused": {
                 borderColor: theme.palette.primary.main,
               },
-              '& .CodeMirror-cursor': {
+              "& .CodeMirror-cursor": {
                 borderColor: theme.palette.text.secondary,
               },
-              '& .editor-preview': {
+              "& .editor-preview": {
                 background: theme.palette.background.paper,
-                '& a': {
-                  color: theme.palette.primary.main
+                "& a": {
+                  color: theme.palette.primary.main,
                 },
-                '& a:visited': {
-                  color: theme.palette.primary.main
+                "& a:visited": {
+                  color: theme.palette.primary.main,
                 },
-                '& pre': {
-                  background: 'rgba(144,144,144,0.2)',
-                  padding: '12px',
-                  borderRadius: '6px'
+                "& pre": {
+                  background: "rgba(144,144,144,0.2)",
+                  padding: "12px",
+                  borderRadius: "6px",
                 },
-                '& table td, table th': {
-                  borderColor: 'rgba(144,144,144,0.5)',
-                }
-              }
-            }
+                "& table td, table th": {
+                  borderColor: "rgba(144,144,144,0.5)",
+                },
+              },
+            },
           }
         }
       >

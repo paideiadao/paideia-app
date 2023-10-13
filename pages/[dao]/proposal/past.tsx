@@ -31,7 +31,9 @@ const Past: React.FC = () => {
           console.log(err);
         });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [dao]);
 
   // ADD FILTER FOR proposalData

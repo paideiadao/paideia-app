@@ -9,23 +9,24 @@ import useSWR from "swr";
 // export const getStaticProps = props;
 
 const Profile: FC = () => {
-  const appContext = React.useContext<IGlobalContext>(GlobalContext);
-  const userData = appContext.api.daoUserData;
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
 
   const { data: activitiesData, error } = useSWR(
-    userData !== undefined && `/activities/${userData.id}`,
+    daoUserData !== undefined && `/activities/${daoUserData.id}`,
     fetcher
   );
 
   const { data: proposalsData, error: proposalsError } = useSWR(
-    userData !== undefined && `/proposals/by_user_details_id/${userData.id}`,
+    daoUserData !== undefined &&
+      `/proposals/by_user_details_id/${daoUserData.id}`,
     fetcher
   );
 
   return (
     <AbstractProfile
       edit
-      data={userData}
+      data={daoUserData}
       proposals={proposalsData}
       activities={activitiesData}
     />

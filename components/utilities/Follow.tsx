@@ -48,11 +48,13 @@ export const FollowMobile: React.FC<IFollow> = (props) => {
 const Follow: React.FC<IFollow> = (props) => {
   const [followed, setFollowed] = React.useState<boolean>(props.followed);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const api = new FollowApi(globalContext.api, props.putUrl);
   useDidMountEffect(() => {
     api.follow(
       followed ? "follow" : "unfollow",
-      props.user_id ? props.user_id : globalContext.api.daoUserData.id
+      props.user_id ? props.user_id : daoUserData.id
     );
   }, [followed]);
 

@@ -213,7 +213,11 @@ export const Notification: React.FC<{
         cursor: "pointer",
         ml: deviceWrapper("-1rem", "0"),
       }}
-      onClick={() => router.push(`/${dao}/discussion/${generateSlug(i.proposal_id, i.proposal_name)}`)}
+      onClick={() =>
+        router.push(
+          `/${dao}/discussion/${generateSlug(i.proposal_id, i.proposal_name)}`
+        )
+      }
     >
       {/* <Avatar src={i.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
       <Box

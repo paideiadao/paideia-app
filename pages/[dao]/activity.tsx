@@ -139,9 +139,9 @@ const Activities: FC = () => {
             }}
             placeholder="Search by keyword or user"
             value={filters.search}
-            onChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-              setFilters({ ...filters, search: event.target.value })
-            }
+            onChange={(
+              event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => setFilters({ ...filters, search: event.target.value })}
           />
         </Paper>
         <FormControl

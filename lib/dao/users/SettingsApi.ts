@@ -36,8 +36,10 @@ export default class SettingsApi extends AbstractApi {
   }
 
   edit(): Promise<any> | void {
+    const [daoUserData] = this.api.daoUserState;
+
     return this.put(
-      `/users/profile/settings?user_details_id=${this.api.daoUserData.id}`,
+      `/users/profile/settings?user_details_id=${daoUserData.id}`,
       {
         settings: this.value,
       }

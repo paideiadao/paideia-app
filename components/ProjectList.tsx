@@ -49,8 +49,8 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
         borderColor: "border.main",
         borderRadius: ".3rem",
         width: "100%",
-        height: '100%',
-        position: 'relative',
+        height: "100%",
+        position: "relative",
         ":hover": {
           borderColor: "primary.main",
         },
@@ -115,11 +115,11 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
             sx={{
               fontSize: "14px",
               mb: "24px",
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: '4',
-              WebkitBoxOrient: 'vertical'
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "4",
+              WebkitBoxOrient: "vertical",
             }}
           >
             {dao.dao_short_description}
@@ -135,7 +135,7 @@ const DaoCard: FC<IDaoCard> = ({ dao }) => {
           </Button>
         </Grid>
       </Grid>
-    </Box >
+    </Box>
   );
 };
 
@@ -283,7 +283,7 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
 
   return (
     <>
-      <Grid container sx={{ mt: "0", mb: '24px' }} spacing={3} direction="row">
+      <Grid container sx={{ mt: "0", mb: "24px" }} spacing={3} direction="row">
         <Grid item xs>
           <SearchBar />
         </Grid>
@@ -317,8 +317,10 @@ const ProjectList: FC<IProjectListProps> = ({ daos, sx }) => {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ width: '100%', textAlign: 'center' }}>
-        <Button disabled variant="contained">Load more...</Button>
+      <Box sx={{ width: "100%", textAlign: "center" }}>
+        <Button disabled variant="contained">
+          Load more...
+        </Button>
       </Box>
     </>
   );

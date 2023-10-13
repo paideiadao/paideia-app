@@ -31,7 +31,9 @@ const All: React.FC = () => {
           console.log(err);
         });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [dao]);
 
   return (

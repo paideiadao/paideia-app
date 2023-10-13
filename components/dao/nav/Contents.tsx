@@ -408,6 +408,8 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
   }, [router]);
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   let categories = [
     {
       icon: <BarChartIcon sx={{ opacity: ".8" }} />,
@@ -428,7 +430,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             ml=".5rem"
             link={daoName ? `/${daoName}/proposal` : ""}
           />
-          {globalContext.api.daoUserData && (
+          {daoUserData && (
             <>
               <BasicLink
                 icon={<FavoriteIcon sx={{ opacity: ".8" }} />}
@@ -541,7 +543,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       link: daoName ? `/${daoName}/activity` : "",
       notifications: 0,
     },
-    globalContext.api.daoUserData === undefined
+    daoUserData === undefined
       ? undefined
       : {
           icon: <SettingsIcon sx={{ opacity: ".8" }} />,

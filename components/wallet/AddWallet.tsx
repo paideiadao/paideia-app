@@ -115,6 +115,8 @@ const AddWallet: React.FC = () => {
   };
 
   const clearWallet = () => {
+    const [_, setDaoUserData] = globalContext.api.daoUserState;
+
     // clear state and local storage
     localStorage.setItem(WALLET_ADDRESS, "");
     localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
@@ -123,7 +125,7 @@ const AddWallet: React.FC = () => {
     localStorage.setItem("user_id", "");
     localStorage.setItem("alias", "");
     setWalletInput("");
-    globalContext.api.setDaoUserData(undefined);
+    setDaoUserData(undefined);
     setWallet("");
     // clear dApp state
     setView("listing");
@@ -131,7 +133,7 @@ const AddWallet: React.FC = () => {
       connected: false,
       addresses: [],
     });
-    globalContext.api.setDaoUserData(undefined);
+    setDaoUserData(undefined);
   };
 
   /**

@@ -170,8 +170,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-      ? 0
-      : undefined;
+    ? 0
+    : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -476,10 +476,10 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
   const [moved, setMoved] = React.useState(false);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const getFavoritedSide = (favorites: number[]) => {
-    const userId = globalContext.api.daoUserData
-      ? globalContext.api.daoUserData.id
-      : null;
+    const userId = daoUserData ? daoUserData.id : null;
     return favorites === undefined ? false : favorites.indexOf(userId) > -1;
   };
 
@@ -489,12 +489,10 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       getUserSide(
         props.likes,
         props.dislikes,
-        globalContext.api.daoUserData == null
-          ? null
-          : globalContext.api.daoUserData.id
+        daoUserData == null ? null : daoUserData.id
       )
     );
-  }, [globalContext.api.daoUserData]);
+  }, [daoUserData]);
   const getFooter = () => {
     const footerFont = {
       xs: "1rem",
@@ -547,8 +545,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               if (!moved) {
                 router.push(
                   (dao === undefined ? "" : `/${dao}/`) +
-                  `${!props.is_proposal ? "discussion" : "proposal"
-                  }/${generateSlug(props.id, props.name)}?tab=comments`
+                    `${
+                      !props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}?tab=comments`
                 );
               }
             }}
@@ -589,7 +588,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
     >
       <Badge
         badgeContent={
-          globalContext.api.daoUserData != null && (
+          daoUserData != null && (
             <IconButton
               sx={{
                 backgroundColor: "favoriteBackground.main",
@@ -648,8 +647,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                    `${!props.is_proposal ? "discussion" : "proposal"
-                    }/${generateSlug(props.id, props.name)}`
+                      `${
+                        !props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
@@ -686,9 +686,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   userSide={getUserSide(
                     props.likes,
                     props.dislikes,
-                    globalContext.api.daoUserData == null
-                      ? null
-                      : globalContext.api.daoUserData.id
+                    daoUserData == null ? null : daoUserData.id
                   )}
                   putUrl={`/proposals/like/${props.id}`}
                 />
@@ -705,8 +703,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                    `${!props.is_proposal ? "discussion" : "proposal"
-                    }/${generateSlug(props.id, props.name)}`
+                      `${
+                        !props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}

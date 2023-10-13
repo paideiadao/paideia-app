@@ -1,7 +1,4 @@
-import {
-  CapsInfo,
-  Header,
-} from "@components/creation/utilities/HeaderComponents";
+import { Header } from "@components/creation/utilities/HeaderComponents";
 import {
   Box,
   Button,
@@ -9,11 +6,10 @@ import {
   InputBase,
   Fab,
   Slide,
-  IconButton,
   Grid,
   CircularProgress,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import * as React from "react";
@@ -28,16 +24,14 @@ import StarIcon from "@mui/icons-material/Star";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import GavelIcon from "@mui/icons-material/Gavel";
 import CodeIcon from "@mui/icons-material/Code";
-import ProposalCard, {
-  IProposalCard,
-} from "@components/dao/proposals/ProposalCard";
+import ProposalCard from "@components/dao/proposals/ProposalCard";
 import Chip from "@components/utilities/Chip";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { deviceStruct, deviceWrapper } from "@components/utilities/Style";
+import { deviceWrapper } from "@components/utilities/Style";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import MobileFilters from "./MobileFilters";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
 export interface IFilters {
   search: string;
@@ -60,6 +54,8 @@ interface IProposalListing {
 
 const ProposalListing: React.FC<IProposalListing> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const [filters, setFilters] = React.useState<IFilters>({
     search: "",
     proposalStatus: "",
@@ -72,20 +68,25 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
 
-  const categories = (props.proposals
-    ? ["All",
-      ...props.proposals
-        .map((proposal: { category: string; }) => proposal.category)
-        .filter((v: string, i: number, x: string[]) => v && x.indexOf(v) === i)
-    ]
-    : ["All"])
-    .map((category: string) => {
-      return { icon: categoriesMap[category.toLowerCase()] ?? <StarIcon />, label: category };
-    })
-    ;
-
-  const theme = useTheme()
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const categories = (
+    props.proposals
+      ? [
+          "All",
+          ...props.proposals
+            .map((proposal: { category: string }) => proposal.category)
+            .filter(
+              (v: string, i: number, x: string[]) => v && x.indexOf(v) === i
+            ),
+        ]
+      : ["All"]
+  ).map((category: string) => {
+    return {
+      icon: categoriesMap[category.toLowerCase()] ?? <StarIcon />,
+      label: category,
+    };
+  });
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <>
@@ -99,7 +100,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
           }}
         >
           <Header large title={props.title} />
-          {globalContext.api.daoUserData != undefined ? (
+          {daoUserData != undefined ? (
             <Link href={dao === undefined ? "" : `/${dao}/create`}>
               <Button
                 variant="contained"
@@ -107,13 +108,17 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 endIcon={<AddIcon />}
                 size="small"
               >
-                {!mobile && 'Create '}
+                {!mobile && "Create "}
                 New
               </Button>
             </Link>
           ) : (
-            <Tooltip title="Connect wallet to create proposal" arrow placement="left">
-              <span style={{ marginLeft: 'auto' }}>
+            <Tooltip
+              title="Connect wallet to create proposal"
+              arrow
+              placement="left"
+            >
+              <span style={{ marginLeft: "auto" }}>
                 <Button
                   variant="contained"
                   sx={{ ml: "auto" }}
@@ -121,7 +126,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                   size="small"
                   disabled
                 >
-                  {!mobile && 'Create '}
+                  {!mobile && "Create "}
                   New
                 </Button>
               </span>
@@ -293,20 +298,20 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 filters.sortBy === ""
                   ? true
                   : filters.sortBy === "Most Recent"
-                    ? new Date(b.date).getTime() - new Date(a.date).getTime()
-                    : true
+                  ? new Date(b.date).getTime() - new Date(a.date).getTime()
+                  : true
               )
               .filter((i: any) => {
                 return (
                   (filters.proposalStatus === "" ||
-                    filters.proposalStatus === "All"
+                  filters.proposalStatus === "All"
                     ? true
                     : i.status === filters.proposalStatus) &&
                   (filters.search === ""
                     ? true
                     : i.name
-                      .toLowerCase()
-                      .includes(filters.search.toLowerCase())) &&
+                        .toLowerCase()
+                        .includes(filters.search.toLowerCase())) &&
                   (filters.categories.indexOf("All") > -1
                     ? true
                     : filters.categories.indexOf(i.category) > -1)

@@ -3,9 +3,7 @@ import * as React from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import { GlobalContext } from "@lib/AppContext";
 import { modalBackground } from "@components/utilities/modalBackground";
-import {
-  Header,
-} from "@components/creation/utilities/HeaderComponents";
+import { Header } from "@components/creation/utilities/HeaderComponents";
 import { deviceWrapper } from "@components/utilities/Style";
 import EditFollow from "./EditFollow";
 import { IDaoUserData } from "@lib/Interfaces";
@@ -110,7 +108,7 @@ const ProfileHeader: React.FC<{
                 textOverflow: "ellipsis",
               }}
             >
-                {props.data.name}
+              {props.data.name}
             </Box>
             <Box
               sx={{

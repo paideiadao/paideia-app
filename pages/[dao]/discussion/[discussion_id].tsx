@@ -44,6 +44,7 @@ import CommentsApi from "@lib/CommentsApi";
 const Discussion: React.FC = () => {
   const themeContext = React.useContext(ThemeContext);
   const globalContext = React.useContext(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
 
   const router = useRouter();
   const { discussion_id, tab } = router.query;
@@ -162,13 +163,11 @@ const Discussion: React.FC = () => {
                   alignItems: "center",
                 }}
               >
-                {globalContext.api.daoUserData != null && (
+                {daoUserData != null && (
                   <FollowMobile
                     followed={
                       data.followers.indexOf(
-                        globalContext.api.daoUserData
-                          ? globalContext.api.daoUserData.id
-                          : null
+                        daoUserData ? daoUserData.id : null
                       ) > -1
                     }
                     putUrl={"/proposals/follow/" + parsed_discussion_id}
@@ -187,16 +186,10 @@ const Discussion: React.FC = () => {
                   likes={data.likes.length}
                   dislikes={data.dislikes.length}
                   userSide={
-                    data.likes.indexOf(
-                      globalContext.api.daoUserData
-                        ? globalContext.api.daoUserData.id
-                        : null
-                    ) > -1
+                    data.likes.indexOf(daoUserData ? daoUserData.id : null) > -1
                       ? 1
                       : data.dislikes.indexOf(
-                          globalContext.api.daoUserData
-                            ? globalContext.api.daoUserData.id
-                            : null
+                          daoUserData ? daoUserData.id : null
                         ) > -1
                       ? 0
                       : undefined
@@ -349,14 +342,12 @@ const Discussion: React.FC = () => {
                     display: deviceWrapper("none", "flex"),
                   }}
                 >
-                  {globalContext.api.daoUserData != null && (
+                  {daoUserData != null && (
                     <>
                       <Follow
                         followed={
                           data.followers.indexOf(
-                            globalContext.api.daoUserData
-                              ? globalContext.api.daoUserData.id
-                              : null
+                            daoUserData ? daoUserData.id : null
                           ) > -1
                         }
                         putUrl={"/proposals/follow/" + parsed_discussion_id}
@@ -437,13 +428,11 @@ const Discussion: React.FC = () => {
                         display: deviceWrapper("flex", "none"),
                       }}
                     >
-                      {globalContext.api.daoUserData != null && (
+                      {daoUserData != null && (
                         <Follow
                           followed={
                             data.followers.indexOf(
-                              globalContext.api.daoUserData
-                                ? globalContext.api.daoUserData.id
-                                : null
+                              daoUserData ? daoUserData.id : null
                             ) > -1
                           }
                           putUrl={"/proposals/follow/" + parsed_discussion_id}
@@ -455,15 +444,11 @@ const Discussion: React.FC = () => {
                       dislikes={data.dislikes.length}
                       userSide={
                         data.likes.indexOf(
-                          globalContext.api.daoUserData
-                            ? globalContext.api.daoUserData.id
-                            : null
+                          daoUserData ? daoUserData.id : null
                         ) > -1
                           ? 1
                           : data.dislikes.indexOf(
-                              globalContext.api.daoUserData
-                                ? globalContext.api.daoUserData.id
-                                : null
+                              daoUserData ? daoUserData.id : null
                             ) > -1
                           ? 0
                           : undefined
@@ -579,8 +564,8 @@ const DiscussionOptions: React.FC<{
   callbackHandler: () => void;
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
   const api = new CommentsApi(globalContext.api, props.discussionId);
-  const userData = globalContext.api.daoUserData;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [modalOpen, setModalOpen] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -626,7 +611,7 @@ const DiscussionOptions: React.FC<{
         }}
       >
         <MenuItem
-          disabled={props.userAlias !== userData?.name}
+          disabled={props.userAlias !== daoUserData?.name}
           sx={{ fontSize: "0.7rem", px: 3 }}
           onClick={() => {
             handleModalOpen();

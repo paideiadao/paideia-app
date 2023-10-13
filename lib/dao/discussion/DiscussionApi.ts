@@ -21,9 +21,10 @@ export default class DiscussionApi extends AbstractApi {
   }
 
   cleanData(image_url: string, dao_id: number): IProposalEndpointBody {
+    const [daoUserData] = this.api.daoUserState;
     return {
       dao_id: dao_id,
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: daoUserData.id,
       name: this.value.name,
       image_url: image_url,
       category: this.value.category,

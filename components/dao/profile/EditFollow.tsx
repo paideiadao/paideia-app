@@ -15,9 +15,11 @@ const EditFollow: React.FC<{
 }> = (props) => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const { dao } = router.query;
-  return globalContext.api.daoUserData == null ? null : props.edit ||
-    props.user_id == globalContext.api.daoUserData.id ? (
+  return daoUserData == null ? null : props.edit ||
+    props.user_id == daoUserData.id ? (
     <Link href={dao === undefined ? "" : `/${dao}/profile/edit`}>
       <Button variant="contained" endIcon={<EditIcon />} size="small">
         Edit Profile

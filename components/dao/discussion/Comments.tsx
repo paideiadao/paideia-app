@@ -210,6 +210,8 @@ const BaseComment: React.FC<{
   level?: number;
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   if (props.comment != undefined) {
     const children = props.data.filter(
       (i: IComment) => i?.parent === props.comment.id
@@ -409,9 +411,7 @@ const BaseComment: React.FC<{
                           userSide={getUserSide(
                             props.comment.likes,
                             props.comment.dislikes,
-                            globalContext.api.daoUserData == null
-                              ? null
-                              : globalContext.api.daoUserData.id
+                            daoUserData == null ? null : daoUserData.id
                           )}
                           putUrl={`/proposals/comment/like/${props.comment.id}`}
                         />
@@ -462,7 +462,7 @@ const CommentOptions: React.FC<{
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const api = new CommentsApi(globalContext.api, "");
-  const userData = globalContext.api.daoUserData;
+  const [daoUserData] = globalContext.api.daoUserState;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [modalOpen, setModalOpen] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -506,7 +506,7 @@ const CommentOptions: React.FC<{
         }}
       >
         <MenuItem
-          disabled={props.userAlias !== userData?.name}
+          disabled={props.userAlias !== daoUserData?.name}
           sx={{ fontSize: "0.7rem", px: 3 }}
           onClick={() => {
             handleModalOpen();

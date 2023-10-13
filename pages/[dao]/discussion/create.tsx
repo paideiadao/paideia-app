@@ -220,9 +220,12 @@ const CreateDiscussion: React.FC = () => {
                         );
                         if (res?.status == 200) {
                           router.push(
-                            `/${dao === undefined ? "" : dao}/discussion/${
-                              generateSlug(res.data.id, res.data.name)
-                            }`
+                            `/${
+                              dao === undefined ? "" : dao
+                            }/discussion/${generateSlug(
+                              res.data.id,
+                              res.data.name
+                            )}`
                           );
                         }
                         setLoading(false);

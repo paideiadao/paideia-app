@@ -175,11 +175,11 @@ const Edit: React.FC<{ params: any }> = (props) => {
   });
 
   const [loading, setLoading] = React.useState<boolean>(false);
-
-  const appContext = React.useContext<IGlobalContext>(GlobalContext);
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData, setDaoUserData] = globalContext.api.daoUserState;
 
   React.useEffect(() => {
-    let val = appContext.api.daoUserData;
+    let val = daoUserData;
     if (val !== undefined) {
       setValue({
         username: val.name,
@@ -188,11 +188,11 @@ const Edit: React.FC<{ params: any }> = (props) => {
         shortBio: val.bio,
       });
     }
-  }, [appContext.api.daoUserData]);
+  }, [daoUserData]);
 
   return (
     <Layout>
-      {appContext.api.daoUserData !== undefined && (
+      {daoUserData !== undefined && (
         <>
           <Header title="Edit profile" large />
           <ProfileEditImage
@@ -293,12 +293,12 @@ const Edit: React.FC<{ params: any }> = (props) => {
                   imgRes =
                     image === undefined || image === -1
                       ? ""
-                      : await appContext.api.uploadFile(image).catch((e) => {
-                          appContext.api.error(e);
+                      : await globalContext.api.uploadFile(image).catch((e) => {
+                          globalContext.api.error(e);
                           return "";
                         });
                 }
-                await appContext.api.editUser({
+                await globalContext.api.editUser({
                   name: value.username,
                   profile_img_url:
                     imgRes === undefined || imgRes === ""
@@ -307,8 +307,8 @@ const Edit: React.FC<{ params: any }> = (props) => {
                   bio: value.shortBio,
                   social_links: value.socialLinks,
                 });
-                appContext.api.setDaoUserData({
-                  ...appContext.api.daoUserData,
+                setDaoUserData({
+                  ...daoUserData,
                   name: value.username,
                   profile_img_url:
                     imgRes === undefined || imgRes === ""

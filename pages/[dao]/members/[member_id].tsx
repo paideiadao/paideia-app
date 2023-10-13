@@ -10,6 +10,9 @@ import { useDaoSlugs } from "@hooks/useDaoSlugs";
 const Member: React.FC = () => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const { dao, member_id } = router.query;
   // const [daoId, setDaoId] = useState(undefined);
   // const { daoSlugsObject } = useDaoSlugs();
@@ -21,8 +24,7 @@ const Member: React.FC = () => {
   // }, [router.isReady]);
 
   const { data: userData, error: userError } = useSWR(
-    member_id !== undefined &&
-      `/users/details_by_slug/${dao}-${member_id}`,
+    member_id !== undefined && `/users/details_by_slug/${dao}-${member_id}`,
     fetcher
   );
 
@@ -50,11 +52,7 @@ const Member: React.FC = () => {
       followed={
         userData === undefined
           ? undefined
-          : userData.followers.indexOf(
-              globalContext.api.daoUserData
-                ? globalContext.api.daoUserData.id
-                : null
-            ) > -1
+          : userData.followers.indexOf(daoUserData ? daoUserData.id : null) > -1
       }
     />
   );

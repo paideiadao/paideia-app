@@ -51,9 +51,10 @@ export default class ProposalApi extends AbstractApi {
   }
 
   cleanData(): IProposalEndpointBody {
+    const [daoUserData] = this.api.daoUserState;
     return {
       dao_id: 1,
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: daoUserData.id,
       name: this.value.name,
       image_url: "",
       category: this.value.category,

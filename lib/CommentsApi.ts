@@ -20,8 +20,10 @@ export default class CommentsApi extends AbstractApi {
   }
 
   commentData(comment: IComment): ICommentPut {
+    const [daoUserData] = this.api.daoUserState;
+
     return {
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: daoUserData.id,
       comment: comment.comment,
       parent: comment.parent,
     };

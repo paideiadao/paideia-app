@@ -6,12 +6,18 @@ body {
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
   font-size: 18px;
+  height: 100%;
 }
 
 body {
   overflow-y: overlay;
   overflow-x: hidden;
+  height: 100%;
   /* background-image: url(/main-bg.png); */
+}
+
+#__next {
+  height: 100%;
 }
 
 table {
@@ -22,9 +28,10 @@ th {
   border-bottom-width: 2px !important;
 }
 
-th, td {
+th,
+td {
   padding: 3px 6px;
-  border: 1px solid rgba(144,144,144,0.5);
+  border: 1px solid rgba(144, 144, 144, 0.5);
 }
 
 tr {

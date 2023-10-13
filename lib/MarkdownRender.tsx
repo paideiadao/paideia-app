@@ -136,7 +136,13 @@ const MarkdownRender = (props: { description: string }) => {
         a: ({ node, ...props }) => (
           <Link sx={{ wordBreak: "break-all" }} href={props.href} {...props} />
         ),
-        blockquote: ({ node, ...props }) => <Box component="blockquote" sx={{ borderLeft: '3px solid', pl: '12px', mb: '24px' }} {...props} />,
+        blockquote: ({ node, ...props }) => (
+          <Box
+            component="blockquote"
+            sx={{ borderLeft: "3px solid", pl: "12px", mb: "24px" }}
+            {...props}
+          />
+        ),
         code({ node, inline, className, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           const hasMeta = node?.data?.meta;

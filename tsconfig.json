@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "typeRoots": ["node_modules/@types", "src/typings"],
+    "typeRoots": ["node_modules/@types", "./types"],
     "paths": {
       "@components/*": ["components/*"],
       "@styles/*": ["styles/*"],
@@ -37,7 +37,8 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    "theme/theme.tsx",
+    "theme/**.tsx",
+    "types/**/*",
     "pages/_document.jsx",
     "pages/[id]/[id].tsx.bak"
   ],

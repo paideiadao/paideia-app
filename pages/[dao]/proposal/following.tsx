@@ -11,6 +11,8 @@ import axios from "axios";
 
 const Following: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = context.api.daoUserState;
+
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
@@ -31,7 +33,9 @@ const Following: React.FC = () => {
           console.log(err);
         });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [dao]);
 
   return (
@@ -44,9 +48,7 @@ const Following: React.FC = () => {
             : proposalData.filter(
                 (i: any) =>
                   i.followers.indexOf(
-                    context.api.daoUserData == null
-                      ? null
-                      : context.api.daoUserData.id
+                    daoUserData == null ? null : daoUserData.id
                   ) > -1
               )
         }

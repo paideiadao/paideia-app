@@ -22,6 +22,8 @@ temp.setDate(temp.getDate() - 30);
 
 const ActiveProposal: React.FC = () => {
   const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [_, setLoading] = globalContext.api.loadingState;
+
   const [slide, setSlide] = React.useState<number>(1);
 
   useDidMountEffect(() => {
@@ -44,10 +46,11 @@ const ActiveProposal: React.FC = () => {
 
   useEffect(() => {
     let isMounted = true;
-    globalContext.api.setLoading((current: number) => current + 1)
+    setLoading((current: number) => current + 1);
     if (dao && daoSlugsObject[dao.toString()]) {
-      const url = `${process.env.API_URL}/proposals/by_dao_id/${daoSlugsObject[dao.toString()]
-        }`;
+      const url = `${process.env.API_URL}/proposals/by_dao_id/${
+        daoSlugsObject[dao.toString()]
+      }`;
       axios
         .get(url)
         .then((res) => {
@@ -57,14 +60,18 @@ const ActiveProposal: React.FC = () => {
           console.log(err);
         });
     }
-    globalContext.api.setLoading((current: number) => current - 1)
-    return () => { isMounted = false };
+    setLoading((current: number) => current - 1);
+    return () => {
+      isMounted = false;
+    };
   }, [dao, daoSlugsObject]);
 
   return (
     <>
       {proposalData === undefined ? (
-        <Box><CircularProgress color="inherit" /></Box>
+        <Box>
+          <CircularProgress color="inherit" />
+        </Box>
       ) : proposalData.length === 0 ? (
         <Box
           sx={{
@@ -102,15 +109,25 @@ const ActiveProposal: React.FC = () => {
             </Box>
           }
         >
-          {proposalData.slice().reverse().slice(0, 10).map((i: any, c: number) => (
-            <ProposalCard
-              {...i}
-              c={c}
-              scrollable
-              key={"proposal-card-key-" + c}
-              width={deviceStruct("15rem", "15rem", "15rem", "16rem", "17rem")}
-            />
-          ))}
+          {proposalData
+            .slice()
+            .reverse()
+            .slice(0, 10)
+            .map((i: any, c: number) => (
+              <ProposalCard
+                {...i}
+                c={c}
+                scrollable
+                key={"proposal-card-key-" + c}
+                width={deviceStruct(
+                  "15rem",
+                  "15rem",
+                  "15rem",
+                  "16rem",
+                  "17rem"
+                )}
+              />
+            ))}
         </CardSlider>
       )}
     </>

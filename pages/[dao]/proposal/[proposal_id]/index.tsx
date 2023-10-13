@@ -105,6 +105,8 @@ const Proposal: React.FC = () => {
   };
 
   const context = useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = context.api.daoUserState;
+
   const api = new ProposalApi(context.api, value, setValue);
 
   const { data, error } = useSWR(
@@ -156,7 +158,7 @@ const Proposal: React.FC = () => {
                   }}
                 >
                   <BackLink variant="contained" />
-                  {context.api.daoUserData != null && (
+                  {daoUserData != null && (
                     <Box
                       sx={{
                         position: "absolute",

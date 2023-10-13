@@ -18,7 +18,8 @@ const Token: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const tokenomics = globalContext.api.daoData?.tokenomics;
+  const [daoData] = globalContext.api.daoState;
+  const tokenomics = daoData?.tokenomics;
 
   const { data: tokenStats, error: error } = useSWR(
     tokenomics &&
@@ -52,10 +53,10 @@ const Token: React.FC = () => {
           </Button>
         </Link>
       </Box>
-      <InfoGrid data={tokenStats}/>
-      <Chart data={tokenStats}/>
-      <Statistics data={tokenStats}/>
-      <Markets data={tokenStats}/>
+      <InfoGrid data={tokenStats} />
+      <Chart data={tokenStats} />
+      <Statistics data={tokenStats} />
+      <Markets data={tokenStats} />
     </Layout>
   );
 };

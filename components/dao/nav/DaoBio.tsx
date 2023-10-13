@@ -34,7 +34,7 @@ export interface IDao {
 
 const DaoBio: FC<ISideNavComponent> = (props) => {
   const globalContext = useContext<IGlobalContext>(GlobalContext);
-  const daoData = globalContext.api.daoData;
+  const [daoData] = globalContext.api.daoState;
   return daoData ? (
     <Box
       sx={{

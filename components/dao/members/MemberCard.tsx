@@ -13,6 +13,7 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import FollowBadge from "@components/utilities/FollowBadge";
 import FollowApi from "@lib/FollowApi";
 import { generateSlug } from "@lib/utilities";
+import { gl } from "date-fns/locale";
 
 export interface IMemberCard {
   width: any;
@@ -32,12 +33,10 @@ export interface IMemberCard {
 
 const MemberCard: React.FC<IMemberCard> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const [favorited, setFavorited] = React.useState<boolean>(
-    props.followers.indexOf(
-      globalContext.api.daoUserData == null
-        ? null
-        : globalContext.api.daoUserData.id
-    ) > -1
+    props.followers.indexOf(daoUserData == null ? null : daoUserData.id) > -1
   );
   const router = useRouter();
   const api = new FollowApi(globalContext.api, "/users/profile/follow");
@@ -66,17 +65,15 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
     >
       <Badge
         badgeContent={
-          globalContext.api.daoUserData != null &&
-          globalContext.api.daoUserData.id !== props.id && (
+          daoUserData != null &&
+          daoUserData.id !== props.id && (
             <FollowBadge
               onChange={(followed: boolean) => {
                 api.follow(followed ? "follow" : "unfollow", props.id);
               }}
               followed={
                 props.followers.indexOf(
-                  globalContext.api.daoUserData == null
-                    ? null
-                    : globalContext.api.daoUserData.id
+                  daoUserData == null ? null : daoUserData.id
                 ) > -1
               }
             />

@@ -18,7 +18,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 const Dashboard: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const themeContext = React.useContext<IThemeContext>(ThemeContext);
-  const daoData = globalContext.api.daoData;
+  const [daoData] = globalContext.api.daoState;
 
   return daoData === undefined ? (
     <Box
@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
             sx={{
               width: "100%",
               // display: deviceWrapper("-webkit-box", "flex"),
-              display: 'none',
+              display: "none",
               alignItems: "center",
               overflowX: "auto",
             }}

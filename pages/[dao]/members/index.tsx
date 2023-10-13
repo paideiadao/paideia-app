@@ -110,7 +110,7 @@ const Members: React.FC = () => {
   });
   const [value, setValue] = useState<number[]>([0, 10]);
   const [daoId, setDaoId] = useState(1);
-  const [data, setData] = useState(undefined)
+  const [data, setData] = useState(undefined);
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
@@ -123,7 +123,6 @@ const Members: React.FC = () => {
 
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
 
-
   useEffect(() => {
     let isMounted = true;
     if (daoId !== undefined && daoId !== 1) {
@@ -131,13 +130,15 @@ const Members: React.FC = () => {
       axios
         .get(url)
         .then((res) => {
-          if (isMounted) setData(res.data)
+          if (isMounted) setData(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [daoId]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {

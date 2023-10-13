@@ -26,12 +26,12 @@ export default class FollowApi extends AbstractApi {
     type: FollowDirection,
     user_details_id: number = undefined
   ): IFollowPut {
+    const [daoUserData] = this.api.daoUserState;
+
     return {
-      current_user_details_id: this.api.daoUserData.id,
+      current_user_details_id: daoUserData.id,
       user_details_id:
-        user_details_id === undefined
-          ? this.api.daoUserData.id
-          : user_details_id,
+        user_details_id === undefined ? daoUserData.id : user_details_id,
       type: type,
     };
   }

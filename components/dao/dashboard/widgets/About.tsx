@@ -5,7 +5,8 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const About: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const daoData = globalContext.api.daoData;
+  const [daoData] = globalContext.api.daoState;
+
   return (
     <Paper
       elevation={0}

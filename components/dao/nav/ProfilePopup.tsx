@@ -103,23 +103,24 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
       sx={{
         "& .MuiDialog-container": {
           justifyContent: "flex-start",
-          alignItems: "flex-start"
-        }
+          alignItems: "flex-start",
+        },
       }}
       PaperProps={{
         sx: {
-          position: 'absolute',
-          width: '300px',
+          position: "absolute",
+          width: "300px",
           bgcolor: "fileInput.outer",
           boxShadow: 24,
-          p: '6px',
+          p: "6px",
           borderRadius: ".3rem",
           color: "text.primary",
           top: 0,
           right: 0,
-          mt: '55px',
-        }
-      }}>
+          mt: "55px",
+        },
+      }}
+    >
       {/* <Box
         sx={{
           ...modalBackground,

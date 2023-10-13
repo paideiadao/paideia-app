@@ -20,22 +20,21 @@ export const useDaoSlugs = () => {
     }
   }, [data]);
 
-  const daoTokensObject: {name: string; tokenId: string; id: number}[] = useMemo(() => {
-    if (data) {
-      let array = data.map(
-        (item: any) => {
+  const daoTokensObject: { name: string; tokenId: string; id: number }[] =
+    useMemo(() => {
+      if (data) {
+        let array = data.map((item: any) => {
           return {
             name: item.dao_name,
             tokenId: item.token_id,
-            id: item.id
-          }
-        }
-      );
-      return array;
-    } else {
-      return [];
-    }
-  }, [data])
+            id: item.id,
+          };
+        });
+        return array;
+      } else {
+        return [];
+      }
+    }, [data]);
 
   return {
     daoSlugs: data,

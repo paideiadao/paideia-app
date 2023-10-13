@@ -9,9 +9,9 @@ import useSWR from "swr";
 
 const Mine: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
-  const userData = context.api.daoUserData;
+  const [daoUserData] = context.api.daoUserState;
   const { data, error } = useSWR(
-    userData?.id && `/proposals/by_user_details_id/${userData?.id}`,
+    daoUserData?.id && `/proposals/by_user_details_id/${daoUserData?.id}`,
     fetcher,
     {
       revalidateIfStale: false,
@@ -28,16 +28,16 @@ const Mine: React.FC = () => {
 
   return (
     <Layout width={"96%"}>
-      {context.api.daoUserData ? (
+      {daoUserData ? (
         <PropsosalListing
           title="My proposals"
           proposals={
             data === undefined
               ? undefined
               : data.filter((i: any) =>
-                  (i.user_details_id === context.api.daoUserData) == null
+                  (i.user_details_id === daoUserData) == null
                     ? null
-                    : context.api.daoUserData.id
+                    : daoUserData.id
                 )
           }
         />

@@ -51,27 +51,27 @@ interface IAboutUser {
 const AboutUser: React.FC<IAboutUser> = (props) => {
   const { wallet, utxos } = useWallet();
   const [userTokens, setUserTokens] = React.useState<number>(0);
-  const appContext = React.useContext<IGlobalContext>(GlobalContext);
+
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
 
   React.useEffect(() => {
     const load = async () => {
-      const res = await appContext.api.daoTokenCheckSingleToken(
+      let res = await globalContext.api.daoTokenCheckSingleToken(
         [props.wallet],
         props.token_id
       );
-      if (res) {
+      if (res != undefined) {
         setUserTokens(res);
-      } else setUserTokens(utxos.currentDaoTokens);
+      } else setUserTokens(0);
     };
     if (props.wallet) {
       load();
     }
   }, [props.wallet, utxos.currentDaoTokens]);
 
-  const ticker =
-    appContext.api.daoData?.tokenomics.token_ticker ??
-    appContext.api.daoData?.dao_name + " DAO tokens";
-  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url;
+  const ticker = daoData?.tokenomics.token_ticker;
+  const tokenImage = daoData?.tokenomics.token_image_url;
 
   return (
     <Box

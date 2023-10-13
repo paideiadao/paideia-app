@@ -22,8 +22,10 @@ export default class LikesDislikesApi extends AbstractApi {
   }
 
   likeDislikeData(type: LikeDislikeAction): ILikeDislikePut {
+    const [daoUserData] = this.api.daoUserState;
+
     return {
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: daoUserData.id,
       type: type,
     };
   }

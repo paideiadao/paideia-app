@@ -8,12 +8,15 @@ export const axiosCachedGetFetcher = (url: string) => {
   if (cached) {
     const data = JSON.parse(cached);
     const timestamp = data.timestamp;
-    if (timestamp + TIMEOUT >= (new Date()).getTime()) {
+    if (timestamp + TIMEOUT >= new Date().getTime()) {
       return data.data;
     }
   }
   return axios.get(url).then((res) => {
-    localStorage.setItem(key, JSON.stringify({timestamp: (new Date()).getTime(), data: res.data}))
-    return res.data
+    localStorage.setItem(
+      key,
+      JSON.stringify({ timestamp: new Date().getTime(), data: res.data })
+    );
+    return res.data;
   });
-}
+};

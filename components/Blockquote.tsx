@@ -7,7 +7,7 @@ const paragraphStyle = {
   fontSize: "16px",
   lineHeight: "24px",
   letterSpacing: "0.15px",
-  mb: 0
+  mb: 0,
 };
 
 const blockquoteStyle = {
@@ -15,7 +15,7 @@ const blockquoteStyle = {
   fontWeight: "600",
   fontSize: "20px",
   lineHeight: "28px",
-  mb: 0
+  mb: 0,
 };
 
 interface BlockquoteProps {

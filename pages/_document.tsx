@@ -37,7 +37,7 @@ export default class MyDocument extends Document {
           ></script>
         </Head>
         <body>
-          <Box sx={{ position: "relative" }}>
+          <Box sx={{ position: "relative", height: "100%" }}>
             <Main />
             <NextScript />
           </Box>
