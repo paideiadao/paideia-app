@@ -4,7 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "npx prettier --write .",
+    "lint": "next lint",
     "mobile": "next build && next export && npx cap sync"
   },
   "dependencies": {
@@ -67,6 +67,9 @@
     "@types/react-slick": "^0.23.8",
     "@types/scheduler": "^0.16.2",
     "@types/uuid": "^8.3.4",
+    "eslint": "8.51.0",
+    "eslint-config-next": "13.5.4",
+    "eslint-config-prettier": "^9.0.0",
     "prettier": "2.6.1",
     "sharp": "^0.30.7"
   },
