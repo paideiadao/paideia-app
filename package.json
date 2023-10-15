@@ -7,6 +7,10 @@
     "lint": "next lint",
     "mobile": "next build && next export && npx cap sync"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=7.0.0"
+  },
   "dependencies": {
     "@babel/runtime": "^7.20.1",
     "@capacitor/android": "^3.6.0",
@@ -67,9 +71,13 @@
     "@types/react-slick": "^0.23.8",
     "@types/scheduler": "^0.16.2",
     "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
     "eslint": "8.51.0",
     "eslint-config-next": "13.5.4",
     "eslint-config-prettier": "^9.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.1",
     "prettier": "2.6.1",
     "sharp": "^0.30.7"
   },
