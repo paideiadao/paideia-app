@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+echo "🚧👷 Starting lint on staged files 👷🚧"
 npx tsc --noEmit && npx eslint --fix . && npx prettier --write .
