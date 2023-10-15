@@ -11,7 +11,6 @@ import {
 } from "@components/creation/utilities/HeaderComponents";
 import WalletSelector from "@components/creation/governance/WalletSelector";
 import { useWallet } from "@components/wallet/WalletContext";
-import { IWallet } from "@lib/creation/Interfaces";
 import { deviceWrapper } from "@components/utilities/Style";
 import CancelLink from "@components/utilities/CancelLink";
 import { useContext, useState } from "react";
@@ -26,7 +25,10 @@ const TICKER = "PAI";
 const FEE_ADJUSTMENT = 0.1;
 
 const StakingForm: React.FC<IStakeState> = (props) => {
-  const appContext = useContext<IGlobalContext>(GlobalContext);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const { wallet, utxos } = useWallet();
 
   const available = utxos.currentDaoTokens;
@@ -45,19 +47,19 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       const context = await getErgoWalletContext();
       const signed = await context.sign_tx(tx);
       const txId = await context.submit_tx(signed);
-      appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      globalContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
     } catch (e: any) {
-      appContext.api.error(e);
+      globalContext.api.error(e);
     }
     setLoading(false);
   };
 
   const get_tx = async (stakeKey: string | undefined) => {
-    const daoId = appContext.api.daoData.id;
-    const userId = appContext.api.daoUserData.user_id;
+    const daoId = daoData.id;
+    const userId = daoUserData.user_id;
     const adjustedValue = Math.min(value, available - FEE_ADJUSTMENT);
     if (stakeKey) {
-      const res = await appContext.api.post<any>("/staking/add", {
+      const res = await globalContext.api.post<any>("/staking/add", {
         dao_id: daoId,
         user_id: userId,
         amount: adjustedValue,
@@ -65,7 +67,7 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       });
       return res.data;
     } else {
-      const res = await appContext.api.post<any>("/staking/", {
+      const res = await globalContext.api.post<any>("/staking/", {
         dao_id: daoId,
         user_id: userId,
         amount: adjustedValue,
@@ -82,9 +84,9 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       <WalletSelector
         id="staking-wallet-input"
         data={{
-          alias: appContext.api.daoUserData?.name,
+          alias: daoUserData?.name,
           address: wallet,
-          img: appContext.api.daoUserData?.profile_img_url,
+          img: daoUserData?.profile_img_url,
         }}
         number={1}
         set={() => {}}

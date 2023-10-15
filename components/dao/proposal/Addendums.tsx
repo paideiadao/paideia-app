@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { deviceWrapper } from "@components/utilities/Style";
-import { props } from "@lib/DaoPaths";
 
 export interface IAddendum {
   id: number;

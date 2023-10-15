@@ -1,6 +1,6 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { deviceWrapper } from "@components/utilities/Style";
-import { generateSlug, getDaoPath } from "@lib/utilities";
+import { generateSlug } from "@lib/utilities";
 import { Avatar, Box, Button } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";

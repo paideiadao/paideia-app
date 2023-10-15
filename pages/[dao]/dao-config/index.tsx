@@ -4,7 +4,6 @@ import Design from "@components/dao/dao-config/Design";
 import Governance from "@components/dao/dao-config/Governance";
 import Termination from "@components/dao/dao-config/Termination";
 import Layout from "@components/dao/Layout";
-import VoteDuration from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import CancelLink from "@components/utilities/CancelLink";
 import Divider from "@components/utilities/Divider";
 import { deviceWrapper } from "@components/utilities/Style";
@@ -54,7 +53,7 @@ const DaoConfig: React.FC = () => {
 
   const globalContext = useContext<IGlobalContext>(GlobalContext);
   const api = new ConfigApi(globalContext.api, data, setData);
-  const daoData = globalContext.api.daoData;
+  const [daoData] = globalContext.api.daoState;
 
   useEffect(() => {
     if (daoData) {

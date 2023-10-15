@@ -8,7 +8,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import * as React from "react";
-import { IProposalAction, Output, Token } from "@pages/[dao]/proposal/create";
+import { IProposalAction, Token } from "@pages/[dao]/proposal/create";
 import axios from "axios";
 import MarkdownRender from "@lib/MarkdownRender";
 

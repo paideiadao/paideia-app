@@ -66,8 +66,10 @@ const defaultCards: IFundCard[] = [
 const Funds: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const [funds, setFunds] = useState<IFundCard[]>(defaultCards);
-  const context = useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+
+  const [daoData] = globalContext.api.daoState;
+  const daoId = daoData?.id;
 
   const { data: treasuryData, error: error } = useSWR(
     daoId && `/dao/treasury/${daoId}`,
@@ -79,7 +81,9 @@ const Funds: React.FC = () => {
       const ergs =
         treasuryData.balance.confirmed.nanoErgs / (1000 * 1000 * 1000);
       const price = (
-        await context.api.get<any>("https://api.ergopad.io/asset/price/ergo")
+        await globalContext.api.get<any>(
+          "https://api.ergopad.io/asset/price/ergo"
+        )
       ).data.price;
       setFunds([
         {
@@ -153,7 +157,14 @@ const Funds: React.FC = () => {
               />
             ))}
       </Box>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", my: "1rem" }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          my: "1rem",
+        }}
+      >
         <Button
           disabled={funds.length <= 4}
           onClick={() => setShow(!show)}

@@ -1,6 +1,5 @@
 import { Box, Button, InputBase, Paper } from "@mui/material";
 import * as React from "react";
-import BalanceIcon from "@mui/icons-material/Balance";
 import CancelIcon from "@mui/icons-material/Cancel";
 import QuadraticVoting from "./Actions/QuadraticVoting";
 import {
@@ -17,7 +16,6 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import SettingsIcon from "@mui/icons-material/Settings";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import AddIcon from "@mui/icons-material/Add";
 import SendFunds from "./Actions/SendFunds";
 import LiquidityPool from "./Actions/LiquidityPool";
 import DaoDescription from "./Actions/DaoDescription";

@@ -10,9 +10,7 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { DarkTheme } from "@theme/theme";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { deviceWrapper } from "@components/utilities/Style";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -215,7 +213,7 @@ const TopNav: React.FC<INav> = (props) => {
             daoUserData !== undefined &&
             isAddressValid(wallet) && (
               <>
-                {globalContext.api.daoUserData !== undefined && (
+                {daoUserData !== undefined && (
                   <Box
                     sx={{
                       display: "flex",

@@ -1,7 +1,4 @@
-import {
-  CapsInfo,
-  Header,
-} from "@components/creation/utilities/HeaderComponents";
+import { Header } from "@components/creation/utilities/HeaderComponents";
 import Layout from "@components/dao/Layout";
 import { Box, Button } from "@mui/material";
 import * as React from "react";
@@ -22,9 +19,7 @@ const TreasuryHeader: React.FC = () => {
       <Header title="Treasury" large />
       <Link
         href={
-          dao === undefined
-            ? "/dao/proposal/create"
-            : `/${dao}/proposal/create`
+          dao === undefined ? "/dao/proposal/create" : `/${dao}/proposal/create`
         }
       >
         <Button

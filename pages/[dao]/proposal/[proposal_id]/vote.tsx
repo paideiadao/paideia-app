@@ -1,6 +1,6 @@
 import Layout from "@components/dao/Layout";
 import { useRouter } from "next/router";
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import {
   Header,
   Subtitle,
@@ -23,49 +23,52 @@ const CastVote: React.FC = () => {
   const parsed_proposal_id = proposal_id
     ? (proposal_id as string).split("-").slice(-5).join("-")
     : null;
-  const context = useContext<IGlobalContext>(GlobalContext);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const [vote, setVote] = useState(null);
   const [loading, setLoading] = useState(false);
   const [stake, setStake] = useState<any>(null);
 
-  const daoId = context.api.daoData?.id;
-  const userId = context.api.daoUserData?.user_id;
+  const { post, error, showAlert } = globalContext.api;
+  const [daoData] = globalContext.api.daoState;
+  const [daoUserData] = globalContext.api.daoUserState;
+  const daoId = daoData?.id;
+  const userId = daoUserData?.user_id;
 
   useEffect(() => {
     const getData = async () => {
       try {
         const stake = (
-          await context.api.post<any>("/staking/user_stake_info", {
-            dao_id: context.api.daoData?.id,
-            user_id: context.api.daoUserData?.user_id,
+          await post<any>("/staking/user_stake_info", {
+            dao_id: daoId,
+            user_id: userId,
           })
         ).data;
         setStake(stake);
         if (!stake.stake_keys?.length) {
-          context.api.error(
+          error(
             "Stake key either not present or in use on another transaction, add stake now"
           );
         }
       } catch (e: any) {
-        context.api.error(e);
+        error(e);
       }
     };
 
     if (daoId && userId) {
       getData();
     }
-  }, [daoId, userId]);
+  }, [daoData?.id, daoId, daoUserData?.user_id, error, post, userId]);
 
   const handleSubmit = async () => {
     setLoading(true);
     if (vote === null) {
-      context.api.error("Please select the preferred option");
+      error("Please select the preferred option");
       setLoading(false);
       return;
     }
     try {
       if (!stake.stake_keys?.length) {
-        context.api.error(
+        error(
           "Stake key either not present or in use on another transaction, add stake now"
         );
         setLoading(false);
@@ -79,15 +82,15 @@ const CastVote: React.FC = () => {
         stake_key: stakeKey,
         votes: vote ? [0, stakeAmount] : [stakeAmount, 0],
       };
-      const res = (await context.api.post<any>("/proposals/vote", req)).data;
+      const res = (await post<any>("/proposals/vote", req)).data;
       const tx = res.unsigned_transaction;
       const ergoContext = await getErgoWalletContext();
       const signed = await ergoContext.sign_tx(tx);
       const txId = await ergoContext.submit_tx(signed);
-      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      showAlert(`Transaction Submitted: ${txId}`, "success");
       router.back();
     } catch (e: any) {
-      context.api.error(e);
+      error(e);
     }
     setLoading(false);
   };

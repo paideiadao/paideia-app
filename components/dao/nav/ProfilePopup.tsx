@@ -6,7 +6,6 @@ import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import {
   DAPP_CONNECTED,
   WALLET_ADDRESS,

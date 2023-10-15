@@ -24,7 +24,10 @@ interface IStakeState {
 }
 
 const WithdrawForm: React.FC<IStakeState> = (props) => {
-  const appContext = useContext<IGlobalContext>(GlobalContext);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
+  const [daoUserData] = globalContext.api.daoUserState;
+  const daoId = daoData?.id;
   const { wallet } = useWallet();
   const ticker = "PAI";
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,12 +49,11 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const daoId = appContext.api.daoData.id;
-      const userId = appContext.api.daoUserData.user_id;
+      const userId = daoUserData.user_id;
       const stake = props.stake.stake_keys.filter(
         (key: { stake: any }) => key.stake === maxStake
       )[0];
-      const res = await appContext.api.put<any>("/staking/", {
+      const res = await globalContext.api.put<any>("/staking/", {
         dao_id: daoId,
         user_id: userId,
         new_stake_key_info: {
@@ -63,9 +65,9 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
       const context = await getErgoWalletContext();
       const signed = await context.sign_tx(tx);
       const txId = await context.submit_tx(signed);
-      appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      globalContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
     } catch (e: any) {
-      appContext.api.error(e);
+      globalContext.api.error(e);
     }
     setLoading(false);
   };
@@ -78,9 +80,9 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
       <WalletSelector
         id="staking-wallet-input"
         data={{
-          alias: appContext.api.daoUserData?.name,
+          alias: daoUserData?.name,
           address: wallet,
-          img: appContext.api.daoUserData?.profile_img_url,
+          img: daoUserData?.profile_img_url,
         }}
         number={1}
         set={() => {}}

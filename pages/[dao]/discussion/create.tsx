@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CreateHeader from "@components/dao/proposal/Header";
 import { Box, Button, Modal } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -20,7 +20,6 @@ import { getRandomImage } from "@components/utilities/images";
 import { IFile } from "@lib/creation/Interfaces";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CancelLink from "@components/utilities/CancelLink";
-import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { generateSlug } from "@lib/utilities";
 
 export interface IDiscussion {

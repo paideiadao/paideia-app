@@ -7,16 +7,19 @@ import * as React from "react";
 import { InfoCard } from "./GeneralInfo";
 
 const YourStaking: React.FC = () => {
-  const appContext = React.useContext<IGlobalContext>(GlobalContext);
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
+  const [daoUserData] = globalContext.api.daoUserState;
+  const { post } = globalContext.api;
   const { utxos } = useWallet();
   const [stakeAmount, setStakeAmount] = React.useState<string>("-");
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const daoId = appContext.api.daoData.id;
-        const userId = appContext.api.daoUserData.user_id;
-        const res = await appContext.api.post<any>("/staking/user_stake_info", {
+        const daoId = daoData.id;
+        const userId = daoUserData.user_id;
+        const res = await post<any>("/staking/user_stake_info", {
           dao_id: daoId,
           user_id: userId,
         });
@@ -30,14 +33,10 @@ const YourStaking: React.FC = () => {
       }
     };
 
-    if (
-      utxos.currentDaoTokens &&
-      appContext.api.daoData?.id &&
-      appContext.api.daoUserData?.id
-    ) {
+    if (utxos.currentDaoTokens && daoData?.id && daoUserData?.id) {
       fetchData();
     }
-  }, [utxos, appContext.api.daoData, appContext.api.daoUserData]);
+  }, [utxos, daoData, daoUserData, post]);
   const ticker = "PAI";
 
   return (

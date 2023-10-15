@@ -127,8 +127,9 @@ const GeneralInfo: React.FC = () => {
     tokensStaked: "-",
     apy: "-",
   });
-  const context = useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
+  const daoId = daoData?.id;
 
   const { data: stakingData, error: error } = useSWR(
     daoId && `/staking/dao_stake_info/${daoId}`,

@@ -1,6 +1,3 @@
-import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
-import MultiTokenHolders from "@components/utilities/MultiTokenHolders";
-import { ITokenHolder } from "@lib/creation/Interfaces";
 import * as React from "react";
 import { ISendFunds } from "../../YesNo/Actions/SendFunds";
 

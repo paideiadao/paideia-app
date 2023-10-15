@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, Button, IconButton, TextField } from "@mui/material";
 import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -26,8 +17,9 @@ interface IMultiTokenHolders {
 }
 
 const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
-  const context = React.useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api?.daoState;
+  const daoId = daoData?.id;
   const { data: treasury, error: error } = useSWR(
     daoId && `/dao/treasury/${daoId}`,
     fetcher

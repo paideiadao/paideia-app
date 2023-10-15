@@ -33,7 +33,7 @@ import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useSWR from "swr";
-import { attrOrUndefined, fetcher, getDaoPath, getWsUrl } from "@lib/utilities";
+import { attrOrUndefined, fetcher, getWsUrl } from "@lib/utilities";
 import { modalBackground } from "@components/utilities/modalBackground";
 import Follow, { FollowMobile } from "@components/utilities/Follow";
 import Details from "@components/dao/discussion/Details";

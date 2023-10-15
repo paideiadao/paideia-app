@@ -1,6 +1,10 @@
 import { Badge, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import DiamondIcon from "@mui/icons-material/Diamond";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import TransformIcon from "@mui/icons-material/Transform";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import GroupsIcon from "@mui/icons-material/Groups";
 import MovingIcon from "@mui/icons-material/Moving";

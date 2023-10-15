@@ -1,7 +1,7 @@
 import { Box, Button, ButtonGroup } from "@mui/material";
 import * as React from "react";
 import { ITokenomics } from "@lib/creation/Interfaces";
-import { IData, IObj } from "@lib/Interfaces";
+import { IData } from "@lib/Interfaces";
 import { Header } from "../utilities/HeaderComponents";
 // import Emissions from "./Charts/Emissions";
 // import PieChart from "./Charts/PieChart";

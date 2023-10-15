@@ -13,7 +13,6 @@ import useSWR from "swr";
 import { fetcher } from "@lib/utilities";
 import { useRouter } from "next/router";
 import useDidMountEffect from "@components/utilities/hooks";
-import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 // proposal or discussion
 // abstract: img, name, id

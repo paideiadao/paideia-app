@@ -1,11 +1,6 @@
-import { FC, useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import {
-  Avatar,
-  Box,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { VoteWidget } from "../proposals/ProposalCard";
 import dateFormat from "dateformat";
 import { useRouter } from "next/router";
@@ -89,9 +84,10 @@ const LastVotes: React.FC = () => {
 };
 
 const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
-  const context = useContext<IGlobalContext>(GlobalContext);
-  const governance = context.api.daoData?.governance;
-  const daoId = context.api.daoData?.id;
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
+  const governance = daoData?.governance;
+  const daoId = daoData?.id;
   const router = useRouter();
   const { dao, proposal_id } = router.query;
 

@@ -126,7 +126,8 @@ const Nautilus: React.FC<{
                                   .changeAddress(i.name)
                                   .then(async (signingMessage: any) => {
                                     if (signingMessage !== undefined) {
-                                      const context = await getErgoWalletContext();
+                                      const context =
+                                        await getErgoWalletContext();
                                       const response = await context.auth(
                                         i.name,
                                         signingMessage.data.signingMessage

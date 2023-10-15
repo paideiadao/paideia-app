@@ -9,3 +9,11 @@
 - `npm install`
 - `npm run dev`
 - Success!
+
+## Contributing
+
+- Work should be done off beta branch
+- One PR per issue please. Large PRs with many changes are hard to review and can cause merge conflicts with others' work.
+- Assign yourself to an issue when you pick it up so we know who is working on what and people don't work on the same thing
+- Add "- Fixes: (ISSUE LINK)" to your PR description so it links the PR with the issue
+- The required .env file is .env.local.template, make sure you rename it to .env

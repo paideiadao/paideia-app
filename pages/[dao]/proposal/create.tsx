@@ -27,9 +27,7 @@ import { IFile } from "@lib/creation/Interfaces";
 import { ILiquidityPool } from "@components/dao/proposal/vote/YesNo/Actions/LiquidityPool";
 import { IQuadradicVoting } from "@components/dao/proposal/vote/YesNo/Actions/QuadraticVoting";
 import { IDaoDescription } from "@components/dao/proposal/vote/YesNo/Actions/DaoDescription";
-import VoteDuration, {
-  IVoteDuration,
-} from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
+import { IVoteDuration } from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import { ISupport } from "@components/dao/proposal/vote/YesNo/Actions/Support";
 import { OptionType } from "@components/dao/proposal/vote/Options/OptionSystemSelector";
 import CancelLink from "@components/utilities/CancelLink";
@@ -38,7 +36,7 @@ import {
   bPaideiaUpdateDAOConfig,
 } from "@lib/proposalActionOutputMapper";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo } from "react";
 import { generateSlug } from "@lib/utilities";
 import { IUpdateConfig } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
 
@@ -182,22 +180,28 @@ const CreateProposal: React.FC = () => {
   });
   const [errors, setErrors] = useState<ICreateProposalErrors>(defaultErrors);
 
-  const context = useContext<IGlobalContext>(GlobalContext);
-  const api = new ProposalApi(context.api, value, setValue, errors, setErrors);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const api = useMemo(
+    () =>
+      new ProposalApi(globalContext.api, value, setValue, errors, setErrors),
+    [errors, globalContext.api, value]
+  );
 
   const [publish, setPublish] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [stake, setStake] = useState<any>({});
-  const tokenomics = context.api.daoData?.tokenomics;
-  const governance = context.api.daoData?.governance;
+  const { post, showAlert } = globalContext.api;
+  const [daoData] = globalContext.api.daoState;
+  const [daoUserData] = globalContext.api.daoUserState;
+  const governance = daoData?.governance;
 
   useEffect(() => {
     const getData = async () => {
       try {
         const stake = (
-          await context.api.post<any>("/staking/user_stake_info", {
-            dao_id: context.api.daoData?.id,
-            user_id: context.api.daoUserData?.user_id,
+          await post<any>("/staking/user_stake_info", {
+            dao_id: daoData?.id,
+            user_id: daoUserData?.user_id,
           })
         ).data;
         setStake(stake);
@@ -211,10 +215,10 @@ const CreateProposal: React.FC = () => {
       }
     };
 
-    if (context.api.daoData?.id && context.api.daoUserData?.user_id) {
+    if (daoData?.id && daoUserData?.user_id) {
       getData();
     }
-  }, [context.api.daoData, context.api.daoUserData]);
+  }, [api, daoData?.id, daoUserData?.user_id, post]);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -251,8 +255,8 @@ const CreateProposal: React.FC = () => {
             )
           : {}; // should never occur
       const proposal = {
-        dao_id: context.api.daoData?.id,
-        user_details_id: context.api.daoUserData?.id,
+        dao_id: daoData?.id,
+        user_details_id: daoUserData?.id,
         ...value,
         image_url: imgUrl,
         actions: [action],
@@ -264,14 +268,13 @@ const CreateProposal: React.FC = () => {
           value.actions[0].data.voting_duration * TIME_MS +
           BUFFER,
       };
-      const data = (
-        await context.api.post<any>("/proposals/on_chain_proposal", proposal)
-      ).data;
+      const data = (await post<any>("/proposals/on_chain_proposal", proposal))
+        .data;
       const tx = data.unsigned_transaction;
       const ergoContext = await getErgoWalletContext();
       const signed = await ergoContext.sign_tx(tx);
       const txId = await ergoContext.submit_tx(signed);
-      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      showAlert(`Transaction Submitted: ${txId}`, "success");
       setPublish(false);
       router.push(
         `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
@@ -345,7 +348,7 @@ const CreateProposal: React.FC = () => {
             <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
               Provide users with different options to vote on, and the proposal
               will either be approved or declined. Keep in mind, once you create
-              a proposal, it can't be edited or deleted.
+              a proposal, it can&apos;t be edited or deleted.
             </Box>
           </Box>
           <Box
@@ -443,7 +446,7 @@ const CreateProposal: React.FC = () => {
               You are about to publish a proposal
             </Box>
             <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-              Once published, a proposal can't be edited or deleted.
+              Once published, a proposal can&apos;t be edited or deleted.
             </Box>
             <Box
               sx={{
