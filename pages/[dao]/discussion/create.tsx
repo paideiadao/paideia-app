@@ -55,7 +55,8 @@ const CreateDiscussion: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
   const { dao } = router.query;
-  const daoId = globalContext.api.daoData?.id;
+  const [daoData] = globalContext.api.daoState;
+  const daoId = daoData?.id;
 
   const api = new DiscussionApi(globalContext.api, value, setValue);
 
@@ -180,8 +181,8 @@ const CreateDiscussion: React.FC = () => {
               You are about to publish a discussion
             </Box>
             <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-              Once published, a discussion can't be edited or deleted. However,
-              a discussion can be upgraded to a proposal at any time.
+              Once published, a discussion can&apos;t be edited or deleted.
+              However, a discussion can be upgraded to a proposal at any time.
             </Box>
             <Box
               sx={{

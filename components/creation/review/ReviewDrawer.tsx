@@ -8,6 +8,7 @@ import Governance from "./Governance";
 import Tokenomics from "./Tokenomics";
 import Design from "./Design";
 import { deviceStruct } from "@components/utilities/Style";
+import { IWallet } from "@lib/creation/Interfaces";
 
 export const Value: React.FC<{
   labelWidth: string;
@@ -52,11 +53,12 @@ export const Value: React.FC<{
   );
 };
 
-export const WalletListing: React.FC<{ data: any }> = (props) => {
+export const WalletListing: React.FC<{ data: IWallet[] }> = (props) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {props.data.map((i: any) => (
+      {props.data.map((data: IWallet) => (
         <Box
+          key={data.address}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -64,11 +66,11 @@ export const WalletListing: React.FC<{ data: any }> = (props) => {
             mb: ".5rem",
           }}
         >
-          <Avatar src={i.img}>
+          <Avatar src={data.img}>
             <PersonIcon color="primary" />
           </Avatar>
           <Box sx={{ ml: ".5rem" }}>
-            <Box sx={{ fontSize: ".9rem" }}>{i.alias}</Box>
+            <Box sx={{ fontSize: ".9rem" }}>{data.alias}</Box>
             <Box sx={{ fontSize: ".7rem", color: "text.secondary" }}>
               <Box
                 sx={{
@@ -81,10 +83,10 @@ export const WalletListing: React.FC<{ data: any }> = (props) => {
                   ),
                 }}
               >
-                {i.address !== undefined &&
-                  `${i.address.slice(0, 18)}...${i.address.slice(
-                    i.address.length - 18,
-                    i.address.length
+                {data.address !== undefined &&
+                  `${data.address.slice(0, 18)}...${data.address.slice(
+                    data.address.length - 18,
+                    data.address.length
                   )}`}
               </Box>
               <Box
@@ -98,10 +100,10 @@ export const WalletListing: React.FC<{ data: any }> = (props) => {
                   ),
                 }}
               >
-                {i.address !== undefined &&
-                  `${i.address.slice(0, 17)}...${i.address.slice(
-                    i.address.length - 17,
-                    i.address.length
+                {data.address !== undefined &&
+                  `${data.address.slice(0, 17)}...${data.address.slice(
+                    data.address.length - 17,
+                    data.address.length
                   )}`}
               </Box>
             </Box>

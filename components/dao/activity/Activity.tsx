@@ -15,10 +15,12 @@ export interface IActivity {
   secondaryValue?: string;
 }
 
-const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
+const Activity: React.FC<{ activity: IActivity; c: number }> = (props) => {
+  const { activity, c } = props;
+
   return (
     <Box
-      key={`activities-key-${props.c}`}
+      key={`activities-key-${c}`}
       sx={{
         width: "100%",
         pt: "1rem",
@@ -36,7 +38,7 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
           height: "2rem",
           display: deviceWrapper("flex", "none"),
         }}
-        src={props.i.img_url}
+        src={activity.img_url}
       ></Avatar>
       <Box
         sx={{
@@ -59,10 +61,10 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
               height: "2rem",
               display: deviceWrapper("none", "flex"),
             }}
-            src={props.i.img_url}
+            src={activity.img_url}
           ></Avatar>
           <Box>
-            {props.i.name + " "}
+            {activity.name + " "}
             <Box
               sx={{
                 display: "inline",
@@ -71,10 +73,10 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
                 mr: ".1rem",
               }}
             >
-              {props.i.action}
+              {activity.action}
             </Box>
-            {" " + props.i.value}
-            {props.i.secondary !== undefined && (
+            {" " + activity.value}
+            {activity.secondary !== undefined && (
               <Box
                 sx={{
                   display: "inline",
@@ -83,11 +85,11 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
                   mr: ".1rem",
                 }}
               >
-                {" " + props.i.secondary}
+                {" " + activity.secondary}
               </Box>
             )}
-            {props.i.secondaryValue !== undefined &&
-              " " + props.i.secondaryValue}
+            {activity.secondaryValue !== undefined &&
+              " " + activity.secondaryValue}
           </Box>
         </Box>
 
@@ -103,7 +105,7 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
           <CalendarTodayIcon
             sx={{ mr: ".5rem", fontSize: deviceWrapper("1rem", "1.5rem") }}
           />
-          {dateFormat(props.i.date, "mmm dd, yyyy: h:MM")}
+          {dateFormat(activity.date, "mmm dd, yyyy: h:MM")}
         </Box>
       </Box>
     </Box>

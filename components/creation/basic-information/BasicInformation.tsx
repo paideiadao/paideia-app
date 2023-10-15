@@ -41,9 +41,9 @@ const BasicInformation: React.FC = () => {
       >
         Basic Information
         <Box sx={{ width: "100%", color: "text.secondary", fontSize: ".8rem" }}>
-          Here you will pick your DAO's name, this will determine your DAO's URL
-          as shown below and you can also write a short description of what your
-          DAO is about.
+          Here you will pick your DAO&apos;s name, this will determine your
+          DAO&apos;s URL as shown below and you can also write a short
+          description of what your DAO is about.
         </Box>
       </Box>
       <Grid container spacing={2} direction={{ xs: "column", md: "row" }}>
@@ -83,12 +83,12 @@ const BasicInformation: React.FC = () => {
       <Box sx={{ width: "100%", mt: 2 }}>
         <Alert severity="warning" color="warning" sx={{ fontSize: ".8rem" }}>
           <AlertTitle sx={{ fontSize: ".9rem" }}>
-            You won't be able to change this once published
+            You won&apos;t be able to change this once published
           </AlertTitle>
           <Box sx={{ ml: "-2rem" }}>
-            The name and URL of your DAO can't be changed even if you publish
-            your DAO as a draft. You will be able to review everything later
-            before fully committing though.
+            The name and URL of your DAO can&apos;t be changed even if you
+            publish your DAO as a draft. You will be able to review everything
+            later before fully committing though.
           </Box>
         </Alert>
       </Box>

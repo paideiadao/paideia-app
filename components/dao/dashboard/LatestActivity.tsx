@@ -95,8 +95,10 @@ const LatestActivity: React.FC = () => {
         </Link>
       </Box>
       {data ? (
-        data.slice(0, 5).map((i: IActivity, c: number) => {
-          return <Activity i={i} c={c} key={"latest-activity" + c} />;
+        data.slice(0, 5).map((activity: IActivity, c: number) => {
+          return (
+            <Activity activity={activity} c={c} key={"latest-activity" + c} />
+          );
         })
       ) : (
         <>Loading Here</>

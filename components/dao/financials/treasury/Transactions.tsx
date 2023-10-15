@@ -12,8 +12,9 @@ const Transactions: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const [transactions, setTransactions] = useState<IActivity[]>([]);
-  const context = useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [daoData] = globalContext.api.daoState;
+  const daoId = daoData?.id;
 
   const { data: transactionData, error: error } = useSWR(
     daoId && `/dao/treasury/${daoId}/transactions`,
@@ -66,8 +67,8 @@ const Transactions: React.FC = () => {
           <Box sx={{ display: deviceWrapper("block", "none") }}>View All</Box>
         </Button>
       </Box>
-      {transactions.map((i: any, c: number) => {
-        return <Activity i={i} c={c} />;
+      {transactions.map((activity: IActivity, index: number) => {
+        return <Activity key={index} activity={activity} c={index} />;
       })}
     </Box>
   );

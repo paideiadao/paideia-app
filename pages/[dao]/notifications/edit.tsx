@@ -130,19 +130,23 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
             <Box sx={{ width: "100%", mt: "1.5rem", fontSize: ".9rem" }}>
               Notify me when
               <FormGroup>
-                {notifications.map((i: INotification) => (
+                {notifications.map((notification: INotification, index) => (
                   <FormControlLabel
+                    key={`${notification.label}-${index}`}
                     disableTypography
                     control={
                       <Checkbox
-                        checked={value[i.value] as boolean}
+                        checked={value[notification.value] as boolean}
                         size="small"
                         onClick={() =>
-                          setValue({ ...value, [i.value]: !value[i.value] })
+                          setValue({
+                            ...value,
+                            [notification.value]: !value[notification.value],
+                          })
                         }
                       />
                     }
-                    label={i.label}
+                    label={notification.label}
                     sx={{
                       mt: ".25rem",
                       mb: ".25rem",

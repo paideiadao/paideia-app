@@ -65,7 +65,7 @@ const MobileWallet: React.FC<{
           </Box>
           <Box sx={{ mt: ".75rem", fontSize: ".9rem" }}>
             Please type your wallet address in the input field in order to
-            connect it to Paideia and access all of Paideia's features.
+            connect it to Paideia and access all of Paideia&rsquo;s features.
           </Box>
           <TextField
             key="mobile-wallet-input"

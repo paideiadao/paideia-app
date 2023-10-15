@@ -2,7 +2,7 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { modalBackground } from "@components/utilities/modalBackground";
 import { Modal, Button, Box } from "@mui/material";
-import { Notification } from "@pages/[dao]/notifications";
+import { INotification, Notification } from "@pages/[dao]/notifications";
 import Link from "next/link";
 import * as React from "react";
 import { useRouter } from "next/router";
@@ -71,16 +71,18 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
         </Box>
         <Box sx={{ height: "25rem", overflowY: "hidden" }}>
           {props.notifications ? (
-            props.notifications.map((i: any, c: number) => {
-              return (
-                <Notification
-                  c={c}
-                  i={i}
-                  m="0"
-                  key={"notification-key-modal-" + c}
-                />
-              );
-            })
+            props.notifications.map(
+              (notification: INotification, index: number) => {
+                return (
+                  <Notification
+                    c={index}
+                    notification={notification}
+                    m="0"
+                    key={"notification-key-modal-" + index}
+                  />
+                );
+              }
+            )
           ) : (
             <Box sx={{ p: 2 }}>Reading your Notifications...</Box>
           )}

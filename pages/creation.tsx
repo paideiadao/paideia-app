@@ -274,10 +274,10 @@ export default function Creation() {
             You are about to publish your DAO as a draft
           </Box>
           <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-            Please keep in mind that if you continue you won't be able to change
-            either your DAO's name or it's URL. The rest of the properties can
-            be changed though. Also, your tokens won't be minted or distributed
-            until you publish the final version.
+            Please keep in mind that if you continue you won&apos;t be able to
+            change either your DAO&apos;s name or it&apos;s URL. The rest of the
+            properties can be changed though. Also, your tokens won&apos;t be
+            minted or distributed until you publish the final version.
           </Box>
           <Box
             sx={{

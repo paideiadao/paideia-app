@@ -23,9 +23,10 @@ const MultiWalletSelector: React.FC<IMultiWalletSelector> = (props) => {
           flexDirection: "column",
         }}
       >
-        {props.wallets.map((i: any, c: number) => {
+        {props.wallets.map((wallet: any, index: number) => {
           return (
             <Box
+              key={wallet.address}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -43,16 +44,16 @@ const MultiWalletSelector: React.FC<IMultiWalletSelector> = (props) => {
               >
                 <WalletSelector
                   id="governance"
-                  data={i}
-                  number={c}
+                  data={wallet}
+                  number={index}
                   canDelete={props.wallets.length > 0}
                   set={(j: any) => {
                     let temp = [...props.wallets];
 
                     if (j === undefined) {
-                      temp.splice(c, 1);
+                      temp.splice(index, 1);
                     } else {
-                      temp[c] = j;
+                      temp[index] = j;
                     }
                     props.set(temp);
                   }}
@@ -72,7 +73,7 @@ const MultiWalletSelector: React.FC<IMultiWalletSelector> = (props) => {
                   sx={{ color: "error.main" }}
                   onClick={() => {
                     let temp = [...props.wallets];
-                    temp.splice(c, 1);
+                    temp.splice(index, 1);
                     props.set(temp);
                   }}
                 >

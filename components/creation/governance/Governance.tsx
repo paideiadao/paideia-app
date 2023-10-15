@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LearnMore } from "../utilities/HeaderComponents";
 import { deviceStruct } from "@components/utilities/Style";
 import VoteDurationSelector from "../utilities/VoteDurationSelector";
+import { IWallet } from "@lib/creation/Interfaces";
 
 const Governance: React.FC = () => {
   const creationContext = React.useContext(CreationContext);
@@ -43,8 +44,8 @@ const Governance: React.FC = () => {
         <Box sx={{ width: "100%", color: "text.secondary", fontSize: ".8rem" }}>
           You can use the default settings or dive more in deep configure your
           voting system as you wish. You can enable and configure features such
-          as "Optimistic governance" or "Quadratic voting" and edit the support
-          quorum, and voting times.
+          as &ldquo;Optimistic governance&rdquo; or &ldquo;Quadratic
+          voting&rdquo; and edit the support quorum, and voting times.
         </Box>
       </Box>
       <Box
@@ -109,9 +110,10 @@ const Governance: React.FC = () => {
                 flexDirection: "column",
               }}
             >
-              {data.whitelist.map((i: any, c: number) => {
+              {data.whitelist.map((whitelist: IWallet, index: number) => {
                 return (
                   <Box
+                    key={whitelist.address}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -129,16 +131,16 @@ const Governance: React.FC = () => {
                     >
                       <WalletSelector
                         id="governance"
-                        data={i}
-                        number={c}
+                        data={whitelist}
+                        number={index}
                         canDelete={data.whitelist.length > 0}
                         set={(j: any) => {
                           let temp = [...data.whitelist];
 
                           if (j === undefined) {
-                            temp.splice(c, 1);
+                            temp.splice(index, 1);
                           } else {
-                            temp[c] = j;
+                            temp[index] = j;
                           }
                           creationContext.api.setData({
                             ...creationContext.api.data,
@@ -163,7 +165,7 @@ const Governance: React.FC = () => {
                         disabled={data.whitelist.length === 1}
                         onClick={() => {
                           let temp = [...data.whitelist];
-                          temp.splice(c, 1);
+                          temp.splice(index, 1);
                           creationContext.api.setData({
                             ...creationContext.api.data,
                             governance: {

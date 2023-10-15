@@ -54,7 +54,7 @@ const DaoBio: FC<ISideNavComponent> = (props) => {
         <Avatar
           sx={{ width: "4rem", height: "4rem", mt: ".5rem", mb: ".5rem" }}
         >
-          <img src={daoData.design.logo_url} />
+          <img alt="Dao Logo" src={daoData.design.logo_url} />
         </Avatar>
       )}
       <DaoSelector {...props} />
@@ -123,7 +123,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                   backgroundColor: "transparent",
                 }}
               >
-                <img src={selectedDao.logo_url} />
+                <img alt="Dao Logo" src={selectedDao.logo_url} />
               </Avatar>
             )}
             <Box>
@@ -355,7 +355,7 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
       </Box>
       {!props.inWallet && (
         <Box sx={{ fontSize: ".57rem", color: "error.main" }}>
-          You don't have any {props.data.token_ticker} in your wallet
+          You don&apos;t have any {props.data.token_ticker} in your wallet
         </Box>
       )}
     </>

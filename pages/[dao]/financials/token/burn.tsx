@@ -19,7 +19,7 @@ const Burn: React.FC = () => {
       <TokenomicsRow
         title="Tokens available for burning"
         balance={2500000}
-        percentage={25}
+        percentage={"25"}
       />
       <Box sx={{ mt: "1rem" }} />
       <BurnForm />

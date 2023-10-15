@@ -10,7 +10,7 @@ const SupportAlert: React.FC = () => {
       <Box sx={{ ml: "-1.75rem" }}>
         Support will only apply to single-choice voting. It determines the
         percentage of users that need to agree for a proposal to be approved.
-        Can't be set to less than 51%
+        Can&apos;t be set to less than 51%
       </Box>
     </Alert>
   );

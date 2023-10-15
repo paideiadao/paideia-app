@@ -87,8 +87,8 @@ const Review: React.FC = () => {
             Publishing as a draft allows you to see the DAO configuation before
             committing to it. You will be able to change any configuration
             (except name and URL). When you publish as a draft the users you
-            whitelisted won't be notified and nothing will happen until you are
-            ready to do the FINAL publish.
+            whitelisted won&apos;t be notified and nothing will happen until you
+            are ready to do the FINAL publish.
           </Box>
         </Alert>
       </Box>

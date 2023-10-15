@@ -43,6 +43,9 @@ const Providers: React.FC<ProvidersProps> = ({
 
   useEffect(() => {
     setTheme(localStorage.getItem("theme") === "dark" ? DarkTheme : LightTheme);
+
+    // "setTheme" is a useState method, doesn't need to be in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

@@ -232,8 +232,8 @@ const Activities: FC = () => {
               : //@ts-ignore
                 b.date - a.date
           )
-          .map((i: any, c: number) => {
-            return <Activity i={i} c={c} key={c} />;
+          .map((activity: IActivity, c: number) => {
+            return <Activity activity={activity} c={c} key={c} />;
           })
       ) : (
         <>Loading Here...</>

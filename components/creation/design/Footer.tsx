@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import { ISocialLink } from "@lib/creation/Interfaces";
 import { CreationContext } from "@lib/creation/Context";
 import {
@@ -30,18 +30,18 @@ import { deviceStruct } from "@components/utilities/Style";
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 
 const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
-  let creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
+  const creationContext = useContext(CreationContext);
+  const currentContext = props.context ?? creationContext;
 
-  let data = creationContext.api.data.design;
+  let data = currentContext.api.data.design;
+
   let setData = (data: any) => {
-    creationContext.api.setData({
-      ...creationContext.api.data,
+    currentContext.api.setData({
+      ...currentContext.api.data,
       design: data,
     });
   };
+
   return (
     <Box
       sx={{

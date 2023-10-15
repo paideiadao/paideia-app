@@ -106,10 +106,11 @@ const AddDistribution: React.FC<{
             />
           </Box>
           <Box sx={{ pl: "1rem", pr: "1rem" }}>
-            {distributionTypes.map((i: any) => {
+            {distributionTypes.map((type, index) => {
               return (
                 <TextField
-                  value={i.label}
+                  key={`${type.label}-${index}`}
+                  value={type.label}
                   sx={{
                     width: "32.33%",
                     mr: "1%",
@@ -125,7 +126,7 @@ const AddDistribution: React.FC<{
                       <InputAdornment
                         position="end"
                         onClick={() =>
-                          setDistribution({ ...distribution, id: i.label })
+                          setDistribution({ ...distribution, id: type.label })
                         }
                       >
                         <NavigateNextIcon color="primary" />

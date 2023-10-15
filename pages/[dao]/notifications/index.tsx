@@ -71,13 +71,15 @@ const getNotificationCountdown = (date: Date) => {
 
 const Notifications: React.FC<{ params: any }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+
+  const [daoUserData] = globalContext.api.daoUserState;
+
   const [view, setView] = React.useState<string>("All");
   const router = useRouter();
   const { dao } = router.query;
 
   const { data: notifications, error: notificationsError } = useSWR(
-    globalContext.api?.daoUserData?.id &&
-      `/notificatons/${globalContext.api?.daoUserData?.id}`,
+    daoUserData.id && `/notificatons/${daoUserData.id}`,
     fetcher
   );
 
@@ -147,8 +149,14 @@ const Notifications: React.FC<{ params: any }> = (props) => {
         }}
       >
         {notifications
-          ? notifications.map((i: INotification, c: number) => {
-              return <Notification i={i} c={c} key={"notification-key-" + c} />;
+          ? notifications.map((notification: INotification, index: number) => {
+              return (
+                <Notification
+                  key={"notification-key-" + index}
+                  notification={notification}
+                  c={index}
+                />
+              );
             })
           : "Reading your Notifications..."}
       </Box>
@@ -189,13 +197,13 @@ const Notifications: React.FC<{ params: any }> = (props) => {
 };
 
 export const Notification: React.FC<{
-  i: INotification;
+  notification: INotification;
   m?: string;
   c: number;
 }> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
-  const i = props.i;
+  const notification = props.notification;
   return (
     <Box
       sx={{
@@ -205,7 +213,9 @@ export const Notification: React.FC<{
         display: "flex",
         alignItems: "center",
         p: "1rem",
-        backgroundColor: i.is_read ? "fileInput.outer" : "fileInput.read",
+        backgroundColor: notification.is_read
+          ? "fileInput.outer"
+          : "fileInput.read",
         borderRadius:
           props.m === undefined ? deviceWrapper("0", ".3rem") : "0rem",
         border: 1,
@@ -215,11 +225,14 @@ export const Notification: React.FC<{
       }}
       onClick={() =>
         router.push(
-          `/${dao}/discussion/${generateSlug(i.proposal_id, i.proposal_name)}`
+          `/${dao}/discussion/${generateSlug(
+            notification.proposal_id,
+            notification.proposal_name
+          )}`
         )
       }
     >
-      {/* <Avatar src={i.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
+      {/* <Avatar src={notification.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
       <Box
         sx={{
           width: "70%",
@@ -229,7 +242,7 @@ export const Notification: React.FC<{
       >
         <Box sx={{ pb: 2 }}>
           <Box sx={{ display: "inline", color: "text.secondary" }}>
-            {i.action} {i.proposal_name}
+            {notification.action} {notification.proposal_name}
           </Box>
         </Box>
         <Box
@@ -240,10 +253,11 @@ export const Notification: React.FC<{
             alignItems: "center",
           }}
         >
-          <AccessTimeIcon sx={{ fontSize: "1rem", mr: ".2rem" }} /> {i.date}
+          <AccessTimeIcon sx={{ fontSize: "1rem", mr: ".2rem" }} />{" "}
+          {notification.date}
         </Box>
       </Box>
-      {!i.is_read && (
+      {!notification.is_read && (
         <Box sx={{ ml: "auto" }}>
           <CircleIcon
             color="primary"

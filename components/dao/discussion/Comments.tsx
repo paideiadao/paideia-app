@@ -1,3 +1,5 @@
+import React, { useState, useContext } from "react";
+
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import {
   Avatar,
@@ -12,7 +14,7 @@ import {
   Modal,
   Link,
 } from "@mui/material";
-import * as React from "react";
+
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 import dateFormat from "dateformat";
@@ -46,6 +48,7 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: string }> = (
   props
 ) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+
   const api = new CommentsApi(globalContext.api, props.id);
 
   const setCommentsWrapper = async (newComment: IComment) => {
@@ -109,8 +112,8 @@ const CommentInput: React.FC<{
   parent?: string;
   level?: number;
 }> = (props) => {
-  const [value, setValue] = React.useState<string>("");
-  const themeContext = React.useContext<IThemeContext>(ThemeContext);
+  const [value, setValue] = useState<string>("");
+  const themeContext = useContext<IThemeContext>(ThemeContext);
   return (
     <Box
       sx={{
@@ -209,19 +212,21 @@ const BaseComment: React.FC<{
   set?: Function;
   level?: number;
 }> = (props) => {
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const router = useRouter();
+
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const [daoUserData] = globalContext.api.daoUserState;
+
+  const [filter, setFilter] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(true);
+  const [reply, setReply] = useState<boolean>(false);
 
   if (props.comment != undefined) {
     const children = props.data.filter(
       (i: IComment) => i?.parent === props.comment.id
     );
     const level = props.level;
-    const router = useRouter();
     const { dao } = router.query;
-    const [filter, setFilter] = React.useState<boolean>(false);
-    const [show, setShow] = React.useState<boolean>(true);
-    const [reply, setReply] = React.useState<boolean>(false);
     const commentStringArray = props.comment.comment.split("\n\n");
 
     return (
@@ -378,10 +383,10 @@ const BaseComment: React.FC<{
                         <Typography key={i} sx={{ mb: "16px" }}>
                           {breaks.map((str, i) => {
                             return (
-                              <React.Fragment key={i}>
+                              <p key={i}>
                                 {str}
                                 <br />
-                              </React.Fragment>
+                              </p>
                             );
                           })}
                         </Typography>
@@ -455,16 +460,18 @@ const BaseComment: React.FC<{
   }
 };
 
-const CommentOptions: React.FC<{
+interface CommentOptionsProps {
   commentId: string;
   userAlias: string;
   callbackHandler: () => void;
-}> = (props) => {
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+}
+
+const CommentOptions: React.FC<CommentOptionsProps> = (props) => {
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
   const api = new CommentsApi(globalContext.api, "");
   const [daoUserData] = globalContext.api.daoUserState;
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

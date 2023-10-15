@@ -47,22 +47,23 @@ const Addendums: React.FC = () => {
             mb="0"
           />
         </Box>
-        {addendums.map((i: IAddendum, c: number) => {
+        {addendums.map((addendum: IAddendum, index: number) => {
           return (
             <Box
+              key={addendum.id}
               sx={{
                 width: "100%",
                 borderRadius: ".3rem",
                 border: 1,
                 borderColor: "border.main",
-                p: "1rem",
+                p: ".5rem",
                 fontSize: ".9rem",
               }}
             >
               <Box
                 sx={{ width: "100%", display: "flex", alignItems: "center" }}
               >
-                <Typography>{i.name}</Typography>
+                {addendum.name}
                 <Box
                   sx={{
                     ml: "auto",
@@ -70,35 +71,60 @@ const Addendums: React.FC = () => {
                     fontSize: ".8rem",
                   }}
                 >
-                  {dateFormat(i.date, "mmmm dS, yyyy")}
+                  {dateFormat(addendum.date, "mmmm dS, yyyy")}
                 </Box>
               </Box>
               <Box
                 sx={{
                   width: "100%",
-                  color: "text.secondary",
-                  fontWeight: ".8rem",
+                  borderRadius: ".3rem",
+                  border: 1,
+                  borderColor: "border.main",
+                  p: "1rem",
+                  fontSize: ".9rem",
                 }}
-                dangerouslySetInnerHTML={{
-                  __html: i.content,
-                }}
-              />
-              <Link
-                href={
-                  dao === undefined
-                    ? ``
-                    : `/${dao}/proposal/${proposal_id}/addendum/${i.id}`
-                }
               >
-                <Button
-                  size="small"
-                  endIcon={<NavigateNextIcon />}
-                  sx={{ mt: ".5rem" }}
-                  disabled
+                <Box
+                  sx={{ width: "100%", display: "flex", alignItems: "center" }}
                 >
-                  Read addendum
-                </Button>
-              </Link>
+                  <Typography>{addendum.name}</Typography>
+                  <Box
+                    sx={{
+                      ml: "auto",
+                      color: "text.secondary",
+                      fontSize: ".8rem",
+                    }}
+                  >
+                    {dateFormat(addendum.date, "mmmm dS, yyyy")}
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    width: "100%",
+                    color: "text.secondary",
+                    fontWeight: ".8rem",
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: addendum.content,
+                  }}
+                />
+                <Link
+                  href={
+                    dao === undefined
+                      ? ``
+                      : `/${dao}/proposal/${proposal_id}/addendum/${addendum.id}`
+                  }
+                >
+                  <Button
+                    size="small"
+                    endIcon={<NavigateNextIcon />}
+                    sx={{ mt: ".5rem" }}
+                    disabled
+                  >
+                    Read addendum
+                  </Button>
+                </Link>
+              </Box>
             </Box>
           );
         })}

@@ -1,3 +1,5 @@
+import { useContext } from "react";
+
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { Box } from "@mui/material";
 import * as React from "react";
@@ -6,14 +8,13 @@ import FileInput from "../../utilities/file";
 import { LearnMore, Subheader, Subtitle } from "../utilities/HeaderComponents";
 
 const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
-  const creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
-  const data = creationContext.api.data.design;
-  const setData = (data: any) => {
-    creationContext.api.setData({
-      ...creationContext.api.data,
+  const creationContext = useContext(CreationContext);
+  const currentContext = props.context ?? creationContext;
+
+  let data = currentContext.api.data.design;
+  let setData = (data: any) => {
+    currentContext.api.setData({
+      ...currentContext.api.data,
       design: data,
     });
   };

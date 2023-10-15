@@ -11,7 +11,7 @@ import AddDistribution from "./AddDistribution";
 export const TokenomicsRow: React.FC<{
   title: string;
   balance: number;
-  percentage: number;
+  percentage: string;
 }> = (props) => {
   return (
     <Box sx={{ display: "flex", alignItems: "center", mt: "1rem", mb: "1rem" }}>
@@ -61,9 +61,9 @@ const TokenomicSummary: React.FC<IData<ITokenomics>> = (props) => {
   // change this here to make the widgets persist...
   // make use of the global state
 
-  const [distributions, setDistributions] = React.useState<any[]>(
-    props.data.distributions
-  );
+  const [distributions, setDistributions] = React.useState<
+    typeof props.data.distributions
+  >(props.data.distributions);
 
   let data = props.data;
   let tokenHolderBalance = data.tokenHolders
@@ -96,13 +96,19 @@ const TokenomicSummary: React.FC<IData<ITokenomics>> = (props) => {
         alignItems: "center",
       }}
     >
-      {tokenomics.map((i: any, c: number) => {
-        return <TokenomicsRow {...i} />;
+      {tokenomics.map((tokenomics) => {
+        return (
+          <TokenomicsRow
+            key={`${tokenomics.title}+${tokenomics.balance}`}
+            {...tokenomics}
+          />
+        );
       })}
-      {distributions.map((i: any, c: number) => (
+      {distributions.map((distribution, c: number) => (
         <AddDistribution
+          key={distribution.id}
           data={{ ...props }}
-          distribution={i}
+          distribution={distribution}
           close={() => {
             let temp = [...distributions];
             temp.splice(c, 1);

@@ -307,9 +307,12 @@ const PublicRound: React.FC<{
           tooltipText="Content here."
           tooltipLink="/here"
         />
-        {value.tokenHolders.map((i: ITokenHolder, c: number) => {
+        {value.tokenHolders.map((tokenHolder: ITokenHolder, c: number) => {
           return (
-            <Box sx={{ display: "flex", alignItems: "center", height: "5rem" }}>
+            <Box
+              key={tokenHolder.alias}
+              sx={{ display: "flex", alignItems: "center", height: "5rem" }}
+            >
               <Box
                 sx={{
                   width: "57%",
@@ -320,7 +323,7 @@ const PublicRound: React.FC<{
                 <WalletSelector
                   id="tokenomics"
                   key={c + "tokenomics"}
-                  data={i}
+                  data={tokenHolder}
                   mt="0"
                   number={c}
                   set={(j: any) => {

@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { Box, Collapse } from "@mui/material";
 import React from "react";
@@ -7,12 +8,10 @@ import { Subheader, Subtitle } from "../utilities/HeaderComponents";
 import LabeledSwitch from "../utilities/LabeledSwitch";
 
 const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
-  let creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
+  const creationContext = useContext(CreationContext);
+  const currentContext = props.context ?? creationContext;
 
-  let data = creationContext.api.data.design;
+  let data = currentContext.api.data.design;
   let setData = (data: any) => {
     creationContext.api.setData({
       ...creationContext.api.data,

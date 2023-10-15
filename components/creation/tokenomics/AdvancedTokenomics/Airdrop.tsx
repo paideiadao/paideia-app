@@ -333,43 +333,49 @@ const Airdrop: React.FC<{
                 tooltipLink="/here"
               />
               <Box sx={{ width: "100%" }}>
-                {value.validatedFields.map((i: IValidatedField, c: number) => {
-                  return (
-                    <Box
-                      sx={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TextField
-                        label={`Input name (${i.number + 1})`}
-                        value={i.value}
-                        sx={{ width: "100%", mt: ".5rem", mb: ".5rem" }}
-                        onChange={(e: any) => {
-                          let temp = [...value.validatedFields];
-                          temp[c].value = e.target.value;
-                          setValue({ ...value, validatedFields: temp });
+                {value.validatedFields.map(
+                  (validatedFields: IValidatedField, index: number) => {
+                    return (
+                      <Box
+                        key={`${validatedFields.number}+${index}`}
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
                         }}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() => {
-                                  let temp = [...value.validatedFields];
-                                  temp.splice(c, 1);
-                                  setValue({ ...value, validatedFields: temp });
-                                }}
-                              >
-                                <DeleteIcon color="error" />
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Box>
-                  );
-                })}
+                      >
+                        <TextField
+                          label={`Input name (${validatedFields.number + 1})`}
+                          value={validatedFields.value}
+                          sx={{ width: "100%", mt: ".5rem", mb: ".5rem" }}
+                          onChange={(e: any) => {
+                            let temp = [...value.validatedFields];
+                            temp[index].value = e.target.value;
+                            setValue({ ...value, validatedFields: temp });
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() => {
+                                    let temp = [...value.validatedFields];
+                                    temp.splice(index, 1);
+                                    setValue({
+                                      ...value,
+                                      validatedFields: temp,
+                                    });
+                                  }}
+                                >
+                                  <DeleteIcon color="error" />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Box>
+                    );
+                  }
+                )}
               </Box>
               <Box
                 sx={{
@@ -419,65 +425,68 @@ const Airdrop: React.FC<{
             tooltipText="Content here."
             tooltipLink="/here"
           />
-          {value.tokenHolders.map((i: ITokenHolder, c: number) => {
-            return (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  height: "5rem",
-                }}
-              >
+          {value.tokenHolders.map(
+            (tokenHolder: ITokenHolder, index: number) => {
+              return (
                 <Box
+                  key={tokenHolder.alias}
                   sx={{
-                    width: "57%",
-                    mr: ".5rem",
                     display: "flex",
-                    alignItem: "flex-start",
+                    alignItems: "flex-start",
+                    height: "5rem",
                   }}
                 >
-                  <WalletSelector
-                    id="tokenomics"
-                    key={c + "tokenomics-airdrop"}
-                    data={i}
-                    mt="0"
-                    number={c}
-                    set={(j: any) => {
+                  <Box
+                    sx={{
+                      width: "57%",
+                      mr: ".5rem",
+                      display: "flex",
+                      alignItem: "flex-start",
+                    }}
+                  >
+                    <WalletSelector
+                      id="tokenomics"
+                      key={index + "tokenomics-airdrop"}
+                      data={tokenHolder}
+                      mt="0"
+                      number={index}
+                      set={(j: any) => {
+                        let temp = [...value.tokenHolders];
+                        if (j === undefined) {
+                          temp.splice(index, 1);
+                        } else {
+                          temp[index] = { ...temp[index], ...j };
+                        }
+                        setValue({ ...value, tokenHolders: temp });
+                      }}
+                    />
+                  </Box>
+                  <BalanceInput
+                    total={value.balance}
+                    remaining={data.tokenRemaining}
+                    balance={value.tokenHolders[index].balance}
+                    value={value.tokenHolders[index]}
+                    set={(newValue: any) => {
                       let temp = [...value.tokenHolders];
-                      if (j === undefined) {
-                        temp.splice(c, 1);
-                      } else {
-                        temp[c] = { ...temp[c], ...j };
-                      }
+                      temp[index] = { ...newValue };
+                      setValue({ ...value, tokenHolders: temp });
+                    }}
+                  />
+                  <PercentageInput
+                    total={value.balance}
+                    remaining={data.tokenRemaining}
+                    percentage={value.tokenHolders[index].percentage}
+                    value={value.tokenHolders[index]}
+                    set={(newValue: any) => {
+                      let temp = [...value.tokenHolders];
+                      temp[index] = { ...newValue };
                       setValue({ ...value, tokenHolders: temp });
                     }}
                   />
                 </Box>
-                <BalanceInput
-                  total={value.balance}
-                  remaining={data.tokenRemaining}
-                  balance={value.tokenHolders[c].balance}
-                  value={value.tokenHolders[c]}
-                  set={(newValue: any) => {
-                    let temp = [...value.tokenHolders];
-                    temp[c] = { ...newValue };
-                    setValue({ ...value, tokenHolders: temp });
-                  }}
-                />
-                <PercentageInput
-                  total={value.balance}
-                  remaining={data.tokenRemaining}
-                  percentage={value.tokenHolders[c].percentage}
-                  value={value.tokenHolders[c]}
-                  set={(newValue: any) => {
-                    let temp = [...value.tokenHolders];
-                    temp[c] = { ...newValue };
-                    setValue({ ...value, tokenHolders: temp });
-                  }}
-                />
-              </Box>
-            );
-          })}
+              );
+            }
+          )}
           {data.tokenRemaining > 0 &&
             value.tokenHolders.map((i: any) => i.balance).indexOf(0) === -1 &&
             value.tokenHolders.map((i: any) => i.percentage).indexOf(0) ===

@@ -26,18 +26,19 @@ const YesNo: React.FC = () => {
         mb=".25rem"
         subtitle="Yes or No proposals allow you to create a chain of actions to be executed if the proposal passes. To add an action, simply click below, decide the type of action you want to create, and fill up the relevant information."
       />
-      {actions.map((i: IProposalAction, c: number) => (
+      {actions.map((action: IProposalAction, index: number) => (
         <AddAction
-          name={i.name}
+          key={index}
+          name={action.name}
           close={() => {
             let temp = [...actions];
-            temp.splice(c, 1);
+            temp.splice(index, 1);
             context.api.setValue({
               ...context.api.value,
               actions: temp,
             });
           }}
-          c={c}
+          c={index}
           data={undefined}
         />
       ))}

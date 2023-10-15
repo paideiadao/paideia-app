@@ -22,6 +22,7 @@ export default class MyDocument extends Document {
           <link
             href="https://fonts.gstatic.com"
             rel="preconnect"
+            crossOrigin="anonymous"
           />
           <link
             href="https://fonts.googleapis.com/css2?family=Inter&family=Space+Grotesk&family=Viga&display=swap"
@@ -34,6 +35,7 @@ export default class MyDocument extends Document {
           <script
             src="https://cdn.tiny.cloud/1/zqjhfpipuc4o31w9futmmrkk1h580wp0khen82rp6wphf1u1/tinymce/6/tinymce.min.js"
             referrerPolicy="origin"
+            defer
           ></script>
         </Head>
         <body>

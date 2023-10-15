@@ -19,8 +19,11 @@ export const StakingActivity: React.FC = () => {
   return (
     <Box>
       <Subheader title="Activity" />
-      {[].map((i: any, c: number) => {
-        return <Activity i={i} c={c} />;
+      {[].map((activity: IActivity, index: number) => {
+        const { name, date } = activity;
+        return (
+          <Activity key={`${name}+${date}`} activity={activity} c={index} />
+        );
       })}
     </Box>
   );
@@ -45,6 +48,7 @@ const Staking: React.FC = () => {
             <Button variant="contained" size="small">
               Manage Stake{" "}
               <img
+                alt="Coin icon"
                 src={Coin.src}
                 style={{
                   marginLeft: ".5rem",

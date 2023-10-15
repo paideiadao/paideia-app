@@ -96,6 +96,8 @@ const rows: IProfilePopupRow[] = [
 export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
   const { setWallet, setDAppWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [_, setDaoUserData] = globalContext.api.daoUserState;
+
   return (
     <Dialog
       open={props.open}
@@ -184,7 +186,7 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
             connected: false,
             addresses: [],
           });
-          globalContext.api.setDaoUserData(undefined);
+          setDaoUserData(undefined);
           props.close();
         }}
       >

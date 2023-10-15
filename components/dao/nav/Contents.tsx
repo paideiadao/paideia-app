@@ -637,6 +637,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       </Box>
       <Box sx={{ zIndex: 1 }}>
         <img
+          alt="Footer image"
           src={
             themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src
           }
