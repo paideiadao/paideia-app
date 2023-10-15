@@ -1,4 +1,4 @@
-import { Theme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { ThemeContext } from "@lib/ThemeContext";
 import { GlobalContext } from "@lib/AppContext";
 import { AddWalletProvider } from "@components/wallet/AddWalletContext";

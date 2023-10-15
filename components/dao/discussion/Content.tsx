@@ -9,7 +9,6 @@ import "easymde/dist/easymde.min.css";
 import dynamic from "next/dynamic";
 import { SimpleMDEReactProps } from "react-simplemde-editor";
 import axios from "axios";
-import { parseJSON } from "date-fns";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const SimpleMdeEditor = dynamic(() => import("react-simplemde-editor"), {

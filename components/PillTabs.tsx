@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { DarkTheme, LightTheme } from "@theme/theme";
+import { DarkTheme } from "@theme/theme";
 
 const StyledTabs = styled((props: any) => (
   <Tabs

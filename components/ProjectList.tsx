@@ -11,19 +11,15 @@ import {
   MenuItem,
   InputAdornment,
   OutlinedInput,
-  useMediaQuery,
-  IconButton,
   DialogTitle,
   DialogContent,
   DialogActions,
   Dialog,
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { useTheme } from "@mui/material/styles";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import StarIcon from "@mui/icons-material/Star";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { DarkTheme } from "@theme/theme";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterOptions from "@components/FilterOptions";
 import { SxProps } from "@mui/material";

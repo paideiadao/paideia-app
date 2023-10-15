@@ -2,7 +2,6 @@ import {
   Box,
   TextField,
   Button,
-  Modal,
   Collapse,
   Typography,
   useTheme,
@@ -10,24 +9,18 @@ import {
 import * as React from "react";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
-import { IObj } from "@lib/Interfaces";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Alert from "@mui/material/Alert";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import Status from "@components/utilities/Status";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import { LoadingButton } from "@mui/lab";
 import { IGlobalContext, GlobalContext } from "@lib/AppContext";
 import { IUserSettings } from "@lib/dao/users/Interfaces";
 import SettingsApi from "@lib/dao/users/SettingsApi";
-import { fetcher, getDaoPath } from "@lib/utilities";
-import { id } from "date-fns/locale";
+import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import useDidMountEffect from "@components/utilities/hooks";
 import CancelLink from "@components/utilities/CancelLink";
 
 interface INotification {
@@ -71,7 +64,6 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
   const [daoUserData] = settingsApi.api.daoUserState;
 
   const router = useRouter();
-  const { id } = router.query;
 
   const { data: userSettingsData, error: userSettingsError } = useSWR(
     daoUserData != null &&

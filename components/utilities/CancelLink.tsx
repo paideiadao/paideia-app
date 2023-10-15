@@ -1,4 +1,3 @@
-import { getDaoPath } from "@lib/utilities";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";

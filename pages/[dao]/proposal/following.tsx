@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropsosalListing from "@components/dao/proposals/ProposalListing";
-import useSWR from "swr";
 import { useRouter } from "next/router";
-import { fetcher, getBaseUrl } from "@lib/utilities";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import useDidMountEffect from "@components/utilities/hooks";
 import Layout from "@components/dao/Layout";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";

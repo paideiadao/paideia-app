@@ -3,7 +3,6 @@ import { Typography, List, ListItem, useTheme, Box } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "@components/Link";
-import Blockquote from "@components/Blockquote";
 import Code from "@components/Code";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import tsx from "react-syntax-highlighter/dist/cjs/languages/prism/tsx";

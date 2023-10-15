@@ -1,18 +1,8 @@
-import { Close, Delete } from "@mui/icons-material";
-import {
-  Alert,
-  Box,
-  Button,
-  IconButton,
-  Modal,
-  Collapse,
-  Link,
-} from "@mui/material";
+import { Alert, Box, IconButton, Collapse, Link } from "@mui/material";
 import React, { useEffect, FC } from "react";
 import { deviceWrapper } from "./Style";
 import CloseIcon from "@mui/icons-material/Close";
 import { TransitionGroup } from "react-transition-group";
-import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 
 interface IAbstractAlert {

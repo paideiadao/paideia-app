@@ -11,7 +11,6 @@ import { Box, Button, ButtonGroup } from "@mui/material";
 import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Layout from "./Layout";
-import { ISendFunds } from "./SendFunds";
 import DexSelector from "@components/creation/utilities/DexSelector";
 import AbstractDate from "@components/creation/utilities/AbstractDate";
 import { deviceWrapper } from "@components/utilities/Style";

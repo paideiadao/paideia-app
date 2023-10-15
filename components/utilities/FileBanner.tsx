@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, Box, Button, Paper, Input, FormControl } from "@mui/material";
+import { Box, Button, Paper, Input, FormControl } from "@mui/material";
 import { bytesToSize } from "../../lib/creation/Utilities";
 import ImageIcon from "@mui/icons-material/Image";
 

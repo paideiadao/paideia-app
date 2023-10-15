@@ -1,9 +1,8 @@
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import * as React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
-import { getDaoPath } from "@lib/utilities";
 import { useRouter } from "next/router";
 
 const Termination: React.FC = () => {

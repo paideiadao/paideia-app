@@ -2,12 +2,8 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import Contents from "./Contents";
 import DaoBio from "./DaoBio";
-import Footer from "./Footer";
-import LightFooter from "@public/dao/light-footer.png";
-import DarkFooter from "@public/dao/dark-footer.png";
 import { ThemeContext, IThemeContext } from "@lib/ThemeContext";
-import { DarkTheme } from "@theme/theme";
-import { deviceStruct, deviceWrapper } from "@components/utilities/Style";
+import { deviceWrapper } from "@components/utilities/Style";
 import { INav } from "./TopNav";
 
 const Nav: React.FC<INav> = (props) => {

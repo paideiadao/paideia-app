@@ -1,4 +1,3 @@
-import { props } from "@lib/DaoPaths";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import * as React from "react";

@@ -10,7 +10,6 @@ import {
   DragUpdate,
   ResponderProvided,
 } from "react-beautiful-dnd";
-import { isEmpty } from "lodash";
 
 // a little function to help us with reordering the result
 const reorder = (list: any, startIndex: number, endIndex: number) => {

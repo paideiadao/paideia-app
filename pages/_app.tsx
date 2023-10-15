@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "@styles/global.css";
 import { AppProps } from "next/app";
-import { DarkTheme, LightTheme } from "@theme/theme";
+import { LightTheme } from "@theme/theme";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import Backdrop from "@mui/material/Backdrop";

@@ -1,4 +1,3 @@
-import { props } from "@lib/DaoPaths";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import * as React from "react";
 

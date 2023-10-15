@@ -8,7 +8,6 @@ import {
   Box,
   SelectChangeEvent,
 } from "@mui/material";
-import { data } from "jquery";
 import * as React from "react";
 
 interface IVoteDurationSelector {

@@ -1,12 +1,8 @@
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
-import { Box, Button, IconButton } from "@mui/material";
-import {
-  ActionType,
-  IProposalAction,
-  IProposalOption,
-} from "@pages/[dao]/proposal/create";
+import { Box, Button } from "@mui/material";
+import { ActionType, IProposalOption } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import {
   DragDropContext,
@@ -19,7 +15,6 @@ import {
 } from "react-beautiful-dnd";
 
 import useDidMountEffect from "@components/utilities/hooks";
-import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import DraggableCard, { DraggableHeader } from "./DraggableContent";
 import { Add } from "@mui/icons-material";
 import DaoDescription from "./Actions/DaoDescription";

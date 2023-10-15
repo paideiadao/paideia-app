@@ -8,7 +8,6 @@ import {
   TextField,
 } from "@mui/material";
 import * as React from "react";
-import Musk from "../../../../public/profile/musk-full.png";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -19,7 +18,6 @@ import { deviceWrapper } from "@components/utilities/Style";
 import { IFile, ISocialLink } from "@lib/creation/Interfaces";
 import { LoadingButton } from "@mui/lab";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import useDidMountEffect from "@components/utilities/hooks";
 import CancelLink from "@components/utilities/CancelLink";
 
 const ProfileEditImage: React.FC<{ set: (val: IFile) => void; img: string }> = (

@@ -4,13 +4,12 @@ import {
   CreationContext,
   ICreationContext,
 } from "../../../lib/creation/Context";
-import { Header, Subheader } from "../utilities/HeaderComponents";
+import { Header } from "../utilities/HeaderComponents";
 import TokenInformation from "./TokenInformation";
 import TokenSymbol from "./TokenSymbol";
 import TokenHolders from "./TokenHolders";
 import AdvancedTokenomics from "./AdvancedTokenomics/AdvancedTokenomics";
 import TokenDistribution from "./TokenDistribution";
-import { ILiquidityInfo } from "./AdvancedTokenomics/Liquidity";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   percentage,

@@ -1,8 +1,4 @@
-import {
-  LearnMore,
-  Subtitle,
-} from "@components/creation/utilities/HeaderComponents";
-import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
+import { LearnMore } from "@components/creation/utilities/HeaderComponents";
 import { deviceStruct } from "@components/utilities/Style";
 import {
   ConfigContext,

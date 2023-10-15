@@ -4,10 +4,7 @@ import { Box, IconButton, TextField } from "@mui/material";
 import { IProposalOption } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import {
-  DraggableStateSnapshot,
-  DroppableStateSnapshot,
-} from "react-beautiful-dnd";
+import { DraggableStateSnapshot } from "react-beautiful-dnd";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";

@@ -1,10 +1,8 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Box, Avatar } from "@mui/material";
 import * as React from "react";
-import { activities } from "../dashboard/LatestActivity";
 import dateFormat from "dateformat";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import Musk from "../../../public/profile/musk-full.png";
 import { IActivity } from "../activity/Activity";
 
 const Activity: React.FC<{ activities: IActivity[] }> = (props) => {

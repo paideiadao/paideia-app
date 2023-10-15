@@ -1,8 +1,8 @@
 import * as React from "react";
 import { ITokenomics } from "@lib/creation/Interfaces";
 import { IData } from "@lib/Interfaces";
-import { Box, InputAdornment, TextField } from "@mui/material";
-import { CapsInfo, Header, Subheader } from "../../utilities/HeaderComponents";
+import { Box } from "@mui/material";
+import { CapsInfo, Header } from "../../utilities/HeaderComponents";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VestingSchedule, { IVestingSchedule } from "./VestingSchedule";
 import BalanceInput from "../../utilities/BalanceInput";

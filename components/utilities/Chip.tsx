@@ -1,6 +1,5 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import * as React from "react";
-import { deviceWrapper } from "./Style";
 
 const Chip: React.FC<{
   set?: Function;

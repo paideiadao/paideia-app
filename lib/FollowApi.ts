@@ -1,7 +1,5 @@
-import { IComment } from "@components/dao/discussion/Comments";
 import { AppApi } from "@lib/AppApi";
 import { AbstractApi } from "@lib/utilities";
-import { IDiscussion } from "@pages/[dao]/discussion/create";
 
 type FollowDirection = "follow" | "unfollow";
 

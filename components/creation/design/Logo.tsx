@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import { CreationContext } from "../../../lib/creation/Context";
 import FileInput from "../../utilities/file";
-import { LearnMore, Subheader, Subtitle } from "../utilities/HeaderComponents";
+import { Subheader, Subtitle } from "../utilities/HeaderComponents";
 
 const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
   const creationContext = useContext(CreationContext);

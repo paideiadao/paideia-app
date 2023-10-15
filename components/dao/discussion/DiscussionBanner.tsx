@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Avatar, Box, Button, Paper, Input, FormControl } from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
+import { Box, Button, Paper, Input, FormControl } from "@mui/material";
 import { bytesToSize } from "@lib/creation/Utilities";
 import { deviceWrapper } from "@components/utilities/Style";
 

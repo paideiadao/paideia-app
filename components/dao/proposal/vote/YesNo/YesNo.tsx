@@ -1,5 +1,5 @@
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import * as React from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import ProposalContext, {

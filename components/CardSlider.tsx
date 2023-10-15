@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, useRef } from "react";
-import { Button, Container, Box, Fab } from "@mui/material";
+import { Container, Box, Fab } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { deviceWrapper } from "./utilities/Style";

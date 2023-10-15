@@ -1,6 +1,5 @@
 import { Button, Fab, Tooltip } from "@mui/material";
 import * as React from "react";
-import { deviceWrapper } from "./Style";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import useDidMountEffect from "./hooks";

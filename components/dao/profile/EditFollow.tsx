@@ -2,8 +2,6 @@ import { Button } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import EditIcon from "@mui/icons-material/Edit";
 import Follow from "@components/utilities/Follow";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";

@@ -4,7 +4,6 @@ import Layout from "@components/dao/Layout";
 import { fetcher } from "@lib/utilities";
 import useDidMountEffect from "@components/utilities/hooks";
 import { IGlobalContext, GlobalContext } from "@lib/AppContext";
-import { useRouter } from "next/router";
 import useSWR from "swr";
 
 const Mine: React.FC = () => {

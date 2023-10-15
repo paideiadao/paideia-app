@@ -1,5 +1,5 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Box, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import * as React from "react";
 import MarkdownRender from "@lib/MarkdownRender";
 

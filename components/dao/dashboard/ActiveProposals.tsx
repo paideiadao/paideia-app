@@ -1,21 +1,15 @@
-import { Box, Button, IconButton, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState, useContext } from "react";
 import { Subheader } from "../../creation/utilities/HeaderComponents";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ProposalCard from "../proposals/ProposalCard";
 import useDidMountEffect from "@components/utilities/hooks";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { deviceStruct, deviceWrapper } from "@components/utilities/Style";
 import CardSlider from "@components/CardSlider";
-import { getBaseUrl, fetcher } from "@lib/utilities";
-import useSWR from "swr";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { getUserId } from "@lib/utilities";
-import { useGridApiContext } from "@mui/x-data-grid";
 
 let temp = new Date();
 temp.setDate(temp.getDate() - 30);

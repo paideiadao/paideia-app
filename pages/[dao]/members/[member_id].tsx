@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AbstractProfile from "@components/dao/profile/AbstractProfile";
-import { fetcher, getDaoPath } from "@lib/utilities";
+import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import useDidMountEffect from "@components/utilities/hooks";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { useDaoSlugs } from "@hooks/useDaoSlugs";
 
 const Member: React.FC = () => {
   const router = useRouter();

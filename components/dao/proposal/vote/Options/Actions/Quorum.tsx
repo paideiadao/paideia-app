@@ -1,4 +1,3 @@
-import { deviceStruct } from "@components/utilities/Style";
 import { Box, Slider, TextField } from "@mui/material";
 import * as React from "react";
 import { IQuorum } from "../../YesNo/Actions/Quorum";

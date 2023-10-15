@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useAddWallet } from "@components/wallet/AddWalletContext";
 import { useWallet } from "@components/wallet/WalletContext";
-import { Address } from "@components/wallet/Address";
 import ProviderListing from "./ProviderListing";
 import Nautilus from "./Nautilus";
 import MobileWallet from "./MobileWallet";

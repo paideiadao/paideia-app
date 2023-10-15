@@ -1,7 +1,4 @@
-import {
-  CapsInfo,
-  Header,
-} from "@components/creation/utilities/HeaderComponents";
+import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import Chip from "@components/utilities/Chip";
 import {
   Box,
@@ -16,7 +13,6 @@ import {
 import * as React from "react";
 import { IFilters } from "./ProposalListing";
 import CloseIcon from "@mui/icons-material/Close";
-import { deviceWrapper } from "@components/utilities/Style";
 import { IThemeContext, ThemeContext } from "@lib/ThemeContext";
 import { DarkTheme } from "@theme/theme";
 

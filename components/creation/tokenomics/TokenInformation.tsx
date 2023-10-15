@@ -1,10 +1,10 @@
 import { Box, Button, ButtonGroup, TextField, Grid } from "@mui/material";
 import * as React from "react";
-import { ICreationData, ITokenomics } from "@lib/creation/Interfaces";
+import { ITokenomics } from "@lib/creation/Interfaces";
 import { CreationContext } from "../../../lib/creation/Context";
 import { IData } from "@lib/Interfaces";
-import { Header, LearnMore, Subheader } from "../utilities/HeaderComponents";
-import { deviceStruct, deviceWrapper } from "@components/utilities/Style";
+import { LearnMore } from "../utilities/HeaderComponents";
+import { deviceStruct } from "@components/utilities/Style";
 
 const NewToken: React.FC<IData<ITokenomics>> = (props) => {
   let data = props.data;

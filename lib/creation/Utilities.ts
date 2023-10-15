@@ -1,4 +1,3 @@
-import { data } from "jquery";
 import { ICreationData, ITokenHolder } from "./Interfaces";
 
 export function checkCompleteness(_data: ICreationData): boolean {

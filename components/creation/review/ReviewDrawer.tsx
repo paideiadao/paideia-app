@@ -1,4 +1,4 @@
-import { Avatar, Box, Button } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import * as React from "react";
 import { CreationContext } from "../../../lib/creation/Context";
 import CircleIcon from "@mui/icons-material/Circle";

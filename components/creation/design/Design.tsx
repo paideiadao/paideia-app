@@ -1,4 +1,4 @@
-import { Avatar, Box, Fab, Paper } from "@mui/material";
+import { Avatar, Box, Paper } from "@mui/material";
 import * as React from "react";
 import { Header, LearnMore, Subtitle } from "../utilities/HeaderComponents";
 import CheckIcon from "@mui/icons-material/Check";

@@ -1,4 +1,5 @@
-import { Box, Button, Chip, Fab, Tab } from "@mui/material";
+import { Box, Button, Chip, Tab } from "@mui/material";
+import * as React from "react";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import Comments, { IComment } from "@components/dao/discussion/Comments";
@@ -171,9 +172,7 @@ const Proposal: React.FC = () => {
                       <FollowMobile
                         followed={
                           value.followers.indexOf(
-                            context.api.daoUserData
-                              ? context.api.daoUserData.id
-                              : null
+                            daoUserData ? daoUserData.id : null
                           ) > -1
                         }
                         putUrl={"/proposals/follow/" + parsed_proposal_id}
@@ -280,13 +279,11 @@ const Proposal: React.FC = () => {
                       flexDirection: deviceWrapper("column", "row"),
                     }}
                   >
-                    {context.api.daoUserData != null && (
+                    {daoUserData != null && (
                       <Follow
                         followed={
                           value.followers.indexOf(
-                            context.api.daoUserData
-                              ? context.api.daoUserData.id
-                              : null
+                            daoUserData ? daoUserData.id : null
                           ) > -1
                         }
                         putUrl={"/proposals/follow/" + parsed_proposal_id}
@@ -367,15 +364,11 @@ const Proposal: React.FC = () => {
                       dislikes={value.dislikes.length}
                       userSide={
                         value.likes.indexOf(
-                          context.api.daoUserData
-                            ? context.api.daoUserData.id
-                            : null
+                          daoUserData ? daoUserData.id : null
                         ) > -1
                           ? 1
                           : value.dislikes.indexOf(
-                              context.api.daoUserData
-                                ? context.api.daoUserData.id
-                                : null
+                              daoUserData ? daoUserData.id : null
                             ) > -1
                           ? 0
                           : undefined

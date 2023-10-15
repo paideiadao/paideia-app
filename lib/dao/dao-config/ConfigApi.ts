@@ -1,4 +1,3 @@
-import { IAlerts } from "@components/utilities/Alert";
 import { AppApi } from "@lib/AppApi";
 import {
   IBasicInformation,
@@ -6,8 +5,6 @@ import {
   IDesign,
 } from "@lib/creation/Interfaces";
 import { AbstractApi } from "@lib/utilities";
-import { IDiscussion } from "@pages/[dao]/discussion/create";
-import { IConfigContext } from "./ConfigContext";
 
 export interface IConfigData {
   basicInformation: IBasicInformation;

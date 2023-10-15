@@ -1,5 +1,4 @@
-import { modalBackground } from "@components/utilities/modalBackground";
-import { Avatar, Box, Button, Modal, Dialog } from "@mui/material";
+import { Avatar, Box, Button, Dialog } from "@mui/material";
 import * as React from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";

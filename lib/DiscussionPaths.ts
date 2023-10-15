@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from "next/types";
+import { GetStaticPaths } from "next/types";
 
 export const paths: GetStaticPaths = async () => {
   // query db for proposals here...

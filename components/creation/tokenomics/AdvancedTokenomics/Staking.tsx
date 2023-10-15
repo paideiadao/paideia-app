@@ -1,9 +1,7 @@
 import {
   Box,
-  Button,
   InputAdornment,
   TextField,
-  AlertTitle,
   FormControl,
   InputLabel,
   Select,
@@ -16,7 +14,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { CapsInfo, Header } from "../../utilities/HeaderComponents";
 import BalanceInput from "../../utilities/BalanceInput";
 import PercentageInput from "../../utilities/PercentageInput";
-import Alert from "@mui/material/Alert";
 import LabeledSwitch from "../../utilities/LabeledSwitch";
 import AbstractDate from "../../utilities/AbstractDate";
 import useDidMountEffect from "../../../utilities/hooks";

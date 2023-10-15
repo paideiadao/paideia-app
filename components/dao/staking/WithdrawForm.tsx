@@ -12,6 +12,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+import * as React from "react";
 import { deviceWrapper } from "@components/utilities/Style";
 import CancelLink from "@components/utilities/CancelLink";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
@@ -59,7 +60,7 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
         },
       });
       const tx = res.data.unsigned_transaction;
-      const context = await getErgoWalletContext()
+      const context = await getErgoWalletContext();
       const signed = await context.sign_tx(tx);
       const txId = await context.submit_tx(signed);
       appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");

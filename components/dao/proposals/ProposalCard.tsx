@@ -2,7 +2,6 @@ import {
   Box,
   Badge,
   Chip,
-  Avatar,
   IconButton,
   ButtonBase,
   Typography,
@@ -16,19 +15,14 @@ import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteIcon from "@mui/icons-material/Delete";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import { percentage } from "@lib/creation/Utilities";
-import Link from "next/link";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useRouter } from "next/router";
 import { deviceWrapper } from "@components/utilities/Style";
-import { getRandomImage } from "@components/utilities/images";
 import LikesDislikesApi from "@lib/LikesDislikesApi";
-import useDidMountEffect from "@components/utilities/hooks";
 import FollowApi from "@lib/FollowApi";
 import { generateSlug } from "@lib/utilities";
-import { SentimentVerySatisfiedOutlined } from "@mui/icons-material";
 import { niceNumber } from "../proposal/VoteWidget";
 
 export interface IProposalCard {

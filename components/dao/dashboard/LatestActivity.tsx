@@ -1,11 +1,8 @@
-import React, { useEffect, useState, useContext, FC } from "react";
-import useDidMountEffect from "@components/utilities/hooks";
+import React, { useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { fetcher } from "@lib/utilities";
-import { Box, Button, Avatar } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 import { Subheader } from "../../creation/utilities/HeaderComponents";
 import Activity, { IActivity } from "../activity/Activity";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";

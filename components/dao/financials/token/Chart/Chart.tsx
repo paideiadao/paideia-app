@@ -5,7 +5,6 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 // import ChartBase from "./ChartBase";
 import { deviceWrapper } from "@components/utilities/Style";
-import { initialData } from "./data";
 
 const Chart: React.FC<any> = (props) => {
   const [view, setView] = React.useState<string>("Line");

@@ -1,12 +1,11 @@
 import {
-  CapsInfo,
   Header,
   Subheader,
 } from "@components/creation/utilities/HeaderComponents";
 import Layout from "@components/dao/Layout";
 import GeneralInfo from "@components/dao/staking/GeneralInfo";
 import YourStaking from "@components/dao/staking/YourStaking";
-import { Avatar, Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";

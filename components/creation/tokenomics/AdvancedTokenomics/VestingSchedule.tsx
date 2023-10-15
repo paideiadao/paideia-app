@@ -10,9 +10,6 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import LabeledSwitch from "../../utilities/LabeledSwitch";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export interface IVestingSchedule {
   vesting: boolean;

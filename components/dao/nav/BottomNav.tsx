@@ -1,7 +1,5 @@
 import { Box, Link, useTheme } from "@mui/material";
 import * as React from "react";
-import RedditIcon from "@mui/icons-material/Reddit";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import { deviceWrapper } from "@components/utilities/Style";
 import { useRouter } from "next/router";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";

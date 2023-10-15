@@ -1,10 +1,6 @@
 import { Subheader } from "@components/creation/utilities/HeaderComponents";
-import { Box, Button, Chip } from "@mui/material";
+import { Box } from "@mui/material";
 import * as React from "react";
-import dateFormat from "dateformat";
-import CircleIcon from "@mui/icons-material/Circle";
-import CellTowerIcon from "@mui/icons-material/CellTower";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { DistributionCard, IDistributionCard } from "./CurrentDistributions";
 
 const temp = new Date();

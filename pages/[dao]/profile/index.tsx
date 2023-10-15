@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import AbstractProfile from "@components/dao/profile/AbstractProfile";
-import { paths, props } from "@lib/DaoPaths";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { fetcher } from "@lib/utilities";
 import useSWR from "swr";

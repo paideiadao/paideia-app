@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import * as React from "react";
 import LightFooter from "../../../public/dao/light-footer.png";
 import DarkFooter from "../../../public/dao/dark-footer.png";

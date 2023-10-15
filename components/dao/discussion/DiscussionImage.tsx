@@ -1,4 +1,3 @@
-import { LearnMore } from "@components/creation/utilities/HeaderComponents";
 import DiscussionContext from "@lib/dao/discussion/DiscussionContext";
 import { Typography } from "@mui/material";
 import * as React from "react";

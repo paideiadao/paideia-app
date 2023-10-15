@@ -1,7 +1,4 @@
-import {
-  Header,
-  LearnMore,
-} from "@components/creation/utilities/HeaderComponents";
+import { Header } from "@components/creation/utilities/HeaderComponents";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";

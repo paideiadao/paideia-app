@@ -3,12 +3,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Accordion, Box, Button, Typography } from "@mui/material";
-import {
-  ActiveInactive,
-  ImageWrapper,
-  Value,
-  WalletListing,
-} from "./ReviewDrawer";
+import { ImageWrapper, Value, WalletListing } from "./ReviewDrawer";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
 import { bytesToSize, percentage } from "../../../lib/creation/Utilities";

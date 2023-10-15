@@ -1,5 +1,4 @@
 import React from "react";
-import { paths, props } from "@lib/DistributionPaths";
 import Layout from "@components/dao/Layout";
 
 // move dao to a wildcard subdomain

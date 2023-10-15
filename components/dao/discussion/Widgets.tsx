@@ -2,7 +2,7 @@ import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Avatar, Box, Button } from "@mui/material";
 import * as React from "react";
 import Link from "next/link";
-import { snipAddress, generateSlug } from "@lib/utilities";
+import { snipAddress } from "@lib/utilities";
 import { useRouter } from "next/router";
 
 export const Overview: React.FC<{

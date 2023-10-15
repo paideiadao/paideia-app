@@ -3,7 +3,7 @@ import { Box, CircularProgress } from "@mui/material";
 import * as React from "react";
 import DarkLogo from "../../../public/logos/dark_logo.svg";
 import LightLogo from "../../../public/logos/light_logo.svg";
-import { DarkTheme, LightTheme } from "@theme/theme";
+import { DarkTheme } from "@theme/theme";
 
 const CreationLoading: React.FC = (props) => {
   let themeContext = React.useContext(ThemeContext);

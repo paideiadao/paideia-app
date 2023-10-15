@@ -5,15 +5,13 @@ import StepSelector, { steps } from "./StepSelector";
 import Help from "./Help";
 import DarkLogo from "@public/logos/dark_logo.svg";
 import LightLogo from "@public/logos/light_logo.svg";
-import { DarkTheme, LightTheme } from "@theme/theme";
+import { DarkTheme } from "@theme/theme";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Save from "@mui/icons-material/Save";
-import DarkSwitch from "@components/utilities/DarkSwitch";
 import { CreationContext } from "@lib/creation/Context";
 import { ThemeContext } from "@lib/ThemeContext";
 import { deviceStruct } from "@components/utilities/Style";
-import { useWallet } from "@components/wallet/WalletContext";
 import ThemeToggle from "@components/dao/nav/ThemeToggle";
 
 interface INavProps {

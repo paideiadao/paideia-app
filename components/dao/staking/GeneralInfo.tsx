@@ -2,12 +2,7 @@ import {
   Subheader,
   Subtitle,
 } from "@components/creation/utilities/HeaderComponents";
-import {
-  Box,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Box, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { ThemeContext } from "@lib/ThemeContext";
 import { DarkTheme } from "@theme/theme";
 import { deviceWrapper } from "@components/utilities/Style";
@@ -146,7 +141,7 @@ const GeneralInfo: React.FC = () => {
         ...data,
         numberOfStakers: stakingData.stakers,
         tokensStaked: stakingData.total_staked,
-        apy: Number(stakingData.apy).toFixed(2)
+        apy: Number(stakingData.apy).toFixed(2),
       });
     };
 
