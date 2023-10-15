@@ -48,14 +48,18 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: string }> = (
   props
 ) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const [comments, setComments] = useState<IComment[]>(props?.data ?? []);
 
   const api = new CommentsApi(globalContext.api, props.id);
 
   const setCommentsWrapper = async (newComment: IComment) => {
     try {
+      setComments((prev) => [newComment, ...prev]);
       await api.publish(newComment);
     } catch (e) {
-      console.log(e);
+      setComments((prev) =>
+        prev.filter((comment) => comment?.id !== newComment.id)
+      );
     }
   };
 
@@ -71,9 +75,9 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: string }> = (
       <CapsInfo
         title={props.title === undefined ? "All comments" : props.title}
       />
-      {props.data === undefined ? (
+      {comments === undefined ? (
         <>Loading here...</>
-      ) : props.data.length === 0 ? (
+      ) : comments.length === 0 ? (
         <Box
           sx={{
             display: "flex",
@@ -85,7 +89,7 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: string }> = (
           No Comments Yet
         </Box>
       ) : (
-        props.data
+        comments
           .sort(
             (a: IComment, b: IComment) =>
               new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -95,7 +99,7 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: string }> = (
             return (
               <BaseComment
                 comment={i}
-                data={props.data}
+                data={comments}
                 key={`base-comment-${c}`}
                 set={setCommentsWrapper}
               />
@@ -188,8 +192,8 @@ const CommentInput: React.FC<{
                     id: props.length + 1,
                     parent: props.parent,
                     userSide: undefined,
-                    likes: 0,
-                    dislikes: 0,
+                    likes: [],
+                    dislikes: [],
                     date: new Date(),
                     alias: localStorage.getItem("alias"),
                     comment: value,

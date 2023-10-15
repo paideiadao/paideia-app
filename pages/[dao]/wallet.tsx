@@ -17,6 +17,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 import Nautilus from "@public/icons/nautilus.png";
 import Ergo from "@public/icons/ergo.png";
 import { isAddressValid } from "@components/wallet/AddWallet";
+import ErrorPage from "@components/ErrorPage/ErrorPage";
 
 // export const getStaticPaths = paths;
 // export const getStaticProps = props;
@@ -24,15 +25,24 @@ import { isAddressValid } from "@components/wallet/AddWallet";
 const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
   const { wallet, dAppWallet, utxos } = useWallet();
   const { setAddWalletOpen } = useAddWallet();
+
   const handleClickOpen = () => {
     setAddWalletOpen(true);
   };
+
   const [show, setShow] = React.useState<boolean>(false);
   const ticker = "PAI";
 
-  return !isAddressValid(wallet) ? (
-    <>Error Message Here..</>
-  ) : (
+  if (!isAddressValid(wallet)) {
+    return (
+      <ErrorPage
+        title="Address is not valid"
+        description="The wallet address you have entered is invalid."
+      />
+    );
+  }
+
+  return (
     <Box
       sx={{
         p: "1rem",

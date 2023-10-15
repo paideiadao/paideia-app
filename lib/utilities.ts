@@ -58,7 +58,7 @@ interface IUpdateUser {
 export const attrOrUndefined = (
   data: IObj<any>,
   attr: string,
-  extraAttr: string = undefined
+  extraAttr: string | undefined = undefined
 ): any => {
   try {
     if (data === undefined) {
@@ -113,7 +113,7 @@ export interface ILoginResponse {
   alias: string;
 }
 
-export const getWsUrl = (): string => {
+export const getWsUrl = (): string | undefined => {
   // process.env.NODE_ENV == "development"
   return process.env.WSS_URL;
 };
@@ -217,11 +217,27 @@ export class AbstractApi {
           ? err.response.data.detail
           : err.response.data
         : bMessage;
-    if (this !== undefined)
+
+    if (this !== undefined) {
       this.showAlert(
         typeof message === "string" ? message : JSON.stringify(message),
         "error"
       );
+    }
+
+    // Throwing an error here so we can catch in the promise chain
+    // Example:
+    /*
+          try {
+            setComments((prev) => [newComment, ...prev]);
+            await api.publish(newComment);
+          } catch (e) {
+            // This now actually triggers
+            setComments((prev) => prev.filter(({ id }) => id !== newComment.id));
+          }
+     */
+
+    throw message;
   }
 
   showAlert = (content: string, severity: ValidAlert): boolean => {
@@ -250,7 +266,7 @@ export class AbstractApi {
   async post<T>(
     url: string,
     body: any = undefined,
-    action: string = undefined,
+    action: string | undefined = undefined,
     current: string = ""
   ): Promise<T> {
     return await this.request(url, "POST", body).then(
@@ -283,7 +299,9 @@ export class AbstractApi {
     return await this.request(url, "PUT", body).then(
       // @ts-ignore
       (data: T) => data,
-      (e) => this.error(e)
+      (e) => {
+        this.error(e);
+      }
     );
   }
 
