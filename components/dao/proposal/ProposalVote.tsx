@@ -54,17 +54,6 @@ export const VoteChoice: React.FC<IVoteChoice> = (props) => {
 };
 
 const ProposalVote: React.FC = () => {
-  const handleClick = () => {
-    const temp = [...context.api.value.actions];
-    temp.push({
-      name: undefined,
-      data: undefined,
-    });
-    context.api.setValue({
-      ...context.api.value,
-      actions: temp,
-    });
-  };
   const context = React.useContext<IProposalContext>(ProposalContext);
   const content: IObj<JSX.Element> = {
     unselected: <Selector />,

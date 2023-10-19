@@ -12,10 +12,6 @@ import VotingChoice from "../VotingChoice";
 const YesNo: React.FC = () => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const actions = context.api.value.actions;
-  actions.push({
-    name: undefined,
-    data: undefined,
-  });
   return (
     <>
       <VotingChoice
