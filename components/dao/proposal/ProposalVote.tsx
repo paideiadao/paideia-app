@@ -74,6 +74,38 @@ const ProposalVote: React.FC = () => {
         Voting System
       </Typography>
       {content[voting_system]}
+      {context.api.value.actions.filter(
+        (i: IProposalAction) => i.name === undefined
+      ).length === 0 &&
+        context.api.value.voting_system === "yes/no" && (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mt: ".5rem",
+            }}
+          >
+            <Button
+              disabled={context?.api?.value?.actions?.length >= 1}
+              endIcon={<AddIcon />}
+              onClick={() => {
+                const temp = [...context.api.value.actions];
+                temp.push({
+                  name: undefined,
+                  data: undefined,
+                });
+                context.api.setValue({
+                  ...context.api.value,
+                  actions: temp,
+                });
+              }}
+            >
+              Add Another Action
+            </Button>
+          </Box>
+        )}
       {context.api.errors.voting && (
         <FormHelperText sx={{ mt: 1 }} error>
           Voting or Action not configured
