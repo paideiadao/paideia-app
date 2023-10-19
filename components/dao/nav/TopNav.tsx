@@ -119,6 +119,7 @@ const TopNav: React.FC<INav> = (props) => {
     `/notificatons/${globalContext.api?.daoUserData?.id}`,
     fetcher
   );
+
   const unreadCount = notifications
     ? notifications
       .map((notification: { is_read: boolean }) =>

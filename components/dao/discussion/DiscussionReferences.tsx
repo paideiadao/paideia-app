@@ -92,7 +92,9 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           fontSize: deviceWrapper(".8rem", "1rem"),
         }}
       >
-        {props.name}
+        {props.name.length > 120
+          ? props.name.substring(0, 120) + "..."
+          : props.name}
         <Box sx={{ display: deviceWrapper("none", "block") }}>
           <ProposalStatus status={props.status} />
         </Box>

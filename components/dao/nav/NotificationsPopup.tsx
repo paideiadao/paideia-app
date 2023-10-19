@@ -6,6 +6,7 @@ import { Notification } from "@pages/[dao]/notifications";
 import Link from "next/link";
 import * as React from "react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface INotificationsPopup {
   open: boolean;

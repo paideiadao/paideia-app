@@ -38,6 +38,7 @@ export interface INotification {
   proposal_id: number;
   proposal_name: string;
   id: number;
+  transaction_id?: string;
 }
 
 const getNotificationCountdown = (date: Date) => {
@@ -193,6 +194,8 @@ export const Notification: React.FC<{
   m?: string;
   c: number;
 }> = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const unread = globalContext.metadata.metadata.unreadNotificationCount;
   const router = useRouter();
   const { dao } = router.query;
   const i = props.i;
@@ -213,7 +216,19 @@ export const Notification: React.FC<{
         cursor: "pointer",
         ml: deviceWrapper("-1rem", "0"),
       }}
-      onClick={() => router.push(`/${dao}/discussion/${generateSlug(i.proposal_id, i.proposal_name)}`)}
+      onClick={() =>
+        i.transaction_id
+          ? window.open(
+              "https://explorer.ergoplatform.com/en/transactions/" +
+                i.transaction_id
+            )
+          : router.push(
+              `/${dao}/discussion/${generateSlug(
+                i.proposal_id,
+                i.proposal_name
+              )}`
+            )
+      }
     >
       {/* <Avatar src={i.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
       <Box
@@ -225,7 +240,8 @@ export const Notification: React.FC<{
       >
         <Box sx={{ pb: 2 }}>
           <Box sx={{ display: "inline", color: "text.secondary" }}>
-            {i.action} {i.proposal_name}
+            {i.action.charAt(0).toUpperCase() + i.action.slice(1)}{" "}
+            {i.proposal_name} {i.transaction_id}
           </Box>
         </Box>
         <Box
@@ -239,7 +255,7 @@ export const Notification: React.FC<{
           <AccessTimeIcon sx={{ fontSize: "1rem", mr: ".2rem" }} /> {i.date}
         </Box>
       </Box>
-      {!i.is_read && (
+      {!i.is_read && unread !== 0 && (
         <Box sx={{ ml: "auto" }}>
           <CircleIcon
             color="primary"

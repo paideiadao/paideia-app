@@ -120,7 +120,7 @@ export const getWsUrl = (): string => {
 
 export class AbstractApi {
   alert: IAlerts[] = [];
-  setAlert: (val: IAlerts[]) => void = () => { };
+  setAlert: (val: IAlerts[]) => void = () => {};
 
   webSocket(request_id: string): WebSocket {
     const ws = new WebSocket(`${process.env.WSS_URL}/auth/ws/${request_id}`);
@@ -213,19 +213,24 @@ export class AbstractApi {
       typeof err === "string"
         ? err
         : err?.response
-          ? err.response.status === 401
-            ? err.response.data.detail
-            : err.response.data
-          : bMessage;
-    if (this !== undefined)
+        ? err.response.status === 401
+          ? err.response.data.detail
+          : err.response.data
+        : bMessage;
+    if (this !== undefined) {
       this.showAlert(
         typeof message === "string" ? message : JSON.stringify(message),
         "error"
       );
+    }
   }
 
   showAlert = (content: string, severity: ValidAlert): boolean => {
-    if (content !== "" && content !== undefined) {
+    if (
+      content !== "" &&
+      content !== undefined &&
+      content !== "Cannot read properties of undefined (reading 'data')"
+    ) {
       const temp = [...this.alert];
       temp.push({
         content: content,
@@ -321,8 +326,8 @@ export class AbstractApi {
           });
         }
       } catch (err) {
-        console.log(err);
-        return reject(err);
+        console.warn(err);
+        throw reject(err);
       }
     });
   }

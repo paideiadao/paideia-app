@@ -127,10 +127,11 @@ const CastVote: React.FC = () => {
           sx={{
             cursor: "pointer",
             borderRadius: ".5rem",
-            border: "1px solid",
+            border: vote === true ? "3px solid" : "1px solid",
             p: "1rem",
             pb: "2rem",
-            backgroundColor: "fileInput.outer",
+            backgroundColor:
+              vote === true ? "fileInput.outer" : "fileInput.inner",
             borderColor: vote === true ? "primary.main" : "border.main",
             width: deviceWrapper("100%", "50%"),
             mt: deviceWrapper("1rem", "0"),
@@ -169,10 +170,11 @@ const CastVote: React.FC = () => {
           sx={{
             cursor: "pointer",
             borderRadius: ".5rem",
-            border: "1px solid",
+            border: vote === false ? "3px solid" : "1px solid",
             p: "1rem",
             pb: "2rem",
-            backgroundColor: "fileInput.outer",
+            backgroundColor:
+              vote === false ? "fileInput.outer" : "fileInput.inner",
             borderColor: vote === false ? "primary.main" : "border.main",
             width: deviceWrapper("100%", "50%"),
             mt: deviceWrapper("1rem", "0"),

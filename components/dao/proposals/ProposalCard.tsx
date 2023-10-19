@@ -170,8 +170,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-      ? 0
-      : undefined;
+    ? 0
+    : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -547,8 +547,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               if (!moved) {
                 router.push(
                   (dao === undefined ? "" : `/${dao}/`) +
-                  `${!props.is_proposal ? "discussion" : "proposal"
-                  }/${generateSlug(props.id, props.name)}?tab=comments`
+                    `${
+                      !props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}?tab=comments`
                 );
               }
             }}
@@ -648,8 +649,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                    `${!props.is_proposal ? "discussion" : "proposal"
-                    }/${generateSlug(props.id, props.name)}`
+                      `${
+                        !props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
@@ -672,7 +674,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   textOverflow: "ellipsis",
                 }}
               >
-                {props.name}
+                {props.name.length > 60
+                  ? props.name.substring(0, 60) + "..."
+                  : props.name}
               </Box>
             </ButtonBase>
             <Box sx={{ display: "flex", fontSize: "1rem" }}>
@@ -705,8 +709,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                    `${!props.is_proposal ? "discussion" : "proposal"
-                    }/${generateSlug(props.id, props.name)}`
+                      `${
+                        !props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
