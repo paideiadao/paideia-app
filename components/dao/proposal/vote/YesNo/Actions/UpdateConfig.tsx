@@ -31,8 +31,29 @@ export interface IUpdateConfig {
 }
 
 const allowedActions = ["Insert", "Update", "Remove"];
-const allowedKeys = ["im.paideia.staking.emission.amount"];
-const allowedTypes = ["Long"];
+const allowedKeys = [
+  "im.paideia.dao.name",
+  "im.paideia.dao.url",
+  "im.paideia.dao.threshold",
+  "im.paideia.dao.quorum",
+  "im.paideia.dao.min.proposal.time",
+  "im.paideia.staking.emission.amount",
+  "im.paideia.dao.theme",
+  "im.paideia.dao.logo",
+  "im.paideia.dao.banner",
+  "im.paideia.dao.banner.enabled",
+  "im.paideia.dao.footer",
+  "im.paideia.dao.footer.enabled",
+];
+const allowedTypes = [
+  "Byte",
+  "Long",
+  "String",
+  "Coll[Byte]",
+  "Coll[Long]",
+  "PaideiaContractSignature",
+  "Coll[Coll[?]]",
+];
 
 const UpdateConfig: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
