@@ -37,7 +37,8 @@ const InfoCard: React.FC<IInfoCard> = (props) => {
             mr: deviceWrapper(".25rem", ".5rem"),
           }}
         >
-          {props.value ?? <CircularProgress sx={{ mt: 1 }} />}
+          {props.value}
+          {/* {props.value ?? <CircularProgress sx={{ mt: 1 }} />} */}
         </Box>
         {props.value ? props.widget : null}
       </Box>

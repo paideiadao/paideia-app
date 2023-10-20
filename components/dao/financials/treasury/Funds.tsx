@@ -63,16 +63,10 @@ const defaultCards: IFundCard[] = [
   },
 ];
 
-const Funds: React.FC = () => {
+const Funds: React.FC<any> = ({ treasuryData }) => {
   const [show, setShow] = useState<boolean>(false);
   const [funds, setFunds] = useState<IFundCard[]>(defaultCards);
   const context = useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
-
-  const { data: treasuryData, error: error } = useSWR(
-    daoId && `/dao/treasury/${daoId}`,
-    fetcher
-  );
 
   useEffect(() => {
     const getData = async () => {
@@ -153,7 +147,14 @@ const Funds: React.FC = () => {
               />
             ))}
       </Box>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", my: "1rem" }}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          my: "1rem",
+        }}
+      >
         <Button
           disabled={funds.length <= 4}
           onClick={() => setShow(!show)}

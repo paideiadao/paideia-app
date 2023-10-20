@@ -167,12 +167,12 @@ const CommentInput: React.FC<{
               mr: "-.5rem",
             }}
           >
-            <IconButton sx={{ mr: ".5rem" }} size="small">
+            {/* <IconButton sx={{ mr: ".5rem" }} size="small">
               <TagFacesIcon color="primary" />
             </IconButton>
             <IconButton sx={{ mr: "1rem" }} size="small">
               <AttachFileIcon color="primary" />
-            </IconButton>
+            </IconButton> */}
             <Button
               disabled={value.length === 0}
               variant="contained"

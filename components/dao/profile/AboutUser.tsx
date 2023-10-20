@@ -1,5 +1,5 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Avatar, Box, Chip, Skeleton } from "@mui/material";
+import { Avatar, Box, Chip, Link, Skeleton } from "@mui/material";
 import * as React from "react";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { ISocialLink } from "@lib/creation/Interfaces";
@@ -22,7 +22,16 @@ const UserSocial: React.FC<{ icon: JSX.Element; label: string }> = (props) => {
     >
       {props.icon}
       <Box sx={{ ml: ".5rem" }}></Box>
-      {props.label}
+      <Link
+        href={props.label.startsWith("https://") ? props.label : null}
+        underline="hover"
+        target="_blank"
+        rel="noreferrer"
+      >
+        {props.label.length > 32
+          ? props.label.slice(0, 32) + "..."
+          : props.label}
+      </Link>
     </Box>
   );
 };

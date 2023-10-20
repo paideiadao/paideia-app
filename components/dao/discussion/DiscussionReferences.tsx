@@ -90,6 +90,16 @@ const DiscussionCard: React.FC<IReference> = (props) => {
         sx={{
           ml: deviceWrapper(".75rem", "1rem"),
           fontSize: deviceWrapper(".8rem", "1rem"),
+          ":hover": {
+            cursor: "pointer",
+          },
+        }}
+        onClick={() => {
+          router.push(
+            `/${dao}/${
+              props.is_proposal ? "proposal" : "discussion"
+            }/${generateSlug(props.id, props.name)}`
+          );
         }}
       >
         {props.name.length > 120
@@ -124,7 +134,6 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           }
           putUrl={`/proposals/like/${props.id}`}
         />
-
         <Link
           href={`/${dao}/${
             props.is_proposal ? "proposal" : "discussion"

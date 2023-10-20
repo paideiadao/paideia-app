@@ -6,10 +6,20 @@ import { Box } from "@mui/material";
 import * as React from "react";
 import { InfoCard } from "./GeneralInfo";
 
+interface IYourStakingInfo {
+  stakeAmount: string;
+  proposalsVoted: string;
+  totalVotingPowerUsed: string;
+}
+
 const YourStaking: React.FC = () => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
   const { utxos } = useWallet();
-  const [stakeAmount, setStakeAmount] = React.useState<string>("-");
+  const [stakeInfo, setStakeInfo] = React.useState<IYourStakingInfo>({
+    stakeAmount: "-",
+    proposalsVoted: "-",
+    totalVotingPowerUsed: "-",
+  });
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -21,10 +31,27 @@ const YourStaking: React.FC = () => {
           user_id: userId,
         });
         const stake = res.data;
-        const sum = stake.stake_keys
-          .map((stake: { stake: any }) => stake.stake)
+        const stakeAmount = stake.stake_keys
+          .map((stake: { stake: number }) => stake.stake)
           .reduce((a: number, c: number) => a + c, 0);
-        setStakeAmount(sum);
+        const proposalsVoted = stake.stake_keys
+          .map(
+            (stake: { participation_info: { proposals_voted_on: number } }) =>
+              stake.participation_info?.proposals_voted_on ?? 0
+          )
+          .reduce((a: number, c: number) => a + c, 0);
+        const totalVotingPowerUsed = stake.stake_keys
+          .map(
+            (stake: {
+              participation_info: { total_voting_power_used: number };
+            }) => stake.participation_info?.total_voting_power_used ?? 0
+          )
+          .reduce((a: number, c: number) => a + c, 0);
+        setStakeInfo({
+          stakeAmount,
+          proposalsVoted,
+          totalVotingPowerUsed,
+        });
       } catch (e: any) {
         console.log(e);
       }
@@ -51,13 +78,21 @@ const YourStaking: React.FC = () => {
           flexWrap: deviceWrapper("wrap", "nowrap"),
         }}
       >
-        <InfoCard value={stakeAmount} title={`${ticker} tokens staked`} c={0} />
-        <InfoCard value="-" title={`${ticker} tokens earned`} c={1} />
+        <InfoCard
+          value={stakeInfo.stakeAmount}
+          title={`${ticker} tokens staked`}
+          c={0}
+        />
+        <InfoCard
+          value={stakeInfo.proposalsVoted}
+          title={"Proposals Voted On"}
+          c={1}
+        />
         <InfoCard
           c={2}
           full
-          value={`-`}
-          title={`Earned tokens`}
+          value={stakeInfo.totalVotingPowerUsed}
+          title={"Voting Power Used"}
           // dropdown
           // last
         />

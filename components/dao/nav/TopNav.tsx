@@ -6,7 +6,7 @@ import {
   Slide,
   Skeleton,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
@@ -40,18 +40,17 @@ export interface INav {
 }
 
 const TopNav: React.FC<INav> = (props) => {
-  const theme = useTheme()
-  const desktop = useMediaQuery(theme.breakpoints.up('md'))
-  const router = useRouter()
+  const theme = useTheme();
+  const desktop = useMediaQuery(theme.breakpoints.up("md"));
+  const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     if (dao !== undefined) {
       if (!desktop) {
-        router.push(`/${dao}/notifications`)
-      }
-      else {
-        setOpen(true)
+        router.push(`/${dao}/notifications`);
+      } else {
+        setOpen(true);
       }
     }
   };
@@ -116,16 +115,17 @@ const TopNav: React.FC<INav> = (props) => {
 
   const { data: notifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
-    `/notificatons/${globalContext.api?.daoUserData?.id}`,
-    fetcher
+      `/notificatons/${globalContext.api?.daoUserData?.id}`,
+    fetcher,
+    { refreshInterval: 10000 }
   );
 
   const unreadCount = notifications
     ? notifications
-      .map((notification: { is_read: boolean }) =>
-        notification.is_read ? 0 : 1
-      )
-      .reduce((a: number, c: number) => a + c, 0)
+        .map((notification: { is_read: boolean }) =>
+          notification.is_read ? 0 : 1
+        )
+        .reduce((a: number, c: number) => a + c, 0)
     : null;
 
   useEffect(() => {
@@ -139,7 +139,7 @@ const TopNav: React.FC<INav> = (props) => {
     if (notificationsError?.response?.status === 401) {
       globalContext.api.error(
         notificationsError.response.data.detail +
-        " - Please reconnect your wallet and refresh"
+          " - Please reconnect your wallet and refresh"
       );
       setTimeout(() => {
         clearWallet();
@@ -161,15 +161,12 @@ const TopNav: React.FC<INav> = (props) => {
           zIndex: 1000,
           position: "sticky",
           top: 0,
-          justifyContent: 'flex-end',
-          alignItems: 'center'
+          justifyContent: "flex-end",
+          alignItems: "center",
         }}
       >
         <Box sx={{ flexGrow: 1, display: deviceWrapper("flex", "none") }}>
-          <IconButton
-            color="primary"
-            onClick={() => props.setShowMobile(true)}
-          >
+          <IconButton color="primary" onClick={() => props.setShowMobile(true)}>
             <MenuIcon color="primary" />
           </IconButton>
         </Box>
@@ -186,17 +183,16 @@ const TopNav: React.FC<INav> = (props) => {
           <Box>
             <DarkSwitch />
           </Box>
-          <Box sx={{ mr: '0.5rem' }}>
+          <Box sx={{ mr: "0.5rem" }}>
             <IconButton
               onClick={handleOpen}
               sx={{
-                color: theme.palette.text.secondary
+                color: theme.palette.text.secondary,
               }}
             >
               <Badge
                 badgeContent={
-                  globalContext.metadata.metadata
-                    .unreadNotificationCount
+                  globalContext.metadata.metadata.unreadNotificationCount
                 }
                 color="primary"
               >
@@ -209,9 +205,12 @@ const TopNav: React.FC<INav> = (props) => {
             </IconButton>
           </Box>
           {globalContext.api.daoUserData !== undefined &&
-            globalContext.api.daoUserData.loading === true ? (
-            <Box sx={{ width: { xs: '40px', md: '160px' } }}>
-              <Skeleton variant={desktop ? 'rounded' : 'circular'} height={40} />
+          globalContext.api.daoUserData.loading === true ? (
+            <Box sx={{ width: { xs: "40px", md: "160px" } }}>
+              <Skeleton
+                variant={desktop ? "rounded" : "circular"}
+                height={40}
+              />
             </Box>
           ) : (
             globalContext.api.daoUserData !== undefined &&
@@ -223,12 +222,16 @@ const TopNav: React.FC<INav> = (props) => {
                       display: "flex",
                       alignItems: "center",
                       cursor: "pointer",
-                      mr: { xs: 'none', md: ".5rem" },
+                      mr: { xs: "none", md: ".5rem" },
                     }}
                     onClick={handleOpenProfile}
                   >
                     <Avatar
-                      sx={{ mr: { xs: 'none', md: ".5rem" }, height: '32px', width: '32px' }}
+                      sx={{
+                        mr: { xs: "none", md: ".5rem" },
+                        height: "32px",
+                        width: "32px",
+                      }}
                       src={globalContext.api.daoUserData.profile_img_url}
                     ></Avatar>
                     <Box
