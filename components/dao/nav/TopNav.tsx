@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { DarkTheme } from "@theme/theme";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -27,7 +27,7 @@ import {
   isAddressValid,
 } from "@components/wallet/AddWallet";
 import { ProfilePopup } from "./ProfilePopup";
-import { snipAddress } from "@lib/utilities";
+import { getWsUrl, snipAddress } from "@lib/utilities";
 import NotificationsPopup from "./NotificationsPopup";
 import CloseIcon from "@mui/icons-material/Close";
 import { fetcher } from "@lib/utilities";
@@ -113,11 +113,36 @@ const TopNav: React.FC<INav> = (props) => {
     }
   }, [dao, wallet.connected, dAppWallet.connected]);
 
-  const { data: notifications, error: notificationsError } = useSWR(
+  const { data: apiNotifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
       `/notificatons/${globalContext.api?.daoUserData?.id}`,
-    fetcher,
-    { refreshInterval: 10000 }
+    fetcher
+  );
+
+  const user_details_id = globalContext.api?.daoUserData?.id;
+  const [liveNotifications, setLiveNotifications] = useState<any>([]);
+  useEffect(() => {
+    if (user_details_id) {
+      const ws = new WebSocket(
+        `${getWsUrl()}/notificatons/ws/${user_details_id}`
+      );
+      ws.onmessage = (event: any) => {
+        try {
+          const wsRes = JSON.parse(event.data).notifications;
+          setLiveNotifications(wsRes);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      return () => ws.close();
+    }
+  }, [user_details_id]);
+
+  const notifications = liveNotifications.concat(
+    (apiNotifications ?? []).filter(
+      (x: { id: string }) =>
+        !liveNotifications.map((nt: { id: string }) => nt.id).includes(x.id)
+    )
   );
 
   const unreadCount = notifications

@@ -79,7 +79,8 @@ const Notifications: React.FC<{ params: any }> = (props) => {
   const { data: notifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
       `/notificatons/${globalContext.api?.daoUserData?.id}`,
-    fetcher
+    fetcher,
+    { refreshInterval: 30000 }
   );
 
   return (
