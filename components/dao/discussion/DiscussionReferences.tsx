@@ -50,11 +50,7 @@ const DiscussionReferences: React.FC<IDataComponent> = (props) => {
       </Box>
       <Box sx={{ width: "100%", mt: "1rem" }}>
         {props.data.map((i: IReference, c: number) => (
-          <DiscussionCard
-            key={`discussion-reference-${c}`}
-            {...i}
-            status="Active"
-          />
+          <DiscussionCard key={`discussion-reference-${c}`} {...i} />
         ))}
       </Box>
     </>
@@ -105,7 +101,7 @@ const DiscussionCard: React.FC<IReference> = (props) => {
         {props.name.length > 120
           ? props.name.substring(0, 120) + "..."
           : props.name}
-        <Box sx={{ display: deviceWrapper("none", "block") }}>
+        <Box sx={{ display: deviceWrapper("none", "none") }}>
           <ProposalStatus status={props.status} />
         </Box>
       </Box>
@@ -117,7 +113,7 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           flexDirection: deviceWrapper("column", "row"),
         }}
       >
-        <Box sx={{ display: deviceWrapper("block", "none") }}>
+        <Box sx={{ display: deviceWrapper("none", "none") }}>
           <ProposalStatus status={props.status} />
         </Box>
         <LikesDislikes

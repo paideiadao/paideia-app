@@ -19,6 +19,24 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
 
+  React.useEffect(() => {
+    if (props.open) {
+      globalContext.api
+                  ?.markNotificationsAsRead(
+                    props.notifications ? props.notifications[0].id : 0
+                  )
+                  .then(() => {
+                    globalContext.metadata.setMetadata({
+                      ...globalContext.metadata.metadata,
+                      unreadNotificationCount: 0,
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+    }
+  }, [props.open]);
+
   return (
     <Modal open={props.open} onClose={props.close}>
       <Box
@@ -46,29 +64,6 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
           }}
         >
           <CapsInfo title="Notifications" mb={"0"} />
-          <Box sx={{ ml: "auto" }}>
-            <Button
-              size="small"
-              sx={{ whiteSpace: "nowrap" }}
-              onClick={() =>
-                globalContext.api
-                  ?.markNotificationsAsRead(
-                    props.notifications ? props.notifications[0].id : 0
-                  )
-                  .then(() => {
-                    globalContext.metadata.setMetadata({
-                      ...globalContext.metadata.metadata,
-                      unreadNotificationCount: 0,
-                    });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
-              }
-            >
-              Mark all as read
-            </Button>
-          </Box>
         </Box>
         <Box sx={{ height: "25rem", overflowY: "hidden" }}>
           {props.notifications ? (

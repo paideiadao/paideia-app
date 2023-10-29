@@ -55,11 +55,11 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
         user_id: userId,
         new_stake_key_info: {
           ...stake,
-          stake: stake.stake - value,
+          stake: 0,
         },
       });
       const tx = res.data.unsigned_transaction;
-      const context = await getErgoWalletContext()
+      const context = await getErgoWalletContext();
       const signed = await context.sign_tx(tx);
       const txId = await context.submit_tx(signed);
       appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
@@ -86,10 +86,11 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
       />
       <Box sx={{ display: "flex", alignItems: "center", mt: "1rem" }}>
         <TextField
+          disabled
           label="Amount of tokens to withdraw"
           sx={{ width: deviceWrapper("90%", "45%") }}
           size="medium"
-          value={value}
+          value={maxStake}
           type="number"
           onChange={handleChange}
           helperText={`${totalStaked} ${ticker} staked`}
@@ -103,14 +104,14 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
             ),
           }}
         />
-        <Button
+        {/* <Button
           variant="text"
           size="small"
           sx={{ ml: ".5rem" }}
           onClick={() => setValue(maxStake)}
         >
           Max
-        </Button>
+        </Button> */}
       </Box>
       {totalKeys >= 2 && (
         <Typography fontSize="small" sx={{ mt: 2 }}>

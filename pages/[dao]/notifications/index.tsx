@@ -200,6 +200,15 @@ export const Notification: React.FC<{
   const router = useRouter();
   const { dao } = router.query;
   const i = props.i;
+
+  const getFormattedText = (text: string): string => {
+    return text
+      .split(" ")
+      .filter((x) => x && x !== "undefined" && x !== "null")
+      .map((word) => (word.length > 20 ? word.substring(0, 20) + "..." : word))
+      .join(" ");
+  };
+
   return (
     <Box
       sx={{
@@ -234,15 +243,18 @@ export const Notification: React.FC<{
       {/* <Avatar src={i.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
       <Box
         sx={{
-          width: "70%",
+          width: "80%",
           ml: "1rem",
           fontSize: deviceWrapper(".7rem", ".9rem"),
         }}
       >
         <Box sx={{ pb: 2 }}>
           <Box sx={{ display: "inline", color: "text.secondary" }}>
-            {i.action.charAt(0).toUpperCase() + i.action.slice(1)}{" "}
-            {i.proposal_name} {i.transaction_id}
+            {getFormattedText(
+              `${i.action.charAt(0).toUpperCase() + i.action.slice(1)} ${
+                i.proposal_name
+              } ${i.transaction_id}`
+            )}
           </Box>
         </Box>
         <Box

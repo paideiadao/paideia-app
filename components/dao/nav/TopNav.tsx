@@ -330,7 +330,6 @@ const TopNav: React.FC<INav> = (props) => {
               <Contents setShowMobile={props.setShowMobile} />
             </Box>
           </Box>
-
           {/* <Footer /> */}
         </Box>
       </Slide>
