@@ -20,20 +20,20 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
   const { dao } = router.query;
 
   React.useEffect(() => {
-    if (props.open) {
+    if (props.open && props.notifications && props.notifications[0]) {
       globalContext.api
-                  ?.markNotificationsAsRead(
-                    props.notifications ? props.notifications[0].id : 0
-                  )
-                  .then(() => {
-                    globalContext.metadata.setMetadata({
-                      ...globalContext.metadata.metadata,
-                      unreadNotificationCount: 0,
-                    });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
+        ?.markNotificationsAsRead(
+          props.notifications ? props.notifications[0].id : 0
+        )
+        .then(() => {
+          globalContext.metadata.setMetadata({
+            ...globalContext.metadata.metadata,
+            unreadNotificationCount: 0,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [props.open]);
 
