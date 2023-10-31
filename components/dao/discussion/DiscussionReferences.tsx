@@ -18,12 +18,15 @@ interface IReference {
   is_proposal: boolean;
 }
 
-const DiscussionReferences: React.FC<IDataComponent> = (props) => {
+interface IDiscussionReferencesData {
+  references: IReference[];
+  referenced: IReference[];
+}
+
+const DiscussionReferences: React.FC<IDiscussionReferencesData> = (props) => {
   const router = useRouter();
   const { id, discussion_id } = router.query;
-  return props.data === undefined ? (
-    <>Loading Here...</>
-  ) : (
+  return (
     <>
       <Box
         sx={{
@@ -40,17 +43,36 @@ const DiscussionReferences: React.FC<IDataComponent> = (props) => {
             width: deviceWrapper("100%", "50%"),
           }}
         >
-          <CapsInfo
-            title={`this discussion has been referenced ${props.data.length} ${
-              props.data.length === 1 ? "time" : "times"
-            }`}
-            mb="0"
-          />
+          <CapsInfo title={`References ${props.references.length === 0 ? "None" : ""}`} mb="0" />
         </Box>
       </Box>
       <Box sx={{ width: "100%", mt: "1rem" }}>
-        {props.data.map((i: IReference, c: number) => (
-          <DiscussionCard key={`discussion-reference-${c}`} {...i} />
+        {props.references.map((i: IReference, c: number) => (
+          <DiscussionCard key={`discussion-references-${c}`} {...i} />
+        ))}
+      </Box>
+      <Box
+        sx={{
+          mt: "1rem",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          flexWrap: deviceWrapper("wrap", "nowrap"),
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: deviceWrapper("100%", "50%"),
+          }}
+        >
+          <CapsInfo title={`Referenced By ${props.referenced.length === 0 ? "None" : ""}`} mb="0" />
+        </Box>
+      </Box>
+      <Box sx={{ width: "100%", mt: "1rem" }}>
+        {props.referenced.map((i: IReference, c: number) => (
+          <DiscussionCard key={`discussion-referenced-${c}`} {...i} />
         ))}
       </Box>
     </>

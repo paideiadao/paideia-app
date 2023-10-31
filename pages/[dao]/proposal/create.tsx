@@ -131,6 +131,7 @@ export interface IProposal {
   is_proposal: boolean;
   userSide?: number;
   references_meta?: string[];
+  referenced_meta?: string[];
   votes: number[];
   alias?: string;
   profile_img_url?: string;

@@ -66,6 +66,7 @@ const Proposal: React.FC = () => {
     addendums: [],
     is_proposal: true,
     references_meta: [],
+    referenced_meta: [],
     votes: [0, 0],
   });
 
@@ -427,7 +428,7 @@ const Proposal: React.FC = () => {
                         value="1"
                       />
                       <Tab
-                        label={`Referenced | ${value.references_meta.length}`}
+                        label={`References | ${value?.references_meta?.length + value?.referenced_meta?.length}`}
                         value="2"
                       />
                       <Tab label="Addendums" value="3" />
@@ -458,7 +459,8 @@ const Proposal: React.FC = () => {
                   </TabPanel>
                   <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
                     <DiscussionReferences
-                      data={attrOrUndefined(data, "references_meta")}
+                      references={data?.references_meta ?? []}
+                      referenced={data?.referenced_meta ?? []}
                     />
                   </TabPanel>
                   <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>

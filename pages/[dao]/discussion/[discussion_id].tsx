@@ -509,7 +509,7 @@ const Discussion: React.FC = () => {
                     value="2"
                   />
                   <Tab
-                    label={`Referenced | ${data.references_meta.length}`}
+                    label={`References | ${data?.references_meta?.length + data?.referenced_meta?.length}`}
                     value="3"
                   />
                   <Tab
@@ -538,7 +538,8 @@ const Discussion: React.FC = () => {
               </TabPanel>
               <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>
                 <DiscussionReferences
-                  data={attrOrUndefined(data, "references_meta")}
+                  references={data?.references_meta ?? []}
+                  referenced={data?.referenced_meta ?? []}
                 />
               </TabPanel>
               <TabPanel value="4" sx={{ pl: 0, pr: 0 }}>
