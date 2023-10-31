@@ -43,7 +43,10 @@ const DiscussionReferences: React.FC<IDiscussionReferencesData> = (props) => {
             width: deviceWrapper("100%", "50%"),
           }}
         >
-          <CapsInfo title={`References ${props.references.length === 0 ? "None" : ""}`} mb="0" />
+          <CapsInfo
+            title={`References ${props.references.length === 0 ? "None" : ""}`}
+            mb="0"
+          />
         </Box>
       </Box>
       <Box sx={{ width: "100%", mt: "1rem" }}>
@@ -67,7 +70,12 @@ const DiscussionReferences: React.FC<IDiscussionReferencesData> = (props) => {
             width: deviceWrapper("100%", "50%"),
           }}
         >
-          <CapsInfo title={`Referenced By ${props.referenced.length === 0 ? "None" : ""}`} mb="0" />
+          <CapsInfo
+            title={`Referenced By ${
+              props.referenced.length === 0 ? "None" : ""
+            }`}
+            mb="0"
+          />
         </Box>
       </Box>
       <Box sx={{ width: "100%", mt: "1rem" }}>

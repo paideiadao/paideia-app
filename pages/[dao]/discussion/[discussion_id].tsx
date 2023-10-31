@@ -509,7 +509,10 @@ const Discussion: React.FC = () => {
                     value="2"
                   />
                   <Tab
-                    label={`References | ${data?.references_meta?.length + data?.referenced_meta?.length}`}
+                    label={`References | ${
+                      data?.references_meta?.length +
+                      data?.referenced_meta?.length
+                    }`}
                     value="3"
                   />
                   <Tab

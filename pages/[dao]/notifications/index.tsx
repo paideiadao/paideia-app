@@ -202,11 +202,14 @@ export const Notification: React.FC<{
   const i = props.i;
 
   const getFormattedText = (text: string): string => {
-    return text
+    const formattedText = text
       .split(" ")
       .filter((x) => x && x !== "undefined" && x !== "null")
       .map((word) => (word.length > 20 ? word.substring(0, 20) + "..." : word))
       .join(" ");
+    return formattedText.length > 120
+      ? formattedText.substring(0, 120) + "..."
+      : formattedText;
   };
 
   return (

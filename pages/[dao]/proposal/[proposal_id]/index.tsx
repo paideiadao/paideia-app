@@ -428,7 +428,10 @@ const Proposal: React.FC = () => {
                         value="1"
                       />
                       <Tab
-                        label={`References | ${value?.references_meta?.length + value?.referenced_meta?.length}`}
+                        label={`References | ${
+                          value?.references_meta?.length +
+                          value?.referenced_meta?.length
+                        }`}
                         value="2"
                       />
                       <Tab label="Addendums" value="3" />
