@@ -61,6 +61,7 @@ const ProposalVote: React.FC = () => {
     options: <Options />,
   };
   const voting_system = context.api.value.voting_system;
+
   return (
     <>
       <Typography

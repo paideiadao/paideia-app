@@ -13,7 +13,7 @@ const Selector: React.FC = () => {
 
   const wrapper = (value: "yes/no" | "options" | "unselected") => {
     let temp =
-      value === "options"
+      value !== "unselected"
         ? {
             actions: [
               {
