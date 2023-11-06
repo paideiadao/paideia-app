@@ -214,7 +214,7 @@ export class AbstractApi {
         ? err
         : err?.response
         ? err.response.status === 401
-          ? err.response.data.detail
+          ? err.response.data.detail ?? err.response.data
           : err.response.data
         : bMessage;
     if (this !== undefined) {

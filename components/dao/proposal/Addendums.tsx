@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { deviceWrapper } from "@components/utilities/Style";
-import { props } from "@lib/DaoPaths";
+import AddIcon from "@mui/icons-material/Add";
 
 export interface IAddendum {
   id: number;
@@ -28,7 +28,6 @@ const Addendums: React.FC = () => {
       <Box
         sx={{
           width: "100%",
-          display: "flex",
           alignItems: "center",
           flexWrap: deviceWrapper("wrap", "nowrap"),
         }}
@@ -46,6 +45,31 @@ const Addendums: React.FC = () => {
             } to this proposal`}
             mb="0"
           />
+        </Box>
+        <Box
+          sx={{
+            textAlign: "right",
+          }}
+        >
+          <Link
+            href={
+              dao === undefined
+                ? ``
+                : `/${dao}/proposal/${proposal_id}/addendum/create`
+            }
+          >
+            <Button
+              sx={{
+                mt: deviceWrapper("0.5rem", "0"),
+                mb: "1rem",
+              }}
+              variant="contained"
+              size="small"
+              startIcon={<AddIcon />}
+            >
+              Add Addendum
+            </Button>
+          </Link>
         </Box>
         {addendums.map((i: IAddendum, c: number) => {
           return (
@@ -79,10 +103,11 @@ const Addendums: React.FC = () => {
                   color: "text.secondary",
                   fontWeight: ".8rem",
                 }}
-                dangerouslySetInnerHTML={{
-                  __html: i.content,
-                }}
-              />
+              >
+                {i.content.length > 120
+                  ? i.content.substring(0, 120) + "..."
+                  : i.content}
+              </Box>
               <Link
                 href={
                   dao === undefined
@@ -94,7 +119,6 @@ const Addendums: React.FC = () => {
                   size="small"
                   endIcon={<NavigateNextIcon />}
                   sx={{ mt: ".5rem" }}
-                  disabled
                 >
                   Read addendum
                 </Button>
