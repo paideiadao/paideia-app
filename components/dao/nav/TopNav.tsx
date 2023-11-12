@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { DarkTheme } from "@theme/theme";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -43,8 +43,8 @@ const TopNav: React.FC<INav> = (props) => {
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
   const router = useRouter();
-  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const [open, setOpen] = React.useState(false);
+  const globalContext = useContext<IGlobalContext>(GlobalContext);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => {
     if (dao !== undefined) {
       if (!desktop) {
@@ -56,11 +56,12 @@ const TopNav: React.FC<INav> = (props) => {
   };
   const handleClose = () => setOpen(false);
 
-  const [openProfile, setOpenProfile] = React.useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
   const handleOpenProfile = () => setOpenProfile(true);
   const handleCloseProfile = () => setOpenProfile(false);
   const { dao } = router.query;
   const { wallet, utxos, dAppWallet } = useWallet();
+  const [stakeAmount, setStakeAmount] = useState<number>(0);
 
   const clearWallet = () => {
     // clear state and local storage
@@ -173,6 +174,37 @@ const TopNav: React.FC<INav> = (props) => {
     }
   }, [notificationsError]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const daoId = globalContext.api.daoData.id;
+        const userId = globalContext.api.daoUserData.user_id;
+        const res = await globalContext.api.post<any>(
+          "/staking/user_stake_info",
+          {
+            dao_id: daoId,
+            user_id: userId,
+          }
+        );
+        const stake = res.data;
+        const stakeAmount = stake.stake_keys
+          .map((stake: { stake: number }) => stake.stake)
+          .reduce((a: number, c: number) => a + c, 0);
+        setStakeAmount(stakeAmount);
+      } catch (e: any) {
+        console.log(e);
+      }
+    };
+
+    if (
+      utxos.currentDaoTokens &&
+      globalContext.api.daoData?.id &&
+      globalContext.api.daoUserData?.id
+    ) {
+      fetchData();
+    }
+  }, [utxos, globalContext.api.daoData, globalContext.api.daoUserData]);
+
   return (
     <>
       <Box
@@ -270,8 +302,10 @@ const TopNav: React.FC<INav> = (props) => {
                         {snipAddress(globalContext.api.daoUserData.name, 25, 5)}
                       </Box>
                       <Box sx={{ color: "text.secondary", fontSize: ".7rem" }}>
-                        {utxos.currentDaoTokens}{" "}
-                        {globalContext.api.daoData.tokenomics.token_ticker}
+                        {parseFloat(
+                          (utxos.currentDaoTokens + stakeAmount).toFixed(0)
+                        ).toLocaleString("en-US")}{" "}
+                        {globalContext.api.daoData.tokenomics.token_ticker ?? "DAO Tokens"}
                       </Box>
                     </Box>
                   </Box>

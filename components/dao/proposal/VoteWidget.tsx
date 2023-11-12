@@ -1,11 +1,6 @@
 import { FC, useContext, useState, useEffect } from "react";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import {
-  Avatar,
-  Box,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { VoteWidget } from "../proposals/ProposalCard";
 import dateFormat from "dateformat";
 import { useRouter } from "next/router";
@@ -94,16 +89,45 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   const daoId = context.api.daoData?.id;
   const router = useRouter();
   const { dao, proposal_id } = router.query;
+  const [stakeKeys, setStakeKeys] = useState<string[]>([]);
 
-  const { data: stakingData, error: error } = useSWR(
+  const { data: stakingData, error: stakingError } = useSWR(
     daoId && `/staking/dao_stake_info/${daoId}`,
     fetcher
   );
 
+  const { data: votingData, error: votingError } = useSWR(
+    proposal_id && `/proposals/${proposal_id}/votes`,
+    fetcher
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const daoId = context.api.daoData.id;
+        const userId = context.api.daoUserData.user_id;
+        const res = await context.api.post<any>("/staking/user_stake_info", {
+          dao_id: daoId,
+          user_id: userId,
+        });
+        const stake = res.data;
+        const keys = stake.stake_keys.map(
+          (stake: { key_id: string }) => stake.key_id
+        );
+        setStakeKeys(keys);
+      } catch (e: any) {
+        console.log(e);
+      }
+    };
+
+    if (context.api.daoData?.id && context.api.daoUserData?.id) {
+      fetchData();
+    }
+  }, [context.api.daoData, context.api.daoUserData]);
+
   // const quorumInfo = `For this proposal to be approved a quorum of
   // ${governance?.quorum / 10}% and ${governance?.support_needed / 10}%
   // support is needed.`;
-
   const quorumNumberNeeded =
     (stakingData?.total_staked * governance?.quorum) / 1000;
   const current = props.yes + props.no;
@@ -111,6 +135,14 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   const percentValue = (current / quorumNumberNeeded) * 100;
   const supportMet =
     (props.yes / current) * 100 >= governance?.support_needed / 10;
+  const userVote = votingData?.filter((vote: { stake_key: string }) =>
+    stakeKeys.includes(vote.stake_key)
+  )[0];
+  const userVoteParsed = userVote
+    ? userVote.vote[0] > userVote.vote[1]
+      ? false
+      : true
+    : null;
   // const quorumDetails = `Aleast ${numberNeeded.toFixed(0).toLocaleString()} votes needed to meet ${governance?.quorum / 10}%
   // quorum with the current number of DAO tokens staked.`;
 
@@ -191,6 +223,19 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
               View All Votes
             </Button>
           </Link>
+        </Box>
+      </Box>
+      <Box>
+        <Box sx={{ display: "flex", direction: "row", alignItems: "center" }}>
+          {userVoteParsed ? <CheckIcon /> : <CloseIcon />}
+          <Typography sx={{ fontSize: "14px", fontWeight: "800" }}>
+            {userVoteParsed !== null &&
+              "You " +
+                (userVoteParsed
+                  ? "approved the proposal"
+                  : "voted against the proposal")}
+            {userVoteParsed === null && "You did not vote on this proposal"}
+          </Typography>
         </Box>
       </Box>
       <Box>

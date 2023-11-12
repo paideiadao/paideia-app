@@ -131,8 +131,10 @@ const DiscussionCard: React.FC<IReference> = (props) => {
         {props.name.length > 120
           ? props.name.substring(0, 120) + "..."
           : props.name}
-        <Box sx={{ display: deviceWrapper("none", "none") }}>
-          <ProposalStatus status={props.status} />
+        <Box sx={{ display: "block" }}>
+          <ProposalStatus
+            status={props.status === "discussion" ? "Discussion" : props.status}
+          />
         </Box>
       </Box>
       <Box
@@ -143,9 +145,9 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           flexDirection: deviceWrapper("column", "row"),
         }}
       >
-        <Box sx={{ display: deviceWrapper("none", "none") }}>
+        {/* <Box sx={{ display: deviceWrapper("none", "block") }}>
           <ProposalStatus status={props.status} />
-        </Box>
+        </Box> */}
         <LikesDislikes
           likes={props.likes.length}
           dislikes={props.dislikes.length}

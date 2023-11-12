@@ -60,6 +60,7 @@ interface IAboutUser {
 const AboutUser: React.FC<IAboutUser> = (props) => {
   const { wallet, utxos } = useWallet();
   const [userTokens, setUserTokens] = React.useState<number>(0);
+  const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
 
   React.useEffect(() => {
@@ -76,6 +77,34 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
       load();
     }
   }, [props.wallet, utxos.currentDaoTokens]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const daoId = appContext.api.daoData.id;
+        const userId = appContext.api.daoUserData.user_id;
+        const res = await appContext.api.post<any>("/staking/user_stake_info", {
+          dao_id: daoId,
+          user_id: userId,
+        });
+        const stake = res.data;
+        const stakeAmount = stake.stake_keys
+          .map((stake: { stake: number }) => stake.stake)
+          .reduce((a: number, c: number) => a + c, 0);
+        setStakeAmount(stakeAmount);
+      } catch (e: any) {
+        console.log(e);
+      }
+    };
+
+    if (
+      utxos.currentDaoTokens &&
+      appContext.api.daoData?.id &&
+      appContext.api.daoUserData?.id
+    ) {
+      fetchData();
+    }
+  }, [utxos, appContext.api.daoData, appContext.api.daoUserData]);
 
   const ticker =
     appContext.api.daoData?.tokenomics.token_ticker ??
@@ -198,7 +227,9 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
           <Chip
             avatar={<Avatar alt={ticker} src={tokenImage} />}
             label={
-              parseFloat(userTokens.toFixed(0)).toLocaleString("en-US") +
+              parseFloat((userTokens + stakeAmount).toFixed(0)).toLocaleString(
+                "en-US"
+              ) +
               " " +
               ticker
             }
