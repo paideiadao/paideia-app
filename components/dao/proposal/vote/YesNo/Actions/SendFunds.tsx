@@ -13,6 +13,7 @@ import * as React from "react";
 import Layout from "./Layout";
 import AbstractDate from "@components/creation/utilities/AbstractDate";
 import { ITokenAmountDetails } from "@components/utilities/MultiTokenAmountSelector";
+import VoteDurationSelector from "@components/creation/utilities/VoteDurationSelector";
 
 export interface ISendFundsRecipient {
   address: string;
@@ -35,6 +36,10 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
     voting_duration: (24 * 60 * 60).toString(),
     activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
   });
+  const [votingDuration, setVotingDuration] = React.useState<any>({
+    duration: 1,
+    unit: "days",
+  });
 
   React.useEffect(() => {
     const temp = [...context.api.value.actions];
@@ -44,6 +49,21 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
       actions: temp,
     });
   }, [value]);
+
+  React.useEffect(() => {
+    const multiplier_map = {
+      seconds: 1,
+      minutes: 60,
+      hours: 60 * 60,
+      days: 60 * 60 * 24,
+      weeks: 60 * 60 * 24 * 7,
+    };
+    // @ts-ignore
+    const multiplier = multiplier_map[votingDuration.unit];
+    const voting_duration = votingDuration.duration * multiplier;
+    setValue({ ...value, voting_duration: voting_duration.toString() });
+  }, [votingDuration]);
+
   return (
     <Layout>
       <Header
@@ -102,23 +122,24 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
           title="Voting Duration"
           subtitle="Set how long the voting window should be open"
         />
-        <TextField
-          error={context.api.errors.votingDuration}
-          helperText={
-            context.api.errors.votingDuration
-              ? "Voting duration cannot be less than minimum in Dao Config"
-              : `Voting Ends at ${new Date(
-                  new Date().getTime() +
-                    Number(value.voting_duration) * 1000 +
-                    900 * 1000
-                ).toUTCString()}`
+        <FormHelperText error={context.api.errors.votingDuration}>
+          {context.api.errors.votingDuration
+            ? "Voting duration cannot be less than minimum in Dao Config"
+            : `Voting Ends at ${new Date(
+                new Date().getTime() +
+                  Number(value.voting_duration) * 1000 +
+                  900 * 1000
+              ).toUTCString()}`}
+        </FormHelperText>
+        <VoteDurationSelector
+          voteDuration={votingDuration.duration}
+          set={(val: number) =>
+            setVotingDuration({ ...votingDuration, duration: val })
           }
-          label="Duration in Seconds"
-          sx={{ width: "50%" }}
-          value={value.voting_duration}
-          onChange={(e) => {
-            setValue({ ...value, voting_duration: e.target.value });
-          }}
+          voteDurationUnits={votingDuration.unit}
+          setUnits={(val: string) =>
+            setVotingDuration({ ...votingDuration, unit: val })
+          }
         />
       </Box>
       <Box

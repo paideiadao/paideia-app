@@ -29,6 +29,7 @@ const MarkdownRender = (props: { description: string }) => {
   // const themeContext = useContext(ThemeContext);
   // const theme = themeContext.theme;
   return (
+    // @ts-ignore
     <ReactMarkdown
       components={{
         h1: ({ node, ...props }) => (
