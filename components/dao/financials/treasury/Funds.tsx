@@ -21,7 +21,6 @@ const FundCard: React.FC<{
         width: props.width,
         textAlign: deviceWrapper("left", "center"),
         backgroundColor: "fileInput.outer",
-        m: ".3rem",
         border: "1px solid",
         borderColor: "border.main",
         borderRadius: ".3rem",
@@ -116,11 +115,11 @@ const Funds: React.FC<any> = ({ treasuryData }) => {
             color: "text.primary",
             borderRadius: ".2rem",
             ml: "auto",
-            p: ".25rem",
+            p: ".42rem",
             border: "1px solid",
             borderColor: "border.main",
-            pt: ".1rem",
-            pb: ".1rem",
+            pt: ".18rem",
+            pb: ".18rem",
             fontSize: deviceWrapper(".7rem", ".9rem"),
             fontWeight: 500,
           }}
@@ -128,7 +127,7 @@ const Funds: React.FC<any> = ({ treasuryData }) => {
           Total $N/A USD
         </Box>
       </Box>
-      <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap" }}>
+      <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", gap: 2 }}>
         {!show
           ? funds
               .slice(0, 4)

@@ -107,7 +107,6 @@ const Treasury: React.FC = () => {
           sx={{
             width: "28%",
             position: "sticky",
-            top: deviceWrapper("0", "4.8rem"),
             display: deviceWrapper("none", "block"),
             ml: "1.5rem",
           }}
