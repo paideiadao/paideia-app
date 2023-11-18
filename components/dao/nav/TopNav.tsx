@@ -305,7 +305,8 @@ const TopNav: React.FC<INav> = (props) => {
                         {parseFloat(
                           (utxos.currentDaoTokens + stakeAmount).toFixed(0)
                         ).toLocaleString("en-US")}{" "}
-                        {globalContext.api.daoData.tokenomics.token_ticker ?? "DAO Tokens"}
+                        {globalContext.api.daoData.tokenomics.token_ticker ??
+                          "DAO Tokens"}
                       </Box>
                     </Box>
                   </Box>
@@ -321,7 +322,7 @@ const TopNav: React.FC<INav> = (props) => {
           <NotificationsPopup
             open={open}
             close={handleClose}
-            notifications={notifications}
+            notifications={notifications.slice(0, 10)}
           />
         </Box>
       </Box>

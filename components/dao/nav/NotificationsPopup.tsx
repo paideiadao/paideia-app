@@ -65,7 +65,7 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
         >
           <CapsInfo title="Notifications" mb={"0"} />
         </Box>
-        <Box sx={{ height: "25rem", overflowY: "hidden" }}>
+        <Box sx={{ height: "25rem", overflowY: "scroll" }}>
           {props.notifications ? (
             props.notifications.map((i: any, c: number) => {
               return (

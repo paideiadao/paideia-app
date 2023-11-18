@@ -221,7 +221,8 @@ export const Notification: React.FC<{
         display: "flex",
         alignItems: "center",
         p: "1rem",
-        backgroundColor: i.is_read ? "fileInput.outer" : "fileInput.read",
+        backgroundColor:
+          !i.is_read && unread !== 0 ? "fileInput.read" : "fileInput.outer",
         borderRadius:
           props.m === undefined ? deviceWrapper("0", ".3rem") : "0rem",
         border: 1,

@@ -66,8 +66,8 @@ const CustomAlert: FC<{ alert: IAlerts; i: number; close: Function }> = ({
     }, 10000);
     return () => clearTimeout(timer);
   }, []);
-  const router = useRouter()
-  const { dao } = router.query
+  const router = useRouter();
+  const { dao } = router.query;
   return (
     <Alert
       severity={alert.severity}
@@ -87,7 +87,7 @@ const CustomAlert: FC<{ alert: IAlerts; i: number; close: Function }> = ({
         </IconButton>
       }
     >
-      {getParsedContent(alert.content, dao.toString())}
+      {getParsedContent(alert.content, dao?.toString())}
     </Alert>
   );
 };
@@ -120,18 +120,15 @@ const getExplorerLinked = (rawContent: string) => {
       {rawContent}
     </Link>
   );
-}
+};
 
 const getAddStakeLinked = (rawContent: string, dao: string) => {
-  const href = `/${dao}/staking/manage`
+  const href = `/${dao}/staking/manage`;
   return (
-    <Link
-      sx={{ textDecoration: "none", color: "white" }}
-      href={href}
-    >
+    <Link sx={{ textDecoration: "none", color: "white" }} href={href}>
       {rawContent}
     </Link>
   );
-}
+};
 
 export default AbstractAlert;
