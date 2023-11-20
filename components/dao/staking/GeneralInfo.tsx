@@ -4,17 +4,17 @@ import {
 } from "@components/creation/utilities/HeaderComponents";
 import {
   Box,
-  FormControl,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import * as React from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { ThemeContext } from "@lib/ThemeContext";
 import { DarkTheme } from "@theme/theme";
 import { deviceWrapper } from "@components/utilities/Style";
+import { IGlobalContext, GlobalContext } from "@lib/AppContext";
+import useSWR from "swr";
+import { fetcher } from "@lib/utilities";
+import { useContext, useEffect, useState } from "react";
 
 export interface IInfoCard {
   title: string;
@@ -27,12 +27,12 @@ export interface IInfoCard {
 }
 
 export const InfoCard: React.FC<IInfoCard> = (props) => {
-  const [time, setTime] = React.useState("24hrs");
+  const [time, setTime] = useState("24hrs");
 
   const handleChange = (event: SelectChangeEvent) => {
     setTime(event.target.value as string);
   };
-  const themeContext = React.useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext);
   return (
     <Box
       sx={{
@@ -120,10 +120,44 @@ export const InfoCard: React.FC<IInfoCard> = (props) => {
   );
 };
 
+interface IStakingGeneralInfo {
+  numberOfStakers: string;
+  tokensStaked: string;
+  apy: string;
+}
+
 const GeneralInfo: React.FC = () => {
+  const [data, setData] = useState<IStakingGeneralInfo>({
+    numberOfStakers: "-",
+    tokensStaked: "-",
+    apy: "-",
+  });
+  const context = useContext<IGlobalContext>(GlobalContext);
+  const daoId = context.api.daoData?.id;
+
+  const { data: stakingData, error: error } = useSWR(
+    daoId && `/staking/dao_stake_info/${daoId}`,
+    fetcher
+  );
+
+  useEffect(() => {
+    const getData = async () => {
+      setData({
+        ...data,
+        numberOfStakers: stakingData.stakers,
+        tokensStaked: stakingData.total_staked,
+        apy: Number(stakingData.apy).toFixed(2)
+      });
+    };
+
+    if (!error && stakingData) {
+      getData();
+    }
+  }, [stakingData, error]);
+
   return (
     <Box sx={{ width: "100%", mt: "1rem" }}>
-      <Subheader title="General info" />
+      <Subheader title="General Info" />
       <Subtitle subtitle="Staking your tokens will generate new tokens daily based on the APY percentage below." />
       <Box
         sx={{
@@ -133,9 +167,13 @@ const GeneralInfo: React.FC = () => {
           flexWrap: deviceWrapper("wrap", "nowrap"),
         }}
       >
-        <InfoCard title="Number of Stakers" value="621" c={0} />
-        <InfoCard title="PTK tokens staked" value="769,382" c={1} />
-        <InfoCard title="Current APY" value="447.42" last c={2} />
+        <InfoCard
+          title="Number of Stakers"
+          value={data.numberOfStakers}
+          c={0}
+        />
+        <InfoCard title="PAI tokens staked" value={data.tokensStaked} c={1} />
+        <InfoCard title="Current APY" value={data.apy} last c={2} />
       </Box>
     </Box>
   );

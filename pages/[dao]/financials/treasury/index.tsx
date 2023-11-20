@@ -3,27 +3,38 @@ import {
   Header,
 } from "@components/creation/utilities/HeaderComponents";
 import Layout from "@components/dao/Layout";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import * as React from "react";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import NextLink from "next/link";
 import Funds from "@components/dao/financials/treasury/Funds";
-import Chart from "@components/dao/financials/treasury/Chart";
+// import Chart from "@components/dao/financials/treasury/Chart";
 import Transactions from "@components/dao/financials/treasury/Transactions";
 import { deviceWrapper } from "@components/utilities/Style";
+import TokenStats from "@components/dao/dashboard/widgets/TokenStats";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import useSWR from "swr";
+import { fetcher } from "@lib/utilities";
+import { IGlobalContext, GlobalContext } from "@lib/AppContext";
 
-const TreasuryHeader: React.FC = () => {
+const TreasuryHeader: React.FC<{ address: string }> = ({ address }) => {
   const router = useRouter();
   const { dao } = router.query;
   return (
     <Box sx={{ width: "100%", alignItems: "center", display: "flex" }}>
       <Header title="Treasury" large />
       <Link
+        href={`https://explorer.ergoplatform.com/en/addresses/${address}`}
+        target="_blank"
+        rel="noreferrer"
+        sx={{ ml: 0.5 }}
+      >
+        <ArrowOutwardIcon sx={{ fontSize: "inherit" }} />
+      </Link>
+      <NextLink
         href={
-          dao === undefined
-            ? "/dao/financials/treasury/send"
-            : `/${dao}/financials/treasury/send`
+          dao === undefined ? "/dao/proposal/create" : `/${dao}/proposal/create`
         }
       >
         <Button
@@ -35,7 +46,7 @@ const TreasuryHeader: React.FC = () => {
           <Box sx={{ display: deviceWrapper("none", "block") }}>Send Funds</Box>
           <Box sx={{ display: deviceWrapper("block", "none") }}>Send</Box>
         </Button>
-      </Link>
+      </NextLink>
     </Box>
   );
 };
@@ -67,109 +78,20 @@ const ValueLabel: React.FC<{
   );
 };
 
-export const TreasuryInfo: React.FC = () => {
-  const dao = "Paideia";
-  const router = useRouter();
-  const { id } = router.query;
-
-  return (
-    <Box
-      sx={{
-        border: "1px solid",
-        borderColor: "border.main",
-        backgroundColor: "fileInput.outer",
-        p: ".5rem",
-        borderRadius: ".3rem",
-        pb: 0,
-      }}
-    >
-      <CapsInfo title={`${dao} Tokens`} />
-      <Box sx={{ width: "100%", display: "flex" }}>
-        <Box
-          sx={{
-            width: "50%",
-            borderRight: "1px solid",
-            borderColor: "border.main",
-          }}
-        >
-          <ValueLabel label="Ticker" value="PAI" />
-        </Box>
-        <Box sx={{ width: "50%" }}>
-          <ValueLabel label="Price" value="$0.1342" />
-        </Box>
-      </Box>
-      <Box sx={{ width: "100%", display: "flex", mt: "1rem" }}>
-        <Box
-          sx={{
-            width: "50%",
-            borderRight: "1px solid",
-            borderColor: "border.main",
-          }}
-        >
-          <ValueLabel label="High (24hrs)" value="$0.2199" small />
-        </Box>
-        <Box sx={{ width: "50%" }}>
-          <ValueLabel label="Low (24hrs)" value="$0.0119" small />
-        </Box>
-      </Box>
-      <Box sx={{ width: "100%", display: "flex", mt: "1rem" }}>
-        <Box
-          sx={{
-            width: "50%",
-            borderRight: "1px solid",
-            borderColor: "border.main",
-          }}
-        >
-          <ValueLabel label="Market Cap" value="$10,467,400" small />
-        </Box>
-        <Box sx={{ width: "50%" }}>
-          <ValueLabel label="Circulating Supply" value="11,759,754" small />
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          width: "calc(100% + 1rem)",
-          display: "flex",
-          justifyContent: "center",
-          ml: "-.5rem",
-          borderTop: 1,
-          mt: "1rem",
-          borderColor: "border.main",
-        }}
-      >
-        <Link
-          href={
-            id === undefined
-              ? "/dao/financials/token"
-              : `/dao/${id}/financials/token`
-          }
-        >
-          <Button
-            variant="text"
-            sx={{
-              width: "100%",
-              borderTopRightRadius: 0,
-              borderTopLeftRadius: 0,
-            }}
-            size="small"
-          >
-            Learn More
-          </Button>
-        </Link>
-      </Box>
-    </Box>
-  );
-};
-
 const Treasury: React.FC = () => {
+  const context = React.useContext<IGlobalContext>(GlobalContext);
+  const daoId = context.api.daoData?.id;
+  const { data: treasuryData, error: error } = useSWR(
+    daoId && `/dao/treasury/${daoId}`,
+    fetcher
+  );
   return (
     <Layout width={deviceWrapper("92%", "96%")}>
       <Box sx={{ width: "100%", display: "flex", alignItems: "flex-start" }}>
         <Box sx={{ width: deviceWrapper("100%", "72%") }}>
-          <TreasuryHeader />
-          <Funds />
-          <Chart />
+          <TreasuryHeader address={treasuryData?.address} />
+          <Funds treasuryData={treasuryData} />
+          {/* <Chart /> */}
           <Transactions />
           <Box
             sx={{
@@ -178,7 +100,7 @@ const Treasury: React.FC = () => {
               mt: "1rem",
             }}
           >
-            <TreasuryInfo />
+            <TokenStats />
           </Box>
         </Box>
         <Box
@@ -190,7 +112,7 @@ const Treasury: React.FC = () => {
             ml: "1.5rem",
           }}
         >
-          <TreasuryInfo />
+          <TokenStats />
         </Box>
       </Box>
     </Layout>

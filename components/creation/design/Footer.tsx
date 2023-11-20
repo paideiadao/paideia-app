@@ -59,6 +59,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
         <Subtitle subtitle="Add a footer with your own personalized text and link the DAO socials to it." />
       </Box>
       <LabeledSwitch
+        disabled
         title="Show footer"
         value={data.footer.show}
         onChange={() =>

@@ -102,8 +102,8 @@ export class AppApi extends AbstractApi {
   }
 
   async getDaoUser(): Promise<IDaoUserRes> {
-    let userId = getUserId();
-    if (userId != null && this.daoData !== undefined && !isNaN(userId) && this.daoData.id !== undefined) {
+    const userId = getUserId();
+    if (userId && this.daoData && this.daoData.id !== undefined) {
       return this.get<IDaoUserRes>(
         `/users/details/${userId}?dao_id=${this.daoData.id}`
       );
@@ -134,7 +134,7 @@ export class AppApi extends AbstractApi {
     }
 
     // check if user profile for the current dao exists and get the data
-    let res = await this.getDaoUser();
+    const res = await this.getDaoUser();
 
     const response = {
       currentDaoTokens: currentTokens.length > 0 ? currentTokens[0].value : 0,
@@ -146,7 +146,7 @@ export class AppApi extends AbstractApi {
         try {
           if (response.currentDaoTokens > 0) {
             // if they have tokens, create the user account
-            let creationRes = await this.post<IDaoUserRes>(
+            const creationRes = await this.post<IDaoUserRes>(
               "/users/create_user_profile?dao_id=" + this.daoData.id
             );
             this.setDaoUserData({...creationRes.data, loading: false});

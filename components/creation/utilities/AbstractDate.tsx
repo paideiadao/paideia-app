@@ -3,7 +3,7 @@ import * as React from "react";
 import { CapsInfo } from "./HeaderComponents";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dateFormat from "dateformat";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -17,7 +17,7 @@ const AbstractDate: React.FC<{
   let temp = props;
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <DatePicker
+      <DateTimePicker
         showToolbar
         ToolbarComponent={(props) => (
           <Box

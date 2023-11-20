@@ -9,6 +9,7 @@ import ProposalContext, {
 import {
   Box,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -34,7 +35,7 @@ const GeneralInformation: React.FC = () => {
   };
   return (
     <>
-      <Header title="Proposal general information" />
+      <Header title="Proposal General Information" />
       <Box
         sx={{
           width: "100%",
@@ -45,6 +46,8 @@ const GeneralInformation: React.FC = () => {
         }}
       >
         <TextField
+          error={context.api.errors.name}
+          helperText={context.api.errors.name && "Name cannot be blank"}
           value={context.api.value.name}
           label="Proposal name"
           onChange={handleNameChange}
@@ -61,16 +64,22 @@ const GeneralInformation: React.FC = () => {
         >
           <InputLabel id="category-select-label">Category</InputLabel>
           <Select
+            error={context.api.errors.category}
             labelId="category-select-label"
             id="category-select"
             value={context.api.value.category}
             label="Category"
             onChange={handleChange}
           >
-            <MenuItem value="Category 1">Category 1</MenuItem>
-            <MenuItem value="Category 2">Category 2</MenuItem>
-            <MenuItem value="Category 3">Category 3</MenuItem>
+            <MenuItem value="New Feature">New Feature</MenuItem>
+            <MenuItem value="Finance">Finance</MenuItem>
+            <MenuItem value="General">General</MenuItem>
+            <MenuItem value="Governance">Governance</MenuItem>
+            <MenuItem value="Technical">Technical</MenuItem>
           </Select>
+          {context.api.errors.category && (
+            <FormHelperText error>Invalid Category</FormHelperText>
+          )}
         </FormControl>
       </Box>
     </>

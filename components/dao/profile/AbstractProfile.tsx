@@ -14,6 +14,7 @@ import BackLink from "@components/utilities/BackLink";
 import { IProposalCard } from "../proposals/ProposalCard";
 import { IActivity } from "../activity/Activity";
 import { IDaoUserData } from "@lib/Interfaces";
+import { IGlobalContext, GlobalContext } from "@lib/AppContext";
 
 interface IAbstractProfile {
   edit?: boolean;
@@ -25,6 +26,10 @@ interface IAbstractProfile {
 
 const AbstractProfile: React.FC<IAbstractProfile> = (props) => {
   const [value, setValue] = React.useState("1");
+  const context = React.useContext<IGlobalContext>(GlobalContext);
+  const tokenId =
+    context.api.daoData?.tokenomics?.token_id ??
+    "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489";
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -57,9 +62,7 @@ const AbstractProfile: React.FC<IAbstractProfile> = (props) => {
           <Box sx={{ width: "100%", display: deviceWrapper("block", "none") }}>
             {props.data !== undefined && (
               <AboutUser
-                token_id={
-                  "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489"
-                }
+                token_id={tokenId}
                 followers={props.data.followers}
                 created={0}
                 approved={0}
@@ -93,9 +96,7 @@ const AbstractProfile: React.FC<IAbstractProfile> = (props) => {
         <Box sx={{ width: "30%", display: deviceWrapper("none", "block") }}>
           {props.data !== undefined && (
             <AboutUser
-              token_id={
-                "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489"
-              }
+              token_id={tokenId}
               followers={props.data.followers}
               created={props.data.created}
               bio={props.data.bio}

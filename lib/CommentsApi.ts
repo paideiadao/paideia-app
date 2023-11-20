@@ -5,14 +5,14 @@ import { AbstractApi } from "@lib/utilities";
 interface ICommentPut {
   user_details_id: number;
   comment: string;
-  parent: number;
+  parent: string;
 }
 
 export default class CommentsApi extends AbstractApi {
   api: AppApi;
-  proposalId: number;
+  proposalId: string;
 
-  constructor(api: AppApi, proposalId: number) {
+  constructor(api: AppApi, proposalId: string) {
     super();
     this.api = api;
     this.proposalId = proposalId;
@@ -36,7 +36,7 @@ export default class CommentsApi extends AbstractApi {
     );
   }
 
-  deleteComment(id: number): Promise<any> {
+  deleteComment(id: string): Promise<any> {
     return this.delete(`/proposals/comment/${id}`, {}, "Deleted comment");
   }
 

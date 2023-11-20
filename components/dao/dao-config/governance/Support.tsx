@@ -8,16 +8,7 @@ import {
   ConfigContext,
   IConfigContext,
 } from "@lib/dao/dao-config/ConfigContext";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Slider,
-  TextField,
-} from "@mui/material";
+import { Box, Slider, TextField } from "@mui/material";
 import * as React from "react";
 
 const Support: React.FC = () => {
@@ -49,6 +40,7 @@ const Support: React.FC = () => {
           }}
         >
           <Slider
+            disabled
             value={data.supportNeeded}
             min={0}
             max={100}
@@ -72,6 +64,7 @@ const Support: React.FC = () => {
           }}
         >
           <TextField
+            disabled
             label="Value"
             type="number"
             value={data.supportNeeded}

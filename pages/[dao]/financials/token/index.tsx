@@ -30,7 +30,7 @@ const Token: React.FC = () => {
   return (
     <Layout width={deviceWrapper("94%", "97%")}>
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
-        <Header title="Token Information" large />
+        <Header title="Token Information - (Coming Soon)" large />
         <Link
           href={
             dao === undefined

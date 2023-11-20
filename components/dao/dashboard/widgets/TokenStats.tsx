@@ -11,7 +11,7 @@ const TokenStats: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const tokenomics = globalContext.api.daoData.tokenomics;
+  const tokenomics = globalContext.api.daoData?.tokenomics;
 
   const { data: tokenStats, error: error } = useSWR(
     tokenomics &&
@@ -36,7 +36,7 @@ const TokenStats: React.FC = () => {
       }}
     >
       <Box sx={{ pl: ".5rem" }}>
-        <CapsInfo title="Token Stats" small />
+        <CapsInfo title="Dao Token Stats" small />
       </Box>
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
         <Box

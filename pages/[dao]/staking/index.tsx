@@ -58,7 +58,7 @@ const Staking: React.FC = () => {
       </Box>
       <GeneralInfo />
       <YourStaking />
-      <StakingActivity />
+      {/* <StakingActivity /> */}
     </Layout>
   );
 };

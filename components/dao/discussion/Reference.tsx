@@ -17,6 +17,7 @@ import * as React from "react";
 import { clientSideOnly, fetcher, getBaseUrl } from "@lib/utilities";
 import { useRouter } from "next/router";
 import useDidMountEffect from "@components/utilities/hooks";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 // proposal or discussion
 // abstract: img, name, id
@@ -26,16 +27,18 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
     props.context === undefined
       ? React.useContext<IDiscussionContext>(DiscussionContext)
       : React.useContext<IProposalContext>(ProposalContext);
+  const appContext = React.useContext<IGlobalContext>(GlobalContext);
+  const daoId = appContext.api.daoData?.id;
 
   const router = useRouter();
-  const { id, r } = router.query;
-  const [references, setReferences] = React.useState<number[]>(
+  const { r } = router.query;
+  const [references, setReferences] = React.useState<string[]>(
     context.api.value.references
   );
 
   React.useEffect(() => {
-    let temp = [...references];
-    temp.push(parseInt(r as string));
+    const temp = [...references];
+    if (r) temp.push(r.toString());
     setReferences(r === undefined ? references : temp);
   }, [r]);
 
@@ -44,12 +47,9 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
   }, [context.api.value.references]);
 
   const { data, error } = useSWR(
-    `/proposals/by_dao_id/${id === undefined ? 1 : id}`,
+    daoId !== undefined && `/proposals/by_dao_id/${daoId}`,
     fetcher
   );
-  if (error) {
-    context.api.api.showAlert("Error fetching proposals.", "error");
-  }
 
   return (
     <Autocomplete

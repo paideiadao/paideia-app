@@ -61,7 +61,6 @@ export interface IGovernance {
   quadraticVoting: boolean;
   timeToChallenge: number;
   timeToChallengeUnits: string;
-
   quorum: number;
   voteDuration: number;
   voteDurationUnits: string;

@@ -45,7 +45,7 @@ const WalletSelector: React.FC<{
         label="Wallet Address"
         sx={{ width: "100%" }}
         placeholder={
-          props.data.alias === "" && "Search by name or wallet address"
+          props.data.alias === "" ? "Search by name or wallet address" : ""
         }
         // helperText="Search by name or wallet address"
         onFocus={() => setFocused(true)}

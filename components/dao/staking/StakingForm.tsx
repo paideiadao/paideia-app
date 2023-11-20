@@ -1,5 +1,10 @@
-import * as React from "react";
-import { Box, Button, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import {
   CapsInfo,
   Subtitle,
@@ -9,40 +14,80 @@ import { useWallet } from "@components/wallet/WalletContext";
 import { IWallet } from "@lib/creation/Interfaces";
 import { deviceWrapper } from "@components/utilities/Style";
 import CancelLink from "@components/utilities/CancelLink";
+import { useContext, useState } from "react";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
-const StakingForm: React.FC = () => {
-  const { wallet } = useWallet();
-  const [holder, setHolder] = React.useState<IWallet>({
-    alias: "Alone Musk",
-    address: wallet,
-    img: "",
-  });
-  const ticker = "PAI",
-    available = "32,661";
-  const [value, setValue] = React.useState<number>(100);
-  const [stake, setStake] = React.useState<boolean>(false);
-  const openStake = () => setStake(true);
-  const closeStake = () => setStake(false);
+interface IStakeState {
+  stake: any;
+}
+
+const TICKER = "PAI";
+const FEE_ADJUSTMENT = 0.1;
+
+const StakingForm: React.FC<IStakeState> = (props) => {
+  const appContext = useContext<IGlobalContext>(GlobalContext);
+  const { wallet, utxos } = useWallet();
+
+  const available = utxos.currentDaoTokens;
+  const [value, setValue] = useState<number>(Math.min(available, 100));
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(parseFloat(event.target.value));
   };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const stakeKey = props.stake?.stake_keys?.[0]?.key_id;
+      const tx = (await get_tx(stakeKey)).unsigned_transaction;
+      const context = await getErgoWalletContext();
+      const signed = await context.sign_tx(tx);
+      const txId = await context.submit_tx(signed);
+      appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+    } catch (e: any) {
+      appContext.api.error(e);
+    }
+    setLoading(false);
+  };
+
+  const get_tx = async (stakeKey: string | undefined) => {
+    const daoId = appContext.api.daoData.id;
+    const userId = appContext.api.daoUserData.user_id;
+    const adjustedValue = Math.min(value, available - FEE_ADJUSTMENT);
+    if (stakeKey) {
+      const res = await appContext.api.post<any>("/staking/add", {
+        dao_id: daoId,
+        user_id: userId,
+        amount: adjustedValue,
+        stake_key: stakeKey,
+      });
+      return res.data;
+    } else {
+      const res = await appContext.api.post<any>("/staking/", {
+        dao_id: daoId,
+        user_id: userId,
+        amount: adjustedValue,
+      });
+      return res.data;
+    }
+  };
+
   return (
     <Box>
       <CapsInfo title="Staking Form" mb=".5rem" />
-      <Subtitle subtitle="Description here..." />
+      <Subtitle subtitle="" />
       <Box sx={{ mt: "1rem" }} />
       <WalletSelector
         id="staking-wallet-input"
         data={{
-          alias: "Alone Musk",
+          alias: appContext.api.daoUserData?.name,
           address: wallet,
-          img: "",
+          img: appContext.api.daoUserData?.profile_img_url,
         }}
         number={1}
-        set={(j: any) => {
-          setHolder(j);
-        }}
+        set={() => {}}
       />
       <Box sx={{ display: "flex", alignItems: "center", mt: "1rem" }}>
         <TextField
@@ -52,14 +97,14 @@ const StakingForm: React.FC = () => {
           value={value}
           type="number"
           onChange={handleChange}
-          helperText={`${available} ${ticker} available`}
+          helperText={`${available} ${TICKER} available`}
           InputProps={{
             inputProps: {
               min: 1,
-              max: 32661,
+              max: 9999999999,
             },
             endAdornment: (
-              <InputAdornment position="end">{ticker}</InputAdornment>
+              <InputAdornment position="end">{TICKER}</InputAdornment>
             ),
           }}
         />
@@ -67,7 +112,7 @@ const StakingForm: React.FC = () => {
           variant="text"
           size="small"
           sx={{ ml: ".5rem" }}
-          onClick={() => setValue(32661)}
+          onClick={() => setValue(available)}
         >
           Max
         </Button>
@@ -89,14 +134,14 @@ const StakingForm: React.FC = () => {
             Cancel
           </Button>
         </CancelLink>
-
         <Button
+          disabled={loading}
           variant="contained"
           sx={{ width: "50%" }}
-          onClick={openStake}
+          onClick={handleSubmit}
           size="small"
         >
-          Stake
+          {!loading ? "Stake" : <CircularProgress size={26} />}
         </Button>
       </Box>
     </Box>

@@ -22,6 +22,7 @@ const QuadraticVoting: React.FC = () => {
       />
       <Subtitle subtitle="If active, voting power will not be determined only by the stakeholder investment, preventing whales from having too much influence over decisions." />
       <LabeledSwitch
+        disabled
         small
         onChange={() =>
           context.api.setData({

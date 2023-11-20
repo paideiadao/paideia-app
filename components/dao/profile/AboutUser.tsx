@@ -1,15 +1,10 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Avatar, Box, Chip, Skeleton } from "@mui/material";
+import { Avatar, Box, Chip, Link, Skeleton } from "@mui/material";
 import * as React from "react";
-import PaideiaTokenSymbol from "../../../public/images/paideia-token-symbol.png";
-import RedditIcon from "@mui/icons-material/Reddit";
-import TelegramIcon from "@mui/icons-material/Telegram";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { ISocialLink } from "@lib/creation/Interfaces";
 import { useWallet } from "@components/wallet/WalletContext";
 import { getIcon } from "@components/creation/review/Design";
-import { snipAddress } from "@lib/utilities";
-import { getTokenAmount } from "@lib/wallet/Utilities";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 const UserSocial: React.FC<{ icon: JSX.Element; label: string }> = (props) => {
@@ -27,7 +22,16 @@ const UserSocial: React.FC<{ icon: JSX.Element; label: string }> = (props) => {
     >
       {props.icon}
       <Box sx={{ ml: ".5rem" }}></Box>
-      {props.label}
+      <Link
+        href={props.label.startsWith("https://") ? props.label : null}
+        underline="hover"
+        target="_blank"
+        rel="noreferrer"
+      >
+        {props.label.length > 32
+          ? props.label.slice(0, 32) + "..."
+          : props.label}
+      </Link>
     </Box>
   );
 };
@@ -56,22 +60,56 @@ interface IAboutUser {
 const AboutUser: React.FC<IAboutUser> = (props) => {
   const { wallet, utxos } = useWallet();
   const [userTokens, setUserTokens] = React.useState<number>(0);
+  const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
+
   React.useEffect(() => {
     const load = async () => {
-      let res = await appContext.api.daoTokenCheckSingleToken([props.wallet], props.token_id);
-      if (res != undefined) {
+      const res = await appContext.api.daoTokenCheckSingleToken(
+        [props.wallet],
+        props.token_id
+      );
+      if (res) {
         setUserTokens(res);
-      }
-      else setUserTokens(0)
+      } else setUserTokens(utxos.currentDaoTokens);
     };
     if (props.wallet) {
       load();
     }
-  }, []);
+  }, [props.wallet, utxos.currentDaoTokens]);
 
-  const ticker = appContext.api.daoData?.tokenomics.token_ticker
-  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const daoId = appContext.api.daoData.id;
+        const userId = appContext.api.daoUserData.user_id;
+        const res = await appContext.api.post<any>("/staking/user_stake_info", {
+          dao_id: daoId,
+          user_id: userId,
+        });
+        const stake = res.data;
+        const stakeAmount = stake.stake_keys
+          .map((stake: { stake: number }) => stake.stake)
+          .reduce((a: number, c: number) => a + c, 0);
+        setStakeAmount(stakeAmount);
+      } catch (e: any) {
+        console.log(e);
+      }
+    };
+
+    if (
+      utxos.currentDaoTokens &&
+      appContext.api.daoData?.id &&
+      appContext.api.daoUserData?.id
+    ) {
+      fetchData();
+    }
+  }, [utxos, appContext.api.daoData, appContext.api.daoUserData]);
+
+  const ticker =
+    appContext.api.daoData?.tokenomics.token_ticker ??
+    appContext.api.daoData?.dao_name + " DAO tokens";
+  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url;
 
   return (
     <Box
@@ -140,7 +178,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
             </Box>
           </Box>
         </Box>
-        <Box sx={{ fontSize: ".9rem" }}>{props.bio}</Box>
+        <Box sx={{ fontSize: ".9rem", mt: 1 }}>{props.bio}</Box>
         {/* <Box
           sx={{
             display: "flex",
@@ -186,16 +224,24 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
           />
         </Box>
         {props.wallet && userTokens ? (
-        <Chip
-          avatar={<Avatar alt={ticker} src={tokenImage} />}
-          label={parseFloat(userTokens.toFixed(0)).toLocaleString("en-US") +
-            " " +
-            ticker
-          }
-          sx={{ mt: ".5rem" }}
-        />
+          <Chip
+            avatar={<Avatar alt={ticker} src={tokenImage} />}
+            label={
+              parseFloat((userTokens + stakeAmount).toFixed(0)).toLocaleString(
+                "en-US"
+              ) +
+              " " +
+              ticker
+            }
+            sx={{ mt: ".5rem" }}
+          />
         ) : (
-          <Skeleton variant="rounded" width={100} height={32} sx={{ mt: '12px', borderRadius: '24px' }} />
+          <Skeleton
+            variant="rounded"
+            width={100}
+            height={32}
+            sx={{ mt: "12px", borderRadius: "24px" }}
+          />
         )}
       </Box>
     </Box>

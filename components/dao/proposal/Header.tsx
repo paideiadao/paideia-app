@@ -24,7 +24,7 @@ const CreateHeader: React.FC<{ type?: string }> = (props) => {
                 : `/${dao}/create`
               : dao === undefined
               ? ""
-              : `/${dao}/proposals`
+              : `/${dao}/proposal`
           }
         >
           <Button

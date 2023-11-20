@@ -6,6 +6,7 @@ import { Notification } from "@pages/[dao]/notifications";
 import Link from "next/link";
 import * as React from "react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface INotificationsPopup {
   open: boolean;
@@ -17,6 +18,24 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
   const { dao } = router.query;
+
+  React.useEffect(() => {
+    if (props.open && props.notifications && props.notifications[0]) {
+      globalContext.api
+        ?.markNotificationsAsRead(
+          props.notifications ? props.notifications[0].id : 0
+        )
+        .then(() => {
+          globalContext.metadata.setMetadata({
+            ...globalContext.metadata.metadata,
+            unreadNotificationCount: 0,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [props.open]);
 
   return (
     <Modal open={props.open} onClose={props.close}>
@@ -45,31 +64,8 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
           }}
         >
           <CapsInfo title="Notifications" mb={"0"} />
-          <Box sx={{ ml: "auto" }}>
-            <Button
-              size="small"
-              sx={{ whiteSpace: "nowrap" }}
-              onClick={() =>
-                globalContext.api
-                  ?.markNotificationsAsRead(
-                    props.notifications ? props.notifications[0].id : 0
-                  )
-                  .then(() => {
-                    globalContext.metadata.setMetadata({
-                      ...globalContext.metadata.metadata,
-                      unreadNotificationCount: 0,
-                    });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
-              }
-            >
-              Mark all as read
-            </Button>
-          </Box>
         </Box>
-        <Box sx={{ height: "25rem", overflowY: "hidden" }}>
+        <Box sx={{ height: "25rem", overflowY: "scroll" }}>
           {props.notifications ? (
             props.notifications.map((i: any, c: number) => {
               return (

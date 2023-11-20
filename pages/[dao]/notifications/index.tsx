@@ -38,6 +38,7 @@ export interface INotification {
   proposal_id: number;
   proposal_name: string;
   id: number;
+  transaction_id?: string;
 }
 
 const getNotificationCountdown = (date: Date) => {
@@ -78,7 +79,8 @@ const Notifications: React.FC<{ params: any }> = (props) => {
   const { data: notifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
       `/notificatons/${globalContext.api?.daoUserData?.id}`,
-    fetcher
+    fetcher,
+    { refreshInterval: 30000 }
   );
 
   return (
@@ -193,9 +195,23 @@ export const Notification: React.FC<{
   m?: string;
   c: number;
 }> = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const unread = globalContext.metadata.metadata.unreadNotificationCount;
   const router = useRouter();
   const { dao } = router.query;
   const i = props.i;
+
+  const getFormattedText = (text: string): string => {
+    const formattedText = text
+      .split(" ")
+      .filter((x) => x && x !== "undefined" && x !== "null")
+      .map((word) => (word.length > 20 ? word.substring(0, 20) + "..." : word))
+      .join(" ");
+    return formattedText.length > 120
+      ? formattedText.substring(0, 120) + "..."
+      : formattedText;
+  };
+
   return (
     <Box
       sx={{
@@ -205,7 +221,8 @@ export const Notification: React.FC<{
         display: "flex",
         alignItems: "center",
         p: "1rem",
-        backgroundColor: i.is_read ? "fileInput.outer" : "fileInput.read",
+        backgroundColor:
+          !i.is_read && unread !== 0 ? "fileInput.read" : "fileInput.outer",
         borderRadius:
           props.m === undefined ? deviceWrapper("0", ".3rem") : "0rem",
         border: 1,
@@ -213,19 +230,35 @@ export const Notification: React.FC<{
         cursor: "pointer",
         ml: deviceWrapper("-1rem", "0"),
       }}
-      onClick={() => router.push(`/${dao}/discussion/${generateSlug(i.proposal_id, i.proposal_name)}`)}
+      onClick={() =>
+        i.transaction_id
+          ? window.open(
+              "https://explorer.ergoplatform.com/en/transactions/" +
+                i.transaction_id
+            )
+          : router.push(
+              `/${dao}/discussion/${generateSlug(
+                i.proposal_id,
+                i.proposal_name
+              )}`
+            )
+      }
     >
       {/* <Avatar src={i.img} sx={{ width: "4rem", height: "4rem" }}></Avatar> */}
       <Box
         sx={{
-          width: "70%",
+          width: "80%",
           ml: "1rem",
           fontSize: deviceWrapper(".7rem", ".9rem"),
         }}
       >
         <Box sx={{ pb: 2 }}>
           <Box sx={{ display: "inline", color: "text.secondary" }}>
-            {i.action} {i.proposal_name}
+            {getFormattedText(
+              `${i.action.charAt(0).toUpperCase() + i.action.slice(1)} ${
+                i.proposal_name
+              } ${i.transaction_id}`
+            )}
           </Box>
         </Box>
         <Box
@@ -239,7 +272,7 @@ export const Notification: React.FC<{
           <AccessTimeIcon sx={{ fontSize: "1rem", mr: ".2rem" }} /> {i.date}
         </Box>
       </Box>
-      {!i.is_read && (
+      {!i.is_read && unread !== 0 && (
         <Box sx={{ ml: "auto" }}>
           <CircleIcon
             color="primary"

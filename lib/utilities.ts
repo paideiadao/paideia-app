@@ -1,6 +1,6 @@
-import axios from "axios";
-import { IObj } from "@lib/Interfaces";
 import { IAlerts, ValidAlert } from "@components/utilities/Alert";
+import { IObj } from "@lib/Interfaces";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 type RequestType = "POST" | "PUT" | "GET" | "PATCH" | "DELETE";
@@ -24,7 +24,7 @@ export const getObj = (lst: any[], id_field: string, id: any): any => {
 };
 
 export const getUserId = () => {
-  return parseInt(localStorage.getItem("user_id"));
+  return localStorage.getItem("user_id");
 };
 
 export const snipAddress = (
@@ -205,23 +205,32 @@ export class AbstractApi {
 
   error(err: any): any {
     console.log("func:api_error:", err);
+    const bMessage =
+      typeof err?.message === "string"
+        ? err.message
+        : "Oops :( Some unknown error may have occurred";
     const message =
       typeof err === "string"
         ? err
         : err?.response
         ? err.response.status === 401
-          ? err.response.data.detail
+          ? err.response.data.detail ?? err.response.data
           : err.response.data
-        : "Oops :( Some unknown error may have occurred";
-    if (this !== undefined)
+        : bMessage;
+    if (this !== undefined) {
       this.showAlert(
         typeof message === "string" ? message : JSON.stringify(message),
         "error"
       );
+    }
   }
 
   showAlert = (content: string, severity: ValidAlert): boolean => {
-    if (content !== "" && content !== undefined) {
+    if (
+      content !== "" &&
+      content !== undefined &&
+      content !== "Cannot read properties of undefined (reading 'data')"
+    ) {
       const temp = [...this.alert];
       temp.push({
         content: content,
@@ -317,8 +326,8 @@ export class AbstractApi {
           });
         }
       } catch (err) {
-        console.log(err);
-        return reject(err);
+        console.warn(err);
+        throw reject(err);
       }
     });
   }

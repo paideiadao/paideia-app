@@ -6,13 +6,12 @@ import FileInput from "../../utilities/file";
 import { LearnMore, Subheader, Subtitle } from "../utilities/HeaderComponents";
 
 const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
-  let creationContext =
+  const creationContext =
     props.context === undefined
       ? React.useContext(CreationContext)
       : props.context;
-
-  let data = creationContext.api.data.design;
-  let setData = (data: any) => {
+  const data = creationContext.api.data.design;
+  const setData = (data: any) => {
     creationContext.api.setData({
       ...creationContext.api.data,
       design: data,
@@ -20,10 +19,20 @@ const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
   };
   const [url, setUrl] = React.useState<any>(data.logo.url);
 
+  const reset = () => {
+    setData({
+      ...data,
+      logo: {
+        url: "",
+        file: undefined,
+      },
+    });
+  };
+
   function handleImage(e: any) {
-    let fileInput = e.currentTarget.files;
+    const fileInput = e.currentTarget.files;
     if (fileInput && fileInput[0]) {
-      if (fileInput.length != 1) return;
+      if (fileInput.length !== 1) return;
       if (fileInput[0].size > 1000000) {
         setData({
           ...data,
@@ -32,7 +41,6 @@ const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
             file: -1,
           },
         });
-
         return;
       }
 
@@ -65,12 +73,12 @@ const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
         </Box>
         <Subtitle subtitle="Upload your own personalized logo for your DAO or simply use the auto-generated version created from your wallet address." />
       </Box>
-
       <FileInput
         file={data.logo === undefined ? "" : data.logo.file}
         fileUrl={data.logo === undefined ? "" : data.logo.url}
         handleImage={handleImage}
         id="logo-img-upload"
+        reset={reset}
       />
     </Box>
   );

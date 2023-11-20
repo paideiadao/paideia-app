@@ -9,29 +9,29 @@ interface IwSendFunds extends ISendFunds {
 }
 
 const SendFunds: React.FC<IwSendFunds> = (props) => {
-  let treasuryAmount = 100000;
-  const set = (val: any) => {
-    props.set({
-      recurring: props.recurring,
-      tokenHolders: props.tokenHolders,
-      ...val,
-    });
-  };
+  // let treasuryAmount = 100000;
+  // const set = (val: any) => {
+  //   props.set({
+  //     recurring: props.recurring,
+  //     tokenHolders: props.tokenHolders,
+  //     ...val,
+  //   });
+  // };
   return (
     <>
-      <MultiTokenHolders
+      {/* <MultiTokenHolders
         tokenHolders={props.tokenHolders}
         treasuryAmount={treasuryAmount}
         set={(newTokenHolders: ITokenHolder[]) =>
           set({ tokenHolders: newTokenHolders })
         }
-      />
-      <LabeledSwitch
-        title="Set as recurring"
+      /> */}
+      {/* <LabeledSwitch
+        title="Set as Recurring"
         subtitle="Set and schedule this payment to be done for a determined amount of time, in any frequency you wish."
         value={props.recurring}
         onChange={() => set({ recurring: !props.recurring })}
-      />
+      /> */}
     </>
   );
 };

@@ -1,12 +1,22 @@
+import { FC, useContext, useState, useEffect } from "react";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Avatar, Box, Button } from "@mui/material";
-import * as React from "react";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { VoteWidget } from "../proposals/ProposalCard";
 import dateFormat from "dateformat";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { deviceWrapper } from "@components/utilities/Style";
 import { getRandomImage } from "@components/utilities/images";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { fetcher } from "@lib/utilities";
+import useSWR from "swr";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+
+interface IVoteWidgetProps {
+  yes?: number;
+  no?: number;
+}
 
 interface ILastVote {
   img: string;
@@ -14,6 +24,10 @@ interface ILastVote {
   date: Date;
   vote: number;
 }
+
+export const niceNumber = (number: number) => {
+  return Number(number.toFixed(0)).toLocaleString();
+};
 
 const LastVotes: React.FC = () => {
   const lastVotes: ILastVote[] = [
@@ -69,47 +83,110 @@ const LastVotes: React.FC = () => {
   );
 };
 
-const _VoteWidget: React.FC = () => {
+const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
+  const context = useContext<IGlobalContext>(GlobalContext);
+  const governance = context.api.daoData?.governance;
+  const daoId = context.api.daoData?.id;
   const router = useRouter();
-
   const { dao, proposal_id } = router.query;
+  const [stakeKeys, setStakeKeys] = useState<string[]>([]);
+
+  const { data: stakingData, error: stakingError } = useSWR(
+    daoId && `/staking/dao_stake_info/${daoId}`,
+    fetcher
+  );
+
+  const { data: votingData, error: votingError } = useSWR(
+    proposal_id && `/proposals/${proposal_id}/votes`,
+    fetcher
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const daoId = context.api.daoData.id;
+        const userId = context.api.daoUserData.user_id;
+        const res = await context.api.post<any>("/staking/user_stake_info", {
+          dao_id: daoId,
+          user_id: userId,
+        });
+        const stake = res.data;
+        const keys = stake.stake_keys.map(
+          (stake: { key_id: string }) => stake.key_id
+        );
+        setStakeKeys(keys);
+      } catch (e: any) {
+        console.log(e);
+      }
+    };
+
+    if (context.api.daoData?.id && context.api.daoUserData?.id) {
+      fetchData();
+    }
+  }, [context.api.daoData, context.api.daoUserData]);
+
+  // const quorumInfo = `For this proposal to be approved a quorum of
+  // ${governance?.quorum / 10}% and ${governance?.support_needed / 10}%
+  // support is needed.`;
+  const quorumNumberNeeded =
+    (stakingData?.total_staked * governance?.quorum) / 1000;
+  const current = props.yes + props.no;
+  const quorumPct = governance?.quorum / 10;
+  const percentValue = (current / quorumNumberNeeded) * 100;
+  const supportMet =
+    (props.yes / current) * 100 >= governance?.support_needed / 10;
+  const userVote = votingData?.filter((vote: { stake_key: string }) =>
+    stakeKeys.includes(vote.stake_key)
+  )[0];
+  const userVoteParsed = userVote
+    ? userVote.vote[0] > userVote.vote[1]
+      ? false
+      : true
+    : null;
+  // const quorumDetails = `Aleast ${numberNeeded.toFixed(0).toLocaleString()} votes needed to meet ${governance?.quorum / 10}%
+  // quorum with the current number of DAO tokens staked.`;
+
   return (
-    <Box
-      sx={{
-        backgroundColor: "fileInput.outer",
-        border: deviceWrapper("0", "1px solid"),
-        borderColor: deviceWrapper("none", "border.main"),
-        borderRadius: ".3rem",
-        width: deviceWrapper("calc(100% + 1.5rem)", "100%"),
-        mb: "1rem",
-        ml: deviceWrapper("-.75rem", "0"),
-      }}
-    >
+    <>
       <Box
         sx={{
-          width: "100%",
-          borderBottom: deviceWrapper("0", "1px solid"),
-          borderBottomColor: deviceWrapper("none", "border.main"),
-          p: ".5rem",
+          backgroundColor: "fileInput.outer",
+          border: deviceWrapper("0", "1px solid"),
+          borderColor: deviceWrapper("none", "border.main"),
+          borderRadius: ".3rem",
+          width: deviceWrapper("calc(100% + 1.5rem)", "100%"),
+          mb: "1rem",
+          ml: deviceWrapper("-.75rem", "0"),
         }}
       >
-        <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <CapsInfo title="Votes | 206" mb={"0"} />
-          <Button
-            sx={{
-              display: deviceWrapper("flex", "none"),
-              ml: "auto",
-              whiteSpace: "no-wrap",
-              minWidth: "max-content",
-            }}
-            size="small"
-          >
-            View All
-          </Button>
+        <Box
+          sx={{
+            width: "100%",
+            borderBottom: deviceWrapper("0", "1px solid"),
+            borderBottomColor: deviceWrapper("none", "border.main"),
+            p: ".5rem",
+          }}
+        >
+          <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
+            <CapsInfo
+              title={`Votes: ${niceNumber((props.no ?? 0) + (props.yes ?? 0))}`}
+              mb={"0.5rem"}
+            />
+            <Button
+              sx={{
+                display: deviceWrapper("flex", "none"),
+                ml: "auto",
+                whiteSpace: "no-wrap",
+                minWidth: "max-content",
+              }}
+              size="small"
+            >
+              View All
+            </Button>
+          </Box>
+          <VoteWidget yes={props.yes ?? 0} no={props.no ?? 0} />
         </Box>
-        <VoteWidget yes={160} no={46} />
-      </Box>
-      <Box
+        {/* <Box
         sx={{
           width: "100%",
           borderBottom: deviceWrapper("0", "1px solid"),
@@ -120,33 +197,81 @@ const _VoteWidget: React.FC = () => {
       >
         <CapsInfo title="Last Votes" mb={"0"} />
         <LastVotes />
-      </Box>
-      <Box
-        sx={{
-          width: "100%",
-          display: deviceWrapper("none", "flex"),
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Link
-          href={
-            dao === undefined ? `` : `/${dao}/proposals/${proposal_id}/votes`
-          }
+      </Box> */}
+        <Box
+          sx={{
+            width: "100%",
+            display: deviceWrapper("none", "flex"),
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Button
-            size="small"
-            sx={{
-              borderTopRightRadius: 0,
-              borderTopLeftRadius: 0,
-              width: "100%",
-            }}
+          <Link
+            href={
+              dao === undefined ? `` : `/${dao}/proposal/${proposal_id}/votes`
+            }
           >
-            View All Votes
-          </Button>
-        </Link>
+            <Button
+              disabled
+              size="small"
+              sx={{
+                borderTopRightRadius: 0,
+                borderTopLeftRadius: 0,
+                width: "100%",
+              }}
+            >
+              View All Votes
+            </Button>
+          </Link>
+        </Box>
       </Box>
-    </Box>
+      <Box>
+        <Box sx={{ display: "flex", direction: "row", alignItems: "center" }}>
+          {userVoteParsed ? <CheckIcon /> : <CloseIcon />}
+          <Typography sx={{ fontSize: "14px", fontWeight: "800" }}>
+            {userVoteParsed !== null &&
+              "You " +
+                (userVoteParsed
+                  ? "approved the proposal"
+                  : "voted against the proposal")}
+            {userVoteParsed === null && "You did not vote on this proposal"}
+          </Typography>
+        </Box>
+      </Box>
+      <Box>
+        <Box sx={{ display: "flex", direction: "row", alignItems: "center" }}>
+          {supportMet ? <CheckIcon /> : <CloseIcon />}
+          <Typography sx={{ fontSize: "14px" }}>
+            {governance?.support_needed / 10}% Support{" "}
+            {supportMet ? "Met" : "Required"}
+          </Typography>
+        </Box>
+      </Box>
+      <Box sx={{ mb: 2 }}>
+        <Box>
+          {percentValue > 100 ? (
+            <Box
+              sx={{ display: "flex", direction: "row", alignItems: "center" }}
+            >
+              <CheckIcon />
+              <Typography sx={{ fontSize: "14px" }}>Quorum Achieved</Typography>
+            </Box>
+          ) : (
+            <Box
+              sx={{ display: "flex", direction: "row", alignItems: "center" }}
+            >
+              <CloseIcon />
+              <Typography sx={{ fontSize: "14px" }}>
+                {niceNumber(quorumNumberNeeded - current)} more votes required
+                to meet {quorumPct.toFixed(0)}% Quorum
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </Box>
+      {/* <Warning title="Quorum and Support Details" subtitle={quorumInfo} /> */}
+      {/* <Warning title="Quorum Requirement" subtitle={quorumDetails} /> */}
+    </>
   );
 };
 

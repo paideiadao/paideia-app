@@ -2,7 +2,7 @@ import { Avatar, Box, Button, InputAdornment, TextField } from "@mui/material";
 import * as React from "react";
 import nautilus from "@public/icons/nautilus.png";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { isAddressValid } from "./AddWallet";
+import { getErgoWalletContext, isAddressValid } from "./AddWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useWallet } from "./WalletContext";
 import { LoadingButton } from "@mui/lab";
@@ -126,10 +126,9 @@ const Nautilus: React.FC<{
                                   .changeAddress(i.name)
                                   .then(async (signingMessage: any) => {
                                     if (signingMessage !== undefined) {
-                                      // @ts-ignore
-                                      let response = await ergo.auth(
+                                      const context = await getErgoWalletContext();
+                                      const response = await context.auth(
                                         i.name,
-                                        // @ts-ignore
                                         signingMessage.data.signingMessage
                                       );
                                       response.proof = Buffer.from(

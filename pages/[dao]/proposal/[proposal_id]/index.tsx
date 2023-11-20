@@ -1,8 +1,7 @@
 import { Box, Button, Chip, Fab, Tab } from "@mui/material";
-import * as React from "react";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
-import Comments from "@components/dao/discussion/Comments";
+import Comments, { IComment } from "@components/dao/discussion/Comments";
 import DiscussionReferences from "@components/dao/discussion/DiscussionReferences";
 import { Overview } from "@components/dao/discussion/Widgets";
 import { LikesDislikes } from "@components/dao/proposals/ProposalCard";
@@ -14,8 +13,6 @@ import { IProposal } from "../create";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import LanIcon from "@mui/icons-material/Lan";
 import { useRouter } from "next/router";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import CircleIcon from "@mui/icons-material/Circle";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import dateFormat from "dateformat";
@@ -24,15 +21,17 @@ import ProposalContext from "@lib/dao/proposal/ProposalContext";
 import ProposalApi from "@lib/dao/proposal/ProposalApi";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ProposalInfo from "@components/dao/proposal/ProposalInfo";
-import Discussion from "@components/dao/proposal/Discussion";
 import Addendums from "@components/dao/proposal/Addendums";
 import VoteWidget from "@components/dao/proposal/VoteWidget";
-import OptionsWidget from "@components/dao/proposal/OptionsWidget";
 import Link from "next/link";
 import { getRandomImage } from "@components/utilities/images";
 import BackLink from "@components/utilities/BackLink";
 import Details from "@components/dao/proposal/Details";
-import { FollowMobile } from "@components/utilities/Follow";
+import Follow, { FollowMobile } from "@components/utilities/Follow";
+import useSWR from "swr";
+import { attrOrUndefined, fetcher, getWsUrl } from "@lib/utilities";
+import { useContext, useState, useEffect } from "react";
+import useDidMountEffect from "@components/utilities/hooks";
 
 const endDate = new Date();
 endDate.setDate(endDate.getDate() + 10);
@@ -41,56 +40,85 @@ const startDate = new Date();
 startDate.setDate(startDate.getDate() - 10);
 
 const Proposal: React.FC = () => {
-  const themeContext = React.useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext);
   const router = useRouter();
   const { dao, proposal_id } = router.query;
-  const [value, setValue] = React.useState<IProposal>({
+  const parsed_proposal_id = proposal_id
+    ? (proposal_id as string).split("-").slice(-5).join("-")
+    : null;
+  const [value, setValue] = useState<IProposal>({
     name: "",
-    image: {
-      url: getRandomImage(),
-      file: undefined,
-    },
-    status: "active",
+    image_url: getRandomImage(),
+    status: "proposal",
     category: "Finance",
     content: "",
-    votingSystem: "yes/no",
+    voting_system: "yes/no",
     references: [],
-    actions: [
-      {
-        name: undefined,
-        data: undefined,
-      },
-    ],
+    actions: [],
+    likes: [],
+    dislikes: [],
+    comments: [],
     optionType: undefined,
-    tags: ["Controversial"],
-    followed: false,
-    dislikes: 31,
-    likes: 158,
+    tags: [],
+    followers: [],
     date: endDate,
-    createdDate: startDate,
-    addendums: [
-      {
-        id: 1,
-        name: "Addendum 1",
-        date: new Date(),
-        content: "Addendum 1 content here...",
-      },
-    ],
+    created: 0,
+    addendums: [],
+    is_proposal: true,
+    references_meta: [],
+    referenced_meta: [],
+    votes: [0, 0],
   });
 
-  const [tab, setTab] = React.useState("0");
-  const [loaded, setLoaded] = React.useState<boolean>(false);
+  const [tab, setTab] = useState("0");
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [newestComment, setNewestComment] = useState<IComment>();
+  const [liveComments, setLiveComments] = useState<IComment[]>([]);
 
-  React.useEffect(() => {
-    setLoaded(true);
-  }, []);
+  useEffect(() => {
+    if (parsed_proposal_id) {
+      const ws = new WebSocket(
+        `${getWsUrl()}/proposals/ws/${parsed_proposal_id}`
+      );
+      ws.onmessage = (event: any) => {
+        try {
+          const wsRes = JSON.parse(event.data);
+          setWrapper(wsRes.comment);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      return () => ws.close();
+    }
+  }, [parsed_proposal_id]);
+
+  useDidMountEffect(() => {
+    const temp = [...liveComments, newestComment];
+    setLiveComments(temp);
+  }, [newestComment]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
   };
 
-  const context = React.useContext<IGlobalContext>(GlobalContext);
+  const setWrapper = (data: IComment) => {
+    setNewestComment(data);
+  };
+
+  const context = useContext<IGlobalContext>(GlobalContext);
   const api = new ProposalApi(context.api, value, setValue);
+
+  const { data, error } = useSWR(
+    parsed_proposal_id ? `/proposals/${parsed_proposal_id}` : null,
+    fetcher
+  );
+
+  useEffect(() => {
+    if (data) {
+      setValue(data);
+      setLoaded(true);
+    }
+  }, [data]);
 
   return (
     <ProposalContext.Provider value={{ api }}>
@@ -116,8 +144,8 @@ const Proposal: React.FC = () => {
                   to bottom, transparent, ${
                     themeContext.theme === DarkTheme ? "black" : "white"
                   }
-                ), url(${value.image.url})`,
-                      `url(${value.image.url})`
+                ), url(${value.image_url})`,
+                      `url(${value.image_url})`
                     ),
                     p: ".75rem",
                     maxHeight: "30rem",
@@ -141,11 +169,13 @@ const Proposal: React.FC = () => {
                     >
                       <FollowMobile
                         followed={
-                          [].indexOf(
-                            parseInt(localStorage.getItem("user_id"))
+                          value.followers.indexOf(
+                            context.api.daoUserData
+                              ? context.api.daoUserData.id
+                              : null
                           ) > -1
                         }
-                        putUrl={"/proposals/follow/" + proposal_id}
+                        putUrl={"/proposals/follow/" + parsed_proposal_id}
                       />
                     </Box>
                   )}
@@ -158,10 +188,10 @@ const Proposal: React.FC = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Header title="Proposal name" large bold />
+                    <Header title={value.name} large bold />
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Chip
-                        label={"Discussion"}
+                        label={value.status}
                         variant="outlined"
                         icon={
                           <CircleIcon
@@ -207,9 +237,10 @@ const Proposal: React.FC = () => {
                     }}
                   >
                     <LikesDislikes
-                      likes={value.likes}
-                      dislikes={value.dislikes}
+                      likes={value.likes.length}
+                      dislikes={value.dislikes.length}
                       userSide={value.userSide}
+                      putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
                   </Box>
                 </Box>
@@ -225,7 +256,7 @@ const Proposal: React.FC = () => {
                   }}
                 >
                   <Box>
-                    <Header title="Proposal name" large />
+                    <Header title={value.name} large />
                     <Box
                       sx={{
                         display: "flex",
@@ -237,7 +268,7 @@ const Proposal: React.FC = () => {
                       <LanIcon
                         sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }}
                       />
-                      ID: {proposal_id}
+                      ID: {parsed_proposal_id}
                     </Box>
                   </Box>
                   <Box
@@ -248,43 +279,27 @@ const Proposal: React.FC = () => {
                       flexDirection: deviceWrapper("column", "row"),
                     }}
                   >
-                    <Button
-                      onClick={() =>
-                        setValue({ ...value, followed: !value.followed })
-                      }
-                      sx={{
-                        color: value.followed
-                          ? "error.light"
-                          : "text.secondary",
-                        borderColor: value.followed
-                          ? "error.light"
-                          : "text.secondary",
-                        ":hover": {
-                          borderColor: "error.light",
-                          color: "error.light",
-                        },
-                        display: deviceWrapper("none", "flex"),
-                      }}
-                      variant="outlined"
-                      size="small"
-                      startIcon={
-                        value.followed ? (
-                          <FavoriteIcon />
-                        ) : (
-                          <FavoriteBorderIcon />
-                        )
-                      }
-                    >
-                      Follow{value.followed && "ed"}
-                    </Button>
+                    {context.api.daoUserData != null && (
+                      <Follow
+                        followed={
+                          value.followers.indexOf(
+                            context.api.daoUserData
+                              ? context.api.daoUserData.id
+                              : null
+                          ) > -1
+                        }
+                        putUrl={"/proposals/follow/" + parsed_proposal_id}
+                      />
+                    )}
                     <Link
                       href={
                         dao === undefined
-                          ? `/dao/proposals/${proposal_id}/vote`
-                          : `/${dao}/proposals/${proposal_id}/vote`
+                          ? `/dao/proposal/${proposal_id}/vote`
+                          : `/${dao}/proposal/${proposal_id}/vote`
                       }
                     >
                       <Button
+                        disabled={value.status !== "Active"}
                         sx={{
                           ml: "1rem",
                           display: deviceWrapper("none", "flex"),
@@ -307,7 +322,7 @@ const Proposal: React.FC = () => {
                   }}
                 >
                   <Chip
-                    label={value.category}
+                    label={value.category ?? "Default"}
                     variant="outlined"
                     icon={<LocalFireDepartmentIcon sx={{ fontSize: "1rem" }} />}
                     sx={{
@@ -326,10 +341,10 @@ const Proposal: React.FC = () => {
                     }}
                   >
                     <CircleIcon
-                      color="primary"
+                      color={getStatusColor(value.status)}
                       sx={{ mr: ".3rem", fontSize: "1rem" }}
                     />
-                    Discussion
+                    {value.status}
                   </Box>
                   <Box
                     sx={{
@@ -347,9 +362,24 @@ const Proposal: React.FC = () => {
                   </Box>
                   <Box sx={{ ml: "auto" }}>
                     <LikesDislikes
-                      likes={value.likes}
-                      dislikes={value.dislikes}
-                      userSide={value.userSide}
+                      likes={value.likes.length}
+                      dislikes={value.dislikes.length}
+                      userSide={
+                        value.likes.indexOf(
+                          context.api.daoUserData
+                            ? context.api.daoUserData.id
+                            : null
+                        ) > -1
+                          ? 1
+                          : value.dislikes.indexOf(
+                              context.api.daoUserData
+                                ? context.api.daoUserData.id
+                                : null
+                            ) > -1
+                          ? 0
+                          : undefined
+                      }
+                      putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
                   </Box>
                 </Box>
@@ -359,11 +389,10 @@ const Proposal: React.FC = () => {
                     display: deviceWrapper("block", "none"),
                   }}
                 >
-                  {value.votingSystem === "yes/no" ? (
-                    <VoteWidget />
-                  ) : (
-                    <OptionsWidget />
-                  )}
+                  <VoteWidget
+                    yes={value.votes ? value.votes[1] / 10000 : 0}
+                    no={value.votes ? value.votes[0] / 10000 : 0}
+                  />
                 </Box>
                 <TabContext value={tab}>
                   <Box
@@ -385,34 +414,62 @@ const Proposal: React.FC = () => {
                       scrollButtons="auto"
                     >
                       <Tab label="Proposal Info" value="0" />
-
-                      <Tab label="Discussion" value="1" />
-                      <Tab label="Comments | 7" value="2" />
-                      <Tab label="Referenced | 1" value="3" />
-                      <Tab label="Addendum" value="4" />
+                      <Tab
+                        label={`Comments | ${
+                          value.comments
+                            .concat(liveComments)
+                            .filter((x) => x)
+                            .filter(
+                              (v, i, a) =>
+                                a.map((comment) => comment.id).indexOf(v.id) ===
+                                i
+                            ).length
+                        }`}
+                        value="1"
+                      />
+                      <Tab
+                        label={`References | ${
+                          value?.references_meta?.length +
+                          value?.referenced_meta?.length
+                        }`}
+                        value="2"
+                      />
+                      <Tab label="Addendums" value="3" />
                       <Tab
                         label="Proposal Details"
-                        value="5"
+                        value="4"
                         sx={{ display: deviceWrapper("flex", "none") }}
                       />
                     </TabList>
                   </Box>
                   <TabPanel value="0" sx={{ pl: 0, pr: 0 }}>
-                    <ProposalInfo />
+                    <ProposalInfo
+                      content={value.content}
+                      actions={value.actions}
+                    />
                   </TabPanel>
                   <TabPanel value="1" sx={{ pl: 0, pr: 0 }}>
-                    <Discussion />
+                    <Comments
+                      data={value.comments
+                        .concat(liveComments)
+                        .filter((x) => x)
+                        .filter(
+                          (v, i, a) =>
+                            a.map((comment) => comment.id).indexOf(v.id) === i
+                        )}
+                      id={parsed_proposal_id}
+                    />
                   </TabPanel>
                   <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
-                    <Comments data={[]} id={0} />
+                    <DiscussionReferences
+                      references={data?.references_meta ?? []}
+                      referenced={data?.referenced_meta ?? []}
+                    />
                   </TabPanel>
                   <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>
-                    <DiscussionReferences data={[]} />
-                  </TabPanel>
-                  <TabPanel value="4" sx={{ pl: 0, pr: 0 }}>
                     <Addendums />
                   </TabPanel>
-                  <TabPanel value="5" sx={{ pl: 0, pr: 0 }}>
+                  <TabPanel value="4" sx={{ pl: 0, pr: 0 }}>
                     <Details />
                   </TabPanel>
                 </TabContext>
@@ -428,21 +485,21 @@ const Proposal: React.FC = () => {
               >
                 <Overview
                   proposal
-                  userDetailId={0}
-                  alias={""}
+                  userDetailId={value.user_details_id}
+                  alias={value.alias}
+                  img={value.profile_img_url}
+                  followers={value.user_followers}
+                  created={value.created}
                   level={0}
-                  img={""}
-                  followers={[]}
-                  created={0}
                 />
-                {value.votingSystem === "yes/no" ? (
-                  <VoteWidget />
-                ) : (
-                  <OptionsWidget />
-                )}
+                <VoteWidget
+                  yes={value.votes ? value.votes[1] / 10000 : 0}
+                  no={value.votes ? value.votes[0] / 10000 : 0}
+                />
               </Box>
             </Box>
             <Button
+              disabled={value.status !== "Active"}
               size="small"
               startIcon={<GavelIcon />}
               sx={{
@@ -459,12 +516,39 @@ const Proposal: React.FC = () => {
             </Button>
           </>
         )}
+        {!loaded && <>Loading here...</>}
       </Layout>
     </ProposalContext.Provider>
   );
 };
 
-export default Proposal;
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Draft": {
+      return "warning";
+    }
+    case "Passed": {
+      return "success";
+    }
+    case "Active": {
+      return "success";
+    }
+    case "Proposal": {
+      return "success";
+    }
+    case "Failed": {
+      return "error";
+    }
+    case "Failed - Quorum": {
+      return "error";
+    }
+    case "Failed - Vote": {
+      return "error";
+    }
+    default: {
+      return "warning";
+    }
+  }
+};
 
-// export const getStaticPaths = paths;
-// export const getStaticProps = props;
+export default Proposal;

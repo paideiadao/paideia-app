@@ -11,7 +11,7 @@ export interface IDaoUserData {
   dao_id: number;
   followers: number[];
   following: number[];
-  id: number;
+  id: any;
   level: number;
   name: string;
   social_links: any;

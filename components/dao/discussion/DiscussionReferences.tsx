@@ -18,12 +18,15 @@ interface IReference {
   is_proposal: boolean;
 }
 
-const DiscussionReferences: React.FC<IDataComponent> = (props) => {
+interface IDiscussionReferencesData {
+  references: IReference[];
+  referenced: IReference[];
+}
+
+const DiscussionReferences: React.FC<IDiscussionReferencesData> = (props) => {
   const router = useRouter();
   const { id, discussion_id } = router.query;
-  return props.data === undefined ? (
-    <>Loading Here...</>
-  ) : (
+  return (
     <>
       <Box
         sx={{
@@ -41,37 +44,43 @@ const DiscussionReferences: React.FC<IDataComponent> = (props) => {
           }}
         >
           <CapsInfo
-            title={`this discussion has been referenced ${props.data.length} ${
-              props.data.length === 1 ? "time" : "times"
+            title={`References ${props.references.length === 0 ? "None" : ""}`}
+            mb="0"
+          />
+        </Box>
+      </Box>
+      <Box sx={{ width: "100%", mt: "1rem" }}>
+        {props.references.map((i: IReference, c: number) => (
+          <DiscussionCard key={`discussion-references-${c}`} {...i} />
+        ))}
+      </Box>
+      <Box
+        sx={{
+          mt: "1rem",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          flexWrap: deviceWrapper("wrap", "nowrap"),
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: deviceWrapper("100%", "50%"),
+          }}
+        >
+          <CapsInfo
+            title={`Referenced By ${
+              props.referenced.length === 0 ? "None" : ""
             }`}
             mb="0"
           />
         </Box>
-        <Link
-          href={getDaoPath(
-            id as string,
-            `/proposals/create?r=${discussion_id}`
-          )}
-        >
-          <Button
-            sx={{
-              ml: deviceWrapper("0", "auto"),
-              mt: deviceWrapper(".5rem", "0"),
-            }}
-            variant="outlined"
-            size="small"
-          >
-            Reference this discussion
-          </Button>
-        </Link>
       </Box>
       <Box sx={{ width: "100%", mt: "1rem" }}>
-        {props.data.map((i: IReference, c: number) => (
-          <DiscussionCard
-            key={`discussion-reference-${c}`}
-            {...i}
-            status="Active"
-          />
+        {props.referenced.map((i: IReference, c: number) => (
+          <DiscussionCard key={`discussion-referenced-${c}`} {...i} />
         ))}
       </Box>
     </>
@@ -107,11 +116,25 @@ const DiscussionCard: React.FC<IReference> = (props) => {
         sx={{
           ml: deviceWrapper(".75rem", "1rem"),
           fontSize: deviceWrapper(".8rem", "1rem"),
+          ":hover": {
+            cursor: "pointer",
+          },
+        }}
+        onClick={() => {
+          router.push(
+            `/${dao}/${
+              props.is_proposal ? "proposal" : "discussion"
+            }/${generateSlug(props.id, props.name)}`
+          );
         }}
       >
-        {props.name}
-        <Box sx={{ display: deviceWrapper("none", "block") }}>
-          <ProposalStatus status={props.status} />
+        {props.name.length > 120
+          ? props.name.substring(0, 120) + "..."
+          : props.name}
+        <Box sx={{ display: "block" }}>
+          <ProposalStatus
+            status={props.status === "discussion" ? "Discussion" : props.status}
+          />
         </Box>
       </Box>
       <Box
@@ -122,9 +145,9 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           flexDirection: deviceWrapper("column", "row"),
         }}
       >
-        <Box sx={{ display: deviceWrapper("block", "none") }}>
+        {/* <Box sx={{ display: deviceWrapper("none", "block") }}>
           <ProposalStatus status={props.status} />
-        </Box>
+        </Box> */}
         <LikesDislikes
           likes={props.likes.length}
           dislikes={props.dislikes.length}
@@ -139,7 +162,6 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           }
           putUrl={`/proposals/like/${props.id}`}
         />
-
         <Link
           href={`/${dao}/${
             props.is_proposal ? "proposal" : "discussion"

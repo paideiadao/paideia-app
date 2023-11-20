@@ -1,4 +1,4 @@
-import { Box, TextField, Button, Modal, Collapse } from "@mui/material";
+import { Box, TextField, Button, Modal, Collapse, Typography, useTheme } from "@mui/material";
 import * as React from "react";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
@@ -55,6 +55,7 @@ const notifications: INotification[] = [
 ];
 
 const EditNotifications: React.FC<{ params: any }> = (props) => {
+  const theme = useTheme()
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [value, setValue] = React.useState<IUserSettings>();
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -64,7 +65,7 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
 
   const { data: userSettingsData, error: userSettingsError } = useSWR(
     settingsApi.api.daoUserData != null &&
-      `/users/profile/settings?user_details_id=${settingsApi.api.daoUserData.id}`,
+    `/users/profile/settings?user_details_id=${settingsApi.api.daoUserData.id}`,
     fetcher
   );
 
@@ -80,27 +81,25 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
         <>
           <Header title="Notification settings" large />
           <LabeledSwitch
-            title="Notify me through email"
+            title="Notify me through emails"
             value={value.showEmail}
+            disabled
             onChange={() => setValue({ ...value, showEmail: !value.showEmail })}
             small
           />
+          <Typography sx={{ color: theme.palette.text.secondary, fontSize: '14px', mt: -3 }}>
+            Coming soon
+          </Typography>
           <Collapse in={value.showEmail}>
             <TextField
               value={value.emailAddress}
-              label="Email address"
+              label="Email Address"
               sx={{ width: "100%" }}
               onChange={(e: any) =>
                 setValue({ ...value, emailAddress: e.target.value })
               }
             />
           </Collapse>
-          <LabeledSwitch
-            title="Notify me through phone"
-            value={value.showPhone}
-            small
-            onChange={() => setValue({ ...value, showPhone: !value.showPhone })}
-          />
           <Collapse in={value.showPhone}>
             <TextField
               value={value.phoneNumber}

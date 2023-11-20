@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { Avatar, Box, Button, Paper, Input, FormControl } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Paper,
+  Input,
+  FormControl,
+  IconButton,
+} from "@mui/material";
 import { bytesToSize } from "../../lib/creation/Utilities";
 import ImagePlaceholder from "../../public/images/image-placeholder.png";
 import { deviceStruct } from "./Style";
+import { Close } from "@mui/icons-material";
 
 const FileInput: React.FC<{
   file: any;
   handleImage: Function;
+  reset?: Function;
   id: string;
   fileUrl: string;
   banner?: boolean;
@@ -55,6 +65,16 @@ const FileInput: React.FC<{
           position: "relative",
         }}
       >
+        {props.file !== undefined && props.file !== -1 && (
+          <IconButton
+            sx={{ position: "absolute", zIndex: 100, right: 0 }}
+            onClick={() => {
+              props.reset && props.reset();
+            }}
+          >
+            <Close />
+          </IconButton>
+        )}
         <FormControl
           sx={{
             width: "100%",

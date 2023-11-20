@@ -46,7 +46,7 @@ export const VotingChoice: React.FC<IVotingChoice> = (props) => {
         onClick={() =>
           context.api.setValue({
             ...context.api.value,
-            votingSystem: "unselected",
+            voting_system: "unselected",
           })
         }
       >

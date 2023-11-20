@@ -63,7 +63,7 @@ const Send: React.FC = () => {
           In order to participate on this airdrop, please complete the form
           below.
         </Box>
-        <MultiTokenHolders
+        {/* <MultiTokenHolders
           tokenHolders={value.receivers}
           treasuryAmount={treasuryAmount}
           set={(newTokenHolders: ITokenHolder[]) =>
@@ -72,10 +72,9 @@ const Send: React.FC = () => {
               receivers: newTokenHolders,
             })
           }
-        />
-
+        /> */}
         <LabeledSwitch
-          title="Set as recurring"
+          title="Set as Recurring"
           subtitle="Set and schedule this payment to be done for a determined amount of time, in any frequency you wish."
           value={value.recurring}
           onChange={() =>
@@ -103,7 +102,6 @@ const Send: React.FC = () => {
               Cancel
             </Button>
           </CancelLink>
-
           <Button variant="contained" sx={{ width: "50%" }} size="small">
             Send
           </Button>

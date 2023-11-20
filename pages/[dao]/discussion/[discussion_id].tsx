@@ -46,9 +46,9 @@ const Discussion: React.FC = () => {
   const globalContext = React.useContext(GlobalContext);
 
   const router = useRouter();
-  const { discussion_id, id, tab } = router.query;
+  const { discussion_id, tab } = router.query;
   const parsed_discussion_id = discussion_id
-    ? (discussion_id as string).split("-").reverse().at(0)
+    ? (discussion_id as string).split("-").slice(-5).join("-")
     : null;
   const [loaded, setLoaded] = React.useState<boolean>(false);
   const [newestComment, setNewestComment] = React.useState<IComment>();
@@ -85,21 +85,9 @@ const Discussion: React.FC = () => {
   };
 
   const { data, error } = useSWR(
-    discussion_id !== undefined && loaded
-      ? `/proposals/${discussion_id}`
-      : null,
+    discussion_id && loaded ? `/proposals/${discussion_id}` : null,
     fetcher
   );
-
-  if (error) {
-    router.push(getDaoPath(id as string, "/404"));
-  }
-
-  if (data !== undefined) {
-    if (data.is_proposal) {
-      router.push(getDaoPath(id as string, "/404"));
-    }
-  }
 
   const setWrapper = (data: IComment) => {
     setNewestComment(data);
@@ -125,8 +113,7 @@ const Discussion: React.FC = () => {
   }, [parsed_discussion_id]);
 
   useDidMountEffect(() => {
-    let temp = [...liveComments];
-    temp.push(newestComment);
+    const temp = [...liveComments, newestComment];
     setLiveComments(temp);
   }, [newestComment]);
 
@@ -217,7 +204,7 @@ const Discussion: React.FC = () => {
                   putUrl={`/proposals/like/${parsed_discussion_id}`}
                 />
                 <DiscussionOptions
-                  discussionId={parseInt(parsed_discussion_id)}
+                  discussionId={parsed_discussion_id}
                   userAlias={data.alias}
                   callbackHandler={() => router.back()}
                 />
@@ -375,7 +362,7 @@ const Discussion: React.FC = () => {
                         putUrl={"/proposals/follow/" + parsed_discussion_id}
                       />
                       <DiscussionOptions
-                        discussionId={parseInt(parsed_discussion_id)}
+                        discussionId={parsed_discussion_id}
                         userAlias={data.alias}
                         callbackHandler={() => router.back()}
                       />
@@ -509,12 +496,23 @@ const Discussion: React.FC = () => {
                   <Tab label="Discussion Info" value="1" />
                   <Tab
                     label={`Comments | ${
-                      data.comments.length + liveComments.length
+                      data.comments
+                        .concat(liveComments)
+                        .filter((x: any) => x)
+                        .filter(
+                          (v: { id: any }, i: any, a: any[]) =>
+                            a
+                              .map((comment: { id: any }) => comment.id)
+                              .indexOf(v.id) === i
+                        ).length
                     }`}
                     value="2"
                   />
                   <Tab
-                    label={`Referenced | ${data.references_meta.length}`}
+                    label={`References | ${
+                      data?.references_meta?.length +
+                      data?.referenced_meta?.length
+                    }`}
                     value="3"
                   />
                   <Tab
@@ -529,13 +527,22 @@ const Discussion: React.FC = () => {
               </TabPanel>
               <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
                 <Comments
-                  data={data.comments.concat(liveComments)}
-                  id={parseInt(parsed_discussion_id)}
+                  data={data.comments
+                    .concat(liveComments)
+                    .filter((x: any) => x)
+                    .filter(
+                      (v: { id: any }, i: any, a: any[]) =>
+                        a
+                          .map((comment: { id: any }) => comment.id)
+                          .indexOf(v.id) === i
+                    )}
+                  id={parsed_discussion_id}
                 />
               </TabPanel>
               <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>
                 <DiscussionReferences
-                  data={attrOrUndefined(data, "references_meta")}
+                  references={data?.references_meta ?? []}
+                  referenced={data?.referenced_meta ?? []}
                 />
               </TabPanel>
               <TabPanel value="4" sx={{ pl: 0, pr: 0 }}>
@@ -571,7 +578,7 @@ const Discussion: React.FC = () => {
 };
 
 const DiscussionOptions: React.FC<{
-  discussionId: number;
+  discussionId: string;
   userAlias: string;
   callbackHandler: () => void;
 }> = (props) => {

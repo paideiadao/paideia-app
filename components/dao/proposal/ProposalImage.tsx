@@ -1,4 +1,3 @@
-import { LearnMore } from "@components/creation/utilities/HeaderComponents";
 import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";

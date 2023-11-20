@@ -14,14 +14,7 @@ const DiscussionInfo: React.FC<IDataComponent> = (props) => {
       {props.data === undefined ? (
         <Skeleton animation="wave" width="100%" />
       ) : (
-        <MarkdownRender
-          description={props.data.content}
-        />
-        // <Box
-        //   dangerouslySetInnerHTML={{
-        //     __html: props.data.content,
-        //   }}
-        // ></Box>
+        <MarkdownRender description={props.data.content} />
       )}
     </>
   );

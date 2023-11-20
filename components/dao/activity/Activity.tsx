@@ -73,7 +73,10 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
             >
               {props.i.action}
             </Box>
-            {" " + props.i.value}
+            {" " +
+              (props.i.value.length > 120
+                ? props.i.value.substring(0, 120) + "..."
+                : props.i.value)}
             {props.i.secondary !== undefined && (
               <Box
                 sx={{

@@ -31,18 +31,18 @@ import { modalBackground } from "@components/utilities/modalBackground";
 import { useRouter } from "next/router";
 
 export interface IComment {
-  id: number;
+  id: string;
   likes: number[];
   dislikes: number[];
   date: Date;
   alias: string;
   profile_img_url: string;
   comment: string;
-  parent: number;
+  parent: string;
   show?: boolean;
 }
 
-const Comments: React.FC<{ title?: string; data: IComment[]; id: number }> = (
+const Comments: React.FC<{ title?: string; data: IComment[]; id: string }> = (
   props
 ) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -106,7 +106,7 @@ const Comments: React.FC<{ title?: string; data: IComment[]; id: number }> = (
 const CommentInput: React.FC<{
   set: Function;
   length: number;
-  parent?: number;
+  parent?: string;
   level?: number;
 }> = (props) => {
   const [value, setValue] = React.useState<string>("");
@@ -167,13 +167,14 @@ const CommentInput: React.FC<{
               mr: "-.5rem",
             }}
           >
-            <IconButton sx={{ mr: ".5rem" }} size="small">
+            {/* <IconButton sx={{ mr: ".5rem" }} size="small">
               <TagFacesIcon color="primary" />
             </IconButton>
             <IconButton sx={{ mr: "1rem" }} size="small">
               <AttachFileIcon color="primary" />
-            </IconButton>
+            </IconButton> */}
             <Button
+              disabled={value.length === 0}
               variant="contained"
               size="small"
               onClick={() => {
@@ -455,12 +456,12 @@ const BaseComment: React.FC<{
 };
 
 const CommentOptions: React.FC<{
-  commentId: number;
+  commentId: string;
   userAlias: string;
   callbackHandler: () => void;
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const api = new CommentsApi(globalContext.api, 0);
+  const api = new CommentsApi(globalContext.api, "");
   const userData = globalContext.api.daoUserData;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [modalOpen, setModalOpen] = React.useState(false);

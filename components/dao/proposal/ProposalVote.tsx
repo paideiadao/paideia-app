@@ -6,8 +6,8 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import { IObj } from "@lib/Interfaces";
-import { Box, Button, Typography } from "@mui/material";
-import { IProposalAction } from "@pages/[dao]/proposals/create";
+import { Box, Button, FormHelperText, Typography } from "@mui/material";
+import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Selector from "./vote/Selector";
 import YesNo from "./vote/YesNo/YesNo";
@@ -20,6 +20,7 @@ interface IVoteChoice {
   icon: JSX.Element;
   subtitle: string;
   change: () => void;
+  disabled?: boolean;
 }
 
 export const VoteChoice: React.FC<IVoteChoice> = (props) => {
@@ -31,12 +32,11 @@ export const VoteChoice: React.FC<IVoteChoice> = (props) => {
         width: deviceWrapper("100%", "50%"),
         p: ".5rem",
         mt: deviceWrapper("1rem", "0"),
-
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: ".3rem",
-        cursor: "pointer",
+        cursor: props.disabled ? "default " : "pointer",
         border: 1,
         borderColor: "border.main",
         flexDirection: "column",
@@ -44,6 +44,7 @@ export const VoteChoice: React.FC<IVoteChoice> = (props) => {
         ":hover": {
           borderColor: "primary.main",
         },
+        opacity: props.disabled ? 0.5 : 1,
       }}
     >
       {props.icon}
@@ -59,7 +60,8 @@ const ProposalVote: React.FC = () => {
     "yes/no": <YesNo />,
     options: <Options />,
   };
-  const votingSystem = context.api.value.votingSystem;
+  const voting_system = context.api.value.voting_system;
+
   return (
     <>
       <Typography
@@ -69,13 +71,13 @@ const ProposalVote: React.FC = () => {
           fontSize: "1.1rem",
         }}
       >
-        Voting system
+        Voting System
       </Typography>
-      {content[votingSystem]}
+      {content[voting_system]}
       {context.api.value.actions.filter(
         (i: IProposalAction) => i.name === undefined
       ).length === 0 &&
-        context.api.value.votingSystem === "yes/no" && (
+        context.api.value.voting_system === "yes/no" && (
           <Box
             sx={{
               width: "100%",
@@ -86,6 +88,7 @@ const ProposalVote: React.FC = () => {
             }}
           >
             <Button
+              disabled={context?.api?.value?.actions?.length >= 1}
               endIcon={<AddIcon />}
               onClick={() => {
                 const temp = [...context.api.value.actions];
@@ -103,6 +106,11 @@ const ProposalVote: React.FC = () => {
             </Button>
           </Box>
         )}
+      {context.api.errors.voting && (
+        <FormHelperText sx={{ mt: 1 }} error>
+          Voting or Action not configured
+        </FormHelperText>
+      )}
     </>
   );
 };

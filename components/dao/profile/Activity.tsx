@@ -40,7 +40,10 @@ const Activity: React.FC<{ activities: IActivity[] }> = (props) => {
                 >
                   {i.action}
                 </Box>
-                {" " + i.value}
+                {" " +
+                  (i.value.length > 120
+                    ? i.value.substring(0, 120) + "..."
+                    : i.value)}
               </Box>
             </Box>
 

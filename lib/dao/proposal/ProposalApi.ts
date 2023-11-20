@@ -2,10 +2,11 @@ import { AppApi } from "@lib/AppApi";
 import { AbstractApi } from "@lib/utilities";
 import {
   ActionType,
+  ICreateProposalErrors,
   IProposal,
   IProposalAction,
   VotingType,
-} from "@pages/[dao]/proposals/create";
+} from "@pages/[dao]/proposal/create";
 
 export interface IProposalEndpointBody {
   dao_id: number;
@@ -15,7 +16,7 @@ export interface IProposalEndpointBody {
   category: string;
   content: string;
   voting_system?: VotingType;
-  references: number[];
+  references: string[];
   actions?: ActionType[];
   tags?: string[];
   attachments: string[];
@@ -26,12 +27,22 @@ export default class ProposalApi extends AbstractApi {
   api: AppApi;
   value: IProposal;
   setValue: Function;
+  errors: ICreateProposalErrors;
+  setErrors: Function;
 
-  constructor(api: AppApi, value: IProposal, setValue: Function) {
+  constructor(
+    api: AppApi,
+    value: IProposal,
+    setValue: Function,
+    errors?: ICreateProposalErrors,
+    setErrors?: Function
+  ) {
     super();
     this.api = api;
     this.value = value;
     this.setValue = setValue;
+    this.errors = errors;
+    this.setErrors = setErrors;
     this.setAlert = api.setAlert;
   }
 
@@ -47,7 +58,7 @@ export default class ProposalApi extends AbstractApi {
       image_url: "",
       category: this.value.category,
       content: this.value.content,
-      voting_system: this.value.votingSystem,
+      voting_system: this.value.voting_system,
       references: this.value.references,
       actions: this.value.actions.map((i: IProposalAction) => i.data),
       tags: [],

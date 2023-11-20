@@ -16,12 +16,10 @@ import { Box } from "@mui/material";
 import * as React from "react";
 
 const Design: React.FC = () => {
-  let context = React.useContext<IConfigContext>(ConfigContext);
-
+  const context = React.useContext<IConfigContext>(ConfigContext);
   const [theme, setTheme] = React.useState<number>(1);
-
-  let data = context.api.data.design;
-  let setData = (data: IDesign) => {
+  const data = context.api.data.design;
+  const setData = (data: IDesign) => {
     context.api.setData({
       ...context.api.data,
       design: data,
@@ -34,6 +32,7 @@ const Design: React.FC = () => {
       theme: theme,
     });
   }, [theme]);
+
   return (
     <>
       <Header

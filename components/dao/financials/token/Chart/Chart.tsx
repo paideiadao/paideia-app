@@ -3,7 +3,7 @@ import * as React from "react";
 import CandlestickChartIcon from "@mui/icons-material/CandlestickChart";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { Header } from "@components/creation/utilities/HeaderComponents";
-import ChartBase from "./ChartBase";
+// import ChartBase from "./ChartBase";
 import { deviceWrapper } from "@components/utilities/Style";
 import { initialData } from "./data";
 
@@ -157,7 +157,8 @@ const Chart: React.FC<any> = (props) => {
       </Box>
       <Box sx={{ width: "100%" }}>
         {loaded ? (
-          <ChartBase view={view} timeView={timeView} data={data} />
+          // <ChartBase view={view} timeView={timeView} data={data} />
+          <>No chart available. </>
         ) : (
           <>Loading here...</>
         )}

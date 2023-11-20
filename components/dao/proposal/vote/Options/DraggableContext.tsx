@@ -6,7 +6,7 @@ import {
   ActionType,
   IProposalAction,
   IProposalOption,
-} from "@pages/[dao]/proposals/create";
+} from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import {
   DragDropContext,
@@ -101,20 +101,20 @@ export const getData = (name: string): ActionType => {
     return {
       shortDescription: "",
     };
-  } else if (name === "Send funds") {
+  } else if (name === "Send Funds") {
     return {
-      tokenHolders: [
-        { alias: "", address: "", img: "", balance: 0, percentage: 0 },
-      ],
+      recipients: [{ address: "", ergs: 0, tokens: [] }],
       recurring: false,
+      activation_time: 0,
+      voting_duration: "0",
     };
-  } else if (name === "Create liquidity pool") {
+  } else if (name === "Create Liquidity Pool") {
     return defaultLiquidityPoolData;
-  } else if (name === "Quadratic voting") {
+  } else if (name === "Quadratic Voting") {
     return {
       isActive: false,
     };
-  } else if (name === "Vote duration") {
+  } else if (name === "Vote Duration") {
     return {
       voteDuration: 0,
       voteDurationUnits: "weeks",
@@ -127,7 +127,7 @@ export const getData = (name: string): ActionType => {
     return {
       quorum: 4,
     };
-  } else if (name === "Optimistic governance") {
+  } else if (name === "Optimistic Governance") {
     return defaultOptimisticGovernanceData;
   }
 };
@@ -181,8 +181,10 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             tempItems[index].data = val;
             setItems(tempItems);
           }}
-          tokenHolders={(item.data as ISendFunds).tokenHolders}
+          recipients={(item.data as ISendFunds).recipients}
           recurring={(item.data as ISendFunds).recurring}
+          activation_time={0}
+          voting_duration="0"
         />
       );
     } else if (props.name === "Create liquidity pool") {
@@ -387,7 +389,16 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             Add Another
           </Button>
         </Box>
-        <Box sx={{ ...getItemStyle(false, {}, compact), mx: ".5rem" }}>
+        <Box
+          sx={{
+            ...getItemStyle(
+              false,
+              { transition: undefined, transform: undefined },
+              compact
+            ),
+            mx: ".5rem",
+          }}
+        >
           <DraggableHeader
             item={declineProposal}
             index={-1}

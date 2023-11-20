@@ -1,7 +1,7 @@
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Delete } from "@mui/icons-material";
 import { Box, IconButton, TextField } from "@mui/material";
-import { IProposalOption } from "@pages/[dao]/proposals/create";
+import { IProposalOption } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import {
