@@ -1,3 +1,4 @@
+import { IConfig } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
 import { ITokenAmountDetails } from "@components/utilities/MultiTokenAmountSelector";
 
 export const bPaideiaSendFundsBasic = (
@@ -32,25 +33,29 @@ export const bPaideiaSendFundsBasic = (
 };
 
 export const bPaideiaUpdateDAOConfig = (
-  actionType: string,
-  key: string,
-  type: string,
-  value: string,
+  config: IConfig[],
   activation_time: number
 ): any => {
-  const field = {
-    key: key,
-    valueType: type,
-    value: value,
-  };
   return {
     actionType: "UpdateConfig",
     action: {
       optionId: 1,
       activationTime: activation_time,
-      remove: actionType === "remove" ? [field] : [],
-      update: actionType === "update" ? [field] : [],
-      insert: actionType === "insert" ? [field] : [],
+      remove: config
+        .filter((cfg) => cfg.action_type === "remove")
+        .map((cfg) => {
+          return { key: cfg.key, valueType: cfg.type, value: cfg.value };
+        }),
+      update: config
+        .filter((cfg) => cfg.action_type === "update")
+        .map((cfg) => {
+          return { key: cfg.key, valueType: cfg.type, value: cfg.value };
+        }),
+      insert: config
+        .filter((cfg) => cfg.action_type === "insert")
+        .map((cfg) => {
+          return { key: cfg.key, valueType: cfg.type, value: cfg.value };
+        }),
     },
   };
 };

@@ -326,7 +326,7 @@ export class AbstractApi {
           });
         }
       } catch (err) {
-        console.warn(err);
+        console.log(err);
         throw reject(err);
       }
     });

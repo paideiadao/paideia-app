@@ -40,7 +40,10 @@ import {
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
 import { useState, useContext, useEffect } from "react";
 import { generateSlug } from "@lib/utilities";
-import { IUpdateConfig } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
+import {
+  IConfig,
+  IUpdateConfig,
+} from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -240,13 +243,7 @@ const CreateProposal: React.FC = () => {
           : value.actions[0].name === "Update DAO Config"
           ? bPaideiaUpdateDAOConfig(
               // @ts-ignore
-              value.actions[0].data.action_type,
-              // @ts-ignore
-              value.actions[0].data.key,
-              // @ts-ignore
-              value.actions[0].data.type,
-              // @ts-ignore
-              value.actions[0].data.value,
+              value.actions[0].data.config,
               // @ts-ignore
               value.actions[0].data.activation_time
             )
@@ -516,16 +513,18 @@ const validateErrors = (
     // @ts-ignore
     value.actions[0].name === "Update DAO Config"
   ) {
-    errors.actionConfig =
-      errors.voting ||
-      // @ts-ignore
-      value.actions[0].data.action_type === "" ||
-      // @ts-ignore
-      value.actions[0].data.key === "" ||
-      // @ts-ignore
-      value.actions[0].data.type === "" ||
-      // @ts-ignore
-      value.actions[0].data.value === "";
+    // @ts-ignore
+    const actionData: IConfig[] = value.actions[0].data.config;
+    const error =
+      actionData.length === 0 ||
+      actionData.filter(
+        (config) =>
+          config.action_type === "" ||
+          config.key === "" ||
+          config.type === "" ||
+          config.value === ""
+      ).length > 0;
+    errors.actionConfig = errors.voting || error;
   } else {
     errors.voting = true; // should never occur
   }

@@ -7,6 +7,7 @@ import ProposalContext, {
 } from "@lib/dao/proposal/ProposalContext";
 import {
   Box,
+  Button,
   FormControl,
   FormHelperText,
   InputLabel,
@@ -21,12 +22,18 @@ import Layout from "./Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import AbstractDate from "@components/creation/utilities/AbstractDate";
 import VoteDurationSelector from "@components/creation/utilities/VoteDurationSelector";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-export interface IUpdateConfig {
+export interface IConfig {
   action_type: string;
   key: string;
   type: string;
   value: string;
+}
+
+export interface IUpdateConfig {
+  config: IConfig[];
   voting_duration: string;
   activation_time: number;
 }
@@ -59,10 +66,14 @@ const allowedTypes = [
 const UpdateConfig: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<IUpdateConfig>({
-    action_type: "",
-    key: "",
-    type: "",
-    value: "",
+    config: [
+      {
+        action_type: "",
+        key: "",
+        type: "",
+        value: "",
+      },
+    ],
     voting_duration: (24 * 60 * 60).toString(),
     activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
   });
@@ -112,111 +123,179 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
           mb: "1rem",
         }}
       />
+      {value.config.map((_config, index) => (
+        <Box
+          key={"config-update-" + index}
+          sx={{
+            width: "100%",
+            mb: ".75rem",
+            display: "flex",
+            alignItems: "center",
+            flexWrap: deviceWrapper("wrap", "nowrap"),
+          }}
+        >
+          <FormControl
+            sx={{
+              mr: ".5rem",
+              mb: deviceWrapper(".75rem", "0"),
+              width: deviceWrapper("100%", "50%"),
+            }}
+            fullWidth
+          >
+            <InputLabel id="action-select-label">Action Type</InputLabel>
+            <Select
+              labelId="action-select-label"
+              id="action-select"
+              sx={{ width: "100%" }}
+              label="Action Type"
+              value={value.config[index].action_type}
+              onChange={(e: SelectChangeEvent<string>) => {
+                const update = [...value.config];
+                update[index] = {
+                  ...update[index],
+                  action_type: e.target.value,
+                };
+                setValue({
+                  ...value,
+                  config: [...update],
+                });
+              }}
+            >
+              {allowedActions.map((action: string) => (
+                <MenuItem value={action.toLowerCase()}>{action}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl
+            sx={{
+              mr: ".5rem",
+              mb: deviceWrapper(".75rem", "0"),
+              width: deviceWrapper("100%", "50%"),
+            }}
+            fullWidth
+          >
+            <InputLabel id="key-select-label">Key</InputLabel>
+            <Select
+              labelId="key-select-label"
+              id="key-select"
+              sx={{ width: "100%" }}
+              label="Key"
+              value={value.config[index].key}
+              onChange={(e: SelectChangeEvent<string>) => {
+                const update = [...value.config];
+                update[index] = {
+                  ...update[index],
+                  key: e.target.value,
+                };
+                setValue({
+                  ...value,
+                  config: [...update],
+                });
+              }}
+            >
+              {allowedKeys.map((key: string) => (
+                <MenuItem value={key}>{key}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl
+            sx={{
+              mr: ".5rem",
+              mb: deviceWrapper(".75rem", "0"),
+              width: deviceWrapper("100%", "50%"),
+            }}
+            fullWidth
+          >
+            <InputLabel id="type-select-label">Type</InputLabel>
+            <Select
+              labelId="type-select-label"
+              id="type-select"
+              sx={{ width: "100%" }}
+              label="Type"
+              value={value.config[index].type}
+              onChange={(e: SelectChangeEvent<string>) => {
+                const update = [...value.config];
+                update[index] = {
+                  ...update[index],
+                  type: e.target.value,
+                };
+                setValue({
+                  ...value,
+                  config: [...update],
+                });
+              }}
+            >
+              {allowedTypes.map((type: string) => (
+                <MenuItem value={type}>{type}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Value"
+            sx={{
+              mr: ".5rem",
+              mb: deviceWrapper(".75rem", "0"),
+              width: deviceWrapper("100%", "50%"),
+            }}
+            value={value.config[index].value}
+            onChange={(e) => {
+              const update = [...value.config];
+              update[index] = {
+                ...update[index],
+                value: e.target.value,
+              };
+              setValue({
+                ...value,
+                config: [...update],
+              });
+            }}
+          />
+        </Box>
+      ))}
       <Box
         sx={{
-          width: "100%",
-          mb: ".75rem",
           display: "flex",
           alignItems: "center",
-          flexWrap: deviceWrapper("wrap", "nowrap"),
+          justifyContent: "center",
+          mt: ".8rem",
+          mb: "1.2rem",
         }}
       >
-        <FormControl
-          sx={{
-            mr: ".5rem",
-            mb: deviceWrapper(".75rem", "0"),
-            width: deviceWrapper("100%", "50%"),
-          }}
-          fullWidth
-        >
-          <InputLabel id="action-select-label">Action Type</InputLabel>
-          <Select
-            labelId="action-select-label"
-            id="action-select"
-            sx={{ width: "100%" }}
-            label="Action Type"
-            value={value.action_type}
-            onChange={(e: SelectChangeEvent<string>) => {
-              setValue({
-                ...value,
-                action_type: e.target.value,
-              });
-            }}
-          >
-            {allowedActions.map((action: string) => (
-              <MenuItem value={action.toLowerCase()}>{action}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl
-          sx={{
-            mr: ".5rem",
-            mb: deviceWrapper(".75rem", "0"),
-            width: deviceWrapper("100%", "50%"),
-          }}
-          fullWidth
-        >
-          <InputLabel id="key-select-label">Key</InputLabel>
-          <Select
-            labelId="key-select-label"
-            id="key-select"
-            sx={{ width: "100%" }}
-            label="Key"
-            value={value.key}
-            onChange={(e: SelectChangeEvent<string>) => {
-              setValue({
-                ...value,
-                key: e.target.value,
-              });
-            }}
-          >
-            {allowedKeys.map((key: string) => (
-              <MenuItem value={key}>{key}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl
-          sx={{
-            mr: ".5rem",
-            mb: deviceWrapper(".75rem", "0"),
-            width: deviceWrapper("100%", "50%"),
-          }}
-          fullWidth
-        >
-          <InputLabel id="type-select-label">Type</InputLabel>
-          <Select
-            labelId="type-select-label"
-            id="type-select"
-            sx={{ width: "100%" }}
-            label="Type"
-            value={value.type}
-            onChange={(e: SelectChangeEvent<string>) => {
-              setValue({
-                ...value,
-                type: e.target.value,
-              });
-            }}
-          >
-            {allowedTypes.map((type: string) => (
-              <MenuItem value={type}>{type}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          label="Value"
-          sx={{
-            mr: ".5rem",
-            mb: deviceWrapper(".75rem", "0"),
-            width: deviceWrapper("100%", "50%"),
-          }}
-          value={value.value}
-          onChange={(e) => {
+        <Button
+          variant="text"
+          size="small"
+          sx={{ mr: 1 }}
+          endIcon={<AddIcon />}
+          onClick={() => {
             setValue({
               ...value,
-              value: e.target.value,
+              config: [
+                ...value.config,
+                {
+                  action_type: "",
+                  key: "",
+                  type: "",
+                  value: "",
+                },
+              ],
             });
           }}
-        />
+        >
+          Add Row
+        </Button>
+        <Button
+          variant="text"
+          size="small"
+          endIcon={<DeleteIcon />}
+          onClick={() => {
+            setValue({
+              ...value,
+              config: value.config.slice(0, value.config.length - 1),
+            });
+          }}
+        >
+          Remove Row
+        </Button>
       </Box>
       {context.api.errors.actionConfig && (
         <FormHelperText error sx={{ mb: "1rem" }}>
