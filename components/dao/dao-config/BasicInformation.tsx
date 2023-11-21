@@ -40,7 +40,15 @@ const BasicInformation: React.FC = () => {
             label="DAO Name"
             sx={{ width: "100%" }}
             value={data.daoName}
-            disabled
+            onChange={(e) =>
+              context.api.setData({
+                ...context.api.data,
+                basicInformation: {
+                  ...data,
+                  daoName: e.target.value,
+                },
+              })
+            }
           />
         </Box>
         <Box
@@ -54,13 +62,21 @@ const BasicInformation: React.FC = () => {
             label="DAO URL"
             sx={{ width: "100%" }}
             value={data.daoUrl}
-            disabled
+            onChange={(e) =>
+              context.api.setData({
+                ...context.api.data,
+                basicInformation: {
+                  ...data,
+                  daoUrl: e.target.value,
+                },
+              })
+            }
           />
         </Box>
       </Box>
       <Box sx={{ width: "100%", mt: 2 }}>
         <TextField
-          disabled
+          rows={3}
           label="DAO short description"
           inputProps={{
             maxLength: 250,

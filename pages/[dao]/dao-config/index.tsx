@@ -12,49 +12,55 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ConfigApi, { IConfigData } from "@lib/dao/dao-config/ConfigApi";
 import { ConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { Box, Button } from "@mui/material";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
+const defaultState: IConfigData = {
+  basicInformation: {
+    daoName: "",
+    daoUrl: "",
+    shortDescription: "",
+  },
+  governance: {
+    optimisticGovernance: false,
+    quadraticVoting: false,
+    timeToChallenge: 0,
+    timeToChallengeUnits: "days",
+    quorum: 0,
+    voteDuration: 0,
+    voteDurationUnits: "days",
+    whitelist: [],
+    amount: "",
+    currency: "",
+    supportNeeded: 0,
+  },
+  design: {
+    logo: {
+      url: "",
+      file: undefined,
+    },
+    theme: 1,
+    banner: {
+      show: false,
+      data: { url: "", file: undefined },
+    },
+    footer: {
+      show: false,
+      mainText: "",
+      links: [],
+    },
+  },
+};
+
 const DaoConfig: React.FC = () => {
-  const [data, setData] = useState<IConfigData>({
-    basicInformation: {
-      daoName: "",
-      daoUrl: "",
-      shortDescription: "",
-    },
-    governance: {
-      optimisticGovernance: false,
-      quadraticVoting: false,
-      timeToChallenge: 0,
-      timeToChallengeUnits: "days",
-      quorum: 0,
-      voteDuration: 0,
-      voteDurationUnits: "days",
-      whitelist: [],
-      amount: "",
-      currency: "",
-      supportNeeded: 0,
-    },
-    design: {
-      logo: {
-        url: "",
-        file: undefined,
-      },
-      theme: 1,
-      banner: {
-        show: false,
-        data: { url: "", file: undefined },
-      },
-      footer: {
-        show: false,
-        mainText: "",
-        links: [],
-      },
-    },
-  });
+  const [data, setData] = useState<IConfigData>(defaultState);
+  const [diff, setDiff] = useState<IConfigData>(defaultState);
 
   const globalContext = useContext<IGlobalContext>(GlobalContext);
   const api = new ConfigApi(globalContext.api, data, setData);
   const daoData = globalContext.api.daoData;
+  const router = useRouter();
+  const { dao } = router.query
 
   useEffect(() => {
     if (daoData) {
@@ -73,8 +79,22 @@ const DaoConfig: React.FC = () => {
           voteDurationUnits: "minutes",
         },
       });
+      setDiff({
+        ...defaultState,
+        basicInformation: {
+          daoName: daoData.dao_name,
+          daoUrl: daoData.dao_url,
+          shortDescription: daoData.dao_short_description,
+        },
+      });
     }
   }, [daoData]);
+
+  const submit = () => {
+    const d = generateDiff(diff, data)
+    const params = generateRedirectUrl(d)
+    router.push(`/${dao}/proposal/create?auto_update_config=true&${params}`)
+  }
 
   return (
     <ConfigContext.Provider value={{ api }}>
@@ -108,7 +128,7 @@ const DaoConfig: React.FC = () => {
             sx={{ width: "50%" }}
             size="small"
             variant="contained"
-            disabled
+            onClick={submit}
           >
             <Box sx={{ display: deviceWrapper("none", "block") }}>
               Submit Proposal
@@ -120,5 +140,24 @@ const DaoConfig: React.FC = () => {
     </ConfigContext.Provider>
   );
 };
+
+const generateDiff = ( initState: IConfigData, currentState: IConfigData) => {
+  return {
+    "im.paideia.dao.name": initState.basicInformation.daoName === currentState.basicInformation.daoName ? null : currentState.basicInformation.daoName,
+    "im.paideia.dao.url": initState.basicInformation.daoUrl === currentState.basicInformation.daoUrl ? null : currentState.basicInformation.daoUrl,
+    "im.paideia.dao.desc": initState.basicInformation.shortDescription === currentState.basicInformation.shortDescription ? null : currentState.basicInformation.shortDescription,
+  };
+};
+
+const generateRedirectUrl = (diff: any) => {
+  const url: any = {}
+  Object.keys(diff).forEach(key => {
+    if (diff[key] !== null) {
+      url[key] = diff[key]
+    }
+  })
+  const params = new URLSearchParams(url)
+  return params.toString()
+}
 
 export default DaoConfig;

@@ -161,7 +161,7 @@ const defaultErrors: ICreateProposalErrors = {
 
 const CreateProposal: React.FC = () => {
   const router = useRouter();
-  const { dao } = router.query;
+  const { dao, auto_update_config } = router.query;
   const [value, setValue] = useState<IProposal>({
     name: "",
     image: {
@@ -171,12 +171,23 @@ const CreateProposal: React.FC = () => {
     status: "Draft",
     category: "",
     content: "",
-    voting_system: "unselected",
+    voting_system: auto_update_config ? "yes/no" : "unselected",
     optionType: "one-option",
     references: [],
     attachments: [],
     comments: [],
-    actions: [],
+    actions: auto_update_config
+      ? [
+          {
+            name: "Update DAO Config",
+            data: {
+              config: [],
+              voting_duration: (24 * 60 * 60).toString(),
+              activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
+            },
+          },
+        ]
+      : [],
     addendums: [],
     likes: [],
     dislikes: [],
@@ -219,6 +230,25 @@ const CreateProposal: React.FC = () => {
       getData();
     }
   }, [context.api.daoData, context.api.daoUserData]);
+
+  useEffect(() => {
+    if (auto_update_config) {
+      setValue({
+        ...value,
+        voting_system: "yes/no",
+        actions: [
+          {
+            name: "Update DAO Config",
+            data: {
+              config: [],
+              voting_duration: (24 * 60 * 60).toString(),
+              activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
+            },
+          },
+        ],
+      });
+    }
+  }, [auto_update_config]);
 
   const handleSubmit = async () => {
     setLoading(true);

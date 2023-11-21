@@ -24,6 +24,7 @@ import AbstractDate from "@components/creation/utilities/AbstractDate";
 import VoteDurationSelector from "@components/creation/utilities/VoteDurationSelector";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useRouter } from "next/router";
 
 export interface IConfig {
   action_type: string;
@@ -41,6 +42,7 @@ export interface IUpdateConfig {
 const allowedActions = ["Insert", "Update", "Remove"];
 const allowedKeys = [
   "im.paideia.dao.name",
+  "im.paideia.dao.desc",
   "im.paideia.dao.url",
   "im.paideia.dao.threshold",
   "im.paideia.dao.quorum",
@@ -63,7 +65,24 @@ const allowedTypes = [
   "Coll[Coll[?]]",
 ];
 
+const types = {
+  "im.paideia.dao.name": "String",
+  "im.paideia.dao.url": "String",
+  "im.paideia.dao.desc": "String",
+  "im.paideia.dao.threshold": "Long",
+  "im.paideia.dao.quorum": "Long",
+  "im.paideia.dao.min.proposal.time": "Long",
+  "im.paideia.dao.theme": "String",
+  "im.paideia.dao.logo": "String",
+  "im.paideia.dao.banner": "String",
+  "im.paideia.dao.banner.enabled": "Byte",
+  "im.paideia.dao.footer": "String",
+  "im.paideia.dao.footer.enabled": "Byte",
+};
+
 const UpdateConfig: React.FC<IProposalAction> = (props) => {
+  const router = useRouter();
+  const query = router.query;
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<IUpdateConfig>({
     config: [
@@ -104,6 +123,41 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
     const voting_duration = votingDuration.duration * multiplier;
     setValue({ ...value, voting_duration: voting_duration.toString() });
   }, [votingDuration]);
+
+  React.useEffect(() => {
+    const updateData = async () => {
+      try {
+        const cfg = query.auto_update_config
+          ? Object.keys(types)
+              .filter((type) => query[type])
+              .map((key) => {
+                return {
+                  action_type: "",
+                  key: key,
+                  // @ts-ignore
+                  type: types[key],
+                  value: query[key].toString(),
+                };
+              })
+          : [];
+        const daoConfig = (
+          await context.api.get<any>(`/dao/${query.dao}/config`)
+        ).data;
+        const update = cfg.map((config) => {
+          return {
+            ...config,
+            action_type: daoConfig[config.key] ? "update" : "insert",
+          };
+        });
+        setValue({ ...value, config: update });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    if (query.dao && query.auto_update_config) {
+      updateData();
+    }
+  }, [query]);
 
   return (
     <Layout>
