@@ -49,12 +49,19 @@ const Transactions: React.FC = () => {
   }, [transactionData]);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box
+      sx={{
+        width: "100%",
+        mt: deviceWrapper("2rem", "3rem"),
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
         <Subheader title="Latest Transactions" />
         <Button
           variant="text"
-          sx={{ ml: "auto" }}
+          sx={{ ml: "auto", mt: deviceWrapper("0rem", "0.2rem") }}
           size="small"
           onClick={() => {
             router.push(`/${dao ?? "dao"}/activity`);

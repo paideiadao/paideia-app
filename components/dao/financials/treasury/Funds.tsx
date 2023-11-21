@@ -108,7 +108,33 @@ const Funds: React.FC<any> = ({ treasuryData }) => {
           mb: ".5rem",
         }}
       >
-        <Header title="Funds" />
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Header title="Funds" />
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              ml: "2rem",
+              my: "1rem",
+            }}
+          >
+            <Button
+              disabled={funds.length <= 4}
+              onClick={() => setShow(!show)}
+              size="small"
+              endIcon={
+                !show ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />
+              }
+            >
+              {!show ? (
+                <>Show other fund sources </>
+              ) : (
+                <>Hide other fund sources </>
+              )}
+            </Button>
+          </Box>
+        </Box>
         <Box
           sx={{
             backgroundColor: "fileInput.main",
@@ -145,27 +171,6 @@ const Funds: React.FC<any> = ({ treasuryData }) => {
                 key={`all-financial-card-${c}`}
               />
             ))}
-      </Box>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          my: "1rem",
-        }}
-      >
-        <Button
-          disabled={funds.length <= 4}
-          onClick={() => setShow(!show)}
-          size="small"
-          endIcon={!show ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
-        >
-          {!show ? (
-            <>Show other fund sources </>
-          ) : (
-            <>Hide other fund sources </>
-          )}
-        </Button>
       </Box>
     </Box>
   );

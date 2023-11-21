@@ -22,7 +22,7 @@ const TreasuryHeader: React.FC<{ address: string }> = ({ address }) => {
   const router = useRouter();
   const { dao } = router.query;
   return (
-    <Box sx={{ width: "100%", alignItems: "center", display: "flex" }}>
+    <Box sx={{ width: "100%", alignItems: "flex-start", display: "flex" }}>
       <Header title="Treasury" large />
       <Link
         href={`https://explorer.ergoplatform.com/en/addresses/${address}`}
@@ -39,7 +39,7 @@ const TreasuryHeader: React.FC<{ address: string }> = ({ address }) => {
       >
         <Button
           variant="contained"
-          sx={{ ml: "auto" }}
+          sx={{ ml: "auto", mt: deviceWrapper("0.4rem", "1rem") }}
           endIcon={<PaymentsIcon />}
           size="small"
         >
@@ -107,6 +107,7 @@ const Treasury: React.FC = () => {
           sx={{
             width: "28%",
             position: "sticky",
+            top: deviceWrapper("0", "4.8rem"),
             display: deviceWrapper("none", "block"),
             ml: "1.5rem",
           }}
