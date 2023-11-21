@@ -18,16 +18,16 @@ export const FollowMobile: React.FC<IFollow> = (props) => {
   const [followed, setFollowed] = React.useState<boolean>(props.followed);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const api = new FollowApi(globalContext.api, props.putUrl);
-  useDidMountEffect(() => {
-    api.follow(followed ? "follow" : "unfollow");
-  }, [followed]);
   const smallStyle =
     props.small === undefined ? {} : { width: "2rem", height: "2rem" };
   return (
     <Tooltip title={followed ? "Unfollow" : "Follow"} placement="top">
       <Fab
         size="small"
-        onClick={() => setFollowed(!followed)}
+        onClick={() => {
+          api.follow(!followed ? "follow" : "unfollow");
+          setFollowed(!followed);
+        }}
         sx={{
           zIndex: 10,
           backgroundColor: followed ? "white" : "error.main",
@@ -49,12 +49,6 @@ const Follow: React.FC<IFollow> = (props) => {
   const [followed, setFollowed] = React.useState<boolean>(props.followed);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const api = new FollowApi(globalContext.api, props.putUrl);
-  useDidMountEffect(() => {
-    api.follow(
-      followed ? "follow" : "unfollow",
-      props.user_id ? props.user_id : globalContext.api.daoUserData.id
-    );
-  }, [followed]);
 
   React.useEffect(() => {
     setFollowed(props.followed);
@@ -62,7 +56,13 @@ const Follow: React.FC<IFollow> = (props) => {
 
   return (
     <Button
-      onClick={() => setFollowed(!followed)}
+      onClick={() => {
+        setFollowed(!followed);
+        api.follow(
+          !followed ? "follow" : "unfollow",
+          props.user_id ? props.user_id : globalContext.api.daoUserData.id
+        );
+      }}
       sx={{
         color: followed ? "error.light" : "text.secondary",
         borderColor: followed ? "error.light" : "text.secondary",
