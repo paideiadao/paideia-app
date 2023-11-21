@@ -40,7 +40,6 @@ const Support: React.FC = () => {
           }}
         >
           <Slider
-            disabled
             value={data.supportNeeded}
             min={0}
             max={100}
@@ -64,7 +63,6 @@ const Support: React.FC = () => {
           }}
         >
           <TextField
-            disabled
             label="Value"
             type="number"
             value={data.supportNeeded}

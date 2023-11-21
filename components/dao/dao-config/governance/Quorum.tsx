@@ -50,7 +50,6 @@ const Quorum: React.FC = () => {
           }}
         >
           <Slider
-            disabled
             value={data.quorum}
             min={0}
             max={100}
@@ -74,7 +73,6 @@ const Quorum: React.FC = () => {
           }}
         >
           <TextField
-            disabled
             label="Value"
             type="number"
             value={data.quorum}
@@ -96,7 +94,6 @@ const Quorum: React.FC = () => {
       </Box>
       <Header small title="How long does the voting period last for?" />
       <Box sx={{ mt: ".75rem" }} />
-
       <FormControl
         sx={{
           mb: ".5rem",
@@ -105,10 +102,9 @@ const Quorum: React.FC = () => {
         variant="outlined"
       >
         <InputLabel htmlFor={`challenge-time-input`} shrink>
-          Vote duration
+          Min Vote Duration
         </InputLabel>
         <OutlinedInput
-          disabled
           notched
           id={`challenge-time-input`}
           type="number"
@@ -140,7 +136,6 @@ const Quorum: React.FC = () => {
             >
               <FormControl fullWidth>
                 <Select
-                  disabled
                   labelId="currency-select-label"
                   id="currency-select"
                   variant="outlined"

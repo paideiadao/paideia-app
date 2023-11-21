@@ -92,7 +92,6 @@ const BasicInformation: React.FC = () => {
               },
             })
           }
-          maxRows={5}
           sx={{ width: "100%" }}
           FormHelperTextProps={{ sx: { textAlign: "right" } }}
           helperText={`${data.shortDescription.length}/250`}

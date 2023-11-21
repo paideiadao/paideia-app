@@ -60,7 +60,7 @@ const DaoConfig: React.FC = () => {
   const api = new ConfigApi(globalContext.api, data, setData);
   const daoData = globalContext.api.daoData;
   const router = useRouter();
-  const { dao } = router.query
+  const { dao } = router.query;
 
   useEffect(() => {
     if (daoData) {
@@ -86,15 +86,32 @@ const DaoConfig: React.FC = () => {
           daoUrl: daoData.dao_url,
           shortDescription: daoData.dao_short_description,
         },
+        governance: {
+          ...data.governance,
+          supportNeeded: daoData.governance.support_needed / 10,
+          quorum: daoData.governance.quorum / 10,
+          voteDuration: daoData.governance.vote_duration__sec / 60,
+          voteDurationUnits: "minutes",
+        },
       });
     }
   }, [daoData]);
 
-  const submit = () => {
-    const d = generateDiff(diff, data)
-    const params = generateRedirectUrl(d)
-    router.push(`/${dao}/proposal/create?auto_update_config=true&${params}`)
-  }
+  const submit = async () => {
+    const d = generateDiff(diff, data);
+    if (data.design.logo.file !== undefined) {
+      const imageUrl = await getImageUrl(data.design.logo.file);
+      // @ts-ignore
+      d["im.paideia.dao.logo"] = imageUrl;
+    }
+    const params = generateRedirectUrl(d);
+    router.push(`/${dao}/proposal/create?auto_update_config=true&${params}`);
+  };
+
+  const getImageUrl = async (image: File) => {
+    const imgRes = await api.uploadFile(image);
+    return imgRes.data.image_url;
+  };
 
   return (
     <ConfigContext.Provider value={{ api }}>
@@ -141,23 +158,60 @@ const DaoConfig: React.FC = () => {
   );
 };
 
-const generateDiff = ( initState: IConfigData, currentState: IConfigData) => {
+const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
+  const durationMapper = {
+    minutes: 60,
+    hours: 60 * 60,
+    days: 60 * 60 * 24,
+    weeks: 60 * 60 * 24 * 7,
+  };
+  const voteDurationDiff =
+    initState.governance.voteDuration !==
+      currentState.governance.voteDuration ||
+    initState.governance.voteDurationUnits !==
+      currentState.governance.voteDurationUnits
+      ? currentState.governance.voteDuration *
+        1000 *
+        // @ts-ignore
+        durationMapper[currentState.governance.voteDurationUnits]
+      : null;
   return {
-    "im.paideia.dao.name": initState.basicInformation.daoName === currentState.basicInformation.daoName ? null : currentState.basicInformation.daoName,
-    "im.paideia.dao.url": initState.basicInformation.daoUrl === currentState.basicInformation.daoUrl ? null : currentState.basicInformation.daoUrl,
-    "im.paideia.dao.desc": initState.basicInformation.shortDescription === currentState.basicInformation.shortDescription ? null : currentState.basicInformation.shortDescription,
+    "im.paideia.dao.name":
+      initState.basicInformation.daoName ===
+      currentState.basicInformation.daoName
+        ? null
+        : currentState.basicInformation.daoName,
+    "im.paideia.dao.url":
+      initState.basicInformation.daoUrl === currentState.basicInformation.daoUrl
+        ? null
+        : currentState.basicInformation.daoUrl,
+    "im.paideia.dao.desc":
+      initState.basicInformation.shortDescription ===
+      currentState.basicInformation.shortDescription
+        ? null
+        : currentState.basicInformation.shortDescription,
+    "im.paideia.dao.threshold":
+      initState.governance.supportNeeded ===
+      currentState.governance.supportNeeded
+        ? null
+        : currentState.governance.supportNeeded * 10,
+    "im.paideia.dao.quorum":
+      initState.governance.quorum === currentState.governance.quorum
+        ? null
+        : currentState.governance.quorum * 10,
+    "im.paideia.dao.min.proposal.time": voteDurationDiff,
   };
 };
 
 const generateRedirectUrl = (diff: any) => {
-  const url: any = {}
-  Object.keys(diff).forEach(key => {
+  const url: any = {};
+  Object.keys(diff).forEach((key) => {
     if (diff[key] !== null) {
-      url[key] = diff[key]
+      url[key] = diff[key];
     }
-  })
-  const params = new URLSearchParams(url)
-  return params.toString()
-}
+  });
+  const params = new URLSearchParams(url);
+  return params.toString();
+};
 
 export default DaoConfig;
