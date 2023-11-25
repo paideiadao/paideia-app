@@ -11,6 +11,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ConfigApi, { IConfigData } from "@lib/dao/dao-config/ConfigApi";
 import { ConfigContext } from "@lib/dao/dao-config/ConfigContext";
+import { LoadingButton } from "@mui/lab";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -53,6 +54,7 @@ const defaultState: IConfigData = {
 };
 
 const DaoConfig: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IConfigData>(defaultState);
   const [diff, setDiff] = useState<IConfigData>(defaultState);
 
@@ -78,6 +80,18 @@ const DaoConfig: React.FC = () => {
           voteDuration: daoData.governance.vote_duration__sec / 60,
           voteDurationUnits: "minutes",
         },
+        design: {
+          ...data.design,
+          banner: {
+            ...data.design.banner,
+            show: daoData.design.show_banner,
+          },
+          footer: {
+            ...data.design.footer,
+            show: daoData.design.show_footer,
+            mainText: daoData.design.footer_text,
+          },
+        },
       });
       setDiff({
         ...defaultState,
@@ -93,16 +107,34 @@ const DaoConfig: React.FC = () => {
           voteDuration: daoData.governance.vote_duration__sec / 60,
           voteDurationUnits: "minutes",
         },
+        design: {
+          ...data.design,
+          banner: {
+            ...data.design.banner,
+            show: daoData.design.show_banner,
+          },
+          footer: {
+            ...data.design.footer,
+            show: daoData.design.show_footer,
+            mainText: daoData.design.footer_text,
+          },
+        },
       });
     }
   }, [daoData]);
 
   const submit = async () => {
+    setLoading(true);
     const d = generateDiff(diff, data);
     if (data.design.logo.file !== undefined) {
       const imageUrl = await getImageUrl(data.design.logo.file);
       // @ts-ignore
       d["im.paideia.dao.logo"] = imageUrl;
+    }
+    if (data.design.banner.data.file !== undefined) {
+      const imageUrl = await getImageUrl(data.design.banner.data.file);
+      // @ts-ignore
+      d["im.paideia.dao.banner"] = imageUrl;
     }
     const params = generateRedirectUrl(d);
     router.push(`/${dao}/proposal/create?auto_update_config=true&${params}`);
@@ -141,7 +173,8 @@ const DaoConfig: React.FC = () => {
               Cancel
             </Button>
           </CancelLink>
-          <Button
+          <LoadingButton
+            loading={loading}
             sx={{ width: "50%" }}
             size="small"
             variant="contained"
@@ -151,7 +184,7 @@ const DaoConfig: React.FC = () => {
               Submit Proposal
             </Box>
             <Box sx={{ display: deviceWrapper("block", "none") }}>Submit</Box>
-          </Button>
+          </LoadingButton>
         </Box>
       </Layout>
     </ConfigContext.Provider>
@@ -200,6 +233,18 @@ const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
         ? null
         : currentState.governance.quorum * 10,
     "im.paideia.dao.min.proposal.time": voteDurationDiff,
+    "im.paideia.dao.banner.enabled":
+      initState.design.banner.show === currentState.design.banner.show
+        ? null
+        : currentState.design.banner.show,
+    "im.paideia.dao.footer.enabled":
+      initState.design.footer.show === currentState.design.footer.show
+        ? null
+        : currentState.design.footer.show,
+    "im.paideia.dao.footer":
+      initState.design.footer.mainText === currentState.design.footer.mainText
+        ? null
+        : currentState.design.footer.mainText,
   };
 };
 

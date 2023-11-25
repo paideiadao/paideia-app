@@ -30,13 +30,13 @@ import { deviceStruct } from "@components/utilities/Style";
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 
 const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
-  let creationContext =
+  const creationContext =
     props.context === undefined
       ? React.useContext(CreationContext)
       : props.context;
 
-  let data = creationContext.api.data.design;
-  let setData = (data: any) => {
+  const data = creationContext.api.data.design;
+  const setData = (data: any) => {
     creationContext.api.setData({
       ...creationContext.api.data,
       design: data,
@@ -59,8 +59,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
         <Subtitle subtitle="Add a footer with your own personalized text and link the DAO socials to it." />
       </Box>
       <LabeledSwitch
-        disabled
-        title="Show footer"
+        title="Show Footer"
         value={data.footer.show}
         onChange={() =>
           setData({
@@ -75,7 +74,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
       <Collapse in={data.footer.show}>
         <Box sx={{ width: "100%", color: "text.primary" }}>
           <TextField
-            label="Main text"
+            label="Footer Text"
             value={data.footer.mainText}
             sx={{ width: "100%", mb: "1rem" }}
             onChange={(e: any) =>
@@ -85,7 +84,6 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
               })
             }
           />
-
           <Subheader title="Social Links" small />
           <Box sx={{ mt: ".5rem" }}>
             {data.footer.links.map((i: ISocialLink, c: number) => (
@@ -94,7 +92,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
                 data={i}
                 key={`social-link-${c}`}
                 set={(m: any) => {
-                  let temp = [...data.footer.links];
+                  const temp = [...data.footer.links];
                   temp[c] = m;
                   setData({
                     ...data,
@@ -105,7 +103,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
                   });
                 }}
                 delete={(m: any) => {
-                  let temp = [...data.footer.links];
+                  const temp = [...data.footer.links];
                   temp.splice(c, 1);
                   setData({
                     ...data,
@@ -122,9 +120,11 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
             sx={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <Button
+              sx={{ pr: "0.5rem" }}
+              disabled
               size="small"
               onClick={() => {
-                let temp = [...data.footer.links];
+                const temp = [...data.footer.links];
                 temp.push({
                   socialNetwork: "",
                   address: "",

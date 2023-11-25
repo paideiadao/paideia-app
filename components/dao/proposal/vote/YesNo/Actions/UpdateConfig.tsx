@@ -47,7 +47,6 @@ const allowedKeys = [
   "im.paideia.dao.threshold",
   "im.paideia.dao.quorum",
   "im.paideia.dao.min.proposal.time",
-  "im.paideia.staking.emission.amount",
   "im.paideia.dao.theme",
   "im.paideia.dao.logo",
   "im.paideia.dao.banner",
@@ -56,13 +55,9 @@ const allowedKeys = [
   "im.paideia.dao.footer.enabled",
 ];
 const allowedTypes = [
-  "Byte",
   "Long",
   "String",
-  "Coll[Byte]",
-  "Coll[Long]",
-  "PaideiaContractSignature",
-  "Coll[Coll[?]]",
+  "Boolean"
 ];
 
 const types = {
@@ -75,9 +70,9 @@ const types = {
   "im.paideia.dao.theme": "String",
   "im.paideia.dao.logo": "String",
   "im.paideia.dao.banner": "String",
-  "im.paideia.dao.banner.enabled": "Byte",
+  "im.paideia.dao.banner.enabled": "Boolean",
   "im.paideia.dao.footer": "String",
-  "im.paideia.dao.footer.enabled": "Byte",
+  "im.paideia.dao.footer.enabled": "Boolean",
 };
 
 const UpdateConfig: React.FC<IProposalAction> = (props) => {
