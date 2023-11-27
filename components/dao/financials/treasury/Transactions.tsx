@@ -49,34 +49,38 @@ const Transactions: React.FC = () => {
   }, [transactionData]);
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        mt: deviceWrapper("2rem", "3rem"),
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
-        <Subheader title="Latest Transactions" />
-        <Button
-          variant="text"
-          sx={{ ml: "auto", mt: deviceWrapper("0rem", "0.2rem") }}
-          size="small"
-          onClick={() => {
-            router.push(`/${dao ?? "dao"}/activity`);
-          }}
-        >
-          <Box sx={{ display: deviceWrapper("none", "block") }}>
-            View All Activity
-          </Box>
-          <Box sx={{ display: deviceWrapper("block", "none") }}>View All</Box>
-        </Button>
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          mt: deviceWrapper("2rem", "3rem"),
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
+          <Subheader title="Latest Transactions" />
+          <Button
+            variant="text"
+            sx={{ ml: "auto", mt: deviceWrapper("0rem", "0.2rem") }}
+            size="small"
+            onClick={() => {
+              router.push(`/${dao ?? "dao"}/activity`);
+            }}
+          >
+            <Box sx={{ display: deviceWrapper("none", "block") }}>
+              View All Activity
+            </Box>
+            <Box sx={{ display: deviceWrapper("block", "none") }}>View All</Box>
+          </Button>
+        </Box>
       </Box>
-      {transactions.map((i: any, c: number) => {
-        return <Activity i={i} c={c} />;
-      })}
-    </Box>
+      <Box display="flex" flexDirection="column">
+        {transactions.map((i: any, c: number) => {
+          return <Activity i={i} c={c} />;
+        })}
+      </Box>
+    </>
   );
 };
 
