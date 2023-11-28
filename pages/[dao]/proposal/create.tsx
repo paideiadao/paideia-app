@@ -207,29 +207,16 @@ const CreateProposal: React.FC = () => {
   const governance = context.api.daoData?.governance;
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const stake = (
-          await context.api.post<any>("/staking/user_stake_info", {
-            dao_id: context.api.daoData?.id,
-            user_id: context.api.daoUserData?.user_id,
-          })
-        ).data;
-        setStake(stake);
-        if (!stake.stake_keys?.length) {
-          api.error(
-            "Stake key either not present or in use on another transaction, add stake now"
-          );
-        }
-      } catch (e: any) {
-        api.error(e);
+    if (context.api.userStakeData) {
+      const stake = context.api.userStakeData;
+      setStake(stake);
+      if (!stake.stake_keys?.length) {
+        api.error(
+          "Stake key either not present or in use on another transaction, add stake now"
+        );
       }
-    };
-
-    if (context.api.daoData?.id && context.api.daoUserData?.user_id) {
-      getData();
     }
-  }, [context.api.daoData, context.api.daoUserData]);
+  }, [context.api.userStakeData]);
 
   useEffect(() => {
     if (auto_update_config) {

@@ -12,9 +12,32 @@ interface IYourStakingInfo {
   totalVotingPowerUsed: string;
 }
 
+interface IUserStakeKeyProfit {
+  token_name: string;
+  token_id: string;
+  amount: number;
+}
+
+interface IUserStakeKeyParticipationInfo {
+  proposals_voted_on: number;
+  total_voting_power_used: number;
+}
+
+interface IUserStakeKey {
+  key_id: string;
+  stake: number;
+  profit: IUserStakeKeyProfit[];
+  participation_info: IUserStakeKeyParticipationInfo;
+}
+
+export interface IUserStakeData {
+  dao_id: string;
+  user_id: string;
+  stake_keys: IUserStakeKey[];
+}
+
 const YourStaking: React.FC = () => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
-  const { utxos } = useWallet();
   const [stakeInfo, setStakeInfo] = React.useState<IYourStakingInfo>({
     stakeAmount: "-",
     proposalsVoted: "-",
@@ -22,49 +45,28 @@ const YourStaking: React.FC = () => {
   });
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const daoId = appContext.api.daoData.id;
-        const userId = appContext.api.daoUserData.user_id;
-        const res = await appContext.api.post<any>("/staking/user_stake_info", {
-          dao_id: daoId,
-          user_id: userId,
-        });
-        const stake = res.data;
-        const stakeAmount = stake.stake_keys
-          .map((stake: { stake: number }) => stake.stake)
-          .reduce((a: number, c: number) => a + c, 0);
-        const proposalsVoted = stake.stake_keys
-          .map(
-            (stake: { participation_info: { proposals_voted_on: number } }) =>
-              stake.participation_info?.proposals_voted_on ?? 0
-          )
-          .reduce((a: number, c: number) => a + c, 0);
-        const totalVotingPowerUsed = stake.stake_keys
-          .map(
-            (stake: {
-              participation_info: { total_voting_power_used: number };
-            }) => stake.participation_info?.total_voting_power_used ?? 0
-          )
-          .reduce((a: number, c: number) => a + c, 0);
-        setStakeInfo({
-          stakeAmount,
-          proposalsVoted,
-          totalVotingPowerUsed,
-        });
-      } catch (e: any) {
-        console.log(e);
-      }
-    };
-
-    if (
-      utxos.currentDaoTokens &&
-      appContext.api.daoData?.id &&
-      appContext.api.daoUserData?.id
-    ) {
-      fetchData();
+    if (appContext.api.userStakeData) {
+      const stake = appContext.api.userStakeData;
+      const stakeAmount = stake.stake_keys
+        .map((stake) => stake.stake)
+        .reduce((a: number, c: number) => a + c, 0);
+      const proposalsVoted = stake.stake_keys
+        .map((stake) => stake.participation_info.proposals_voted_on)
+        .reduce((a: number, c: number) => a + c, 0);
+      const totalVotingPowerUsed = stake.stake_keys
+        .map(
+          (stake: {
+            participation_info: { total_voting_power_used: number };
+          }) => stake.participation_info?.total_voting_power_used ?? 0
+        )
+        .reduce((a: number, c: number) => a + c, 0);
+      setStakeInfo({
+        stakeAmount: String(stakeAmount),
+        proposalsVoted: String(proposalsVoted),
+        totalVotingPowerUsed: String(totalVotingPowerUsed),
+      });
     }
-  }, [utxos, appContext.api.daoData, appContext.api.daoUserData]);
+  }, [appContext.api.userStakeData]);
   const ticker = "PAI";
 
   return (
