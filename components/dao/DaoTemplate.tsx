@@ -11,6 +11,7 @@ import TopNav from "@components/dao/nav/TopNav";
 import { isAddressValid } from "@components/wallet/AddWallet";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useWallet } from "@components/wallet/WalletContext";
+import ErrorPage from "@components/error/ErrorPage";
 
 const DaoTemplate: React.FC = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -112,7 +113,15 @@ const DaoTemplate: React.FC = (props) => {
           >
             <TopNav showMobile={showMobile} setShowMobile={setShowMobile} />
             <Box sx={{ width: "100%" }} onClick={() => setShowMobile(false)}>
-              {daoError ? "error" : props.children}
+              {daoError ? (
+                <ErrorPage
+                  title="Uh oh...!"
+                  description="Something didn't work as expected."
+                  withGoBack
+                />
+              ) : (
+                props.children
+              )}
             </Box>
             <BottomNav />
           </Box>
