@@ -145,7 +145,7 @@ const Proposal: React.FC = () => {
                     themeContext.theme === DarkTheme ? "black" : "white"
                   }
                 ), url(${value.image_url})`,
-                      `url(${value.image_url})`
+                      `url('${value.image_url}')`
                     ),
                     p: ".75rem",
                     maxHeight: "30rem",
