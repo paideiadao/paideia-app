@@ -102,28 +102,14 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const daoId = context.api.daoData.id;
-        const userId = context.api.daoUserData.user_id;
-        const res = await context.api.post<any>("/staking/user_stake_info", {
-          dao_id: daoId,
-          user_id: userId,
-        });
-        const stake = res.data;
-        const keys = stake.stake_keys.map(
-          (stake: { key_id: string }) => stake.key_id
-        );
-        setStakeKeys(keys);
-      } catch (e: any) {
-        console.log(e);
-      }
-    };
-
-    if (context.api.daoData?.id && context.api.daoUserData?.id) {
-      fetchData();
+    if (context.api.userStakeData) {
+      const stake = context.api.userStakeData;
+      const keys = stake.stake_keys.map(
+        (stake: { key_id: string }) => stake.key_id
+      );
+      setStakeKeys(keys);
     }
-  }, [context.api.daoData, context.api.daoUserData]);
+  }, [context.api.userStakeData]);
 
   // const quorumInfo = `For this proposal to be approved a quorum of
   // ${governance?.quorum / 10}% and ${governance?.support_needed / 10}%

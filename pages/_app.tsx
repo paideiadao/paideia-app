@@ -21,6 +21,7 @@ import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { SlugContext } from "contexts/SlugContext";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { IUserStakeData } from "@components/dao/staking/YourStaking";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -38,6 +39,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [theme, setTheme] = useState(LightTheme);
   const [daoData, setDaoData] = useState(undefined);
   const [daoUserData, setDaoUserData] = useState<IDaoUserData>(undefined);
+  const [userStakeData, setUserStakeData] = useState<IUserStakeData>(undefined);
   const [metaData, setMetaData] = useState<any>({});
   const [loading, setLoading] = useState(0);
   const [alert, setAlert] = useState<IAlerts[]>([]);
@@ -71,6 +73,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     setDaoData,
     daoUserData,
     setDaoUserData,
+    userStakeData,
+    setUserStakeData,
     loading,
     setLoading
   );

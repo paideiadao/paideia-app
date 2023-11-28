@@ -29,32 +29,18 @@ const CastVote: React.FC = () => {
   const [stake, setStake] = useState<any>(null);
 
   const daoId = context.api.daoData?.id;
-  const userId = context.api.daoUserData?.user_id;
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const stake = (
-          await context.api.post<any>("/staking/user_stake_info", {
-            dao_id: context.api.daoData?.id,
-            user_id: context.api.daoUserData?.user_id,
-          })
-        ).data;
-        setStake(stake);
-        if (!stake.stake_keys?.length) {
-          context.api.error(
-            "Stake key either not present or in use on another transaction, add stake now"
-          );
-        }
-      } catch (e: any) {
-        context.api.error(e);
+    if (context.api.userStakeData) {
+      const stake = context.api.userStakeData;
+      setStake(stake);
+      if (!stake.stake_keys?.length) {
+        context.api.error(
+          "Stake key either not present or in use on another transaction, add stake now"
+        );
       }
-    };
-
-    if (daoId && userId) {
-      getData();
     }
-  }, [daoId, userId]);
+  }, [context.api.userStakeData]);
 
   const handleSubmit = async () => {
     setLoading(true);

@@ -14,6 +14,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useWallet } from "@components/wallet/WalletContext";
 import { useContext, useEffect, useState } from "react";
+import { IUserStakeData } from "@components/dao/staking/YourStaking";
 
 interface ITokenBanner {
   amount: number;
@@ -68,31 +69,33 @@ const ManageStake: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    setLoading(true);
+    if (appContext.api.userStakeData) {
+      const stake = appContext.api.userStakeData;
+      setStakeState(stake);
+      setLoading(false);
+    }
+  }, [appContext.api.userStakeData]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const daoId = appContext.api.daoData?.id;
+      const userId = appContext.api.daoUserData?.user_id;
       try {
-        const daoId = appContext.api.daoData.id;
-        const userId = appContext.api.daoUserData.user_id;
         const res = await appContext.api.post<any>("/staking/user_stake_info", {
           dao_id: daoId,
           user_id: userId,
         });
-        const stake = res.data;
-        setStakeState(stake);
-        setLoading(false);
-      } catch (e: any) {
+        const data: IUserStakeData = res.data;
+        appContext.api.setUserStakeData(data);
+      } catch (e) {
         console.log(e);
       }
     };
-
-    setLoading(true);
-    if (
-      utxos.currentDaoTokens &&
-      appContext.api.daoData?.id &&
-      appContext.api.daoUserData?.id
-    ) {
-      fetchData();
+    if (appContext.api.daoData?.id && appContext.api.daoUserData?.user_id) {
+      getData();
     }
-  }, [utxos, appContext.api.daoData, appContext.api.daoUserData]);
+  }, [appContext.api.daoData?.id, appContext.api.daoUserData?.user_id]);
 
   const router = useRouter();
   const { dao } = router.query;

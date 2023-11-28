@@ -7,13 +7,13 @@ import { Subheader, Subtitle } from "../utilities/HeaderComponents";
 import LabeledSwitch from "../utilities/LabeledSwitch";
 
 const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
-  let creationContext =
+  const creationContext =
     props.context === undefined
       ? React.useContext(CreationContext)
       : props.context;
 
-  let data = creationContext.api.data.design;
-  let setData = (data: any) => {
+  const data = creationContext.api.data.design;
+  const setData = (data: any) => {
     creationContext.api.setData({
       ...creationContext.api.data,
       design: data,
@@ -23,7 +23,7 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
   const [url, setUrl] = React.useState<any>(data.banner.data.url);
 
   function handleImage(e: any) {
-    let fileInput = e.currentTarget.files;
+    const fileInput = e.currentTarget.files;
     if (fileInput && fileInput[0]) {
       if (fileInput.length != 1) return;
       if (fileInput[0].size > 1000000) {
@@ -87,10 +87,8 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
         </Box>
         <Subtitle subtitle="You can choose to have a banner on your DAO homepage by simply enabling below and uploading a compatible file." />
       </Box>
-
       <LabeledSwitch
-        disabled
-        title="Show banner"
+        title="Show Banner"
         value={data.banner.show}
         onChange={() =>
           setData({

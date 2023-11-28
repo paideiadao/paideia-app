@@ -40,7 +40,10 @@ import {
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
 import { useState, useContext, useEffect } from "react";
 import { generateSlug } from "@lib/utilities";
-import { IUpdateConfig } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
+import {
+  IConfig,
+  IUpdateConfig,
+} from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -158,7 +161,7 @@ const defaultErrors: ICreateProposalErrors = {
 
 const CreateProposal: React.FC = () => {
   const router = useRouter();
-  const { dao } = router.query;
+  const { dao, auto_update_config } = router.query;
   const [value, setValue] = useState<IProposal>({
     name: "",
     image: {
@@ -168,12 +171,23 @@ const CreateProposal: React.FC = () => {
     status: "Draft",
     category: "",
     content: "",
-    voting_system: "unselected",
+    voting_system: auto_update_config ? "yes/no" : "unselected",
     optionType: "one-option",
     references: [],
     attachments: [],
     comments: [],
-    actions: [],
+    actions: auto_update_config
+      ? [
+          {
+            name: "Update DAO Config",
+            data: {
+              config: [],
+              voting_duration: (24 * 60 * 60).toString(),
+              activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
+            },
+          },
+        ]
+      : [],
     addendums: [],
     likes: [],
     dislikes: [],
@@ -193,29 +207,35 @@ const CreateProposal: React.FC = () => {
   const governance = context.api.daoData?.governance;
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const stake = (
-          await context.api.post<any>("/staking/user_stake_info", {
-            dao_id: context.api.daoData?.id,
-            user_id: context.api.daoUserData?.user_id,
-          })
-        ).data;
-        setStake(stake);
-        if (!stake.stake_keys?.length) {
-          api.error(
-            "Stake key either not present or in use on another transaction, add stake now"
-          );
-        }
-      } catch (e: any) {
-        api.error(e);
+    if (context.api.userStakeData) {
+      const stake = context.api.userStakeData;
+      setStake(stake);
+      if (!stake.stake_keys?.length) {
+        api.error(
+          "Stake key either not present or in use on another transaction, add stake now"
+        );
       }
-    };
-
-    if (context.api.daoData?.id && context.api.daoUserData?.user_id) {
-      getData();
     }
-  }, [context.api.daoData, context.api.daoUserData]);
+  }, [context.api.userStakeData]);
+
+  useEffect(() => {
+    if (auto_update_config) {
+      setValue({
+        ...value,
+        voting_system: "yes/no",
+        actions: [
+          {
+            name: "Update DAO Config",
+            data: {
+              config: [],
+              voting_duration: (24 * 60 * 60).toString(),
+              activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
+            },
+          },
+        ],
+      });
+    }
+  }, [auto_update_config]);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -240,13 +260,7 @@ const CreateProposal: React.FC = () => {
           : value.actions[0].name === "Update DAO Config"
           ? bPaideiaUpdateDAOConfig(
               // @ts-ignore
-              value.actions[0].data.action_type,
-              // @ts-ignore
-              value.actions[0].data.key,
-              // @ts-ignore
-              value.actions[0].data.type,
-              // @ts-ignore
-              value.actions[0].data.value,
+              value.actions[0].data.config,
               // @ts-ignore
               value.actions[0].data.activation_time
             )
@@ -516,16 +530,18 @@ const validateErrors = (
     // @ts-ignore
     value.actions[0].name === "Update DAO Config"
   ) {
-    errors.actionConfig =
-      errors.voting ||
-      // @ts-ignore
-      value.actions[0].data.action_type === "" ||
-      // @ts-ignore
-      value.actions[0].data.key === "" ||
-      // @ts-ignore
-      value.actions[0].data.type === "" ||
-      // @ts-ignore
-      value.actions[0].data.value === "";
+    // @ts-ignore
+    const actionData: IConfig[] = value.actions[0].data.config;
+    const error =
+      actionData.length === 0 ||
+      actionData.filter(
+        (config) =>
+          config.action_type === "" ||
+          config.key === "" ||
+          config.type === "" ||
+          config.value === ""
+      ).length > 0;
+    errors.actionConfig = errors.voting || error;
   } else {
     errors.voting = true; // should never occur
   }

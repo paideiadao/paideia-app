@@ -720,7 +720,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 mt: ".5rem",
                 height: "7rem",
                 backgroundColor: "fileInput.outer",
-                backgroundImage: `url(${props.image_url})`,
+                backgroundImage: `url('${props.image_url}')`,
                 backgroundSize: "100%",
                 width: "100%",
                 // border: "1px solid",

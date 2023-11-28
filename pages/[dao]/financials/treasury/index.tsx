@@ -22,7 +22,7 @@ const TreasuryHeader: React.FC<{ address: string }> = ({ address }) => {
   const router = useRouter();
   const { dao } = router.query;
   return (
-    <Box sx={{ width: "100%", alignItems: "center", display: "flex" }}>
+    <Box sx={{ width: "100%", alignItems: "center", display: "flex", mt: 0.5 }}>
       <Header title="Treasury" large />
       <Link
         href={`https://explorer.ergoplatform.com/en/addresses/${address}`}

@@ -175,35 +175,14 @@ const TopNav: React.FC<INav> = (props) => {
   }, [notificationsError]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const daoId = globalContext.api.daoData.id;
-        const userId = globalContext.api.daoUserData.user_id;
-        const res = await globalContext.api.post<any>(
-          "/staking/user_stake_info",
-          {
-            dao_id: daoId,
-            user_id: userId,
-          }
-        );
-        const stake = res.data;
-        const stakeAmount = stake.stake_keys
-          .map((stake: { stake: number }) => stake.stake)
-          .reduce((a: number, c: number) => a + c, 0);
-        setStakeAmount(stakeAmount);
-      } catch (e: any) {
-        console.log(e);
-      }
-    };
-
-    if (
-      utxos.currentDaoTokens &&
-      globalContext.api.daoData?.id &&
-      globalContext.api.daoUserData?.id
-    ) {
-      fetchData();
+    if (globalContext.api.userStakeData) {
+      const stake = globalContext.api.userStakeData;
+      const stakeAmount = stake.stake_keys
+        .map((stake: { stake: number }) => stake.stake)
+        .reduce((a: number, c: number) => a + c, 0);
+      setStakeAmount(stakeAmount);
     }
-  }, [utxos, globalContext.api.daoData, globalContext.api.daoUserData]);
+  }, [globalContext.api.userStakeData]);
 
   return (
     <>

@@ -78,33 +78,15 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
     }
   }, [props.wallet, utxos.currentDaoTokens]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const daoId = appContext.api.daoData.id;
-        const userId = appContext.api.daoUserData.user_id;
-        const res = await appContext.api.post<any>("/staking/user_stake_info", {
-          dao_id: daoId,
-          user_id: userId,
-        });
-        const stake = res.data;
-        const stakeAmount = stake.stake_keys
-          .map((stake: { stake: number }) => stake.stake)
-          .reduce((a: number, c: number) => a + c, 0);
-        setStakeAmount(stakeAmount);
-      } catch (e: any) {
-        console.log(e);
-      }
-    };
-
-    if (
-      utxos.currentDaoTokens &&
-      appContext.api.daoData?.id &&
-      appContext.api.daoUserData?.id
-    ) {
-      fetchData();
-    }
-  }, [utxos, appContext.api.daoData, appContext.api.daoUserData]);
+  // React.useEffect(() => {
+  //   if (appContext.api.userStakeData) {
+  //     const stake = appContext.api.userStakeData;
+  //     const stakeAmount = stake.stake_keys
+  //       .map((stake: { stake: number }) => stake.stake)
+  //       .reduce((a: number, c: number) => a + c, 0);
+  //     setStakeAmount(stakeAmount);
+  //   }
+  // }, [appContext.api.userStakeData]);
 
   const ticker =
     appContext.api.daoData?.tokenomics.token_ticker ??

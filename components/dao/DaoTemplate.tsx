@@ -11,6 +11,8 @@ import TopNav from "@components/dao/nav/TopNav";
 import { isAddressValid } from "@components/wallet/AddWallet";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useWallet } from "@components/wallet/WalletContext";
+import ErrorPage from "@components/error/ErrorPage";
+import { IUserStakeData } from "./staking/YourStaking";
 
 const DaoTemplate: React.FC = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -45,6 +47,29 @@ const DaoTemplate: React.FC = (props) => {
       });
     }
   }, [daoData, daoList, daoSlug]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const daoId = daoData?.id;
+      const userId = globalContext.api.daoUserData?.user_id;
+      try {
+        const res = await globalContext.api.post<any>(
+          "/staking/user_stake_info",
+          {
+            dao_id: daoId,
+            user_id: userId,
+          }
+        );
+        const data: IUserStakeData = res.data;
+        globalContext.api.setUserStakeData(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    if (daoData?.id && globalContext.api.daoUserData?.user_id) {
+      getData();
+    }
+  }, [daoData?.id, globalContext.api.daoUserData?.user_id]);
 
   useEffect(() => {
     const load = async (tokensIds: string[]) => {
@@ -112,7 +137,15 @@ const DaoTemplate: React.FC = (props) => {
           >
             <TopNav showMobile={showMobile} setShowMobile={setShowMobile} />
             <Box sx={{ width: "100%" }} onClick={() => setShowMobile(false)}>
-              {daoError ? "error" : props.children}
+              {daoError ? (
+                <ErrorPage
+                  title="Uh oh...!"
+                  description="Something didn't work as expected."
+                  withGoBack
+                />
+              ) : (
+                props.children
+              )}
             </Box>
             <BottomNav />
           </Box>
