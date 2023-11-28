@@ -116,7 +116,7 @@ const Funds: React.FC<any> = ({ treasuryData }) => {
             color: "text.primary",
             borderRadius: ".2rem",
             ml: "auto",
-            p: ".25rem",
+            p: "0.45rem",
             border: "1px solid",
             borderColor: "border.main",
             pt: ".1rem",
