@@ -68,7 +68,17 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
             src={props.i.img_url}
           ></Avatar>
           <Box>
-            {props.i.name + " "}
+            {!props.i.name.includes(" ") &&
+            !["Withdrawal"].includes(props.i.name) ? (
+              <Link
+                sx={{ textDecoration: "none", color: "text.primary" }}
+                href={`/${dao}/members/${props.i.name}`}
+              >
+                {props.i.name}
+              </Link>
+            ) : (
+              props.i.name
+            )}{" "}
             <Box
               sx={{
                 display: "inline",
