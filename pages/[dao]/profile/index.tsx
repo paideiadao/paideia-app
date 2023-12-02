@@ -13,12 +13,12 @@ const Profile: FC = () => {
   const userData = appContext.api.daoUserData;
 
   const { data: activitiesData, error } = useSWR(
-    userData !== undefined && `/activities/${userData.id}`,
+    userData?.id && `/activities/${userData.id}`,
     fetcher
   );
 
   const { data: proposalsData, error: proposalsError } = useSWR(
-    userData !== undefined && `/proposals/by_user_details_id/${userData.id}`,
+    userData?.id && `/proposals/by_user_details_id/${userData.id}`,
     fetcher
   );
 

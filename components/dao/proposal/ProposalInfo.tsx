@@ -65,7 +65,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
     const fetchAllTokenDescriptions = async () => {
       const amounts: { [key: string]: string } = {};
       const infos: Record<string, AssetInfo | null> = {};
-
+      if (!actions) return;
       for (const action of actions) {
         for (const output of action.action.outputs ?? []) {
           if (output.tokens) {
@@ -89,7 +89,6 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           }
         }
       }
-
       setTokenAmounts(amounts);
       setTokenInfos(infos);
     };
@@ -266,7 +265,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
         )}
       </Box>
       <CapsInfo title="Proposal Actions" />
-      {actions.map((action) => (
+      {actions?.map((action) => (
         <Box key={action.actionType}>
           <Box
             sx={{

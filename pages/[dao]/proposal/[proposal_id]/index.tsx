@@ -191,7 +191,11 @@ const Proposal: React.FC = () => {
                     <Header title={value.name} large bold />
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Chip
-                        label={value.status}
+                        label={
+                          value.status === "discussion"
+                            ? "Discussion"
+                            : value.status
+                        }
                         variant="outlined"
                         icon={
                           <CircleIcon
@@ -344,7 +348,9 @@ const Proposal: React.FC = () => {
                       color={getStatusColor(value.status)}
                       sx={{ mr: ".3rem", fontSize: "1rem" }}
                     />
-                    {value.status}
+                    {value.status === "discussion"
+                      ? "Discussion"
+                      : value.status}
                   </Box>
                   <Box
                     sx={{
