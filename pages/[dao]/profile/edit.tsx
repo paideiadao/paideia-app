@@ -240,7 +240,11 @@ const Edit: React.FC<{ params: any }> = (props) => {
 
   const uploadImage = async () => {
     if (typeof value.img === "string") {
-      return;
+      return {
+        data: {
+          image_url: value.img,
+        },
+      };
     }
 
     const image = value?.img?.file ?? -1;
