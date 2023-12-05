@@ -22,6 +22,8 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import useDidMountEffect from "@components/utilities/hooks";
 import CancelLink from "@components/utilities/CancelLink";
 
+const BIO_MAX_LENGTH = 250;
+
 const ProfileEditImage: React.FC<{ set: (val: IFile) => void; img: string }> = (
   props
 ) => {
@@ -174,6 +176,11 @@ const Edit: React.FC<{ params: any }> = (props) => {
     ],
   });
 
+  const [formErrors, setFormErrors] = React.useState({
+    username: "",
+    shortBio: "",
+  });
+
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -190,6 +197,95 @@ const Edit: React.FC<{ params: any }> = (props) => {
     }
   }, [appContext.api.daoUserData]);
 
+  const validateFormFields = () => {
+    const { username, shortBio } = value;
+    let isValid = true;
+
+    if (!/^[A-Za-z0-9]*$/.test(username)) {
+      setFormErrors((prev) => ({
+        ...prev,
+        username: "Username can only contain letters and numbers",
+      }));
+
+      isValid = false;
+    }
+
+    if (shortBio.length > BIO_MAX_LENGTH) {
+      setFormErrors((prev) => ({
+        ...prev,
+        shortBio: `Bio field can contain a maximum of ${BIO_MAX_LENGTH} symbols`,
+      }));
+
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  const clearValidation = () => {
+    setFormErrors({
+      username: "",
+      shortBio: "",
+    });
+  };
+
+  const onChange = (field: keyof typeof value, fieldValue: string) => {
+    setValue((prev) => ({
+      ...prev,
+      [field]: fieldValue,
+    }));
+
+    clearValidation();
+  };
+
+  const uploadImage = async () => {
+    if (typeof value.img === "string") {
+      return;
+    }
+
+    const image = value?.img?.file ?? -1;
+
+    if (image === undefined || image === -1) {
+      return "";
+    }
+
+    return await appContext.api.uploadFile(image).catch((e) => {
+      appContext.api.error(e);
+      return "";
+    });
+  };
+
+  const saveChanges = async () => {
+    setLoading(true);
+
+    const isValid = validateFormFields();
+
+    if (!isValid) {
+      setLoading(false);
+      return;
+    }
+
+    const imgRes = await uploadImage();
+    const imgUrl = imgRes?.data?.image_url || "";
+
+    await appContext.api.editUser({
+      name: value.username,
+      profile_img_url: imgUrl,
+      bio: value.shortBio,
+      social_links: value.socialLinks,
+    });
+
+    appContext.api.setDaoUserData({
+      ...appContext.api.daoUserData,
+      name: value.username,
+      profile_img_url: imgUrl,
+      bio: value.shortBio,
+      social_links: value.socialLinks,
+    });
+
+    setLoading(false);
+  };
+
   return (
     <Layout>
       {appContext.api.daoUserData !== undefined && (
@@ -203,19 +299,22 @@ const Edit: React.FC<{ params: any }> = (props) => {
             value={value.username}
             label="User name"
             sx={{ width: "100%", mt: ".5rem" }}
-            onChange={(e) => setValue({ ...value, username: e.target.value })}
+            onChange={(e) => onChange("username", e.target.value)}
+            error={!!formErrors.username}
+            helperText={formErrors.username}
           />
           <TextField
             value={value.shortBio}
             label="Short bio"
             sx={{ width: "100%", mt: "1rem" }}
             minRows={2}
-            onChange={(e) => setValue({ ...value, shortBio: e.target.value })}
+            onChange={(e) => onChange("shortBio", e.target.value)}
             multiline
             FormHelperTextProps={{ sx: { textAlign: "right" } }}
+            error={!!formErrors.shortBio}
             helperText={`${
               value.shortBio == null ? 0 : value.shortBio.length
-            }/250`}
+            }/${BIO_MAX_LENGTH}`}
           />
           <Header title="Social Links" small />
           <Box sx={{ mt: ".5rem" }}>
@@ -285,40 +384,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
               sx={{ width: "49%" }}
               loadingPosition={"center"}
               loading={loading}
-              onClick={async () => {
-                setLoading(true);
-                let imgRes;
-                if (typeof value.img !== "string") {
-                  const image = value?.img?.file ?? -1;
-                  imgRes =
-                    image === undefined || image === -1
-                      ? ""
-                      : await appContext.api.uploadFile(image).catch((e) => {
-                          appContext.api.error(e);
-                          return "";
-                        });
-                }
-                await appContext.api.editUser({
-                  name: value.username,
-                  profile_img_url:
-                    imgRes === undefined || imgRes === ""
-                      ? ""
-                      : imgRes.data.image_url,
-                  bio: value.shortBio,
-                  social_links: value.socialLinks,
-                });
-                appContext.api.setDaoUserData({
-                  ...appContext.api.daoUserData,
-                  name: value.username,
-                  profile_img_url:
-                    imgRes === undefined || imgRes === ""
-                      ? ""
-                      : imgRes.data.image_url,
-                  bio: value.shortBio,
-                  social_links: value.socialLinks,
-                });
-                setLoading(false);
-              }}
+              onClick={saveChanges}
             >
               {!loading ? (
                 <>
