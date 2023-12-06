@@ -11,7 +11,6 @@ import Activity, { IActivity } from "../activity/Activity";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
 
-
 export const activities = [
   {
     date: new Date(),
@@ -73,7 +72,9 @@ const LatestActivity: React.FC = () => {
           console.log(err);
         });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [dao, daoSlugsObject]);
 
   return (
@@ -86,7 +87,7 @@ const LatestActivity: React.FC = () => {
           mt: ".5rem",
         }}
       >
-        <Subheader title="Latest activity" small bold />
+        <Subheader title="Latest Activity" small bold />
         <Link href={dao === undefined ? "" : `/${dao}/activity`}>
           <Button sx={{ ml: "auto", fontSize: ".8rem" }} size="small">
             View Activity Log

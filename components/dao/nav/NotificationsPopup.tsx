@@ -1,6 +1,7 @@
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { modalBackground } from "@components/utilities/modalBackground";
+import { deviceStruct } from "@components/utilities/Style";
 import { Modal, Button, Box } from "@mui/material";
 import { Notification } from "@pages/[dao]/notifications";
 import Link from "next/link";
@@ -44,7 +45,13 @@ const NotificationsPopup: React.FC<INotificationsPopup> = (props) => {
           ...modalBackground,
           p: 0,
           width: "30rem",
-          right: "-12rem",
+          right: deviceStruct(
+            "-12rem",
+            "-12rem",
+            "-12rem",
+            "-12rem",
+            "calc(50% - 960px - 3rem)"
+          ),
           top: "18.3rem",
           left: "",
         }}

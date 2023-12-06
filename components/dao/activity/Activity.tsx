@@ -3,6 +3,9 @@ import * as React from "react";
 import dateFormat from "dateformat";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { deviceWrapper } from "@components/utilities/Style";
+import { generateSlug } from "@lib/utilities";
+import Link from "@components/Link";
+import { useRouter } from "next/router";
 
 export interface IActivity {
   img_url: string;
@@ -13,9 +16,12 @@ export interface IActivity {
   category: string;
   secondary?: string;
   secondaryValue?: string;
+  link?: string;
 }
 
 const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
+  const router = useRouter();
+  const { dao } = router.query;
   return (
     <Box
       key={`activities-key-${props.c}`}
@@ -62,7 +68,17 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
             src={props.i.img_url}
           ></Avatar>
           <Box>
-            {props.i.name + " "}
+            {!props.i.name.includes(" ") &&
+            !["Withdrawal"].includes(props.i.name) ? (
+              <Link
+                sx={{ textDecoration: "none", color: "text.primary" }}
+                href={`/${dao}/members/${props.i.name}`}
+              >
+                {props.i.name}
+              </Link>
+            ) : (
+              props.i.name
+            )}{" "}
             <Box
               sx={{
                 display: "inline",
@@ -72,11 +88,23 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
               }}
             >
               {props.i.action}
-            </Box>
-            {" " +
-              (props.i.value.length > 120
-                ? props.i.value.substring(0, 120) + "..."
-                : props.i.value)}
+            </Box>{" "}
+            {props.i.link ? (
+              <Link
+                sx={{ textDecoration: "none", color: "text.primary" }}
+                href={
+                  props.i.link ? generateRedirectUrl(props.i, String(dao)) : ""
+                }
+              >
+                {props.i.value.length > 120
+                  ? props.i.value.substring(0, 120) + "..."
+                  : props.i.value}
+              </Link>
+            ) : props.i.value.length > 120 ? (
+              props.i.value.substring(0, 120) + "..."
+            ) : (
+              props.i.value
+            )}
             {props.i.secondary !== undefined && (
               <Box
                 sx={{
@@ -93,7 +121,6 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
               " " + props.i.secondaryValue}
           </Box>
         </Box>
-
         <Box
           sx={{
             ml: deviceWrapper("0", "auto"),
@@ -111,6 +138,18 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
       </Box>
     </Box>
   );
+};
+
+const generateRedirectUrl = (activity: IActivity, dao: string) => {
+  if (["Transactions", "Staking"].includes(activity.category)) {
+    return `https://explorer.ergoplatform.com/en/transactions/${activity.link}`;
+  }
+  const url =
+    "/" + dao + "/proposal/" + generateSlug(activity.link, activity.value);
+  if (activity.category === "Comments") {
+    return url + "?tab=comments";
+  }
+  return String(url);
 };
 
 export default Activity;
