@@ -46,17 +46,13 @@ const Discussion: React.FC = () => {
   const globalContext = React.useContext(GlobalContext);
 
   const router = useRouter();
-  const { discussion_id, tab } = router.query;
+  const { dao, discussion_id, tab } = router.query;
   const parsed_discussion_id = discussion_id
     ? (discussion_id as string).split("-").slice(-5).join("-")
     : null;
   const [loaded, setLoaded] = React.useState<boolean>(false);
   const [newestComment, setNewestComment] = React.useState<IComment>();
   const [liveComments, setLiveComments] = React.useState<IComment[]>([]);
-
-  React.useEffect(() => {
-    setLoaded(true);
-  }, []);
 
   React.useEffect(() => {
     if (tab && tab === "comments") {
@@ -85,7 +81,7 @@ const Discussion: React.FC = () => {
   };
 
   const { data, error } = useSWR(
-    discussion_id && loaded ? `/proposals/${discussion_id}` : null,
+    discussion_id ? `/proposals/${discussion_id}` : null,
     fetcher
   );
 
@@ -116,6 +112,15 @@ const Discussion: React.FC = () => {
     const temp = [...liveComments, newestComment];
     setLiveComments(temp);
   }, [newestComment]);
+
+  React.useEffect(() => {
+    if (data) {
+      setLoaded(true);
+      if (data.is_proposal) {
+        router.replace(`/${dao}/proposal/${discussion_id}`);
+      }
+    }
+  }, [data]);
 
   return (
     <Layout width={deviceWrapper("92%", "97%")}>
