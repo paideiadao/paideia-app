@@ -117,6 +117,9 @@ const Proposal: React.FC = () => {
     if (data) {
       setValue(data);
       setLoaded(true);
+      if (!data.is_proposal) {
+        router.replace(`/${dao}/discussion/${proposal_id}`);
+      }
     }
   }, [data]);
 
