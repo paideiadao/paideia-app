@@ -107,6 +107,10 @@ const Proposal: React.FC = () => {
 
   const context = useContext<IGlobalContext>(GlobalContext);
   const api = new ProposalApi(context.api, value, setValue);
+  const decimalAdjust = Math.pow(
+    10,
+    context.api.daoData?.tokenomics?.token_decimals ?? 0
+  );
 
   const { data, error } = useSWR(
     parsed_proposal_id ? `/proposals/${parsed_proposal_id}` : null,
@@ -399,8 +403,8 @@ const Proposal: React.FC = () => {
                   }}
                 >
                   <VoteWidget
-                    yes={value.votes ? value.votes[1] / 10000 : 0}
-                    no={value.votes ? value.votes[0] / 10000 : 0}
+                    yes={value.votes ? value.votes[1] / decimalAdjust : 0}
+                    no={value.votes ? value.votes[0] / decimalAdjust : 0}
                   />
                 </Box>
                 <TabContext value={tab}>
@@ -502,8 +506,8 @@ const Proposal: React.FC = () => {
                   level={0}
                 />
                 <VoteWidget
-                  yes={value.votes ? value.votes[1] / 10000 : 0}
-                  no={value.votes ? value.votes[0] / 10000 : 0}
+                  yes={value.votes ? value.votes[1] / decimalAdjust : 0}
+                  no={value.votes ? value.votes[0] / decimalAdjust : 0}
                 />
               </Box>
             </Box>
