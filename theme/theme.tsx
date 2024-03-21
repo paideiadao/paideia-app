@@ -299,7 +299,7 @@ export const DarkTheme = createTheme({
       main: "#9FD2DB",
     },
     alert: {
-      main: "linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), #FFA726",
+      main: "#FFA726",
     },
     darkHover: {
       main: "rgba(17, 24, 39, 0.08)",
