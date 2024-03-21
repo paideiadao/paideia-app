@@ -34,7 +34,7 @@ const MarkdownRender = (props: { description: string }) => {
       components={{
         h1: ({ node, ...props }) => (
           <Typography
-            id={props.children[0].toString().split(" ").join("-")}
+            id={props?.children && props.children[0].toString().split(" ").join("-")}
             variant="h1"
             {...props}
           />
