@@ -26,7 +26,8 @@ type CreateContextOptions = {
   prisma: PrismaClient;
   user: {
     id: string;
-    address?: string | undefined;
+    address?: string;
+    jwt?: string;
   } | null;
 };
 

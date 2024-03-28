@@ -22,6 +22,7 @@ import { SlugContext } from "contexts/SlugContext";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { IUserStakeData } from "@components/dao/staking/YourStaking";
+import { trpc } from "@utils/trpc";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -44,6 +45,10 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [loading, setLoading] = useState(0);
   const [alert, setAlert] = useState<IAlerts[]>([]);
   const router = useRouter();
+
+  const test = trpc.auth.getNonce.useQuery({
+    address: "",
+  })
 
   useEffect(() => {
     setTheme(localStorage.getItem("theme") === "dark" ? DarkTheme : LightTheme);

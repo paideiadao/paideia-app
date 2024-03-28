@@ -41,6 +41,7 @@ declare module "next-auth" {
     user: {
       id: string;
       address?: string;
+      jwt?: string;
     };
   }
 
@@ -284,18 +285,16 @@ export const sessionCallback = async (
   const cookie = getCookie(`next-auth.session-token`, {
     req: req,
   });
-  let dbSession;
-  if (typeof cookie === "string") {
-    dbSession = await prisma.session.findFirst({
-      where: {
-        sessionToken: cookie,
-      },
-    });
-  }
+  await prisma.session.findFirstOrThrow({
+    where: {
+      sessionToken: cookie,
+    },
+  });
   if (user) {
     session.user = {
       id: user.id,
       address: user.defaultAddress,
+      jwt: "", // TODO: generate paideia-api token
     };
   }
   return session;

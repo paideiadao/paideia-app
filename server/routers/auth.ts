@@ -9,12 +9,12 @@ export const authRouter = createTRPCRouter({
   getNonce: publicProcedure
     .input(
       z.object({
-        userAddress: z.string(),
+        address: z.string(),
       })
     )
     .query(async ({ input }) => {
-      const { userAddress } = input;
-      const nonce = await generateNonceForLogin(userAddress);
+      const { address } = input;
+      const nonce = await generateNonceForLogin(address);
 
       if (!nonce) {
         throw new Error("Address already in use by another user account");
