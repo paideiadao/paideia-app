@@ -190,19 +190,6 @@ export class AbstractApi {
     );
   }
 
-  async login(username: string, password: string) {
-    const res: any = await this.post(
-      "/auth/token",
-      { username, password },
-      "logged in.",
-      ""
-    );
-
-    if (res !== false) {
-      localStorage.setItem("jwt_token_login", res.data.access_token);
-    }
-  }
-
   error(err: any): any {
     console.log("func:api_error:", err);
     const bMessage =

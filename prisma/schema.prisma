@@ -1,0 +1,92 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgres"
+    url      = env("POSTGRES_PRISMA_URL")
+}
+
+model Account {
+    id                String  @id @default(cuid())
+    userId            String  @map("user_id")
+    type              String
+    provider          String
+    providerAccountId String  @map("provider_account_id")
+    refreshToken      String? @map("refresh_token")
+    accessToken       String? @map("access_token")
+    expiresAt         Int?    @map("expires_at")
+    tokenType         String? @map("expires_type")
+    scope             String?
+    idToken           String? @map("id_token")
+    sessionState      String? @map("session_state")
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique @map("session_token")
+    userId       String   @map("user_id")
+    walletType   String?  @map("wallet_type")
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("sessions")
+}
+
+enum UserLoginStatus {
+    ACTIVE
+    PENDING
+    DELETED
+}
+
+model User {
+    id            String          @id @default(cuid())
+    address       String?         @unique @map("address")
+    nonce         String?
+    status        UserLoginStatus
+    createdAt     DateTime        @default(now()) @map("created_at")
+    updatedAt     DateTime        @updatedAt @map("updated_at")
+    accounts      Account[]
+    sessions      Session[]
+    wallets       Wallet[]
+    loginRequests LoginRequest[]
+
+    @@map("users")
+}
+
+model Wallet {
+    id              String   @id @default(cuid())
+    type            String?
+    changeAddress   String   @unique @map("change_address")
+    unusedAddresses String[] @map("unused_addresses")
+    usedAddresses   String[] @map("used_addresses")
+    userId          String   @map("user_id")
+    user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("wallets")
+}
+
+enum LoginRequestStatus {
+    SIGNED
+    PENDING
+    EXPIRED
+}
+
+model LoginRequest {
+    id             String             @id @default(cuid())
+    userId         String             @map("user_id")
+    user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+    verificationId String             @unique @map("verification_id")
+    message        String
+    status         LoginRequestStatus
+    signedMessage  String?            @map("signed_message")
+    proof          String?
+    createdAt      DateTime           @default(now()) @map("created_at")
+    updatedAt      DateTime           @updatedAt @map("updated_at")
+
+    @@map("login_requests")
+}

@@ -10,7 +10,7 @@ import ProposalApi from "@lib/dao/proposal/ProposalApi";
 import GeneralInformation from "@components/dao/proposal/GeneralInformation";
 import ProposalImage from "@components/dao/proposal/ProposalImage";
 import ProposalVote from "@components/dao/proposal/ProposalVote";
-import Content from "@components/dao/proposal/Context";
+import Content from "@components/dao/proposal/Content";
 import { modalBackground } from "@components/utilities/modalBackground";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PublishIcon from "@mui/icons-material/Publish";

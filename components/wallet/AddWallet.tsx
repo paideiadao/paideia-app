@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useAddWallet } from "@components/wallet/AddWalletContext";
 import { useWallet } from "@components/wallet/WalletContext";
-import { Address } from "@components/wallet/Address";
 import ProviderListing from "./ProviderListing";
 import Nautilus from "./Nautilus";
 import MobileWallet from "./MobileWallet";
@@ -36,8 +35,7 @@ export const DAPP_CONNECTED = "dapp_connected";
 const AddWallet: React.FC = () => {
   const [walletInput, setWalletInput] = React.useState("");
   const { addWalletOpen, setAddWalletOpen } = useAddWallet();
-  const { wallet, setWallet, dAppWallet, setDAppWallet, loggedIn } =
-    useWallet();
+  const { wallet, setWallet, dAppWallet, setDAppWallet } = useWallet();
   const [init, setInit] = React.useState(false);
   const [qrCode, setQrCode] = React.useState<string>(undefined);
 

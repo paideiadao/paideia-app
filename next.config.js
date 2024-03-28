@@ -24,6 +24,9 @@ const nextConfig = {
   env: {
     API_URL: process.env.API_URL,
     WSS_URL: process.env.WSS_URL,
+    VERCEL_URL: process.env.VERCEL_URL,
+    AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+    PAIDEIA_API_SECRET: process.env.PAIDEIA_API_SECRET,
   },
   images: {
     domains: ["ergopad-public.s3.us-west-2.amazonaws.com"],
