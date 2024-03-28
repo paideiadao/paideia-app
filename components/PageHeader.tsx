@@ -53,7 +53,7 @@ const PageHeader: FC<IPageHeader> = ({
               ...mobileSx,
             }}
           >
-            <Image src={mobileBgUrl} layout="fill" priority />
+            <Image src={mobileBgUrl} layout="fill" priority alt="page-header"/>
           </Box>
         ) : (
           <Box
@@ -67,7 +67,7 @@ const PageHeader: FC<IPageHeader> = ({
               ...imgPositionSx,
             }}
           >
-            <Image src={bgUrl} layout="fill" priority />
+            <Image src={bgUrl} layout="fill" priority alt="page-header"/>
           </Box>
         )}
         <Grid
