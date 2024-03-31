@@ -1,17 +1,17 @@
 import * as React from "react";
-import { AlertTitle, Box, Divider, Grid } from "@mui/material";
+import { AlertTitle, Box, Grid } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
-import { CreationContext } from "../../../lib/creation/Context";
+import { CreationContext } from "@lib/creation/Context";
 import { deviceStruct } from "@components/utilities/Style";
 import useDidMountEffect from "@components/utilities/hooks";
 
 const BasicInformation: React.FC = () => {
-  let creationContext = React.useContext(CreationContext);
-  let data = creationContext.api.data.basicInformation;
+  const creationContext = React.useContext(CreationContext);
+  const data = creationContext.api.data.basicInformation;
 
   useDidMountEffect(() => {
-    let clean = data.daoName.toLowerCase().replaceAll(" ", "");
+    const clean = data.daoName.toLowerCase().replaceAll(" ", "");
     creationContext.api.setData({
       ...creationContext.api.data,
       basicInformation: {

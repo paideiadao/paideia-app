@@ -179,12 +179,14 @@ const Tokenomics: React.FC<{
             labelWidth="35%"
             title="Token symbol"
             component={
-              data.tokenomics.tokenImage.file != null && (
+              data.tokenomics.tokenImage.file !== null ? (
                 <ImageWrapper
                   size={bytesToSize(data.tokenomics.tokenImage.file.size)}
                   img={data.tokenomics.tokenImage.url}
                   name={data.tokenomics.tokenImage.file.name}
                 />
+              ) : (
+                <></>
               )
             }
           />

@@ -1,10 +1,11 @@
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { Box, Collapse } from "@mui/material";
 import React from "react";
-import { CreationContext } from "../../../lib/creation/Context";
+import { CreationContext } from "@lib/creation/Context";
 import FileBanner from "../../utilities/FileBanner";
 import { Subheader, Subtitle } from "../utilities/HeaderComponents";
 import LabeledSwitch from "../utilities/LabeledSwitch";
+import { IDesign } from "@lib/creation/Interfaces";
 
 const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
   const creationContext =
@@ -13,16 +14,17 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
       : props.context;
 
   const data = creationContext.api.data.design;
-  const setData = (data: any) => {
+  const setData = (data: IDesign) => {
     creationContext.api.setData({
       ...creationContext.api.data,
       design: data,
     });
   };
 
-  const [url, setUrl] = React.useState<any>(data.banner.data.url);
+  const [url, setUrl] = React.useState(data.banner.data.url);
 
-  function handleImage(e: any) {
+  // todo: fix this any
+  const handleImage = (e: any) => {
     const fileInput = e.currentTarget.files;
     if (fileInput && fileInput[0]) {
       if (fileInput.length != 1) return;

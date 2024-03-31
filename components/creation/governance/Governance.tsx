@@ -1,19 +1,15 @@
 import * as React from "react";
 import {
-  AlertTitle,
   Box,
   Button,
-  Divider,
   IconButton,
   OutlinedInput,
   Select,
   Slider,
   Switch,
 } from "@mui/material";
-import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
-import { CreationContext } from "../../../lib/creation/Context";
-import InfoIcon from "@mui/icons-material/Info";
+import { CreationContext } from "@lib/creation/Context";
 import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import WalletSelector from "./WalletSelector";
