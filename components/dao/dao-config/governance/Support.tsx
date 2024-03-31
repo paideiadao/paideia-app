@@ -13,7 +13,7 @@ import * as React from "react";
 
 const Support: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
-  const data = context.api.data.governance;
+  const data = context.api?.data.governance;
   return (
     <>
       <LearnMore
@@ -40,11 +40,11 @@ const Support: React.FC = () => {
           }}
         >
           <Slider
-            value={data.supportNeeded}
+            value={data?.supportNeeded}
             min={0}
             max={100}
             onChange={(event, newValue) =>
-              context.api.setData({
+              context.api?.setData({
                 ...context.api.data,
                 governance: {
                   ...data,
@@ -65,9 +65,9 @@ const Support: React.FC = () => {
           <TextField
             label="Value"
             type="number"
-            value={data.supportNeeded}
+            value={data?.supportNeeded}
             onChange={(e) =>
-              context.api.setData({
+              context.api?.setData({
                 ...context.api.data,
                 governance: {
                   ...data,

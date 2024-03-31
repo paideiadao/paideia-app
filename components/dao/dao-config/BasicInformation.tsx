@@ -9,7 +9,7 @@ import * as React from "react";
 
 const BasicInformation: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
-  const data = context.api.data.basicInformation;
+  const data = context.api?.data.basicInformation;
   return (
     <>
       <Header
@@ -39,9 +39,9 @@ const BasicInformation: React.FC = () => {
           <TextField
             label="DAO Name"
             sx={{ width: "100%" }}
-            value={data.daoName}
+            value={data?.daoName}
             onChange={(e) =>
-              context.api.setData({
+              context.api?.setData({
                 ...context.api.data,
                 basicInformation: {
                   ...data,
@@ -61,9 +61,9 @@ const BasicInformation: React.FC = () => {
           <TextField
             label="DAO URL"
             sx={{ width: "100%" }}
-            value={data.daoUrl}
+            value={data?.daoUrl}
             onChange={(e) =>
-              context.api.setData({
+              context.api?.setData({
                 ...context.api.data,
                 basicInformation: {
                   ...data,
@@ -82,9 +82,9 @@ const BasicInformation: React.FC = () => {
             maxLength: 250,
           }}
           multiline
-          value={data.shortDescription}
+          value={data?.shortDescription}
           onChange={(e) =>
-            context.api.setData({
+            context.api?.setData({
               ...context.api.data,
               basicInformation: {
                 ...data,
@@ -94,7 +94,7 @@ const BasicInformation: React.FC = () => {
           }
           sx={{ width: "100%" }}
           FormHelperTextProps={{ sx: { textAlign: "right" } }}
-          helperText={`${data.shortDescription.length}/250`}
+          helperText={`${data?.shortDescription.length}/250`}
         />
       </Box>
     </>

@@ -34,8 +34,8 @@ export default class ProposalApi extends AbstractApi {
     api: AppApi,
     value: IProposal,
     setValue: Function,
-    errors?: ICreateProposalErrors,
-    setErrors?: Function
+    errors: ICreateProposalErrors,
+    setErrors: Function
   ) {
     super();
     this.api = api;
@@ -60,7 +60,10 @@ export default class ProposalApi extends AbstractApi {
       content: this.value.content,
       voting_system: this.value.voting_system,
       references: this.value.references,
-      actions: this.value.actions.map((i: IProposalAction) => i.data),
+      // @ts-ignore
+      actions: this.value.actions
+        .map((i: IProposalAction) => i.data)
+        .filter((data) => data !== undefined),
       tags: [],
       attachments: [],
       is_proposal: true,

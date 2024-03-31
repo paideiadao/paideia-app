@@ -37,8 +37,10 @@ const daoVariants = {
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [theme, setTheme] = useState(LightTheme);
-  const [daoData, setDaoData] = useState(undefined);
+  const [daoData, setDaoData] = useState<any>(undefined);
+  // @ts-ignore
   const [daoUserData, setDaoUserData] = useState<IDaoUserData>(undefined);
+  // @ts-ignore
   const [userStakeData, setUserStakeData] = useState<IUserStakeData>(undefined);
   const [metaData, setMetaData] = useState<any>({});
   const [loading, setLoading] = useState(0);
@@ -56,7 +58,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   const { daoSlugsObject, daoSlugsIsLoading, daoTokensObject } = useDaoSlugs();
   const [daoSlugs, setDaoSlugs] = useState({});
-  const [daoTokens, setDaoTokens] = useState([]);
+  const [daoTokens, setDaoTokens] = useState<typeof daoTokensObject>([]);
   useEffect(() => {
     setDaoSlugs(daoSlugsObject);
   }, [daoSlugsObject]);

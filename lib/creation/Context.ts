@@ -74,9 +74,9 @@ export const CreationContext = React.createContext({
       },
       isDraft: 0,
       isPublished: 0,
-      review: undefined,
+      review: 0,
       draftModal: false,
     },
-    undefined
+    () => {}
   ),
 });

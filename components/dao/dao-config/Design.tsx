@@ -18,19 +18,20 @@ import * as React from "react";
 const Design: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
   const [theme, setTheme] = React.useState<number>(1);
-  const data = context.api.data.design;
+  const data = context.api?.data.design;
   const setData = (data: IDesign) => {
-    context.api.setData({
+    context.api?.setData({
       ...context.api.data,
       design: data,
     });
   };
 
   React.useEffect(() => {
-    setData({
-      ...data,
-      theme: theme,
-    });
+    data &&
+      setData({
+        ...data,
+        theme: theme,
+      });
   }, [theme]);
 
   return (

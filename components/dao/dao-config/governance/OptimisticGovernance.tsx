@@ -24,7 +24,7 @@ import * as React from "react";
 
 const OptimisticGovernance: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
-  const data = context.api.data.governance;
+  const data = context.api?.data.governance;
   return (
     <>
       <LearnMore
@@ -38,18 +38,18 @@ const OptimisticGovernance: React.FC = () => {
         disabled
         small
         onChange={() =>
-          context.api.setData({
+          context.api?.setData({
             ...context.api.data,
             governance: {
               ...data,
-              optimisticGovernance: !data.optimisticGovernance,
+              optimisticGovernance: data && !data.optimisticGovernance,
             },
           })
         }
-        value={data.optimisticGovernance}
+        value={data?.optimisticGovernance ?? false}
         title="Activate optimistic governance"
       />
-      <Collapse in={data.optimisticGovernance}>
+      <Collapse in={data && data.optimisticGovernance}>
         <LearnMore
           title="White listed members"
           // tooltipTitle="Whitelisted Members"
@@ -57,9 +57,9 @@ const OptimisticGovernance: React.FC = () => {
           // tooltipLink="/here"
         />
         <MultiWalletSelector
-          wallets={data.whitelist}
+          wallets={data?.whitelist ?? []}
           set={(value: IWallet[]) =>
-            context.api.setData({
+            context.api?.setData({
               ...context.api.data,
               governance: {
                 ...data,
@@ -85,12 +85,12 @@ const OptimisticGovernance: React.FC = () => {
         >
           <Box sx={{ width: "50%", mr: ".8rem" }}>
             <TextField
-              value={data.amount}
+              value={data?.amount}
               label="Amount"
               type="number"
               sx={{ width: "100%" }}
               onChange={(e) =>
-                context.api.setData({
+                context.api?.setData({
                   ...context.api.data,
                   governance: {
                     ...data,
@@ -106,10 +106,10 @@ const OptimisticGovernance: React.FC = () => {
               <Select
                 labelId="currency-select-label"
                 id="currency-select"
-                value={data.currency}
+                value={data?.currency}
                 label="Currency"
                 onChange={(e) =>
-                  context.api.setData({
+                  context.api?.setData({
                     ...context.api.data,
                     governance: {
                       ...data,
@@ -149,9 +149,9 @@ const OptimisticGovernance: React.FC = () => {
                 notched
                 id={`challenge-time-input`}
                 type="number"
-                value={data.timeToChallenge === 0 ? "" : data.timeToChallenge}
+                value={data?.timeToChallenge === 0 ? "" : data?.timeToChallenge}
                 onChange={(e) =>
-                  context.api.setData({
+                  context.api?.setData({
                     ...context.api.data,
                     governance: {
                       ...data,
@@ -179,10 +179,10 @@ const OptimisticGovernance: React.FC = () => {
                         labelId="currency-select-label"
                         id="currency-select"
                         variant="outlined"
-                        value={data.timeToChallengeUnits}
+                        value={data?.timeToChallengeUnits}
                         sx={{ height: "100%", color: "text.primary" }}
                         onChange={(e) =>
-                          context.api.setData({
+                          context.api?.setData({
                             ...context.api.data,
                             governance: {
                               ...data,

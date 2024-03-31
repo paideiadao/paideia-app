@@ -34,7 +34,10 @@ const MarkdownRender = (props: { description: string }) => {
       components={{
         h1: ({ node, ...props }) => (
           <Typography
-            id={props?.children && props.children[0].toString().split(" ").join("-")}
+            id={
+              props?.children &&
+              props.children[0]?.toString().split(" ").join("-")
+            }
             variant="h1"
             {...props}
           />
@@ -135,9 +138,19 @@ const MarkdownRender = (props: { description: string }) => {
             />
           ),
         a: ({ node, ...props }) => (
-          <Link sx={{ wordBreak: "break-all" }} href={props.href} {...props} />
+          <Link
+            sx={{ wordBreak: "break-all" }}
+            href={props.href ?? ""}
+            {...props}
+          />
         ),
-        blockquote: ({ node, ...props }) => <Box component="blockquote" sx={{ borderLeft: '3px solid', pl: '12px', mb: '24px' }} {...props} />,
+        blockquote: ({ node, ...props }) => (
+          <Box
+            component="blockquote"
+            sx={{ borderLeft: "3px solid", pl: "12px", mb: "24px" }}
+            {...props}
+          />
+        ),
         code({ node, inline, className, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           const hasMeta = node?.data?.meta;
@@ -148,13 +161,13 @@ const MarkdownRender = (props: { description: string }) => {
               // @ts-ignore
               const metadata = node.data.meta?.replace(/\s/g, "");
               const strlineNumbers = RE?.test(metadata)
-                ? RE?.exec(metadata)[1]
+                ? RE?.exec(metadata)?.[1]
                 : "0";
-              const highlightLines = rangeParser(strlineNumbers);
+              const highlightLines = rangeParser(strlineNumbers ?? "");
               const highlight = highlightLines;
               const data: string = highlight.includes(applyHighlights)
                 ? "highlight"
-                : null;
+                : "";
               return { data };
             } else {
               return {};

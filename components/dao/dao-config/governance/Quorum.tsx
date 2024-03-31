@@ -23,7 +23,7 @@ import * as React from "react";
 
 const Quorum: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
-  const data = context.api.data.governance;
+  const data = context.api?.data.governance;
   return (
     <>
       <LearnMore
@@ -50,11 +50,11 @@ const Quorum: React.FC = () => {
           }}
         >
           <Slider
-            value={data.quorum}
+            value={data?.quorum}
             min={0}
             max={100}
             onChange={(event, newValue) =>
-              context.api.setData({
+              context.api?.setData({
                 ...context.api.data,
                 governance: {
                   ...data,
@@ -75,9 +75,9 @@ const Quorum: React.FC = () => {
           <TextField
             label="Value"
             type="number"
-            value={data.quorum}
+            value={data?.quorum}
             onChange={(e) =>
-              context.api.setData({
+              context.api?.setData({
                 ...context.api.data,
                 governance: {
                   ...data,
@@ -108,9 +108,9 @@ const Quorum: React.FC = () => {
           notched
           id={`challenge-time-input`}
           type="number"
-          value={data.voteDuration === 0 ? "" : data.voteDuration}
+          value={data?.voteDuration === 0 ? "" : data?.voteDuration}
           onChange={(e) =>
-            context.api.setData({
+            context.api?.setData({
               ...context.api.data,
               governance: {
                 ...data,
@@ -139,10 +139,10 @@ const Quorum: React.FC = () => {
                   labelId="currency-select-label"
                   id="currency-select"
                   variant="outlined"
-                  value={data.voteDurationUnits}
+                  value={data?.voteDurationUnits}
                   sx={{ height: "100%", color: "text.primary" }}
                   onChange={(e) =>
-                    context.api.setData({
+                    context.api?.setData({
                       ...context.api.data,
                       governance: {
                         ...data,
