@@ -13,8 +13,8 @@ import OptionSystemSelector, { OptionType } from "./OptionSystemSelector";
 
 const Options: React.FC = () => {
   const context = React.useContext<IProposalContext>(ProposalContext);
-  const actions = context.api.value.actions;
-  const optionType = context.api.value.optionType;
+  const actions = context.api?.value.actions ?? [];
+  const optionType = context.api?.value.optionType;
 
   return (
     <>
@@ -30,9 +30,9 @@ const Options: React.FC = () => {
         subtitle="Yes or No proposals allow you to create a chain of actions to be executed if the proposal passes. To add an action, simply click below, decide the type of action you want to create, and fill up the relevant information."
       />
       <OptionSystemSelector
-        selected={optionType}
+        selected={optionType ?? ""}
         set={(val: OptionType) =>
-          context.api.setValue({
+          context.api?.setValue({
             ...context.api.value,
             optionType: val,
           })
@@ -45,7 +45,7 @@ const Options: React.FC = () => {
             icon={actions[0].icon}
             description={actions[0].description}
             close={() => {
-              context.api.setValue({
+              context.api?.setValue({
                 ...context.api.value,
                 actions: [
                   {
@@ -59,7 +59,7 @@ const Options: React.FC = () => {
             c={0}
             data={undefined}
           />
-          <DraggableContext name={actions[0].name} />
+          <DraggableContext name={actions[0].name ?? ""} />
         </>
       )}
     </>

@@ -14,12 +14,12 @@ import { IUserStakeData } from "@components/dao/staking/YourStaking";
 export class AppApi extends AbstractApi {
   theme: Theme;
   setTheme: Function;
-  daoData: any;
+  daoData: any; // todo: fix this
   setDaoData: Function;
   daoUserData: IDaoUserData;
-  setDaoUserData: (val: IDaoUserData) => void;
+  setDaoUserData: Function;
   userStakeData: IUserStakeData;
-  setUserStakeData: (val: IUserStakeData) => void;
+  setUserStakeData: Function;
   loading: number;
   setLoading: Function;
 
@@ -112,7 +112,7 @@ export class AppApi extends AbstractApi {
     );
   }
 
-  async getDaoUser(): Promise<IDaoUserRes> {
+  async getDaoUser(): Promise<IDaoUserRes | null> {
     const userId = getUserId();
     if (userId && this.daoData && this.daoData.id !== undefined) {
       return this.get<IDaoUserRes>(
@@ -127,8 +127,9 @@ export class AppApi extends AbstractApi {
     tokenIds: string[]
   ): Promise<IDaoMembership> {
     const tokenCheck = await this.daoTokenCheck(addresses, tokenIds);
+    const sortIndex = [...Object.values(tokenCheck.data)]
 
-    const sort = [...new Set([].concat(...Object.values(tokenCheck.data)))].map(
+    const sort = [...new Set(sortIndex)].map(
       (item) => {
         return {
           token: Object.keys(item)[0],

@@ -11,7 +11,7 @@ const BurnForm: React.FC = () => {
     amount: number;
     terminationDate: Date;
   }>({
-    amount: undefined,
+    amount: 0,
     terminationDate: terminationDate,
   });
   return (

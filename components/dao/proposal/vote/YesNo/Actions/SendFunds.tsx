@@ -42,9 +42,9 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
   });
 
   React.useEffect(() => {
-    const temp = [...context.api.value.actions];
-    temp[props.c].data = value;
-    context.api.setValue({
+    const temp = [...(context.api?.value.actions ?? [])];
+    temp[props.c ?? 0].data = value;
+    context.api?.setValue({
       ...context.api.value,
       actions: temp,
     });
@@ -93,7 +93,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
           })
         }
       />
-      {context.api.errors.actionConfig && (
+      {context.api?.errors.actionConfig && (
         <FormHelperText error>
           Validation failed for receiving wallet
         </FormHelperText>
@@ -122,8 +122,8 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
           title="Voting Duration"
           subtitle="Set how long the voting window should be open"
         />
-        <FormHelperText error={context.api.errors.votingDuration}>
-          {context.api.errors.votingDuration
+        <FormHelperText error={context.api?.errors.votingDuration}>
+          {context.api?.errors.votingDuration
             ? "Voting duration cannot be less than minimum in Dao Config"
             : `Voting Ends at ${new Date(
                 new Date().getTime() +
@@ -155,7 +155,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
           title="Activation Time"
           subtitle="Set time when the action will be executed"
         />
-        {context.api.errors.activationTime && (
+        {context.api?.errors.activationTime && (
           <FormHelperText error>
             Activation time cannot be before voting ends
           </FormHelperText>

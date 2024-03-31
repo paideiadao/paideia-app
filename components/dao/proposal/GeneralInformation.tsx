@@ -21,14 +21,14 @@ import * as React from "react";
 const GeneralInformation: React.FC = () => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const handleChange = (event: SelectChangeEvent) => {
-    context.api.setValue({
+    context.api?.setValue({
       ...context.api.value,
       category: event.target.value,
     });
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    context.api.setValue({
+    context.api?.setValue({
       ...context.api.value,
       name: event.target.value,
     });
@@ -46,9 +46,9 @@ const GeneralInformation: React.FC = () => {
         }}
       >
         <TextField
-          error={context.api.errors.name}
-          helperText={context.api.errors.name && "Name cannot be blank"}
-          value={context.api.value.name}
+          error={context.api?.errors.name}
+          helperText={context.api?.errors.name && "Name cannot be blank"}
+          value={context.api?.value.name}
           label="Proposal name"
           onChange={handleNameChange}
           sx={{
@@ -64,10 +64,10 @@ const GeneralInformation: React.FC = () => {
         >
           <InputLabel id="category-select-label">Category</InputLabel>
           <Select
-            error={context.api.errors.category}
+            error={context.api?.errors.category}
             labelId="category-select-label"
             id="category-select"
-            value={context.api.value.category}
+            value={context.api?.value.category}
             label="Category"
             onChange={handleChange}
           >
@@ -77,7 +77,7 @@ const GeneralInformation: React.FC = () => {
             <MenuItem value="Governance">Governance</MenuItem>
             <MenuItem value="Technical">Technical</MenuItem>
           </Select>
-          {context.api.errors.category && (
+          {context.api?.errors.category && (
             <FormHelperText error>Invalid Category</FormHelperText>
           )}
         </FormControl>

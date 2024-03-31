@@ -85,8 +85,8 @@ const LastVotes: React.FC = () => {
 
 const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   const context = useContext<IGlobalContext>(GlobalContext);
-  const governance = context.api.daoData?.governance;
-  const daoId = context.api.daoData?.id;
+  const governance = context.api?.daoData?.governance;
+  const daoId = context.api?.daoData?.id;
   const router = useRouter();
   const { dao, proposal_id } = router.query;
   const [stakeKeys, setStakeKeys] = useState<string[]>([]);
@@ -102,25 +102,25 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   );
 
   useEffect(() => {
-    if (context.api.userStakeData) {
+    if (context.api?.userStakeData) {
       const stake = context.api.userStakeData;
       const keys = stake.stake_keys.map(
         (stake: { key_id: string }) => stake.key_id
       );
       setStakeKeys(keys);
     }
-  }, [context.api.userStakeData]);
+  }, [context.api?.userStakeData]);
 
   // const quorumInfo = `For this proposal to be approved a quorum of
   // ${governance?.quorum / 10}% and ${governance?.support_needed / 10}%
   // support is needed.`;
   const quorumNumberNeeded =
     (stakingData?.total_staked * governance?.quorum) / 1000;
-  const current = props.yes + props.no;
+  const current = (props.yes ?? 0) + (props.no ?? 0);
   const quorumPct = governance?.quorum / 10;
   const percentValue = (current / quorumNumberNeeded) * 100;
   const supportMet =
-    (props.yes / current) * 100 >= governance?.support_needed / 10;
+    ((props.yes ?? 0) / current) * 100 >= governance?.support_needed / 10;
   const userVote = votingData?.filter((vote: { stake_key: string }) =>
     stakeKeys.includes(vote.stake_key)
   )[0];

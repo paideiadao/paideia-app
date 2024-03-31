@@ -23,7 +23,7 @@ const Selector: React.FC = () => {
             ],
           }
         : {};
-    context.api.setValue({
+    context.api?.setValue({
       ...context.api.value,
       voting_system: value,
       ...temp,

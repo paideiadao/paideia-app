@@ -104,7 +104,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
           }}
         >
           <Header large title={props.title} />
-          {globalContext.api.daoUserData != undefined ? (
+          {globalContext.api?.daoUserData != undefined ? (
             <Link href={dao === undefined ? "" : `/${dao}/create`}>
               <Button
                 variant="contained"

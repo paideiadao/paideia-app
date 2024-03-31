@@ -34,7 +34,7 @@ export interface IDao {
 
 const DaoBio: FC<ISideNavComponent> = (props) => {
   const globalContext = useContext<IGlobalContext>(GlobalContext);
-  const daoData = globalContext.api.daoData;
+  const daoData = globalContext.api?.daoData;
   return daoData ? (
     <Box
       sx={{
@@ -72,7 +72,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
   const [id, setId] = useState<number>(1);
-  const [selectedDao, setSelectedDao] = useState<IDao>(undefined);
+  const [selectedDao, setSelectedDao] = useState<IDao | null>(null);
   const [localLoading, setLocalLoading] = useState(false);
   const { daoSlugs } = useDaoSlugs();
   const { utxos } = useWallet();
@@ -209,7 +209,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
               <CapsInfo
                 title={
                   search === ""
-                    ? daoSlugs.filter((i: IDao) => utxos > 0)
+                    ? daoSlugs.filter((i: IDao) => utxos.currentDaoTokens > 0)
                       ? "Daos Connected to your wallet"
                       : "Daos Connected to your wallet"
                     : "Search Results"
@@ -272,8 +272,8 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                         data={d}
                         set={(val: IDao) => setDaoWrapper(val)}
                         key={`dao-select-key-${c}`}
-                        selected={id === d.id && utxos > 0}
-                        inWallet={utxos > 0}
+                        selected={id === d.id && utxos.currentDaoTokens > 0}
+                        inWallet={utxos.currentDaoTokens > 0}
                         setSearch={setSearch}
                         // redirect={props.redirect}
                       />

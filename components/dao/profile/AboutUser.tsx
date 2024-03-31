@@ -23,7 +23,7 @@ const UserSocial: React.FC<{ icon: JSX.Element; label: string }> = (props) => {
       {props.icon}
       <Box sx={{ ml: ".5rem" }}></Box>
       <Link
-        href={props.label.startsWith("https://") ? props.label : null}
+        href={props.label.startsWith("https://") ? props.label : undefined}
         underline="hover"
         target="_blank"
         rel="noreferrer"
@@ -65,8 +65,8 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
 
   React.useEffect(() => {
     const load = async () => {
-      const res = await appContext.api.daoTokenCheckSingleToken(
-        [props.wallet],
+      const res = await appContext.api?.daoTokenCheckSingleToken(
+        [props.wallet ?? ""],
         props.token_id
       );
       if (res) {
@@ -89,9 +89,9 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
   // }, [appContext.api.userStakeData]);
 
   const ticker =
-    appContext.api.daoData?.tokenomics.token_ticker ??
-    appContext.api.daoData?.dao_name + " DAO tokens";
-  const tokenImage = appContext.api.daoData?.tokenomics.token_image_url;
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.dao_name + " DAO tokens";
+  const tokenImage = appContext.api?.daoData?.tokenomics.token_image_url;
 
   return (
     <Box
@@ -181,7 +181,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
               <UserSocial
                 label={i.address}
                 key={i.socialNetwork + "-" + c}
-                icon={getIcon(i.socialNetwork.toLowerCase())}
+                icon={getIcon(i.socialNetwork.toLowerCase()) ?? <></>}
               />
             );
           })}

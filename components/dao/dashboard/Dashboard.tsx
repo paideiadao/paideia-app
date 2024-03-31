@@ -18,7 +18,7 @@ import { deviceWrapper } from "@components/utilities/Style";
 const Dashboard: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const themeContext = React.useContext<IThemeContext>(ThemeContext);
-  const daoData = globalContext.api.daoData;
+  const daoData = globalContext.api?.daoData;
 
   return daoData === undefined ? (
     <Box

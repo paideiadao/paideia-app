@@ -158,7 +158,7 @@ export const ProposalStatus: React.FC<{ status: string }> = (props) => {
 interface ILikesDislikes {
   likes: number;
   dislikes: number;
-  userSide: number;
+  userSide?: number;
   putUrl?: string;
 }
 

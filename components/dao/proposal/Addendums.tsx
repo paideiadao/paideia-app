@@ -22,7 +22,7 @@ const Addendums: React.FC = () => {
   const router = useRouter();
   const { dao, proposal_id } = router.query;
   const proposalContext = React.useContext<IProposalContext>(ProposalContext);
-  const addendums = proposalContext.api.value.addendums;
+  const addendums = proposalContext.api?.value.addendums ?? [];
   return (
     <>
       <Box

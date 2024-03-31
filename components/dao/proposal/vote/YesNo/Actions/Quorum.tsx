@@ -22,13 +22,14 @@ const QuorumAction: React.FC<IProposalAction> = (props) => {
   });
 
   React.useEffect(() => {
-    const temp = [...context.api.value.actions];
-    temp[props.c].data = value;
-    context.api.setValue({
+    const temp = [...(context.api?.value.actions ?? [])];
+    temp[props.c ?? 0].data = value;
+    context.api?.setValue({
       ...context.api.value,
       actions: temp,
     });
   }, [value]);
+
   return (
     <Layout>
       <Header

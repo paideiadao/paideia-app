@@ -12,25 +12,25 @@ interface IFollowPut {
 }
 
 export default class FollowApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   putUrl: string;
 
-  constructor(api: AppApi, putUrl: string) {
+  constructor(api: AppApi | undefined, putUrl: string) {
     super();
     this.api = api;
     this.putUrl = putUrl;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 
   followData(
     type: FollowDirection,
-    user_details_id: number = undefined
+    user_details_id: number | undefined
   ): IFollowPut {
     return {
-      current_user_details_id: this.api.daoUserData.id,
+      current_user_details_id: this.api?.daoUserData.id,
       user_details_id:
         user_details_id === undefined
-          ? this.api.daoUserData.id
+          ? this.api?.daoUserData.id
           : user_details_id,
       type: type,
     };
@@ -38,7 +38,7 @@ export default class FollowApi extends AbstractApi {
 
   follow(
     type: FollowDirection,
-    user_details_id: number = undefined
+    user_details_id: number | undefined
   ): Promise<any> | void {
     let data = this.followData(type, user_details_id);
     return this.put(this.putUrl, data, "Followed proposal");

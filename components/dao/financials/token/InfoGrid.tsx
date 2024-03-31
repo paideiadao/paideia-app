@@ -150,7 +150,7 @@ const safeFormattedString = (
     return "-";
   }
   if (x === undefined) {
-    return null;
+    return "";
   }
   const pre = currency === "$" ? currency : "";
   const post = currency === "ERG" ? " ERG" : "";

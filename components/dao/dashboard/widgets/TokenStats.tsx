@@ -11,7 +11,7 @@ const TokenStats: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const tokenomics = globalContext.api.daoData?.tokenomics;
+  const tokenomics = globalContext.api?.daoData?.tokenomics;
 
   const { data: tokenStats, error: error } = useSWR(
     tokenomics &&

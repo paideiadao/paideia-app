@@ -13,7 +13,7 @@ const Transactions: React.FC = () => {
   const { dao } = router.query;
   const [transactions, setTransactions] = useState<IActivity[]>([]);
   const context = useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const daoId = context.api?.daoData?.id;
 
   const { data: transactionData, error: error } = useSWR(
     daoId && `/dao/treasury/${daoId}/transactions`,

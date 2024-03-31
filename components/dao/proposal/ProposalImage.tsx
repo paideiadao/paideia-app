@@ -7,7 +7,7 @@ import DiscussionBanner from "../discussion/DiscussionBanner";
 
 const ProposalImage: React.FC = () => {
   const context = React.useContext<IProposalContext>(ProposalContext);
-  const data = context.api.value.image;
+  const data = context.api?.value.image;
   const [url, setUrl] = React.useState<any>(data === undefined ? "" : data.url);
 
   function handleImage(e: any) {
@@ -15,7 +15,7 @@ const ProposalImage: React.FC = () => {
     if (fileInput && fileInput[0]) {
       if (fileInput.length != 1) return;
       if (fileInput[0].size > 1000000) {
-        context.api.setValue({
+        context.api?.setValue({
           ...context.api.value,
           image: {
             ...data,
@@ -32,7 +32,7 @@ const ProposalImage: React.FC = () => {
       };
 
       reader.readAsDataURL(fileInput[0]);
-      context.api.setValue({
+      context.api?.setValue({
         ...context.api.value,
         image: {
           ...data,
@@ -43,7 +43,7 @@ const ProposalImage: React.FC = () => {
   }
 
   React.useEffect(() => {
-    context.api.setValue({
+    context.api?.setValue({
       ...context.api.value,
       image: {
         ...data,

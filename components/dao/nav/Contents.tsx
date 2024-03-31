@@ -121,7 +121,7 @@ const BasicLink: React.FC<{
               {props.icon}
             </Box>
             <Box sx={{ width: "73.5%" }}>{props.title}</Box>
-            {props.notifications > 0 && (
+            {(props.notifications ?? 0) > 0 && (
               <Box sx={{ width: "10%" }}>
                 <Badge
                   color="primary"
@@ -306,10 +306,10 @@ export interface ISideNavComponent {
 const Contents: React.FC<ISideNavComponent> = (props) => {
   const router = useRouter();
   const { dao } = router.query;
-  const [daoName, setDaoName] = useState(undefined);
+  const [daoName, setDaoName] = useState<string | null>(null);
 
   useEffect(() => {
-    if (router.isReady && dao != undefined) {
+    if (router.isReady && dao !== undefined) {
       setDaoName(dao.toString());
     }
   }, [router.isReady]);
@@ -347,6 +347,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     } else if (path.split("/").length === 2) {
       return "Dashboard";
     }
+    return "Default";
   };
 
   const getSubSelected = (): string => {
@@ -387,19 +388,19 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
   );
   const setWrapper = (v: string) => {
     if (v !== "Distributions") {
-      setSubSelected(undefined);
+      setSubSelected("");
       setSelected(v);
       if (
         ["Proposals", "Financials", "Staking", "Settings"].indexOf(v) === -1
       ) {
-        props.setShowMobile(false);
+        props.setShowMobile && props.setShowMobile(false);
       }
     }
   };
   const setSubWrapper = (v: string) => {
     setSubSelected(v);
 
-    props.setShowMobile(false);
+    props.setShowMobile && props.setShowMobile(false);
   };
 
   React.useEffect(() => {
@@ -428,7 +429,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             ml=".5rem"
             link={daoName ? `/${daoName}/proposal` : ""}
           />
-          {globalContext.api.daoUserData && (
+          {globalContext.api?.daoUserData && (
             <>
               <BasicLink
                 icon={<FavoriteIcon sx={{ opacity: ".8" }} />}
@@ -541,7 +542,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       link: daoName ? `/${daoName}/activity` : "",
       notifications: 0,
     },
-    globalContext.api.daoUserData === undefined
+    globalContext.api?.daoUserData === undefined
       ? undefined
       : {
           icon: <SettingsIcon sx={{ opacity: ".8" }} />,

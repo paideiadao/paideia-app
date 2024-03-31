@@ -70,7 +70,7 @@ export interface IProposalAction {
     | undefined;
   icon?: React.ReactNode;
   description?: string;
-  data: ActionType;
+  data?: ActionType;
   close?: () => void;
   c?: number;
   options?: IProposalOption[];
@@ -97,7 +97,7 @@ export type Token = [string, number]; // [tokenId, tokenAmount (not accounting f
 export interface IProposalOption {
   name: string;
   description: string;
-  data: ActionType;
+  data?: ActionType;
   rank: number;
   default?: boolean;
 }
@@ -165,7 +165,7 @@ const CreateProposal: React.FC = () => {
   const [value, setValue] = useState<IProposal>({
     name: "",
     image: {
-      url: getRandomImage(),
+      url: getRandomImage() ?? "",
       file: undefined,
     },
     status: "Draft",

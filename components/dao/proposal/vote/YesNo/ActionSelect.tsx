@@ -30,7 +30,7 @@ const ActionSelection: React.FC<IActionType> = (props) => {
         {props.icon}
       </Box>
       <Box sx={{ width: "80%", alignItems: "center" }}>
-        <Header title={props.title} small mb="0" />
+        <Header title={props.title ?? ""} small mb="0" />
         <Subtitle subtitle={props.subtitle} small />
       </Box>
       <Button sx={{ ml: "auto" }} onClick={props.select}>

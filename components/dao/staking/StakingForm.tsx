@@ -45,19 +45,19 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       const context = await getErgoWalletContext();
       const signed = await context.sign_tx(tx);
       const txId = await context.submit_tx(signed);
-      appContext.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      appContext.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
     } catch (e: any) {
-      appContext.api.error(e);
+      appContext.api?.error(e);
     }
     setLoading(false);
   };
 
   const get_tx = async (stakeKey: string | undefined) => {
-    const daoId = appContext.api.daoData.id;
-    const userId = appContext.api.daoUserData.user_id;
+    const daoId = appContext.api?.daoData.id;
+    const userId = appContext.api?.daoUserData.user_id;
     const adjustedValue = Math.min(value, available - FEE_ADJUSTMENT);
     if (stakeKey) {
-      const res = await appContext.api.post<any>("/staking/add", {
+      const res = await appContext.api?.post<any>("/staking/add", {
         dao_id: daoId,
         user_id: userId,
         amount: adjustedValue,
@@ -65,7 +65,7 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       });
       return res.data;
     } else {
-      const res = await appContext.api.post<any>("/staking/", {
+      const res = await appContext.api?.post<any>("/staking/", {
         dao_id: daoId,
         user_id: userId,
         amount: adjustedValue,
@@ -82,9 +82,9 @@ const StakingForm: React.FC<IStakeState> = (props) => {
       <WalletSelector
         id="staking-wallet-input"
         data={{
-          alias: appContext.api.daoUserData?.name,
+          alias: appContext.api?.daoUserData?.name ?? "",
           address: wallet,
-          img: appContext.api.daoUserData?.profile_img_url,
+          img: appContext.api?.daoUserData?.profile_img_url ?? "",
         }}
         number={1}
         set={() => {}}

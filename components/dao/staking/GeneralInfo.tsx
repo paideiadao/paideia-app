@@ -2,12 +2,7 @@ import {
   Subheader,
   Subtitle,
 } from "@components/creation/utilities/HeaderComponents";
-import {
-  Box,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Box, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { ThemeContext } from "@lib/ThemeContext";
 import { DarkTheme } from "@theme/theme";
 import { deviceWrapper } from "@components/utilities/Style";
@@ -51,7 +46,7 @@ export const InfoCard: React.FC<IInfoCard> = (props) => {
           props.full || props.last
             ? "0rem"
             : deviceWrapper(
-                props.c % 2 === 0 ? "1rem" : "0",
+                (props.c ?? 0) % 2 === 0 ? "1rem" : "0",
                 props.c === 2 ? "0" : "1rem"
               ),
       }}
@@ -133,7 +128,7 @@ const GeneralInfo: React.FC = () => {
     apy: "-",
   });
   const context = useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const daoId = context.api?.daoData?.id;
 
   const { data: stakingData, error: error } = useSWR(
     daoId && `/staking/dao_stake_info/${daoId}`,
@@ -146,7 +141,7 @@ const GeneralInfo: React.FC = () => {
         ...data,
         numberOfStakers: stakingData.stakers,
         tokensStaked: stakingData.total_staked,
-        apy: Number(stakingData.apy).toFixed(2)
+        apy: Number(stakingData.apy).toFixed(2),
       });
     };
 

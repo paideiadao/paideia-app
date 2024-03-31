@@ -3,11 +3,11 @@ import { AppApi } from "@lib/AppApi";
 import { MetaDataHandler } from "@lib/MetaDataHandler";
 
 export interface IGlobalContext {
-  api: AppApi;
+  api?: AppApi;
   metadata: MetaDataHandler;
 }
 
-export const GlobalContext = React.createContext({
+export const GlobalContext = React.createContext<IGlobalContext>({
   api: undefined,
-  metadata: undefined,
+  metadata: new MetaDataHandler({}, () => {}), // dummy values
 });

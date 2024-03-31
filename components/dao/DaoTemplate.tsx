@@ -40,7 +40,7 @@ const DaoTemplate: React.FC = (props) => {
       const daoSummary = daoList.filter(
         (dao: { dao_url: string }) => dao.dao_url === daoSlug
       )[0];
-      globalContext.api.setDaoData({
+      globalContext.api?.setDaoData({
         ...daoData,
         member_count: daoSummary?.member_count,
         proposal_count: daoSummary?.proposal_count,
@@ -51,9 +51,9 @@ const DaoTemplate: React.FC = (props) => {
   useEffect(() => {
     const getData = async () => {
       const daoId = daoData?.id;
-      const userId = globalContext.api.daoUserData?.user_id;
+      const userId = globalContext.api?.daoUserData?.user_id;
       try {
-        const res = await globalContext.api.post<any>(
+        const res = await globalContext.api?.post<any>(
           "/staking/user_stake_info",
           {
             dao_id: daoId,
@@ -61,32 +61,30 @@ const DaoTemplate: React.FC = (props) => {
           }
         );
         const data: IUserStakeData = res.data;
-        globalContext.api.setUserStakeData(data);
+        globalContext.api?.setUserStakeData(data);
       } catch (e) {
         console.log(e);
       }
     };
-    if (daoData?.id && globalContext.api.daoUserData?.user_id) {
+    if (daoData?.id && globalContext.api?.daoUserData?.user_id) {
       getData();
     }
-  }, [daoData?.id, globalContext.api.daoUserData?.user_id]);
+  }, [daoData?.id, globalContext.api?.daoUserData?.user_id]);
 
   useEffect(() => {
     const load = async (tokensIds: string[]) => {
       try {
         if (dAppWallet.connected) {
           if (dAppWallet.addresses.length > 0) {
-            const addresses = dAppWallet.addresses.map(
-              (address: { id: number; name: string }) => address.name
-            );
-            const membership = await globalContext.api.getOrCreateDaoUser(
+            const addresses = dAppWallet.addresses;
+            const membership = await globalContext.api?.getOrCreateDaoUser(
               addresses,
               tokensIds
             );
             setUtxos(membership);
           }
         } else if (isAddressValid(wallet)) {
-          const membership = await globalContext.api.getOrCreateDaoUser(
+          const membership = await globalContext.api?.getOrCreateDaoUser(
             [wallet],
             tokensIds
           );
@@ -100,7 +98,7 @@ const DaoTemplate: React.FC = (props) => {
         });
       }
     };
-    if (daoTokensObject.length > 0 && globalContext.api.daoData) {
+    if (daoTokensObject.length > 0 && globalContext.api?.daoData) {
       const tokenIds = Object.values(daoTokensObject).map(
         (item) => item.tokenId
       );
@@ -111,7 +109,7 @@ const DaoTemplate: React.FC = (props) => {
         membershipList: [],
       });
     }
-  }, [wallet, dAppWallet, globalContext.api.daoData]);
+  }, [wallet, dAppWallet, globalContext.api?.daoData]);
 
   return (
     <>

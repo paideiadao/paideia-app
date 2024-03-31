@@ -98,7 +98,7 @@ const DraggableCard: React.FC<IDraggableCard> = (props) => {
           onChange={(e) => {
             let tempItems = [...props.items];
             tempItems[props.index].name = e.target.value;
-            props.set(tempItems);
+            props.set && props.set(tempItems);
           }}
         />
         <TextField
@@ -110,7 +110,7 @@ const DraggableCard: React.FC<IDraggableCard> = (props) => {
           onChange={(e) => {
             let tempItems = [...props.items];
             tempItems[props.index].description = e.target.value;
-            props.set(tempItems);
+            props.set && props.set(tempItems);
           }}
         />
       </Box>

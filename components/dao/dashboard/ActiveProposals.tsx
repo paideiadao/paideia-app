@@ -1,23 +1,18 @@
-import { Box, Button, IconButton, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState, useContext } from "react";
 import { Subheader } from "../../creation/utilities/HeaderComponents";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ProposalCard from "../proposals/ProposalCard";
 import useDidMountEffect from "@components/utilities/hooks";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { deviceStruct, deviceWrapper } from "@components/utilities/Style";
 import CardSlider from "@components/CardSlider";
-import { getBaseUrl, fetcher } from "@lib/utilities";
-import useSWR from "swr";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { getUserId } from "@lib/utilities";
-import { useGridApiContext } from "@mui/x-data-grid";
+import { IProposal } from "@pages/[dao]/proposal/create";
 
-let temp = new Date();
+const temp = new Date();
 temp.setDate(temp.getDate() - 30);
 
 const ActiveProposal: React.FC = () => {
@@ -25,7 +20,7 @@ const ActiveProposal: React.FC = () => {
   const [slide, setSlide] = React.useState<number>(1);
 
   useDidMountEffect(() => {
-    let element = document.getElementById(
+    const element = document.getElementById(
       `proposal-active-${slide === 0 ? slide : slide - 1}`
     );
     if (element) {
@@ -40,11 +35,11 @@ const ActiveProposal: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [proposalData, setProposalData] = useState(undefined);
+  const [proposalData, setProposalData] = useState<null | IProposal[]>(null);
 
   useEffect(() => {
     let isMounted = true;
-    globalContext.api.setLoading((current: number) => current + 1);
+    globalContext.api?.setLoading((current: number) => current + 1);
     if (dao && daoSlugsObject[dao.toString()]) {
       const url = `${process.env.API_URL}/proposals/by_dao_id/${
         daoSlugsObject[dao.toString()]
@@ -58,7 +53,7 @@ const ActiveProposal: React.FC = () => {
           console.log(err);
         });
     }
-    globalContext.api.setLoading((current: number) => current - 1);
+    globalContext.api?.setLoading((current: number) => current - 1);
     return () => {
       isMounted = false;
     };
@@ -66,7 +61,7 @@ const ActiveProposal: React.FC = () => {
 
   return (
     <>
-      {proposalData === undefined ? (
+      {proposalData === null ? (
         <Box>
           <CircularProgress color="inherit" />
         </Box>

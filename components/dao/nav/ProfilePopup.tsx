@@ -186,7 +186,7 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
             connected: false,
             addresses: [],
           });
-          globalContext.api.setDaoUserData(undefined);
+          globalContext.api?.setDaoUserData(undefined);
           props.close();
         }}
       >
