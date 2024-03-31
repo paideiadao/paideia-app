@@ -4,7 +4,7 @@ import { axiosCachedGetFetcher } from "@utils/axios";
 
 export const useDaoData = (id: number) => {
   const { data, error } = useSWR(
-    id && `${process.env.API_URL}/${id.toString()}`,
+    id ? `${process.env.API_URL}/${id.toString()}` : false,
     axiosCachedGetFetcher
   );
 

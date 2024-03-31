@@ -24,7 +24,7 @@ export default class FollowApi extends AbstractApi {
 
   followData(
     type: FollowDirection,
-    user_details_id: number | undefined
+    user_details_id: number | undefined = undefined
   ): IFollowPut {
     return {
       current_user_details_id: this.api?.daoUserData.id,
@@ -38,7 +38,7 @@ export default class FollowApi extends AbstractApi {
 
   follow(
     type: FollowDirection,
-    user_details_id: number | undefined
+    user_details_id: number | undefined = undefined
   ): Promise<any> | void {
     let data = this.followData(type, user_details_id);
     return this.put(this.putUrl, data, "Followed proposal");
