@@ -87,7 +87,7 @@ const CustomAlert: FC<{ alert: IAlerts; i: number; close: Function }> = ({
         </IconButton>
       }
     >
-      {getParsedContent(alert.content, dao?.toString())}
+      {getParsedContent(alert.content, dao?.toString() ?? "")}
     </Alert>
   );
 };

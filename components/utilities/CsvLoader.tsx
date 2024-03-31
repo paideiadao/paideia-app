@@ -69,7 +69,7 @@ const CsvLoader: React.FC<{
             var reader = new FileReader();
             // do more work here to get the aliases & images from the database if there are any...
             reader.onload = function (e) {
-              const text: any = e.target.result;
+              const text: any = e.target?.result;
               let data = csvToArray(text);
               props.handleFile(data);
             };
@@ -82,7 +82,7 @@ const CsvLoader: React.FC<{
         variant="text"
         onClick={() => {
           const fileInput = document.getElementById(props.id);
-          fileInput.click();
+          fileInput?.click();
         }}
       >
         Add from file <FileUploadIcon />

@@ -37,7 +37,7 @@ const AddWallet: React.FC = () => {
   const { addWalletOpen, setAddWalletOpen } = useAddWallet();
   const { wallet, setWallet, dAppWallet, setDAppWallet } = useWallet();
   const [init, setInit] = React.useState(false);
-  const [qrCode, setQrCode] = React.useState<string>(undefined);
+  const [qrCode, setQrCode] = React.useState<string | null>(null);
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   /**
@@ -65,7 +65,7 @@ const AddWallet: React.FC = () => {
     // load primary address
     if (localStorage.getItem(WALLET_ADDRESS)) {
       setWallet(localStorage.getItem(WALLET_ADDRESS));
-      setWalletInput(localStorage.getItem(WALLET_ADDRESS));
+      setWalletInput(localStorage.getItem(WALLET_ADDRESS) ?? "");
     }
     // load dApp state
     if (
@@ -75,7 +75,9 @@ const AddWallet: React.FC = () => {
       setDAppWallet({
         connected:
           localStorage.getItem(DAPP_CONNECTED) === "true" ? true : false,
-        addresses: JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST)),
+        addresses: JSON.parse(
+          localStorage.getItem(WALLET_ADDRESS_LIST) ?? "[]"
+        ),
       });
     }
 
@@ -87,7 +89,10 @@ const AddWallet: React.FC = () => {
    */
   React.useEffect(() => {
     if (init) {
-      localStorage.setItem(DAPP_CONNECTED, dAppWallet.connected);
+      localStorage.setItem(
+        DAPP_CONNECTED,
+        dAppWallet.connected ? "true" : "false"
+      );
       localStorage.setItem(
         WALLET_ADDRESS_LIST,
         JSON.stringify(dAppWallet.addresses)
@@ -109,7 +114,7 @@ const AddWallet: React.FC = () => {
       connected: false,
       addresses: [],
     });
-    setQrCode(undefined);
+    setQrCode(null);
   };
 
   const clearWallet = () => {
@@ -121,7 +126,7 @@ const AddWallet: React.FC = () => {
     localStorage.setItem("user_id", "");
     localStorage.setItem("alias", "");
     setWalletInput("");
-    globalContext.api.setDaoUserData(undefined);
+    globalContext.api?.setDaoUserData(undefined);
     setWallet("");
     // clear dApp state
     setView("listing");
@@ -129,7 +134,7 @@ const AddWallet: React.FC = () => {
       connected: false,
       addresses: [],
     });
-    globalContext.api.setDaoUserData(undefined);
+    globalContext.api?.setDaoUserData(undefined);
   };
 
   /**
@@ -187,7 +192,7 @@ const AddWallet: React.FC = () => {
         return { id: index, name: address };
       });
       await globalContext.api
-        .signingMessage(addresses)
+        ?.signingMessage(addresses)
         .then(async (signingMessage: any) => {
           if (signingMessage !== undefined) {
             const context = await getErgoWalletContext();
@@ -199,7 +204,7 @@ const AddWallet: React.FC = () => {
               "base64"
             );
             globalContext.api
-              .signMessage(signingMessage.data.tokenUrl, response)
+              ?.signMessage(signingMessage.data.tokenUrl, response)
               .then(async (data) => {
                 localStorage.setItem("jwt_token_login", data.data.access_token);
                 localStorage.setItem("user_id", data.data.id);
@@ -212,7 +217,7 @@ const AddWallet: React.FC = () => {
                 // await globalContext.api.getOrCreateDaoUser();
               })
               .catch((e) => {
-                globalContext.api.error("Unable to login with Nautilus");
+                globalContext.api?.error("Unable to login with Nautilus");
                 clearWallet();
               });
           }
@@ -231,12 +236,14 @@ const AddWallet: React.FC = () => {
 
   React.useEffect(() => {
     if (localStorage.getItem(WALLET_ADDRESS_LIST)) {
-      if (JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST)).length > 0) {
+      if (
+        JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST) ?? "[]").length > 0
+      ) {
         setDAppWallet({
           // connected: true,
           connected: true,
           addresses: localStorage.getItem(WALLET_ADDRESS_LIST)
-            ? JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST))
+            ? JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST) ?? "[]")
             : [],
         });
         setWallet(localStorage.getItem(WALLET_ADDRESS));
@@ -286,7 +293,7 @@ const AddWallet: React.FC = () => {
               set={() => setView("listing")}
               wallet={walletInput}
               setWallet={setWalletInput}
-              qrCode={qrCode}
+              qrCode={qrCode ?? ""}
             />
           )}
         </DialogContent>
@@ -318,19 +325,18 @@ const AddWallet: React.FC = () => {
                 Disconnect
               </Button>
             )}
-            {view === "mobile" &&
-              qrCode === undefined &&
-              !isAddressValid(wallet) && (
-                <Button
-                  onClick={async () => {
-                    try {
-                      // add try catch here...
-                      const res = await globalContext.api.mobileLogin(
-                        walletInput
-                      );
-                      const ws = globalContext.api.webSocket(
-                        res.data.verificationId
-                      );
+            {view === "mobile" && qrCode === null && !isAddressValid(wallet) && (
+              <Button
+                onClick={async () => {
+                  try {
+                    // add try catch here...
+                    const res = await globalContext.api?.mobileLogin(
+                      walletInput
+                    );
+                    const ws = globalContext.api?.webSocket(
+                      res?.data.verificationId
+                    );
+                    if (ws) {
                       ws.onmessage = async (event) => {
                         try {
                           const wsRes = JSON.parse(event.data);
@@ -347,26 +353,27 @@ const AddWallet: React.FC = () => {
                           console.log(e);
                         }
                       };
-                      setQrCode(res.data.signingRequestUrl);
-                    } catch (e) {
-                      globalContext.api.error(
-                        "Error logging in with Mobile Wallet"
-                      );
-                      clearWallet();
                     }
-                  }}
-                  disabled={walletInput === ""}
-                  variant="contained"
-                >
-                  Confirm
-                </Button>
-              )}
+                    setQrCode(res?.data.signingRequestUrl);
+                  } catch (e) {
+                    globalContext.api?.error(
+                      "Error logging in with Mobile Wallet"
+                    );
+                    clearWallet();
+                  }
+                }}
+                disabled={walletInput === ""}
+                variant="contained"
+              >
+                Confirm
+              </Button>
+            )}
             {view === "mobile" && qrCode && (
               <Button
                 onClick={() => {
                   clearWallet();
                   setView("listing");
-                  setQrCode(undefined);
+                  setQrCode(null);
                 }}
                 variant="contained"
               >

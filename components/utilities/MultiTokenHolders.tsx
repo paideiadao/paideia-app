@@ -27,7 +27,7 @@ interface IMultiTokenHolders {
 
 const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const daoId = context.api?.daoData?.id;
   const { data: treasury, error: error } = useSWR(
     daoId && `/dao/treasury/${daoId}`,
     fetcher

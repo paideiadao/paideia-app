@@ -1,7 +1,15 @@
 import { createContext, useContext, useState } from "react";
 
+export interface IAddWalletContext {
+  addWalletOpen: boolean;
+  setAddWalletOpen: Function;
+}
+
 // The Context
-const AddWalletContext = createContext(undefined);
+const AddWalletContext = createContext<IAddWalletContext>({
+  addWalletOpen: false,
+  setAddWalletOpen: () => {},
+});
 
 // Template Provider
 const AddWalletProvider = ({ children }: any) => {

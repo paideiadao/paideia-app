@@ -20,7 +20,7 @@ const Nautilus: React.FC<{
 }> = (props) => {
   const { wallet, setWallet, loggedIn, dAppWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const [changeLoading, setChangeLoading] = React.useState<number>(undefined);
+  const [changeLoading, setChangeLoading] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     const wrapper = async () => {
@@ -123,10 +123,11 @@ const Nautilus: React.FC<{
                               setChangeLoading(c);
                               try {
                                 await globalContext.api
-                                  .changeAddress(i.name)
+                                  ?.changeAddress(i.name)
                                   .then(async (signingMessage: any) => {
                                     if (signingMessage !== undefined) {
-                                      const context = await getErgoWalletContext();
+                                      const context =
+                                        await getErgoWalletContext();
                                       const response = await context.auth(
                                         i.name,
                                         signingMessage.data.signingMessage
@@ -136,7 +137,7 @@ const Nautilus: React.FC<{
                                         "hex"
                                       ).toString("base64");
                                       globalContext.api
-                                        .signMessage(
+                                        ?.signMessage(
                                           signingMessage.data.tokenUrl,
                                           {
                                             ...response,
@@ -162,7 +163,7 @@ const Nautilus: React.FC<{
                                           );
                                           props.setLoading(false);
                                           setWallet(i.name);
-                                          setChangeLoading(undefined);
+                                          setChangeLoading(0);
                                         })
                                         .catch((e: any) => {
                                           console.log(e);
@@ -171,7 +172,7 @@ const Nautilus: React.FC<{
                                   });
                               } catch (e) {
                                 console.log(e);
-                                setChangeLoading(undefined);
+                                setChangeLoading(0);
                               }
                             }
                           }

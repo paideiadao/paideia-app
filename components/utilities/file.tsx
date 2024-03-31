@@ -164,7 +164,7 @@ const FileInput: React.FC<{
                   }}
                   onClick={() => {
                     const fileInput = document.getElementById(props.id);
-                    fileInput.click();
+                    fileInput?.click();
                   }}
                 >
                   browse
@@ -199,7 +199,7 @@ const FileInput: React.FC<{
                 sx={{ mt: ".5rem" }}
                 onClick={() => {
                   const fileInput = document.getElementById(props.id);
-                  fileInput.click();
+                  fileInput?.click();
                 }}
               >
                 Replace

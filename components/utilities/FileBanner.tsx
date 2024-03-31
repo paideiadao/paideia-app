@@ -185,7 +185,7 @@ const FileBanner: React.FC<{
                       size="small"
                       onClick={() => {
                         const fileInput = document.getElementById(props.id);
-                        fileInput.click();
+                        fileInput?.click();
                       }}
                     >
                       Replace
@@ -226,7 +226,7 @@ const FileBanner: React.FC<{
                       }}
                       onClick={() => {
                         const fileInput = document.getElementById(props.id);
-                        fileInput.click();
+                        fileInput?.click();
                       }}
                     >
                       browse
@@ -249,7 +249,7 @@ const FileBanner: React.FC<{
                     sx={{ mt: ".5rem" }}
                     onClick={() => {
                       const fileInput = document.getElementById(props.id);
-                      fileInput.click();
+                      fileInput?.click();
                     }}
                   >
                     Replace
