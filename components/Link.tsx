@@ -31,9 +31,9 @@ const NextLinkComposed = React.forwardRef<
       scroll={scroll}
       shallow={shallow}
       prefetch={prefetch}
-    >
-      <a ref={ref} {...other} />
-    </NextLink>
+      ref={ref}
+      {...other}
+    />
   );
 });
 

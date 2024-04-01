@@ -243,10 +243,13 @@ export const LearnMore: React.FC<{
                     </Typography>
                     <Box sx={{ width: "100%", display: "flex" }}>
                       {props.tooltipLink && (
-                        <Link href={props.tooltipLink} passHref>
-                          <a target="_blank" style={{ textDecoration: "none" }}>
-                            <Button size="small">Learn More</Button>
-                          </a>
+                        <Link
+                          href={props.tooltipLink}
+                          passHref
+                          target="_blank"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Button size="small">Learn More</Button>
                         </Link>
                       )}
                       <Button
