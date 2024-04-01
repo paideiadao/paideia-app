@@ -188,9 +188,7 @@ const AddWallet: React.FC = () => {
       // use the first used address if available or the first unused one if not as default
       // when a user hits the signing request, it should be a list of addresses that they have connected.
       // If one of them has an account, then you login using that method... don't default to 0
-      const addressData = addresses.map((address, index) => {
-        return { id: index, name: address };
-      });
+      const addressData = [...addresses];
       await globalContext.api
         ?.signingMessage(addresses)
         .then(async (signingMessage: any) => {
