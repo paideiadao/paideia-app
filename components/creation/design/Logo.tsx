@@ -4,20 +4,39 @@ import { Box } from "@mui/material";
 import { CreationContext } from "../../../lib/creation/Context";
 import FileInput from "../../utilities/file";
 import { Subheader, Subtitle } from "../utilities/HeaderComponents";
+import { IDesign } from "@lib/creation/Interfaces";
 
 const Logo: React.FC<{ context?: IConfigContext }> = (props) => {
   const creationContext =
     props.context === undefined
       ? React.useContext(CreationContext)
       : props.context;
-  const data = creationContext.api.data.design;
-  const setData = (data: any) => {
-    creationContext.api.setData({
+  const data: IDesign = creationContext.api?.data.design ?? {
+    theme: 0,
+    logo: {
+      file: {},
+      url: "",
+    },
+    banner: {
+      show: false,
+      data: {
+        file: {},
+        url: "",
+      },
+    },
+    footer: {
+      show: false,
+      mainText: "",
+      links: [],
+    },
+  };
+  const setData = (data: IDesign) => {
+    creationContext.api?.setData({
       ...creationContext.api.data,
       design: data,
     });
   };
-  const [url, setUrl] = React.useState<any>(data.logo.url);
+  const [url, setUrl] = React.useState<string>(data.logo.url);
 
   const reset = () => {
     setData({

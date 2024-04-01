@@ -191,7 +191,7 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
 
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
 
-  const api = new LikesDislikesApi(globalContext.api, props.putUrl);
+  const api = new LikesDislikesApi(globalContext.api, props.putUrl ?? "");
   React.useEffect(() => {
     setValue({ ...props });
   }, [props]);
@@ -472,12 +472,12 @@ const CountdownWidget: React.FC<{ date: Date }> = (props) => {
 };
 
 const ProposalCard: React.FC<IProposalCard> = (props) => {
-  const [favorited, setFavorited] = React.useState<boolean>(undefined);
+  const [favorited, setFavorited] = React.useState<boolean>(false);
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
   const [moved, setMoved] = React.useState(false);
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const getFavoritedSide = (favorites: number[]) => {
-    const userId = globalContext.api.daoUserData
+    const userId = globalContext.api?.daoUserData
       ? globalContext.api.daoUserData.id
       : null;
     return favorites === undefined ? false : favorites.indexOf(userId) > -1;
@@ -489,12 +489,12 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       getUserSide(
         props.likes,
         props.dislikes,
-        globalContext.api.daoUserData == null
+        !globalContext.api?.daoUserData
           ? null
           : globalContext.api.daoUserData.id
       )
     );
-  }, [globalContext.api.daoUserData]);
+  }, [globalContext.api?.daoUserData]);
   const getFooter = () => {
     const footerFont = {
       xs: "1rem",
@@ -590,7 +590,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
     >
       <Badge
         badgeContent={
-          globalContext.api.daoUserData != null && (
+          globalContext.api?.daoUserData != null && (
             <IconButton
               sx={{
                 backgroundColor: "favoriteBackground.main",
@@ -681,7 +681,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             </ButtonBase>
             <Box sx={{ display: "flex", fontSize: "1rem" }}>
               <ProposalStatus
-                status={!props.is_proposal ? "Discussion" : props.status}
+                status={!props.is_proposal ? "Discussion" : props.status ?? ""}
               />
               <Box sx={{ ml: "auto" }}>
                 <LikesDislikes
@@ -690,7 +690,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   userSide={getUserSide(
                     props.likes,
                     props.dislikes,
-                    globalContext.api.daoUserData == null
+                    !globalContext.api?.daoUserData
                       ? null
                       : globalContext.api.daoUserData.id
                   )}

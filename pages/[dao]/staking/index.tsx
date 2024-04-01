@@ -37,23 +37,28 @@ const Staking: React.FC = () => {
 
   React.useEffect(() => {
     const getData = async () => {
-      const daoId = appContext.api.daoData?.id;
-      const userId = appContext.api.daoUserData?.user_id;
-      try {
-        const res = await appContext.api.post<any>("/staking/user_stake_info", {
-          dao_id: daoId,
-          user_id: userId,
-        });
-        const data: IUserStakeData = res.data;
-        appContext.api.setUserStakeData(data);
-      } catch (e) {
-        console.log(e);
+      const daoId = appContext.api?.daoData?.id;
+      const userId = appContext.api?.daoUserData?.user_id;
+      if (appContext.api) {
+        try {
+          const res = await appContext.api.post<any>(
+            "/staking/user_stake_info",
+            {
+              dao_id: daoId,
+              user_id: userId,
+            }
+          );
+          const data: IUserStakeData = res.data;
+          appContext.api.setUserStakeData(data);
+        } catch (e) {
+          console.log(e);
+        }
       }
     };
-    if (appContext.api.daoData?.id && appContext.api.daoUserData?.user_id) {
+    if (appContext.api?.daoData?.id && appContext.api.daoUserData?.user_id) {
       getData();
     }
-  }, [appContext.api.daoData?.id, appContext.api.daoUserData?.user_id]);
+  }, [appContext.api?.daoData?.id, appContext.api?.daoUserData?.user_id]);
 
   return (
     <Layout width="92%">

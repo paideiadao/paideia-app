@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ISocialLink } from "@lib/creation/Interfaces";
+import { IDesign, ISocialLink } from "@lib/creation/Interfaces";
 import { CreationContext } from "@lib/creation/Context";
 import {
   Subheader,
@@ -35,13 +35,32 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
       ? React.useContext(CreationContext)
       : props.context;
 
-  const data = creationContext.api.data.design;
+  const data: IDesign = creationContext.api?.data.design ?? {
+    theme: 0,
+    logo: {
+      file: {},
+      url: "",
+    },
+    banner: {
+      show: false,
+      data: {
+        file: {},
+        url: "",
+      },
+    },
+    footer: {
+      show: false,
+      mainText: "",
+      links: [],
+    },
+  };;
   const setData = (data: any) => {
-    creationContext.api.setData({
+    creationContext.api?.setData({
       ...creationContext.api.data,
       design: data,
     });
   };
+
   return (
     <Box
       sx={{

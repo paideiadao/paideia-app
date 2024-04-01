@@ -27,8 +27,8 @@ export default class ProposalApi extends AbstractApi {
   api?: AppApi;
   value: IProposal;
   setValue: Function;
-  errors?: ICreateProposalErrors;
-  setErrors?: Function;
+  errors: ICreateProposalErrors;
+  setErrors: Function;
 
   constructor(
     api: AppApi | undefined,
@@ -41,8 +41,15 @@ export default class ProposalApi extends AbstractApi {
     this.api = api;
     this.value = value;
     this.setValue = setValue;
-    this.errors = errors;
-    this.setErrors = setErrors;
+    this.errors = errors ?? {
+      name: false,
+      category: false,
+      voting: false,
+      actionConfig: false,
+      votingDuration: false,
+      activationTime: false,
+    };
+    this.setErrors = setErrors ?? (() => {});
     this.setAlert = api?.setAlert ?? (() => {});
   }
 

@@ -13,9 +13,27 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
       ? React.useContext(CreationContext)
       : props.context;
 
-  const data = creationContext.api.data.design;
+  const data: IDesign = creationContext.api?.data.design ?? {
+    theme: 0,
+    logo: {
+      file: {},
+      url: "",
+    },
+    banner: {
+      show: false,
+      data: {
+        file: {},
+        url: "",
+      },
+    },
+    footer: {
+      show: false,
+      mainText: "",
+      links: [],
+    },
+  };
   const setData = (data: IDesign) => {
-    creationContext.api.setData({
+    creationContext.api?.setData({
       ...creationContext.api.data,
       design: data,
     });
@@ -60,7 +78,7 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
         },
       });
     }
-  }
+  };
 
   React.useEffect(() => {
     setData({
