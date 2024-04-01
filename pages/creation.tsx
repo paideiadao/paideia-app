@@ -120,11 +120,6 @@ export default function Creation() {
   }, [data.navStage]);
 
   React.useEffect(() => {
-    let temp = theme === LightTheme ? "light" : "dark";
-    localStorage.setItem("theme", temp);
-  }, [theme]);
-
-  React.useEffect(() => {
     if (["success", "info"].indexOf(alert.value) > -1) {
       setTimeout(
         () => setAlert({ show: false, value: "", current: "", action: "" }),

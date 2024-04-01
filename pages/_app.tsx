@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import "@styles/global.css";
 import { AppProps } from "next/app";
 import { DarkTheme, LightTheme } from "@theme/theme";
-import { ThemeProvider } from "@mui/material/styles";
+import { Theme, ThemeProvider } from "@mui/material/styles";
 import { ThemeContext } from "@lib/ThemeContext";
 import { AppApi } from "@lib/AppApi";
 import { MetaDataHandler } from "@lib/MetaDataHandler";
@@ -36,7 +36,7 @@ const daoVariants = {
 };
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const [theme, setTheme] = useState(LightTheme);
+  const [theme, setTheme] = useState<Theme | null>(null);
   const [daoData, setDaoData] = useState<any>(undefined);
   // @ts-ignore
   const [daoUserData, setDaoUserData] = useState<IDaoUserData>(undefined);
@@ -52,8 +52,10 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   useEffect(() => {
-    let temp = theme === LightTheme ? "light" : "dark";
-    localStorage.setItem("theme", temp);
+    if (theme) {
+      const temp = theme === LightTheme ? "light" : "dark";
+      localStorage.setItem("theme", temp);
+    }
   }, [theme]);
 
   const { daoSlugsObject, daoSlugsIsLoading, daoTokensObject } = useDaoSlugs();
@@ -69,7 +71,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   const api = new AppApi(
     alert,
     setAlert,
-    theme,
+    theme ?? LightTheme,
     setTheme,
     daoData,
     setDaoData,
@@ -98,14 +100,14 @@ const App = ({ Component, pageProps }: AppProps) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <ThemeContext.Provider value={{ theme, setTheme }}>
+      <ThemeContext.Provider value={{ theme: theme ?? LightTheme, setTheme }}>
         <AddWalletProvider>
           <WalletProvider>
             <SlugContext.Provider
               value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading, daoTokens }}
             >
               <GlobalContext.Provider value={{ api, metadata }}>
-                <ThemeProvider theme={theme}>
+                <ThemeProvider theme={theme ?? LightTheme}>
                   <CssBaseline />
                   {Component !== Creation ? (
                     <>
