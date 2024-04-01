@@ -4,16 +4,16 @@ import { IDiscussion } from "@pages/[dao]/discussion/create";
 import { IProposalEndpointBody } from "../proposal/ProposalApi";
 
 export default class DiscussionApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   value: IDiscussion;
   setValue: Function;
 
-  constructor(api: AppApi, value: IDiscussion, setValue: Function) {
+  constructor(api: AppApi | undefined, value: IDiscussion, setValue: Function) {
     super();
     this.api = api;
     this.value = value;
     this.setValue = setValue;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 
   validData(): Boolean {
@@ -23,7 +23,7 @@ export default class DiscussionApi extends AbstractApi {
   cleanData(image_url: string, dao_id: number): IProposalEndpointBody {
     return {
       dao_id: dao_id,
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: this.api?.daoUserData.id,
       name: this.value.name,
       image_url: image_url,
       category: this.value.category,

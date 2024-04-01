@@ -10,7 +10,7 @@ import useSWR from "swr";
 
 const Profile: FC = () => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
-  const userData = appContext.api.daoUserData;
+  const userData = appContext.api?.daoUserData;
 
   const { data: activitiesData, error } = useSWR(
     userData?.id && `/activities/${userData.id}`,
@@ -22,13 +22,15 @@ const Profile: FC = () => {
     fetcher
   );
 
-  return (
+  return userData ? (
     <AbstractProfile
       edit
       data={userData}
       proposals={proposalsData}
       activities={activitiesData}
     />
+  ) : (
+    <></>
   );
 };
 

@@ -138,7 +138,7 @@ const ProfileEditImage: React.FC<{ set: (val: IFile) => void; img: string }> = (
           endIcon={<SwapVertIcon />}
           onClick={() => {
             const fileInput = document.getElementById("replace-profile-image");
-            fileInput.click();
+            fileInput?.click();
           }}
         >
           Replace Image
@@ -163,7 +163,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
     username: string;
     shortBio: string;
     socialLinks: ISocialLink[];
-    img: IFile | string;
+    img?: IFile | string;
   }>({
     username: "",
     shortBio: "",
@@ -186,7 +186,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
 
   React.useEffect(() => {
-    let val = appContext.api.daoUserData;
+    const val = appContext.api?.daoUserData;
     if (val !== undefined) {
       setValue({
         username: val.name,
@@ -195,7 +195,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
         shortBio: val.bio,
       });
     }
-  }, [appContext.api.daoUserData]);
+  }, [appContext.api?.daoUserData]);
 
   const validateFormFields = () => {
     const { username, shortBio } = value;
@@ -253,8 +253,8 @@ const Edit: React.FC<{ params: any }> = (props) => {
       return "";
     }
 
-    return await appContext.api.uploadFile(image).catch((e) => {
-      appContext.api.error(e);
+    return await appContext.api?.uploadFile(image).catch((e) => {
+      appContext.api?.error(e);
       return "";
     });
   };
@@ -272,14 +272,14 @@ const Edit: React.FC<{ params: any }> = (props) => {
     const imgRes = await uploadImage();
     const imgUrl = imgRes?.data?.image_url || "";
 
-    await appContext.api.editUser({
+    await appContext.api?.editUser({
       name: value.username,
       profile_img_url: imgUrl,
       bio: value.shortBio,
       social_links: value.socialLinks,
     });
 
-    appContext.api.setDaoUserData({
+    appContext.api?.setDaoUserData({
       ...appContext.api.daoUserData,
       name: value.username,
       profile_img_url: imgUrl,
@@ -292,7 +292,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
 
   return (
     <Layout>
-      {appContext.api.daoUserData !== undefined && (
+      {appContext.api?.daoUserData !== undefined && (
         <>
           <Header title="Edit profile" large />
           <ProfileEditImage

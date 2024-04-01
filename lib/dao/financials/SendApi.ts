@@ -26,12 +26,12 @@ export interface ISendFunds {
 }
 
 export default class SendApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   value: ISendFunds;
   setValue: (value: ISendFunds) => void;
 
   constructor(
-    api: AppApi,
+    api: AppApi | undefined,
     value: ISendFunds,
     setValue: (value: ISendFunds) => void
   ) {
@@ -39,6 +39,6 @@ export default class SendApi extends AbstractApi {
     this.api = api;
     this.value = value;
     this.setValue = setValue;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 }

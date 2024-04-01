@@ -75,10 +75,10 @@ const Activities: FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [data, setData] = useState(undefined);
+  const [data, setData] = useState<IActivity[] | null>(null);
 
   useEffect(() => {
-    if (dao != undefined && daoSlugsObject[dao.toString()] != undefined) {
+    if (dao && daoSlugsObject[dao.toString()] !== undefined) {
       const url = `${process.env.API_URL}/activities/by_dao_id/${
         daoSlugsObject[dao.toString()]
       }`;
@@ -88,7 +88,7 @@ const Activities: FC = () => {
           setData(res.data);
         })
         .catch((err) => {
-          globalContext.api.showAlert("Error fetching activities.", "error");
+          globalContext.api?.showAlert("Error fetching activities.", "error");
         });
     }
   }, [dao]);
@@ -212,7 +212,7 @@ const Activities: FC = () => {
           />
         ))}
       </Box>
-      {data != undefined ? (
+      {data ? (
         data
           .filter((i: IActivity) => {
             return (

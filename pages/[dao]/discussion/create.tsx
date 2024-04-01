@@ -44,7 +44,7 @@ const CreateDiscussion: React.FC = () => {
     name: "",
     category: "",
     image: {
-      url: getRandomImage(),
+      url: getRandomImage() ?? "",
       file: undefined,
     },
     references: [],
@@ -55,7 +55,7 @@ const CreateDiscussion: React.FC = () => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const router = useRouter();
   const { dao } = router.query;
-  const daoId = globalContext.api.daoData?.id;
+  const daoId = globalContext.api?.daoData?.id;
 
   const api = new DiscussionApi(globalContext.api, value, setValue);
 
@@ -203,8 +203,10 @@ const CreateDiscussion: React.FC = () => {
                       setLoading(true);
                       try {
                         let image;
-                        if (value.image.file === undefined) {
-                          const defaultImage = await fetch(value.image.url);
+                        if (value.image?.file === undefined) {
+                          const defaultImage = await fetch(
+                            value.image?.url ?? ""
+                          );
                           const data = await defaultImage.blob();
                           const metadata = {
                             type: "image/jpeg",
@@ -220,15 +222,18 @@ const CreateDiscussion: React.FC = () => {
                         );
                         if (res?.status == 200) {
                           router.push(
-                            `/${dao === undefined ? "" : dao}/discussion/${
-                              generateSlug(res.data.id, res.data.name)
-                            }`
+                            `/${
+                              dao === undefined ? "" : dao
+                            }/discussion/${generateSlug(
+                              res.data.id,
+                              res.data.name
+                            )}`
                           );
                         }
                         setLoading(false);
                       } catch (e) {
                         console.log(e);
-                        api.api.error(e);
+                        api.api?.error(e);
                         setLoading(false);
                       }
                     }

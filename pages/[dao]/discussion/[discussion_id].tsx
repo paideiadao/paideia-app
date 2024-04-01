@@ -109,8 +109,10 @@ const Discussion: React.FC = () => {
   }, [parsed_discussion_id]);
 
   useDidMountEffect(() => {
-    const temp = [...liveComments, newestComment];
-    setLiveComments(temp);
+    if (newestComment) {
+      const temp = [...liveComments, newestComment];
+      setLiveComments(temp);
+    }
   }, [newestComment]);
 
   React.useEffect(() => {
@@ -167,7 +169,7 @@ const Discussion: React.FC = () => {
                   alignItems: "center",
                 }}
               >
-                {globalContext.api.daoUserData != null && (
+                {globalContext.api?.daoUserData && (
                   <FollowMobile
                     followed={
                       data.followers.indexOf(
@@ -193,13 +195,13 @@ const Discussion: React.FC = () => {
                   dislikes={data.dislikes.length}
                   userSide={
                     data.likes.indexOf(
-                      globalContext.api.daoUserData
+                      globalContext.api?.daoUserData
                         ? globalContext.api.daoUserData.id
                         : null
                     ) > -1
                       ? 1
                       : data.dislikes.indexOf(
-                          globalContext.api.daoUserData
+                          globalContext.api?.daoUserData
                             ? globalContext.api.daoUserData.id
                             : null
                         ) > -1
@@ -209,7 +211,7 @@ const Discussion: React.FC = () => {
                   putUrl={`/proposals/like/${parsed_discussion_id}`}
                 />
                 <DiscussionOptions
-                  discussionId={parsed_discussion_id}
+                  discussionId={parsed_discussion_id ?? ""}
                   userAlias={data.alias}
                   callbackHandler={() => router.back()}
                 />
@@ -354,7 +356,7 @@ const Discussion: React.FC = () => {
                     display: deviceWrapper("none", "flex"),
                   }}
                 >
-                  {globalContext.api.daoUserData != null && (
+                  {globalContext.api?.daoUserData && (
                     <>
                       <Follow
                         followed={
@@ -367,7 +369,7 @@ const Discussion: React.FC = () => {
                         putUrl={"/proposals/follow/" + parsed_discussion_id}
                       />
                       <DiscussionOptions
-                        discussionId={parsed_discussion_id}
+                        discussionId={parsed_discussion_id ?? ""}
                         userAlias={data.alias}
                         callbackHandler={() => router.back()}
                       />
@@ -442,7 +444,7 @@ const Discussion: React.FC = () => {
                         display: deviceWrapper("flex", "none"),
                       }}
                     >
-                      {globalContext.api.daoUserData != null && (
+                      {globalContext.api?.daoUserData && (
                         <Follow
                           followed={
                             data.followers.indexOf(
@@ -460,13 +462,13 @@ const Discussion: React.FC = () => {
                       dislikes={data.dislikes.length}
                       userSide={
                         data.likes.indexOf(
-                          globalContext.api.daoUserData
+                          globalContext.api?.daoUserData
                             ? globalContext.api.daoUserData.id
                             : null
                         ) > -1
                           ? 1
                           : data.dislikes.indexOf(
-                              globalContext.api.daoUserData
+                              globalContext.api?.daoUserData
                                 ? globalContext.api.daoUserData.id
                                 : null
                             ) > -1
@@ -541,7 +543,7 @@ const Discussion: React.FC = () => {
                           .map((comment: { id: any }) => comment.id)
                           .indexOf(v.id) === i
                     )}
-                  id={parsed_discussion_id}
+                  id={parsed_discussion_id ?? ""}
                 />
               </TabPanel>
               <TabPanel value="3" sx={{ pl: 0, pr: 0 }}>
@@ -589,7 +591,7 @@ const DiscussionOptions: React.FC<{
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const api = new CommentsApi(globalContext.api, props.discussionId);
-  const userData = globalContext.api.daoUserData;
+  const userData = globalContext.api?.daoUserData;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [modalOpen, setModalOpen] = React.useState(false);
   const open = Boolean(anchorEl);

@@ -58,7 +58,7 @@ const Proposal: React.FC = () => {
     likes: [],
     dislikes: [],
     comments: [],
-    optionType: undefined,
+    optionType: "one-option",
     tags: [],
     followers: [],
     date: endDate,
@@ -93,8 +93,10 @@ const Proposal: React.FC = () => {
   }, [parsed_proposal_id]);
 
   useDidMountEffect(() => {
-    const temp = [...liveComments, newestComment];
-    setLiveComments(temp);
+    if (newestComment) {
+      const temp = [...liveComments, newestComment];
+      setLiveComments(temp);
+    }
   }, [newestComment]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -109,7 +111,7 @@ const Proposal: React.FC = () => {
   const api = new ProposalApi(context.api, value, setValue);
   const decimalAdjust = Math.pow(
     10,
-    context.api.daoData?.tokenomics?.token_decimals ?? 0
+    context.api?.daoData?.tokenomics?.token_decimals ?? 0
   );
 
   const { data, error } = useSWR(
@@ -164,7 +166,7 @@ const Proposal: React.FC = () => {
                   }}
                 >
                   <BackLink variant="contained" />
-                  {context.api.daoUserData != null && (
+                  {context.api?.daoUserData && (
                     <Box
                       sx={{
                         position: "absolute",
@@ -290,7 +292,7 @@ const Proposal: React.FC = () => {
                       flexDirection: deviceWrapper("column", "row"),
                     }}
                   >
-                    {context.api.daoUserData != null && (
+                    {context.api?.daoUserData && (
                       <Follow
                         followed={
                           value.followers.indexOf(
@@ -379,13 +381,13 @@ const Proposal: React.FC = () => {
                       dislikes={value.dislikes.length}
                       userSide={
                         value.likes.indexOf(
-                          context.api.daoUserData
+                          context.api?.daoUserData
                             ? context.api.daoUserData.id
                             : null
                         ) > -1
                           ? 1
                           : value.dislikes.indexOf(
-                              context.api.daoUserData
+                              context.api?.daoUserData
                                 ? context.api.daoUserData.id
                                 : null
                             ) > -1
@@ -442,8 +444,8 @@ const Proposal: React.FC = () => {
                       />
                       <Tab
                         label={`References | ${
-                          value?.references_meta?.length +
-                          value?.referenced_meta?.length
+                          (value?.references_meta?.length ?? 0) +
+                          (value?.referenced_meta?.length ?? 0)
                         }`}
                         value="2"
                       />
@@ -470,7 +472,7 @@ const Proposal: React.FC = () => {
                           (v, i, a) =>
                             a.map((comment) => comment.id).indexOf(v.id) === i
                         )}
-                      id={parsed_proposal_id}
+                      id={parsed_proposal_id ?? ""}
                     />
                   </TabPanel>
                   <TabPanel value="2" sx={{ pl: 0, pr: 0 }}>
@@ -498,11 +500,11 @@ const Proposal: React.FC = () => {
               >
                 <Overview
                   proposal
-                  userDetailId={value.user_details_id}
-                  alias={value.alias}
-                  img={value.profile_img_url}
-                  followers={value.user_followers}
-                  created={value.created}
+                  userDetailId={value.user_details_id ?? 0}
+                  alias={value.alias ?? ""}
+                  img={value.profile_img_url ?? ""}
+                  followers={value.user_followers ?? []}
+                  created={value.created ?? 0}
                   level={0}
                 />
                 <VoteWidget
