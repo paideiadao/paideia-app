@@ -68,8 +68,8 @@ const YourStaking: React.FC = () => {
     }
   }, [appContext.api?.userStakeData]);
   const ticker =
-    appContext.api?.daoData.tokenomics.token_ticker ??
-    appContext.api?.daoData.tokenomics.token_name;
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.tokenomics.token_name;
 
   return (
     <Box>

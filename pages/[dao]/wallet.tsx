@@ -35,8 +35,8 @@ const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
   };
   const [show, setShow] = React.useState<boolean>(false);
   const ticker =
-    globalContext.api?.daoData.tokenomics.token_ticker ??
-    globalContext.api?.daoData.tokenomics.token_name;
+    globalContext.api?.daoData?.tokenomics.token_ticker ??
+    globalContext.api?.daoData?.tokenomics.token_name;
   const [stakeAmount, setStakeAmount] = React.useState<number>(0);
 
   React.useEffect(() => {

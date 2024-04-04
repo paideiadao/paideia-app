@@ -33,8 +33,8 @@ const StakingForm: React.FC<IStakeState> = (props) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const ticker =
-    appContext.api?.daoData.tokenomics.token_ticker ??
-    appContext.api?.daoData.tokenomics.token_name;
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.tokenomics.token_name;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(parseFloat(event.target.value));

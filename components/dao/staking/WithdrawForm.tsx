@@ -26,8 +26,8 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
   const appContext = useContext<IGlobalContext>(GlobalContext);
   const { wallet } = useWallet();
   const ticker =
-    appContext.api?.daoData.tokenomics.token_ticker ??
-    appContext.api?.daoData.tokenomics.token_name;
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.tokenomics.token_name;
   const [loading, setLoading] = useState<boolean>(false);
 
   const totalStaked = props.stake?.stake_keys

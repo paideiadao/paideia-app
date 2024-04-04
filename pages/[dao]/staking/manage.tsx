@@ -106,8 +106,8 @@ const ManageStake: React.FC = () => {
   const { dao } = router.query;
 
   const ticker =
-    appContext.api?.daoData.tokenomics.token_ticker ??
-    appContext.api?.daoData.tokenomics.token_name;
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.tokenomics.token_name;
 
   return (
     <Layout width={deviceWrapper("92%", "65%")}>
