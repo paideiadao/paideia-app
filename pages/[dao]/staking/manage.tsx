@@ -50,7 +50,7 @@ const TokenBanner: React.FC<ITokenBanner> = (props) => {
           fontWeight: 500,
         }}
       >
-        {`${props.ticker.toUpperCase()} tokens staked`}
+        {`${props.ticker?.toUpperCase()} tokens staked`}
       </Box>
     </Box>
   );
