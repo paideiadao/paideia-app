@@ -183,7 +183,10 @@ const TeamPartners: React.FC<{
         />
         {value.tokenHolders.map((i: ITokenHolder, c: number) => {
           return (
-            <Box sx={{ display: "flex", alignItems: "center", height: "5rem" }}>
+            <Box
+              key={`token-holder-team${c}`}
+              sx={{ display: "flex", alignItems: "center", height: "5rem" }}
+            >
               <Box
                 sx={{
                   width: "57%",

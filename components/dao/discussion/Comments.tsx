@@ -212,16 +212,17 @@ const BaseComment: React.FC<{
   level?: number;
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const router = useRouter();
+  const [filter, setFilter] = React.useState<boolean>(false);
+  const [show, setShow] = React.useState<boolean>(true);
+  const [reply, setReply] = React.useState<boolean>(false);
+
   if (props.comment != undefined) {
     const children = props.data.filter(
       (i: IComment) => i?.parent === props.comment.id
     );
     const level = props.level;
-    const router = useRouter();
     const { dao } = router.query;
-    const [filter, setFilter] = React.useState<boolean>(false);
-    const [show, setShow] = React.useState<boolean>(true);
-    const [reply, setReply] = React.useState<boolean>(false);
     const commentStringArray = props.comment.comment.split("\n\n");
 
     return (

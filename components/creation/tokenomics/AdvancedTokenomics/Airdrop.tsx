@@ -336,6 +336,7 @@ const Airdrop: React.FC<{
                 {value.validatedFields.map((i: IValidatedField, c: number) => {
                   return (
                     <Box
+                      key={`validated-field-${c}`}
                       sx={{
                         width: "100%",
                         display: "flex",
@@ -422,6 +423,7 @@ const Airdrop: React.FC<{
           {value.tokenHolders.map((i: ITokenHolder, c: number) => {
             return (
               <Box
+                key={`token-holder-${c}`}
                 sx={{
                   display: "flex",
                   alignItems: "flex-start",

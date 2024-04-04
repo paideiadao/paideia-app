@@ -144,6 +144,7 @@ const EditNotifications: React.FC<{ params: any }> = (props) => {
               <FormGroup>
                 {notifications.map((i: INotification) => (
                   <FormControlLabel
+                    key={`notification-${i.label}`}
                     disableTypography
                     control={
                       <Checkbox

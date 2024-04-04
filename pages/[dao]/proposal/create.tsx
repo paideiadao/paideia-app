@@ -361,7 +361,7 @@ const CreateProposal: React.FC = () => {
             <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
               Provide users with different options to vote on, and the proposal
               will either be approved or declined. Keep in mind, once you create
-              a proposal, it can't be edited or deleted.
+              a proposal, it can&apos;t be edited or deleted.
             </Box>
           </Box>
           <Box
@@ -459,7 +459,7 @@ const CreateProposal: React.FC = () => {
               You are about to publish a proposal
             </Box>
             <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-              Once published, a proposal can't be edited or deleted.
+              Once published, a proposal can&apos;t be edited or deleted.
             </Box>
             <Box
               sx={{

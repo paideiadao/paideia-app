@@ -23,10 +23,11 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 // abstract: img, name, id
 
 const Reference: React.FC<{ context?: boolean }> = (props) => {
+  const discussionContext =
+    React.useContext<IDiscussionContext>(DiscussionContext);
+  const proposalContext = React.useContext<IProposalContext>(ProposalContext);
   const context =
-    props.context === undefined
-      ? React.useContext<IDiscussionContext>(DiscussionContext)
-      : React.useContext<IProposalContext>(ProposalContext);
+    props.context === undefined ? discussionContext : proposalContext;
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
   const daoId = appContext.api?.daoData?.id;
 

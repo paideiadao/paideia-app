@@ -36,6 +36,7 @@ const NextLinkComposed = React.forwardRef<
     />
   );
 });
+NextLinkComposed.displayName = "NextLinkComposed";
 
 interface ILinkProps {
   children: React.ReactNode;
@@ -110,5 +111,6 @@ const Link = React.forwardRef<HTMLAnchorElement, ILinkProps>((props, ref) => {
     />
   );
 });
+Link.displayName = "Link";
 
 export default Link;

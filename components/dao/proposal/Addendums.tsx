@@ -74,6 +74,7 @@ const Addendums: React.FC = () => {
         {addendums.map((i: IAddendum, c: number) => {
           return (
             <Box
+              key={`addendum-${c}`}
               sx={{
                 width: "100%",
                 borderRadius: ".3rem",

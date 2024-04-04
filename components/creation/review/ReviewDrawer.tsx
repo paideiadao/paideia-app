@@ -57,6 +57,7 @@ export const WalletListing: React.FC<{ data: any }> = (props) => {
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       {props.data.map((i: any) => (
         <Box
+          key={`wallet-listing-${i.alias}`}
           sx={{
             display: "flex",
             alignItems: "center",

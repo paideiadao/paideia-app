@@ -229,6 +229,7 @@ const PrivateRound: React.FC<{
         {value.tokenHolders.map((i: ITokenHolder, c: number) => {
           return (
             <Box
+              key={`token-holder-private-${c}`}
               sx={{ display: "flex", alignItems: "flex-start", height: "5rem" }}
             >
               <Box

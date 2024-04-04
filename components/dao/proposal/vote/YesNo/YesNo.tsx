@@ -28,6 +28,7 @@ const YesNo: React.FC = () => {
       />
       {actions.map((i: IProposalAction, c: number) => (
         <AddAction
+          key={`actions-proposal-${c}`}
           name={i.name}
           close={() => {
             let temp = [...actions];

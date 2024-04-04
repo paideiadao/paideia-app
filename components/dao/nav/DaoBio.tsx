@@ -355,7 +355,7 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
       </Box>
       {!props.inWallet && (
         <Box sx={{ fontSize: ".57rem", color: "error.main" }}>
-          You don't have any {props.data.token_ticker} in your wallet
+          You don&apos;t have any {props.data.token_ticker} in your wallet
         </Box>
       )}
     </>

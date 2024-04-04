@@ -30,10 +30,9 @@ import { deviceStruct } from "@components/utilities/Style";
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 
 const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
+  const defaultContext = React.useContext(CreationContext);
   const creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
+    props.context === undefined ? defaultContext : props.context;
 
   const data: IDesign = creationContext.api?.data.design ?? {
     theme: 0,
@@ -53,7 +52,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
       mainText: "",
       links: [],
     },
-  };;
+  };
   const setData = (data: any) => {
     creationContext.api?.setData({
       ...creationContext.api.data,

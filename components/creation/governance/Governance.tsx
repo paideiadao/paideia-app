@@ -39,8 +39,8 @@ const Governance: React.FC = () => {
         <Box sx={{ width: "100%", color: "text.secondary", fontSize: ".8rem" }}>
           You can use the default settings or dive more in deep configure your
           voting system as you wish. You can enable and configure features such
-          as "Optimistic governance" or "Quadratic voting" and edit the support
-          quorum, and voting times.
+          as &quot;Optimistic governance&quot; or &quot;Quadratic voting&quot;
+          and edit the support quorum, and voting times.
         </Box>
       </Box>
       <Box
@@ -108,6 +108,7 @@ const Governance: React.FC = () => {
               {data.whitelist.map((i: any, c: number) => {
                 return (
                   <Box
+                    key={`wallet-whitelist-${c}`}
                     sx={{
                       display: "flex",
                       alignItems: "center",

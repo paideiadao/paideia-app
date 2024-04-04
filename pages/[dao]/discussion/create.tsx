@@ -180,7 +180,7 @@ const CreateDiscussion: React.FC = () => {
               You are about to publish a discussion
             </Box>
             <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-              Once published, a discussion can't be edited or deleted. However,
+              Once published, a discussion can&apos;t be edited or deleted. However,
               a discussion can be upgraded to a proposal at any time.
             </Box>
             <Box

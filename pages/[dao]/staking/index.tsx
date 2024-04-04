@@ -23,7 +23,7 @@ export const StakingActivity: React.FC = () => {
     <Box>
       <Subheader title="Activity" />
       {[].map((i: any, c: number) => {
-        return <Activity i={i} c={c} />;
+        return <Activity i={i} c={c} key="activity-dummy"/>;
       })}
     </Box>
   );

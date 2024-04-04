@@ -61,7 +61,7 @@ const Create: React.FC = () => {
             >
               Provide users with different options to vote on, and the proposal
               will either be approved or declined. Keep in mind, once you create
-              a proposal, it can't be edited or deleted.
+              a proposal, it can&apos;t be edited or deleted.
             </Box>
           </Box>
         </Link>

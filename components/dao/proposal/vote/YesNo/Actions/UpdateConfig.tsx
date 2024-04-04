@@ -207,8 +207,13 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
                 });
               }}
             >
-              {allowedActions.map((action: string) => (
-                <MenuItem value={action.toLowerCase()}>{action}</MenuItem>
+              {allowedActions.map((action: string, c: number) => (
+                <MenuItem
+                  key={`allowed-action-${c}`}
+                  value={action.toLowerCase()}
+                >
+                  {action}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -240,7 +245,9 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
               }}
             >
               {allowedKeys.map((key: string) => (
-                <MenuItem value={key}>{key}</MenuItem>
+                <MenuItem value={key} key={`allowed-keys-${key}`}>
+                  {key}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -272,7 +279,9 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
               }}
             >
               {allowedTypes.map((type: string) => (
-                <MenuItem value={type}>{type}</MenuItem>
+                <MenuItem value={type} key={`allowed-types-${type}`}>
+                  {type}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

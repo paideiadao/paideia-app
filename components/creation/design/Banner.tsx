@@ -8,10 +8,9 @@ import LabeledSwitch from "../utilities/LabeledSwitch";
 import { IDesign } from "@lib/creation/Interfaces";
 
 const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
+  const defaultContext = React.useContext(CreationContext);
   const creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
+    props.context === undefined ? defaultContext : props.context;
 
   const data: IDesign = creationContext.api?.data.design ?? {
     theme: 0,
