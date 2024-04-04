@@ -22,7 +22,6 @@ interface IStakeState {
   stake: any;
 }
 
-const TICKER = "PAI";
 const FEE_ADJUSTMENT = 0.1;
 
 const StakingForm: React.FC<IStakeState> = (props) => {
@@ -32,6 +31,10 @@ const StakingForm: React.FC<IStakeState> = (props) => {
   const available = utxos.currentDaoTokens;
   const [value, setValue] = useState<number>(Math.min(available, 100));
   const [loading, setLoading] = useState<boolean>(false);
+
+  const ticker =
+    appContext.api?.daoData.tokenomics.token_ticker ??
+    appContext.api?.daoData.tokenomics.token_name;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(parseFloat(event.target.value));
@@ -97,14 +100,14 @@ const StakingForm: React.FC<IStakeState> = (props) => {
           value={value}
           type="number"
           onChange={handleChange}
-          helperText={`${available} ${TICKER} available`}
+          helperText={`${available} ${ticker} available`}
           InputProps={{
             inputProps: {
               min: 1,
               max: 9999999999,
             },
             endAdornment: (
-              <InputAdornment position="end">{TICKER}</InputAdornment>
+              <InputAdornment position="end">{ticker}</InputAdornment>
             ),
           }}
         />

@@ -167,7 +167,7 @@ const GeneralInfo: React.FC = () => {
           value={data.numberOfStakers}
           c={0}
         />
-        <InfoCard title="PAI tokens staked" value={data.tokensStaked} c={1} />
+        <InfoCard title="Tokens Staked" value={data.tokensStaked} c={1} />
         <InfoCard title="Current APY" value={data.apy} last c={2} />
       </Box>
     </Box>

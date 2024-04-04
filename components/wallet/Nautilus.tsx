@@ -11,7 +11,7 @@ const Nautilus: React.FC<{
   set: Function;
   connect: Function;
   connected: boolean;
-  addresses: any[];
+  addresses: string[];
   setLoading: Function;
   setDAppWallet: Function;
   dAppWallet: any;
@@ -29,7 +29,7 @@ const Nautilus: React.FC<{
       props.setLoading(false);
     };
     if (!dAppWallet.connected || !isAddressValid(wallet)) {
-      wrapper();
+        wrapper();
     }
   }, []);
 
@@ -82,107 +82,104 @@ const Nautilus: React.FC<{
               overflowY: "auto",
             }}
           >
-            {props.addresses.map((i: any, c: number) => {
+            {props.addresses.map((i: string, c: number) => {
               return (
-                i.name !== undefined && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                      fontSize: ".7rem",
-                      pl: ".5rem",
-                      mt: ".5rem",
-                      pb: ".5rem",
-                      borderBottom:
-                        c === props.addresses.length - 1 ? 0 : "1px solid",
-                      borderBottomColor: "border.main",
-                    }}
-                    key={`${i.name}-address-selector-${c}`}
-                  >
-                    {i.name}
-                    {changeLoading === c ||
-                    (!loggedIn && changeLoading === c) ? (
-                      <LoadingButton
-                        color="primary"
-                        loading
-                        variant="contained"
-                        sx={{ ml: "auto", mr: ".5rem" }}
-                      >
-                        Active
-                      </LoadingButton>
-                    ) : (
-                      <Button
-                        sx={{ ml: "auto", mr: ".5rem" }}
-                        variant="contained"
-                        color={wallet === i.name ? "success" : "primary"}
-                        size="small"
-                        onClick={async () => {
-                          if (wallet !== i.name) {
-                            {
-                              setChangeLoading(c);
-                              try {
-                                await globalContext.api
-                                  ?.changeAddress(i.name)
-                                  .then(async (signingMessage: any) => {
-                                    if (signingMessage !== undefined) {
-                                      const context =
-                                        await getErgoWalletContext();
-                                      const response = await context.auth(
-                                        i.name,
-                                        signingMessage.data.signingMessage
-                                      );
-                                      response.proof = Buffer.from(
-                                        response.proof,
-                                        "hex"
-                                      ).toString("base64");
-                                      globalContext.api
-                                        ?.signMessage(
-                                          signingMessage.data.tokenUrl,
-                                          {
-                                            ...response,
-                                            previous_wallet_address:
-                                              wallet === "" ||
-                                              wallet === undefined
-                                                ? undefined
-                                                : wallet,
-                                          }
-                                        )
-                                        .then((data) => {
-                                          localStorage.setItem(
-                                            "jwt_token_login",
-                                            data.data.access_token
-                                          );
-                                          localStorage.setItem(
-                                            "user_id",
-                                            data.data.id
-                                          );
-                                          localStorage.setItem(
-                                            "alias",
-                                            data.data.alias
-                                          );
-                                          props.setLoading(false);
-                                          setWallet(i.name);
-                                          setChangeLoading(0);
-                                        })
-                                        .catch((e: any) => {
-                                          console.log(e);
-                                        });
-                                    }
-                                  });
-                              } catch (e) {
-                                console.log(e);
-                                setChangeLoading(0);
-                              }
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                    fontSize: ".7rem",
+                    pl: ".5rem",
+                    mt: ".5rem",
+                    pb: ".5rem",
+                    borderBottom:
+                      c === props.addresses.length - 1 ? 0 : "1px solid",
+                    borderBottomColor: "border.main",
+                  }}
+                  key={`${i}-address-selector-${c}`}
+                >
+                  {i}
+                  {changeLoading === c || (!loggedIn && changeLoading === c) ? (
+                    <LoadingButton
+                      color="primary"
+                      loading
+                      variant="contained"
+                      sx={{ ml: "auto", mr: ".5rem" }}
+                    >
+                      Active
+                    </LoadingButton>
+                  ) : (
+                    <Button
+                      sx={{ ml: "auto", mr: ".5rem" }}
+                      variant="contained"
+                      color={wallet === i ? "success" : "primary"}
+                      size="small"
+                      onClick={async () => {
+                        if (wallet !== i) {
+                          {
+                            setChangeLoading(c);
+                            try {
+                              await globalContext.api
+                                ?.changeAddress(i)
+                                .then(async (signingMessage: any) => {
+                                  if (signingMessage !== undefined) {
+                                    const context =
+                                      await getErgoWalletContext();
+                                    const response = await context.auth(
+                                      i,
+                                      signingMessage.data.signingMessage
+                                    );
+                                    response.proof = Buffer.from(
+                                      response.proof,
+                                      "hex"
+                                    ).toString("base64");
+                                    globalContext.api
+                                      ?.signMessage(
+                                        signingMessage.data.tokenUrl,
+                                        {
+                                          ...response,
+                                          previous_wallet_address:
+                                            wallet === "" ||
+                                            wallet === undefined
+                                              ? undefined
+                                              : wallet,
+                                        }
+                                      )
+                                      .then((data) => {
+                                        localStorage.setItem(
+                                          "jwt_token_login",
+                                          data.data.access_token
+                                        );
+                                        localStorage.setItem(
+                                          "user_id",
+                                          data.data.id
+                                        );
+                                        localStorage.setItem(
+                                          "alias",
+                                          data.data.alias
+                                        );
+                                        props.setLoading(false);
+                                        setWallet(i);
+                                        setChangeLoading(0);
+                                      })
+                                      .catch((e: any) => {
+                                        console.log(e);
+                                      });
+                                  }
+                                });
+                            } catch (e) {
+                              console.log(e);
+                              setChangeLoading(0);
                             }
                           }
-                        }}
-                      >
-                        {wallet === i.name ? "Active" : "Choose"}
-                      </Button>
-                    )}
-                  </Box>
-                )
+                        }
+                      }}
+                    >
+                      {wallet === i ? "Active" : "Choose"}
+                    </Button>
+                  )}
+                </Box>
               );
             })}
           </Box>

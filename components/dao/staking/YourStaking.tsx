@@ -67,7 +67,9 @@ const YourStaking: React.FC = () => {
       });
     }
   }, [appContext.api?.userStakeData]);
-  const ticker = "PAI";
+  const ticker =
+    appContext.api?.daoData.tokenomics.token_ticker ??
+    appContext.api?.daoData.tokenomics.token_name;
 
   return (
     <Box>

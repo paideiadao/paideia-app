@@ -132,11 +132,12 @@ export class AppApi extends AbstractApi {
     const sort = [...new Set(sortIndex)].map(
       (item) => {
         return {
-          token: Object.keys(item)[0],
-          value: Object.values(item)[0],
+          token: Object.keys(item[0])[0],
+          value: Object.values(item[0])[0],
         };
       }
     );
+
     const sort1 = Array.from(
       sort.reduce(
         (m, { token, value }) => m.set(token, (m.get(token) || 0) + value),
@@ -149,7 +150,7 @@ export class AppApi extends AbstractApi {
       token: string;
       value: number;
     }[] = [];
-    if (this.daoData?.tokenomics?.token_id != undefined) {
+    if (this.daoData?.tokenomics?.token_id) {
       currentTokens = sort1.filter(
         (item) => item.token == this.daoData.tokenomics.token_id
       );

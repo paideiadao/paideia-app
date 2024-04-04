@@ -104,6 +104,11 @@ const ManageStake: React.FC = () => {
 
   const router = useRouter();
   const { dao } = router.query;
+
+  const ticker =
+    appContext.api?.daoData.tokenomics.token_ticker ??
+    appContext.api?.daoData.tokenomics.token_name;
+
   return (
     <Layout width={deviceWrapper("92%", "65%")}>
       <Link href={dao === undefined ? "/dao/staking" : `/${dao}/staking`}>
@@ -127,7 +132,7 @@ const ManageStake: React.FC = () => {
             amount={stakeState?.stake_keys
               ?.map((key: { stake: number }) => key.stake)
               .reduce((a: number, c: number) => a + c, 0)}
-            ticker="PAI"
+            ticker={ticker}
           />
           <TabContext value={value}>
             <Box
