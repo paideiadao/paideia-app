@@ -12,6 +12,7 @@ import {
   encode,
 } from "next-auth/jwt";
 import { ProviderType } from "next-auth/providers/index";
+import jwt from "jsonwebtoken";
 
 /**
  * Module augmentation for `next-auth` types.
@@ -257,6 +258,7 @@ export const signInCallback = async (
       res: res,
       httpOnly: true,
       secure: process.env.AUTH_DOMAIN !== "http://localhost:3000", // support localhost
+      sameSite: true,
     });
 
     return true;
@@ -293,8 +295,15 @@ export const sessionCallback = async (
   if (user) {
     session.user = {
       id: user.id,
-      address: user.defaultAddress,
-      jwt: "", // TODO: generate paideia-api token
+      address: user.address,
+      jwt: jwt.sign(
+        {
+          sub: user.address,
+          permissions: "user",
+        },
+        process.env.PAIDEIA_API_SECRET ?? "secret",
+        { expiresIn: "1h" }
+      ),
     };
   }
   return session;

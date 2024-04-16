@@ -16,6 +16,10 @@ import Nautilus from "./Nautilus";
 import MobileWallet from "./MobileWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import useDidMountEffect from "@components/utilities/hooks";
+import { trpc } from "@utils/trpc";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { paideiaApi } from "@server/services/axios";
+import { LoadingButton } from "@mui/lab";
 
 export const WALLET_ADDRESS = "wallet_address";
 export const WALLET_ADDRESS_LIST = "wallet_address_list";
@@ -35,7 +39,14 @@ export const DAPP_CONNECTED = "dapp_connected";
 const AddWallet: React.FC = () => {
   const [walletInput, setWalletInput] = React.useState("");
   const { addWalletOpen, setAddWalletOpen } = useAddWallet();
-  const { wallet, setWallet, dAppWallet, setDAppWallet } = useWallet();
+  const {
+    wallet,
+    setWallet,
+    dAppWallet,
+    setDAppWallet,
+    mobileWallet,
+    setMobileWallet,
+  } = useWallet();
   const [init, setInit] = React.useState(false);
   const [qrCode, setQrCode] = React.useState<string | null>(null);
 
@@ -43,7 +54,6 @@ const AddWallet: React.FC = () => {
   /**
    * dapp state
    *
-   * loading: yoroi is slow so need to show a loader for yoroi
    * dAppConnected: true if permission granted (persisted in local storage)
    * dAppError: show error message
    * dAppAddressTableData: list available addresses from wallet
@@ -57,9 +67,146 @@ const AddWallet: React.FC = () => {
       : "listing"
   );
 
+  // trpc
+  const session = useSession();
+  const [defaultAddress, setDefaultAddress] = React.useState<string | null>(
+    null
+  );
+  const [usedAddresses, setUsedAddresses] = React.useState<string[]>([]);
+  const [unusedAddresses, setUnusedAddresses] = React.useState<string[]>([]);
+  const getNonce = trpc.auth.getNonce.useQuery(
+    { address: defaultAddress ?? "" },
+    { enabled: false, retry: false }
+  );
+  const [nonce, setNonce] = React.useState<NonceResponse | null>(null);
+  const [verificationId, setVerificationId] = React.useState<string | null>(
+    null
+  );
+  const [signature, setSignature] = React.useState<Signature | null>(null);
+  const deleteEmptyUser = trpc.auth.deleteEmptyUser.useMutation();
+  const mobileInitiate = trpc.auth.initiateLogin.useMutation();
+  trpc.auth.checkLoginStatus.useQuery(
+    // @ts-ignore
+    { verificationId },
+    {
+      enabled: !!verificationId,
+      refetchInterval: (data: {
+        status: "PENDING" | "SIGNED";
+        signedMessage?: string;
+        proof?: string;
+      }) => {
+        // If the status is 'SIGNED', stop polling
+        if (data?.status === "SIGNED") {
+          return false;
+        }
+        // Otherwise, continue polling every 2 seconds
+        return 2000;
+      },
+      refetchIntervalInBackground: true,
+      onSuccess: (data) => {
+        if (data?.status === "SIGNED") {
+          localStorage.setItem("wallet_address", defaultAddress ?? walletInput);
+          handleSubmitWallet(defaultAddress ?? walletInput);
+          setMobileWallet({
+            connected: true,
+          });
+          data?.proof &&
+            data?.signedMessage &&
+            setSignature({
+              proof: data.proof,
+              signedMessage: data.signedMessage,
+            });
+        }
+      },
+    }
+  );
+
+  // get the new nonce
+  const refetchData = () => {
+    getNonce
+      .refetch()
+      .then((response: any) => {
+        if (response && response.error) {
+          throw new Error(response.error.message);
+        }
+        setNonce(response.data);
+      })
+      .catch((error: any) => {
+        globalContext.api?.error(error);
+      });
+  };
+
+  React.useEffect(() => {
+    const authSignInMobile = async () => {
+      await signIn("credentials", {
+        nonce: nonce?.nonce,
+        userId: nonce?.userId,
+        signature: JSON.stringify(signature),
+        wallet: JSON.stringify({
+          type: "mobile",
+          defaultAddress: defaultAddress,
+          usedAddresses: [],
+          unusedAddresses: [],
+        }),
+        redirect: false,
+      });
+    };
+
+    if (mobileWallet.connected && signature) {
+      authSignInMobile();
+    }
+  }, [mobileWallet.connected, signature]);
+
+  React.useEffect(() => {
+    if (defaultAddress && view === "nautilus") {
+      refetchData();
+    }
+  }, [defaultAddress, view]);
+
+  React.useEffect(() => {
+    if (
+      nonce &&
+      defaultAddress &&
+      !dAppWallet.connected &&
+      view === "nautilus"
+    ) {
+      signInNautilus();
+    }
+  }, [nonce, defaultAddress, dAppWallet.connected]);
+
+  React.useEffect(() => {
+    const initiateUser = async () => {
+      try {
+        const res = await paideiaApi.post(
+          "/auth/initiate_user",
+          {},
+          {
+            headers: {
+              Authorization: `bearer ${session.data?.user.jwt}`,
+            },
+          }
+        );
+        const user = res.data;
+        localStorage.setItem("jwt_token_login", session.data?.user.jwt ?? "");
+        localStorage.setItem("user_id", user.id);
+        localStorage.setItem("alias", user.alias);
+      } catch (e: any) {
+        clearWallet(true);
+        globalContext.api?.error(e);
+      }
+    };
+    if (
+      (dAppWallet.connected || mobileWallet.connected) &&
+      session.data?.user.jwt
+    ) {
+      initiateUser();
+    }
+  }, [dAppWallet.connected, mobileWallet.connected, session.data?.user.jwt]);
+
+  // handle events
   React.useEffect(() => {
     window.addEventListener("ergo_wallet_disconnected", () => {
-      clearWallet();
+      clearWallet(true);
     });
     //@ts-ignore
     // load primary address
@@ -106,9 +253,9 @@ const AddWallet: React.FC = () => {
     if (init) localStorage.setItem(WALLET_ADDRESS, wallet);
   }, [wallet, init]);
 
-  const handleSubmitWallet = () => {
+  const handleSubmitWallet = (address: string) => {
     // add read only wallet
-    setWallet(walletInput);
+    setWallet(address);
     // clear dApp state
     setDAppWallet({
       connected: false,
@@ -117,7 +264,7 @@ const AddWallet: React.FC = () => {
     setQrCode(null);
   };
 
-  const clearWallet = () => {
+  const clearWallet = (force: boolean = false) => {
     // clear state and local storage
     localStorage.setItem(WALLET_ADDRESS, "");
     localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
@@ -134,6 +281,11 @@ const AddWallet: React.FC = () => {
       connected: false,
       addresses: [],
     });
+    setMobileWallet({
+      connected: false,
+    });
+    setNonce(null);
+    force && signOut();
     globalContext.api?.setDaoUserData(undefined);
   };
 
@@ -182,54 +334,129 @@ const AddWallet: React.FC = () => {
   const dAppLoad = async () => {
     try {
       const context = await getErgoWalletContext();
+      const change_address = await context.get_change_address();
       const address_used = await context.get_used_addresses();
       const address_unused = await context.get_unused_addresses();
+      setUsedAddresses(address_used);
+      setUnusedAddresses(address_unused);
       const addresses = [...address_used, ...address_unused];
+      if (change_address) {
+        setDefaultAddress(await mapToPrimaryAddress(change_address));
+      } else {
+        setDefaultAddress(await mapToPrimaryAddress(addresses[0]));
+      }
       // use the first used address if available or the first unused one if not as default
       // when a user hits the signing request, it should be a list of addresses that they have connected.
       // If one of them has an account, then you login using that method... don't default to 0
-      const addressData = [...addresses];
-      await globalContext.api
-        ?.signingMessage(addresses)
-        .then(async (signingMessage: any) => {
-          if (signingMessage !== undefined) {
-            const context = await getErgoWalletContext();
-            const response = await context.auth(
-              signingMessage.data.address,
-              signingMessage.data.signingMessage
-            );
-            response.proof = Buffer.from(response.proof, "hex").toString(
-              "base64"
-            );
-            globalContext.api
-              ?.signMessage(signingMessage.data.tokenUrl, response)
-              .then(async (data) => {
-                localStorage.setItem("jwt_token_login", data.data.access_token);
-                localStorage.setItem("user_id", data.data.id);
-                localStorage.setItem("alias", data.data.alias);
-                setWallet(signingMessage.data.address);
-                localStorage.setItem(
-                  WALLET_ADDRESS,
-                  signingMessage.data.address
-                );
-                // await globalContext.api.getOrCreateDaoUser();
-              })
-              .catch((e) => {
-                globalContext.api?.error("Unable to login with Nautilus");
-                clearWallet();
-              });
-          }
-        });
-      setDAppWallet({
-        connected: true,
-        addresses: addressData,
-      });
     } catch (e) {
-      console.log(e);
-      clearWallet();
+      globalContext.api?.error(e);
+      clearWallet(true);
       setLoading(false);
     }
     setLoading(false);
+  };
+
+  const signInNautilus = async () => {
+    setLoading(true);
+    if (!defaultAddress || !nonce) {
+      setLoading(false);
+      return;
+    }
+    try {
+      const addresses = [...usedAddresses, ...unusedAddresses];
+      const context = await getErgoWalletContext();
+      const signature = await context.auth(defaultAddress, nonce.nonce);
+      if (!signature.signedMessage || !signature.proof) {
+        throw new Error("Signature failed to generate");
+      }
+
+      const response = await signIn("credentials", {
+        nonce: nonce.nonce,
+        userId: nonce.userId,
+        signature: JSON.stringify(signature),
+        wallet: JSON.stringify({
+          type: "nautilus",
+          defaultAddress: defaultAddress,
+          usedAddresses,
+          unusedAddresses,
+        }),
+        redirect: false,
+      });
+
+      if (!response || !response?.status || response.status !== 200) {
+        throw new Error("Sign in Failed");
+      }
+
+      setWallet(defaultAddress);
+      localStorage.setItem(WALLET_ADDRESS, defaultAddress);
+
+      setDAppWallet({
+        connected: true,
+        addresses: addresses,
+      });
+    } catch (e: any) {
+      globalContext.api?.error("Error logging in with Nautilus Wallet");
+      if (nonce.userId) {
+        deleteEmptyUser.mutateAsync({
+          userId: nonce.userId,
+        });
+      }
+      clearWallet();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const mapToPrimaryAddress = async (address: string): Promise<string> => {
+    try {
+      const response = await paideiaApi.get(
+        `/users/details/search?search_string=${address}`
+      );
+      const results = response.data.filter(
+        (r: { address: string }) => r.address === address
+      );
+      if (results.length === 0) {
+        return address;
+      }
+      return results[0].alias;
+    } catch {
+      return address;
+    }
+  };
+
+  const signInMobile = async () => {
+    setLoading(true);
+    if (!walletInput) {
+      setLoading(false);
+      return;
+    }
+    const address = await mapToPrimaryAddress(walletInput);
+    setDefaultAddress(address);
+    try {
+      const response = await mobileInitiate.mutateAsync({
+        address: address,
+      });
+      setVerificationId(response.verificationId);
+      setNonce(response.nonce);
+      setQrCode(
+        `ergoauth://${process.env.ERGOAUTH_DOMAIN?.replace(
+          "https://",
+          ""
+        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${
+          response.verificationId
+        }&address=${address}`
+      );
+    } catch (e: any) {
+      globalContext.api?.error("Error logging in with Mobile Wallet");
+      if (nonce?.userId) {
+        deleteEmptyUser.mutateAsync({
+          userId: nonce.userId,
+        });
+      }
+      clearWallet();
+    } finally {
+      setLoading(false);
+    }
   };
 
   React.useEffect(() => {
@@ -238,7 +465,6 @@ const AddWallet: React.FC = () => {
         JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST) ?? "[]").length > 0
       ) {
         setDAppWallet({
-          // connected: true,
           connected: true,
           addresses: localStorage.getItem(WALLET_ADDRESS_LIST)
             ? JSON.parse(localStorage.getItem(WALLET_ADDRESS_LIST) ?? "[]")
@@ -308,7 +534,6 @@ const AddWallet: React.FC = () => {
           <Button onClick={() => setAddWalletOpen(false)} sx={{ mr: "1rem" }}>
             Close
           </Button>
-
           <Box sx={{ ml: "auto" }}>
             {loading && <CircularProgress color="primary" size="small" />}
             {isAddressValid(wallet) && view !== "listing" && (
@@ -317,54 +542,21 @@ const AddWallet: React.FC = () => {
                 variant="outlined"
                 sx={{ mr: view === "mobile" ? ".5rem" : 0 }}
                 onClick={() => {
-                  clearWallet();
+                  clearWallet(true);
                 }}
               >
                 Disconnect
               </Button>
             )}
             {view === "mobile" && qrCode === null && !isAddressValid(wallet) && (
-              <Button
-                onClick={async () => {
-                  try {
-                    // add try catch here...
-                    const res = await globalContext.api?.mobileLogin(
-                      walletInput
-                    );
-                    const ws = globalContext.api?.webSocket(
-                      res?.data.verificationId
-                    );
-                    if (ws) {
-                      ws.onmessage = async (event) => {
-                        try {
-                          const wsRes = JSON.parse(event.data);
-                          localStorage.setItem(
-                            "jwt_token_login",
-                            wsRes.access_token
-                          );
-                          localStorage.setItem("user_id", wsRes.id);
-                          localStorage.setItem("alias", wsRes.alias);
-                          localStorage.setItem("wallet_address", walletInput);
-                          handleSubmitWallet();
-                          // await globalContext.api.getOrCreateDaoUser();
-                        } catch (e) {
-                          console.log(e);
-                        }
-                      };
-                    }
-                    setQrCode(res?.data.signingRequestUrl);
-                  } catch (e) {
-                    globalContext.api?.error(
-                      "Error logging in with Mobile Wallet"
-                    );
-                    clearWallet();
-                  }
-                }}
+              <LoadingButton
+                loading={loading}
+                onClick={signInMobile}
                 disabled={walletInput === ""}
                 variant="contained"
               >
                 Confirm
-              </Button>
+              </LoadingButton>
             )}
             {view === "mobile" && qrCode && (
               <Button

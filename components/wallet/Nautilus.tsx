@@ -18,7 +18,7 @@ const Nautilus: React.FC<{
   loading: boolean;
   clear: Function;
 }> = (props) => {
-  const { wallet, setWallet, loggedIn, dAppWallet } = useWallet();
+  const { wallet, setWallet, dAppWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [changeLoading, setChangeLoading] = React.useState<number | null>(null);
 
@@ -100,7 +100,7 @@ const Nautilus: React.FC<{
                   key={`${i}-address-selector-${c}`}
                 >
                   {i}
-                  {changeLoading === c || (!loggedIn && changeLoading === c) ? (
+                  {changeLoading === c || (changeLoading === c) ? (
                     <LoadingButton
                       color="primary"
                       loading

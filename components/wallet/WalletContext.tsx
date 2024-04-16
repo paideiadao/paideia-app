@@ -7,11 +7,17 @@ export interface IDAppWallet {
   addresses: string[];
 }
 
+export interface IMobileWallet {
+  connected: boolean;
+}
+
 export interface IWalletContext {
   wallet: string;
   dAppWallet: IDAppWallet;
+  mobileWallet: IMobileWallet;
   setWallet: Function;
   setDAppWallet: Function;
+  setMobileWallet: Function;
   loggedIn: boolean;
   setLoggedIn: Function;
   utxos: IDaoMembership;
@@ -25,8 +31,12 @@ const WalletContext = createContext<IWalletContext>({
     connected: false,
     addresses: [],
   },
+  mobileWallet: {
+    connected: false
+  },
   setWallet: () => {},
   setDAppWallet: () => {},
+  setMobileWallet: () => {},
   loggedIn: false,
   setLoggedIn: () => {},
   utxos: {
@@ -44,6 +54,9 @@ const WalletProvider = ({ children }: any) => {
     connected: false,
     addresses: [],
   }); // dApp only
+  const [mobileWallet, setMobileWallet] = useState({
+    connected: false
+  })
   const [utxos, setUtxos] = React.useState<IDaoMembership>({
     currentDaoTokens: 0,
     membershipList: [],
@@ -53,8 +66,10 @@ const WalletProvider = ({ children }: any) => {
   const value = {
     wallet, // <------ Expose Value to Consumer
     dAppWallet,
+    mobileWallet,
     setWallet, // <------ Expose Setter to Consumer
     setDAppWallet,
+    setMobileWallet,
     loggedIn,
     setLoggedIn,
     utxos,

@@ -26,6 +26,7 @@ const nextConfig = {
     WSS_URL: process.env.WSS_URL,
     VERCEL_URL: process.env.VERCEL_URL,
     AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+    ERGOAUTH_DOMAIN: process.env.ERGOAUTH_DOMAIN,
     PAIDEIA_API_SECRET: process.env.PAIDEIA_API_SECRET,
   },
   images: {

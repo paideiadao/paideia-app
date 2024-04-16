@@ -79,7 +79,7 @@ export const authRouter = createTRPCRouter({
       }
 
       if (loginRequest.status === LoginRequestStatus.PENDING) {
-        return { status: LoginRequestStatus.SIGNED };
+        return { status: LoginRequestStatus.PENDING };
       }
 
       if (loginRequest.status === LoginRequestStatus.SIGNED) {
@@ -89,6 +89,8 @@ export const authRouter = createTRPCRouter({
           proof: loginRequest.proof,
         };
       }
+
+      return { status: LoginRequestStatus.EXPIRED };
     }),
   deleteEmptyUser: publicProcedure
     .input(

@@ -24,7 +24,7 @@ const MobileWallet: React.FC<{
   const { wallet } = useWallet();
   return (
     <Box sx={{ width: "100%" }}>
-      {props.qrCode === undefined ? (
+      {props.qrCode === "" ? (
         <>
           <Box
             sx={{

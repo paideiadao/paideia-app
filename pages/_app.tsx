@@ -22,6 +22,9 @@ import { SlugContext } from "contexts/SlugContext";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { IUserStakeData } from "@components/dao/staking/YourStaking";
+import { trpc } from "@utils/trpc";
+import { SessionProvider } from "next-auth/react";
+import SessionWrapper from "@components/SessionWrapper";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -35,7 +38,7 @@ const daoVariants = {
   exit: { opacity: 0, x: 0, y: -100 },
 };
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const [theme, setTheme] = useState<Theme | null>(null);
   const [daoData, setDaoData] = useState<any>(undefined);
   // @ts-ignore
@@ -82,7 +85,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     loading,
     setLoading
   );
-
   const metadata = new MetaDataHandler(metaData, setMetaData);
 
   return (
@@ -101,52 +103,54 @@ const App = ({ Component, pageProps }: AppProps) => {
         <CircularProgress color="inherit" />
       </Backdrop>
       <ThemeContext.Provider value={{ theme: theme ?? LightTheme, setTheme }}>
-        <AddWalletProvider>
-          <WalletProvider>
-            <SlugContext.Provider
-              value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading, daoTokens }}
-            >
-              <GlobalContext.Provider value={{ api, metadata }}>
-                <ThemeProvider theme={theme ?? LightTheme}>
-                  <CssBaseline />
-                  {Component !== Creation ? (
-                    <>
-                      <DaoTemplate>
-                        <AnimatePresence exitBeforeEnter>
-                          <motion.main
-                            variants={daoVariants}
-                            initial="hidden"
-                            animate="enter"
-                            exit="exit"
-                            transition={{ type: "linear" }}
-                            className=""
-                            key={router.route}
-                          >
-                            <Component {...pageProps} />
-                          </motion.main>
-                        </AnimatePresence>
-                      </DaoTemplate>
-                    </>
-                  ) : (
-                    <Component {...pageProps} />
-                  )}
-                </ThemeProvider>
-                <AbstractAlert
-                  alerts={alert}
-                  // set={(val: IAlerts[]) => setAlert(val)}
-                  close={(i: number) => {
-                    setAlert((prevState) =>
-                      prevState.filter((_item, idx) => idx !== i)
-                    );
-                  }}
-                />
-              </GlobalContext.Provider>
-            </SlugContext.Provider>
-          </WalletProvider>
-        </AddWalletProvider>
+        <SessionProvider session={session}>
+          <AddWalletProvider>
+            <WalletProvider>
+              <SlugContext.Provider
+                value={{ daoSlugs, setDaoSlugs, daoSlugsIsLoading, daoTokens }}
+              >
+                <SessionWrapper api={api} metadata={metadata}>
+                  <ThemeProvider theme={theme ?? LightTheme}>
+                    <CssBaseline />
+                    {Component !== Creation ? (
+                      <>
+                        <DaoTemplate>
+                          <AnimatePresence exitBeforeEnter>
+                            <motion.main
+                              variants={daoVariants}
+                              initial="hidden"
+                              animate="enter"
+                              exit="exit"
+                              transition={{ type: "linear" }}
+                              className=""
+                              key={router.route}
+                            >
+                              <Component {...pageProps} />
+                            </motion.main>
+                          </AnimatePresence>
+                        </DaoTemplate>
+                      </>
+                    ) : (
+                      <Component {...pageProps} />
+                    )}
+                  </ThemeProvider>
+                  <AbstractAlert
+                    alerts={alert}
+                    // set={(val: IAlerts[]) => setAlert(val)}
+                    close={(i: number) => {
+                      setAlert((prevState) =>
+                        prevState.filter((_item, idx) => idx !== i)
+                      );
+                    }}
+                  />
+                </SessionWrapper>
+              </SlugContext.Provider>
+            </WalletProvider>
+          </AddWalletProvider>
+        </SessionProvider>
       </ThemeContext.Provider>
     </>
   );
 };
 
-export default App;
+export default trpc.withTRPC(App);
