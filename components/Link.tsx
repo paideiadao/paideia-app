@@ -102,12 +102,12 @@ const Link = React.forwardRef<HTMLAnchorElement, ILinkProps>((props, ref) => {
 
   return (
     <MuiLink
-      to={href}
-      component={NextLinkComposed}
+      href={href.toString()}
       className={className}
       ref={ref}
       sx={sx}
       {...other}
+      underline="none"
     />
   );
 });
