@@ -6,6 +6,7 @@ import { getErgoWalletContext, isAddressValid } from "./AddWallet";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useWallet } from "./WalletContext";
 import { LoadingButton } from "@mui/lab";
+import { trpc } from "@utils/trpc";
 
 const Nautilus: React.FC<{
   set: Function;
@@ -21,6 +22,10 @@ const Nautilus: React.FC<{
   const { wallet, setWallet, dAppWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [changeLoading, setChangeLoading] = React.useState<number | null>(null);
+  const getNonceForChangeAddress =
+    trpc.auth.getNonceForChangeAddress.useMutation();
+  const verifyNonceForChangeAddress =
+    trpc.auth.verifyNonceForChangeAddress.useMutation();
 
   React.useEffect(() => {
     const wrapper = async () => {
@@ -29,7 +34,7 @@ const Nautilus: React.FC<{
       props.setLoading(false);
     };
     if (!dAppWallet.connected || !isAddressValid(wallet)) {
-        wrapper();
+      wrapper();
     }
   }, []);
 
@@ -100,7 +105,7 @@ const Nautilus: React.FC<{
                   key={`${i}-address-selector-${c}`}
                 >
                   {i}
-                  {changeLoading === c || (changeLoading === c) ? (
+                  {changeLoading === c ? (
                     <LoadingButton
                       color="primary"
                       loading
@@ -120,57 +125,35 @@ const Nautilus: React.FC<{
                           {
                             setChangeLoading(c);
                             try {
-                              await globalContext.api
-                                ?.changeAddress(i)
-                                .then(async (signingMessage: any) => {
-                                  if (signingMessage !== undefined) {
-                                    const context =
-                                      await getErgoWalletContext();
-                                    const response = await context.auth(
-                                      i,
-                                      signingMessage.data.signingMessage
-                                    );
-                                    response.proof = Buffer.from(
-                                      response.proof,
-                                      "hex"
-                                    ).toString("base64");
-                                    globalContext.api
-                                      ?.signMessage(
-                                        signingMessage.data.tokenUrl,
-                                        {
-                                          ...response,
-                                          previous_wallet_address:
-                                            wallet === "" ||
-                                            wallet === undefined
-                                              ? undefined
-                                              : wallet,
-                                        }
-                                      )
-                                      .then((data) => {
-                                        localStorage.setItem(
-                                          "jwt_token_login",
-                                          data.data.access_token
-                                        );
-                                        localStorage.setItem(
-                                          "user_id",
-                                          data.data.id
-                                        );
-                                        localStorage.setItem(
-                                          "alias",
-                                          data.data.alias
-                                        );
-                                        props.setLoading(false);
-                                        setWallet(i);
-                                        setChangeLoading(0);
-                                      })
-                                      .catch((e: any) => {
-                                        console.log(e);
-                                      });
-                                  }
+                              const address = i;
+                              const nonce =
+                                await getNonceForChangeAddress.mutateAsync();
+                              const context = await getErgoWalletContext();
+                              const response = await context.auth(
+                                address,
+                                nonce.nonce
+                              );
+                              const signedMessage: string =
+                                response.signedMessage;
+                              const proof: string = response.proof;
+                              const result =
+                                await verifyNonceForChangeAddress.mutateAsync({
+                                  address: address,
+                                  signedMessage: signedMessage,
+                                  proof: proof,
                                 });
+                              localStorage.setItem(
+                                "jwt_token_login",
+                                result.jwt
+                              );
+                              localStorage.setItem("user_id", result.id);
+                              localStorage.setItem("alias", result.alias);
+                              props.setLoading(false);
+                              setWallet(i);
+                              setChangeLoading(null);
                             } catch (e) {
                               console.log(e);
-                              setChangeLoading(0);
+                              setChangeLoading(null);
                             }
                           }
                         }

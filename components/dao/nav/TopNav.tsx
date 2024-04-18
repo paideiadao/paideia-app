@@ -167,10 +167,10 @@ const TopNav: React.FC<INav> = (props) => {
         notificationsError.response.data.detail +
           " - Please reconnect your wallet and refresh"
       );
-      setTimeout(() => {
-        clearWallet();
-        router.reload();
-      }, 2000);
+      // setTimeout(() => {
+      //   clearWallet();
+      //   router.reload();
+      // }, 2000);
     }
   }, [notificationsError]);
 

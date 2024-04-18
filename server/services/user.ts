@@ -8,16 +8,6 @@ export const generateNonceForLogin = async (userAddress: string) => {
     where: { address: userAddress },
   });
 
-  // If no user exists with the defaultAddress, then check using the getUserIdByAddress function
-  if (!user) {
-    const userId = await getUserIdByAddress(userAddress);
-    if (userId) {
-      user = await prisma.user.findUnique({
-        where: { id: userId },
-      });
-    }
-  }
-
   // If still no user found, then create a new one
   if (!user) {
     user = await prisma.user.create({
@@ -43,7 +33,7 @@ export const generateNonceForLogin = async (userAddress: string) => {
   return { nonce, userId: user.id };
 };
 
-export const generateNonceForAddWallet = async (userId: string) => {
+export const generateNonceForChangeAddress = async (userId: string) => {
   const nonce = nanoid();
 
   // Update the user's nonce in the database
@@ -56,74 +46,8 @@ export const generateNonceForAddWallet = async (userId: string) => {
     throw new Error("User doesn't exist");
   }
 
-  return nonce;
+  return { nonce, userId: user.id };
 };
-
-export async function checkAddressAvailability(address: string) {
-  const [userWithAddress, walletWithChangeAddress, walletWithAddressInArrays] =
-    await prisma.$transaction([
-      prisma.user.findUnique({
-        where: {
-          address: address,
-        },
-        select: { id: true },
-      }),
-      prisma.wallet.findUnique({
-        where: {
-          changeAddress: address,
-        },
-        select: { id: true },
-      }),
-      prisma.wallet.findFirst({
-        where: {
-          OR: [
-            { unusedAddresses: { has: address } },
-            { usedAddresses: { has: address } },
-          ],
-        },
-        select: { id: true },
-      }),
-    ]);
-
-  if (userWithAddress || walletWithChangeAddress || walletWithAddressInArrays) {
-    return { status: "unavailable" };
-  }
-  return { status: "available" };
-}
-
-export async function getUserIdByAddress(address: string) {
-  const [walletWithChangeAddress, walletWithAddressInArrays] =
-    await prisma.$transaction([
-      prisma.wallet.findUnique({
-        where: {
-          changeAddress: address,
-        },
-        select: { userId: true },
-      }),
-      prisma.wallet.findFirst({
-        where: {
-          OR: [
-            { unusedAddresses: { has: address } },
-            { usedAddresses: { has: address } },
-          ],
-        },
-        select: { userId: true },
-      }),
-    ]);
-
-  // If the address is a change address in a wallet or exists in the arrays of a wallet,
-  // return the user ID associated with that wallet
-  if (walletWithChangeAddress) {
-    return walletWithChangeAddress.userId;
-  }
-
-  if (walletWithAddressInArrays) {
-    return walletWithAddressInArrays.userId;
-  }
-
-  // If none of the above conditions match, the address is not associated with any user
-  return null;
-}
 
 export const deleteEmptyUser = async (
   userId: string
