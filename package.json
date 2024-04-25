@@ -6,7 +6,8 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "npx prettier --write .",
-    "mobile": "next build && next export && npx cap sync"
+    "mobile": "next build && next export && npx cap sync",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.1",
