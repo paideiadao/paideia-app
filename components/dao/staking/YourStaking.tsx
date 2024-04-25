@@ -45,7 +45,7 @@ const YourStaking: React.FC = () => {
   });
 
   React.useEffect(() => {
-    if (appContext.api.userStakeData) {
+    if (appContext.api?.userStakeData) {
       const stake = appContext.api.userStakeData;
       const stakeAmount = stake.stake_keys
         .map((stake) => stake.stake)
@@ -66,8 +66,10 @@ const YourStaking: React.FC = () => {
         totalVotingPowerUsed: String(totalVotingPowerUsed),
       });
     }
-  }, [appContext.api.userStakeData]);
-  const ticker = "PAI";
+  }, [appContext.api?.userStakeData]);
+  const ticker =
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.tokenomics.token_name;
 
   return (
     <Box>

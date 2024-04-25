@@ -14,9 +14,9 @@ import {
 import * as React from "react";
 
 const GeneralInformation: React.FC = () => {
-  let discussionContext =
+  const discussionContext =
     React.useContext<IDiscussionContext>(DiscussionContext);
-  let value = discussionContext.api.value;
+  const value = discussionContext.api?.value;
 
   return (
     <>
@@ -31,10 +31,10 @@ const GeneralInformation: React.FC = () => {
         }}
       >
         <TextField
-          value={value.name}
+          value={value?.name}
           label="Discussion name"
           onChange={(e: any) =>
-            discussionContext.api.setValue({
+            discussionContext.api?.setValue({
               ...value,
               name: e.target.value,
             })
@@ -58,10 +58,10 @@ const GeneralInformation: React.FC = () => {
             id={`new-discussion-category`}
             variant="outlined"
             label="Discussion category"
-            value={value.category}
+            value={value?.category}
             sx={{ height: "100%", color: "text.primary" }}
             onChange={(e: any) =>
-              discussionContext.api.setValue({
+              discussionContext.api?.setValue({
                 ...value,
                 category: e.target.value,
               })

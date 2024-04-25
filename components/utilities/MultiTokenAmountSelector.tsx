@@ -29,14 +29,15 @@ const MultiTokenAmountSelector: React.FC<IMultiTokenAmountSelectorProps> = (
   const [tokens, setTokens] = useState<ITokenAmountDetails[]>([]);
 
   useEffect(() => {
-    props.setTokens(tokens)
-  }, [tokens])
+    props.setTokens(tokens);
+  }, [tokens]);
 
   return (
     <>
       {tokens.map((token, index) => {
         return (
           <Box
+            key={`token-${index}`}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -75,7 +76,10 @@ const MultiTokenAmountSelector: React.FC<IMultiTokenAmountSelectorProps> = (
                 >
                   {props.tokens.map(
                     (tokenDetails: { tokenId: string; name: string }) => (
-                      <MenuItem value={tokenDetails.tokenId}>
+                      <MenuItem
+                        value={tokenDetails.tokenId}
+                        key={`token-detail-${tokenDetails.tokenId}`}
+                      >
                         {tokenDetails.name}
                       </MenuItem>
                     )

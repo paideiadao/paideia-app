@@ -15,7 +15,7 @@ interface ISocialLinkGet {
 const BottomNav: React.FC = () => {
   const router = useRouter();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-  const daoData = globalContext.api.daoData;
+  const daoData = globalContext.api?.daoData;
   const theme = useTheme()
   return daoData === undefined ? null : (
     <Box

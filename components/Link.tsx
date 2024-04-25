@@ -31,11 +31,12 @@ const NextLinkComposed = React.forwardRef<
       scroll={scroll}
       shallow={shallow}
       prefetch={prefetch}
-    >
-      <a ref={ref} {...other} />
-    </NextLink>
+      ref={ref}
+      {...other}
+    />
   );
 });
+NextLinkComposed.displayName = "NextLinkComposed";
 
 interface ILinkProps {
   children: React.ReactNode;
@@ -101,14 +102,15 @@ const Link = React.forwardRef<HTMLAnchorElement, ILinkProps>((props, ref) => {
 
   return (
     <MuiLink
-      to={href}
-      component={NextLinkComposed}
+      href={href.toString()}
       className={className}
       ref={ref}
       sx={sx}
       {...other}
+      underline="none"
     />
   );
 });
+Link.displayName = "Link";
 
 export default Link;

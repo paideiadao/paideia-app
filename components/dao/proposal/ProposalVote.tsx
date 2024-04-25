@@ -60,7 +60,7 @@ const ProposalVote: React.FC = () => {
     "yes/no": <YesNo />,
     options: <Options />,
   };
-  const voting_system = context.api.value.voting_system;
+  const voting_system = context.api?.value.voting_system ?? "yes/no";
 
   return (
     <>
@@ -74,7 +74,7 @@ const ProposalVote: React.FC = () => {
         Voting System
       </Typography>
       {content[voting_system]}
-      {context.api.value.actions.filter(
+      {context.api?.value.actions.filter(
         (i: IProposalAction) => i.name === undefined
       ).length === 0 &&
         context.api.value.voting_system === "yes/no" && (
@@ -88,15 +88,15 @@ const ProposalVote: React.FC = () => {
             }}
           >
             <Button
-              disabled={context?.api?.value?.actions?.length >= 1}
+              disabled={context.api?.value?.actions?.length >= 1}
               endIcon={<AddIcon />}
               onClick={() => {
-                const temp = [...context.api.value.actions];
+                const temp = [...(context.api?.value.actions ?? [])];
                 temp.push({
                   name: undefined,
                   data: undefined,
                 });
-                context.api.setValue({
+                context.api?.setValue({
                   ...context.api.value,
                   actions: temp,
                 });
@@ -106,7 +106,7 @@ const ProposalVote: React.FC = () => {
             </Button>
           </Box>
         )}
-      {context.api.errors.voting && (
+      {context.api?.errors.voting && (
         <FormHelperText sx={{ mt: 1 }} error>
           Voting or Action not configured
         </FormHelperText>

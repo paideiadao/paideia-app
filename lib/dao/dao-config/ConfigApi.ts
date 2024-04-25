@@ -16,15 +16,15 @@ export interface IConfigData {
 }
 
 export default class ConfigApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   data: IConfigData;
   setData: Function;
 
-  constructor(api: AppApi, data: IConfigData, setData: Function) {
+  constructor(api: AppApi | undefined, data: IConfigData, setData: Function) {
     super();
     this.api = api;
     this.data = data;
     this.setData = setData;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 }

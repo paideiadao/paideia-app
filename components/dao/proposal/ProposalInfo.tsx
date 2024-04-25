@@ -67,7 +67,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
       const infos: Record<string, AssetInfo | null> = {};
       if (!actions) return;
       for (const action of actions) {
-        for (const output of action.action.outputs ?? []) {
+        for (const output of action.action?.outputs ?? []) {
           if (output.tokens) {
             for (const tokenArray of output.tokens) {
               const tokenDetails = generateTokenDetails(tokenArray);
@@ -165,7 +165,9 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
                       mb: mobile ? 1 : 0,
                     }}
                   >
-                    {tokenInfos[tokenId] ? tokenInfos[tokenId].name : tokenId}
+                    {tokenInfos && tokenInfos[tokenId]
+                      ? tokenInfos[tokenId]?.name
+                      : tokenId}
                   </Typography>
                 </Box>
                 <Box
@@ -290,7 +292,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           >
             <Typography sx={{ fontWeight: 700 }}>Activation time:</Typography>
             <Typography sx={{ wordBreak: "break-all" }}>
-              {new Date(action.action.activationTime).toLocaleString()}
+              {new Date(action.action?.activationTime ?? 0).toLocaleString()}
             </Typography>
           </Box>
           <Box
@@ -303,7 +305,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           >
             <Typography sx={{ fontWeight: 700 }}>Recurring:</Typography>
             <Typography sx={{ wordBreak: "break-all" }}>
-              {action.action.repeats ? action.action.repeats : "N/A"}
+              {action.action?.repeats ? action.action.repeats : "N/A"}
             </Typography>
           </Box>
           <Box
@@ -315,19 +317,23 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
             }}
           >
             <Typography sx={{ fontWeight: 700, mb: 1 }}>
-              {concatUpdates(action.action).length > 0
+              {action.action && concatUpdates(action.action).length > 0
                 ? "Config Diff"
                 : "Outputs:"}
             </Typography>
             <Typography sx={{ wordBreak: "break-all" }}>
-              {!action.action?.outputs &&
+              {action.action &&
+                !action.action?.outputs &&
                 concatUpdates(action.action).length === 0 &&
                 "N/A"}
             </Typography>
           </Box>
           <Box>
             {action.action?.outputs?.map((output) => renderOutput(output))}
-            {concatUpdates(action.action).map((update) => renderUpdate(update))}
+            {action.action &&
+              concatUpdates(action.action).map((update) =>
+                renderUpdate(update)
+              )}
           </Box>
         </Box>
       ))}
@@ -347,7 +353,14 @@ const fetchAssetInfo = async (token: TokenDetails): Promise<AssetInfo> => {
     return assetInfo;
   } catch (error) {
     console.log("Failed to fetch asset info:", error);
-    return null;
+    return {
+      name: "",
+      description: "",
+      decimals: 0,
+      totalMinted: 0,
+      nftType: "",
+      extraMetaData: {},
+    };
   }
 };
 

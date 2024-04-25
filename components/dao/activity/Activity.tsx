@@ -145,7 +145,10 @@ const generateRedirectUrl = (activity: IActivity, dao: string) => {
     return `https://explorer.ergoplatform.com/en/transactions/${activity.link}`;
   }
   const url =
-    "/" + dao + "/proposal/" + generateSlug(activity.link, activity.value);
+    "/" +
+    dao +
+    "/proposal/" +
+    generateSlug(activity.link ?? "", activity.value);
   if (activity.category === "Comments") {
     return url + "?tab=comments";
   }

@@ -19,12 +19,12 @@ const defaultSettingsData: IUserSettings = {
 };
 
 export default class SettingsApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   value: IUserSettings;
   setValue: (val: IUserSettings) => void;
 
   constructor(
-    api: AppApi,
+    api: AppApi | undefined,
     value: IUserSettings,
     setValue: (val: IUserSettings) => void
   ) {
@@ -32,12 +32,12 @@ export default class SettingsApi extends AbstractApi {
     this.api = api;
     this.value = value;
     this.setValue = setValue;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 
   edit(): Promise<any> | void {
     return this.put(
-      `/users/profile/settings?user_details_id=${this.api.daoUserData.id}`,
+      `/users/profile/settings?user_details_id=${this.api?.daoUserData.id}`,
       {
         settings: this.value,
       }

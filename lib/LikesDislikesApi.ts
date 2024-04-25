@@ -11,19 +11,19 @@ interface ILikeDislikePut {
 }
 
 export default class LikesDislikesApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   putUrl: string;
 
-  constructor(api: AppApi, putUrl: string) {
+  constructor(api: AppApi | undefined, putUrl: string) {
     super();
     this.api = api;
     this.putUrl = putUrl;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 
   likeDislikeData(type: LikeDislikeAction): ILikeDislikePut {
     return {
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: this.api?.daoUserData.id,
       type: type,
     };
   }

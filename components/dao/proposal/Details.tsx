@@ -83,7 +83,8 @@ const Details: React.FC = () => {
           }}
         >
           <CalendarTodayIcon sx={{ mr: ".3rem", fontSize: "1.2rem" }} />
-          Created: {dateFormat(proposalContext.api.value.date, "mmmm dS, yyyy")}
+          Created:{" "}
+          {dateFormat(proposalContext.api?.value.date, "mmmm dS, yyyy")}
         </Box>
         <Box
           sx={{

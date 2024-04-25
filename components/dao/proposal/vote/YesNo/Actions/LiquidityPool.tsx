@@ -61,9 +61,9 @@ const LiquidityPoolAction: React.FC<IProposalAction> = (props) => {
   );
 
   React.useEffect(() => {
-    const temp = [...context.api.value.actions];
-    temp[props.c].data = value;
-    context.api.setValue({
+    const temp = [...(context.api?.value.actions ?? [])];
+    temp[props.c ?? 0].data = value;
+    context.api?.setValue({
       ...context.api.value,
       actions: temp,
     });
@@ -146,10 +146,10 @@ const LiquidityPoolAction: React.FC<IProposalAction> = (props) => {
           tradingPair={value.tradingPair}
           tokenTicker={tokenTicker}
           set={(val: string) => setValue({ ...value, tradingPair: val })}
-          c={props.c}
+          c={props.c ?? 0}
         />
         <DexSelector
-          c={props.c}
+          c={props.c ?? 0}
           dex={value.dex}
           set={(val: string) => setValue({ ...value, dex: val })}
         />

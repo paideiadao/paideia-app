@@ -58,38 +58,38 @@ const ThemeIndicator: React.FC<{ theme: ITheme }> = (props) => {
 };
 
 const BannerPreview: React.FC<{ data: IFile }> = (props) => {
-  return (
-    props.data.file != null && (
-      <Box sx={{ width: "100%" }}>
-        <img
-          src={props.data.url}
-          alt="Picture of the author"
-          style={{
-            borderRadius: ".2rem",
-          }}
-          width="1200rem"
-          height="410rem"
-        />
-        <Box
-          sx={{
-            height: "3rem",
-            pl: "0rem",
-            pr: "1rem",
-            display: "flex",
-            width: "100%",
-          }}
-        >
-          <Box sx={{ mt: ".2rem" }}>
-            {props.data.file.name}
-            <Box sx={{ color: "text.secondary", fontSize: ".9rem" }}>
-              {props.data.file === undefined || props.data.file === -1
-                ? "File Max size 1Mb. Dimensions 48px by 48px."
-                : bytesToSize(props.data.file.size)}
-            </Box>
+  return props.data.file !== null ? (
+    <Box sx={{ width: "100%" }}>
+      <img
+        src={props.data.url}
+        alt="Picture of the author"
+        style={{
+          borderRadius: ".2rem",
+        }}
+        width="1200rem"
+        height="410rem"
+      />
+      <Box
+        sx={{
+          height: "3rem",
+          pl: "0rem",
+          pr: "1rem",
+          display: "flex",
+          width: "100%",
+        }}
+      >
+        <Box sx={{ mt: ".2rem" }}>
+          {props.data.file.name}
+          <Box sx={{ color: "text.secondary", fontSize: ".9rem" }}>
+            {props.data.file === undefined || props.data.file === -1
+              ? "File Max size 1Mb. Dimensions 48px by 48px."
+              : bytesToSize(props.data.file.size)}
           </Box>
         </Box>
       </Box>
-    )
+    </Box>
+  ) : (
+    <></>
   );
 };
 
@@ -231,12 +231,14 @@ const Design: React.FC<{
             labelWidth="26%"
             title="Logo"
             component={
-              data.design.logo.file != null && (
+              data.design.logo.file !== null ? (
                 <ImageWrapper
                   size={bytesToSize(data.design.logo.file.size)}
                   img={data.design.logo.url}
                   name={data.design.logo.file.name}
                 />
+              ) : (
+                <></>
               )
             }
           />

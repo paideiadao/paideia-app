@@ -1,19 +1,15 @@
 import * as React from "react";
 import {
-  AlertTitle,
   Box,
   Button,
-  Divider,
   IconButton,
   OutlinedInput,
   Select,
   Slider,
   Switch,
 } from "@mui/material";
-import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
-import { CreationContext } from "../../../lib/creation/Context";
-import InfoIcon from "@mui/icons-material/Info";
+import { CreationContext } from "@lib/creation/Context";
 import AddIcon from "@mui/icons-material/Add";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import WalletSelector from "./WalletSelector";
@@ -43,8 +39,8 @@ const Governance: React.FC = () => {
         <Box sx={{ width: "100%", color: "text.secondary", fontSize: ".8rem" }}>
           You can use the default settings or dive more in deep configure your
           voting system as you wish. You can enable and configure features such
-          as "Optimistic governance" or "Quadratic voting" and edit the support
-          quorum, and voting times.
+          as &quot;Optimistic governance&quot; or &quot;Quadratic voting&quot;
+          and edit the support quorum, and voting times.
         </Box>
       </Box>
       <Box
@@ -112,6 +108,7 @@ const Governance: React.FC = () => {
               {data.whitelist.map((i: any, c: number) => {
                 return (
                   <Box
+                    key={`wallet-whitelist-${c}`}
                     sx={{
                       display: "flex",
                       alignItems: "center",

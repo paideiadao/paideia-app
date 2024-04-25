@@ -80,7 +80,7 @@ const ValueLabel: React.FC<{
 
 const Treasury: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
-  const daoId = context.api.daoData?.id;
+  const daoId = context.api?.daoData?.id;
   const { data: treasuryData, error: error } = useSWR(
     daoId && `/dao/treasury/${daoId}`,
     fetcher

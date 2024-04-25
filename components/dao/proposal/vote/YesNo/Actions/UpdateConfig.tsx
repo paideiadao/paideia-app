@@ -54,11 +54,7 @@ const allowedKeys = [
   "im.paideia.dao.footer",
   "im.paideia.dao.footer.enabled",
 ];
-const allowedTypes = [
-  "Long",
-  "String",
-  "Boolean"
-];
+const allowedTypes = ["Long", "String", "Boolean"];
 
 const types = {
   "im.paideia.dao.name": "String",
@@ -97,9 +93,9 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
   });
 
   React.useEffect(() => {
-    const temp = [...context.api.value.actions];
-    temp[props.c].data = value;
-    context.api.setValue({
+    const temp = [...(context.api?.value.actions ?? [])];
+    temp[props.c ?? 0].data = value;
+    context.api?.setValue({
       ...context.api.value,
       actions: temp,
     });
@@ -131,12 +127,13 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
                   key: key,
                   // @ts-ignore
                   type: types[key],
+                  // @ts-ignore
                   value: query[key].toString(),
                 };
               })
           : [];
         const daoConfig = (
-          await context.api.get<any>(`/dao/${query.dao}/config`)
+          await context.api?.get<any>(`/dao/${query.dao}/config`)
         ).data;
         const update = cfg.map((config) => {
           return {
@@ -210,8 +207,13 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
                 });
               }}
             >
-              {allowedActions.map((action: string) => (
-                <MenuItem value={action.toLowerCase()}>{action}</MenuItem>
+              {allowedActions.map((action: string, c: number) => (
+                <MenuItem
+                  key={`allowed-action-${c}`}
+                  value={action.toLowerCase()}
+                >
+                  {action}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -243,7 +245,9 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
               }}
             >
               {allowedKeys.map((key: string) => (
-                <MenuItem value={key}>{key}</MenuItem>
+                <MenuItem value={key} key={`allowed-keys-${key}`}>
+                  {key}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -275,7 +279,9 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
               }}
             >
               {allowedTypes.map((type: string) => (
-                <MenuItem value={type}>{type}</MenuItem>
+                <MenuItem value={type} key={`allowed-types-${type}`}>
+                  {type}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -346,7 +352,7 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
           Remove Row
         </Button>
       </Box>
-      {context.api.errors.actionConfig && (
+      {context.api?.errors.actionConfig && (
         <FormHelperText error sx={{ mb: "1rem" }}>
           Config field is not set
         </FormHelperText>
@@ -375,8 +381,8 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
           title="Voting Duration"
           subtitle="Set how long the voting window should be open"
         />
-        <FormHelperText error={context.api.errors.votingDuration}>
-          {context.api.errors.votingDuration
+        <FormHelperText error={context.api?.errors.votingDuration}>
+          {context.api?.errors.votingDuration
             ? "Voting duration cannot be less than minimum in Dao Config"
             : `Voting Ends at ${new Date(
                 new Date().getTime() +
@@ -409,7 +415,7 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
           title="Activation Time"
           subtitle="Set time when the action will be executed"
         />
-        {context.api.errors.activationTime && (
+        {context.api?.errors.activationTime && (
           <FormHelperText error>
             Activation time cannot be before voting ends
           </FormHelperText>

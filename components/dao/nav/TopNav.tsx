@@ -71,7 +71,7 @@ const TopNav: React.FC<INav> = (props) => {
     localStorage.setItem("jwt_token_login", "");
     localStorage.setItem("user_id", "");
     localStorage.setItem("alias", "");
-    globalContext.api.setDaoUserData(undefined);
+    globalContext.api?.setDaoUserData(undefined);
   };
 
   const closeNavOnResize = () => {
@@ -84,7 +84,7 @@ const TopNav: React.FC<INav> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (wallet.connected || dAppWallet.connected) {
+    if (dAppWallet.connected) {
       if (dao !== undefined && dao !== "") {
         if (globalContext.api?.daoUserData != undefined) {
           globalContext.api.setDaoUserData({
@@ -92,7 +92,7 @@ const TopNav: React.FC<INav> = (props) => {
             loading: true,
           });
         } else
-          globalContext.api.setDaoUserData({
+          globalContext.api?.setDaoUserData({
             dao_id: 0,
             followers: [],
             following: [],
@@ -110,9 +110,9 @@ const TopNav: React.FC<INav> = (props) => {
           });
       }
     } else {
-      globalContext.api.setDaoUserData(undefined);
+      globalContext.api?.setDaoUserData(undefined);
     }
-  }, [dao, wallet.connected, dAppWallet.connected]);
+  }, [dao, wallet, dAppWallet.connected]);
 
   const { data: apiNotifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
@@ -163,26 +163,26 @@ const TopNav: React.FC<INav> = (props) => {
 
   useEffect(() => {
     if (notificationsError?.response?.status === 401) {
-      globalContext.api.error(
+      globalContext.api?.error(
         notificationsError.response.data.detail +
           " - Please reconnect your wallet and refresh"
       );
-      setTimeout(() => {
-        clearWallet();
-        router.reload();
-      }, 2000);
+      // setTimeout(() => {
+      //   clearWallet();
+      //   router.reload();
+      // }, 2000);
     }
   }, [notificationsError]);
 
   useEffect(() => {
-    if (globalContext.api.userStakeData) {
+    if (globalContext.api?.userStakeData) {
       const stake = globalContext.api.userStakeData;
       const stakeAmount = stake.stake_keys
         .map((stake: { stake: number }) => stake.stake)
         .reduce((a: number, c: number) => a + c, 0);
       setStakeAmount(stakeAmount);
     }
-  }, [globalContext.api.userStakeData]);
+  }, [globalContext.api?.userStakeData]);
 
   return (
     <>
@@ -240,7 +240,7 @@ const TopNav: React.FC<INav> = (props) => {
               </Badge>
             </IconButton>
           </Box>
-          {globalContext.api.daoUserData !== undefined &&
+          {globalContext.api?.daoUserData !== undefined &&
           globalContext.api.daoUserData.loading === true ? (
             <Box sx={{ width: { xs: "40px", md: "160px" } }}>
               <Skeleton
@@ -249,7 +249,7 @@ const TopNav: React.FC<INav> = (props) => {
               />
             </Box>
           ) : (
-            globalContext.api.daoUserData !== undefined &&
+            globalContext.api?.daoUserData !== undefined &&
             isAddressValid(wallet) && (
               <>
                 {globalContext.api.daoUserData !== undefined && (
@@ -294,7 +294,7 @@ const TopNav: React.FC<INav> = (props) => {
               </>
             )
           )}
-          <ConnectWallet show={globalContext.api.daoUserData === undefined} />
+          <ConnectWallet show={globalContext.api?.daoUserData === undefined} />
         </Box>
         <Box sx={{ position: "relative" }}>
           <ProfilePopup open={openProfile} close={handleCloseProfile} />

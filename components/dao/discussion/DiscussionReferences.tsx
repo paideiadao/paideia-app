@@ -152,10 +152,10 @@ const DiscussionCard: React.FC<IReference> = (props) => {
           likes={props.likes.length}
           dislikes={props.dislikes.length}
           userSide={
-            props.likes.indexOf(parseInt(localStorage.getItem("user_id"))) > -1
+            props.likes.indexOf(parseInt(localStorage.getItem("user_id") ?? "")) > -1
               ? 1
               : props.dislikes.indexOf(
-                  parseInt(localStorage.getItem("user_id"))
+                  parseInt(localStorage.getItem("user_id") ?? "")
                 ) > -1
               ? 0
               : undefined

@@ -9,19 +9,19 @@ interface ICommentPut {
 }
 
 export default class CommentsApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   proposalId: string;
 
-  constructor(api: AppApi, proposalId: string) {
+  constructor(api: AppApi | undefined, proposalId: string) {
     super();
     this.api = api;
     this.proposalId = proposalId;
-    this.setAlert = api.setAlert;
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 
   commentData(comment: IComment): ICommentPut {
     return {
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: this.api?.daoUserData.id,
       comment: comment.comment,
       parent: comment.parent,
     };

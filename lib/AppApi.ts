@@ -14,12 +14,12 @@ import { IUserStakeData } from "@components/dao/staking/YourStaking";
 export class AppApi extends AbstractApi {
   theme: Theme;
   setTheme: Function;
-  daoData: any;
+  daoData: any; // todo: fix this
   setDaoData: Function;
   daoUserData: IDaoUserData;
-  setDaoUserData: (val: IDaoUserData) => void;
+  setDaoUserData: Function;
   userStakeData: IUserStakeData;
-  setUserStakeData: (val: IUserStakeData) => void;
+  setUserStakeData: Function;
   loading: number;
   setLoading: Function;
 
@@ -112,7 +112,7 @@ export class AppApi extends AbstractApi {
     );
   }
 
-  async getDaoUser(): Promise<IDaoUserRes> {
+  async getDaoUser(): Promise<IDaoUserRes | null> {
     const userId = getUserId();
     if (userId && this.daoData && this.daoData.id !== undefined) {
       return this.get<IDaoUserRes>(
@@ -127,15 +127,17 @@ export class AppApi extends AbstractApi {
     tokenIds: string[]
   ): Promise<IDaoMembership> {
     const tokenCheck = await this.daoTokenCheck(addresses, tokenIds);
+    const sortIndex = [...Object.values(tokenCheck.data)]
 
-    const sort = [...new Set([].concat(...Object.values(tokenCheck.data)))].map(
+    const sort = [...new Set(sortIndex)].map(
       (item) => {
         return {
-          token: Object.keys(item)[0],
-          value: Object.values(item)[0],
+          token: Object.keys(item[0])[0],
+          value: Object.values(item[0])[0],
         };
       }
     );
+
     const sort1 = Array.from(
       sort.reduce(
         (m, { token, value }) => m.set(token, (m.get(token) || 0) + value),
@@ -148,7 +150,7 @@ export class AppApi extends AbstractApi {
       token: string;
       value: number;
     }[] = [];
-    if (this.daoData?.tokenomics?.token_id != undefined) {
+    if (this.daoData?.tokenomics?.token_id) {
       currentTokens = sort1.filter(
         (item) => item.token == this.daoData.tokenomics.token_id
       );

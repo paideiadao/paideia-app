@@ -11,7 +11,7 @@ import VotingChoice from "../VotingChoice";
 
 const YesNo: React.FC = () => {
   const context = React.useContext<IProposalContext>(ProposalContext);
-  const actions = context.api.value.actions;
+  const actions = context.api?.value.actions ?? [];
   return (
     <>
       <VotingChoice
@@ -28,11 +28,12 @@ const YesNo: React.FC = () => {
       />
       {actions.map((i: IProposalAction, c: number) => (
         <AddAction
+          key={`actions-proposal-${c}`}
           name={i.name}
           close={() => {
             let temp = [...actions];
             temp.splice(c, 1);
-            context.api.setValue({
+            context.api?.setValue({
               ...context.api.value,
               actions: temp,
             });

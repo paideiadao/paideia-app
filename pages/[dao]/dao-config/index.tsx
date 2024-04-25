@@ -60,7 +60,7 @@ const DaoConfig: React.FC = () => {
 
   const globalContext = useContext<IGlobalContext>(GlobalContext);
   const api = new ConfigApi(globalContext.api, data, setData);
-  const daoData = globalContext.api.daoData;
+  const daoData = globalContext.api?.daoData;
   const router = useRouter();
   const { dao } = router.query;
 

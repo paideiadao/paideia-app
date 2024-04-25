@@ -16,7 +16,6 @@ import {
   Slider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { deviceWrapper } from "@components/utilities/Style";
 import { IThemeContext, ThemeContext } from "@lib/ThemeContext";
 import { DarkTheme } from "@theme/theme";
 import { categories, IFilters, marks } from "@pages/[dao]/members/index";

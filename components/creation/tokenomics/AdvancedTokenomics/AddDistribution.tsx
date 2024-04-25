@@ -109,6 +109,7 @@ const AddDistribution: React.FC<{
             {distributionTypes.map((i: any) => {
               return (
                 <TextField
+                  key={`text-label-${i.label}`}
                   value={i.label}
                   sx={{
                     width: "32.33%",

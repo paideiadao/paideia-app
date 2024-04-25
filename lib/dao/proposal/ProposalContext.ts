@@ -2,10 +2,10 @@ import * as React from "react";
 import ProposalApi from "./ProposalApi";
 
 export interface IProposalContext {
-  api: ProposalApi;
+  api?: ProposalApi;
 }
 
-const ProposalContext = React.createContext({
+const ProposalContext = React.createContext<IProposalContext>({
   api: undefined,
 });
 

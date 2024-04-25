@@ -222,7 +222,9 @@ const AddAction: React.FC<IProposalAction> = (props) => {
                   ? true
                   : temp === ""
                   ? i.mostCommon
-                  : i.title.toLowerCase().includes(temp);
+                  : i.title
+                  ? i.title.toLowerCase().includes(temp)
+                  : false;
               })
               .map((i: IActionType, c: number) => {
                 return (
@@ -230,21 +232,21 @@ const AddAction: React.FC<IProposalAction> = (props) => {
                     key={`proposal-action-${c}-${i.title}`}
                     {...i}
                     select={() => {
-                      let temp = [...context.api.value.actions];
-                      temp[props.c].name = i.title;
-                      if (context.api.value.voting_system === "options") {
-                        temp[props.c].icon = i.icon;
-                        temp[props.c].description = i.subtitle;
-                        temp[props.c].options = [
+                      let temp = [...(context.api?.value.actions ?? [])];
+                      temp[props.c ?? 0].name = i.title;
+                      if (context.api?.value.voting_system === "options") {
+                        temp[props.c ?? 0].icon = i.icon;
+                        temp[props.c ?? 0].description = i.subtitle;
+                        temp[props.c ?? 0].options = [
                           {
                             name: "",
                             description: "",
-                            data: getData(i.title),
+                            data: i.title ? getData(i.title) : undefined,
                             rank: 1,
                           },
                         ];
                       }
-                      context.api.setValue({
+                      context.api?.setValue({
                         ...context.api.value,
                         actions: temp,
                       });
@@ -283,7 +285,7 @@ const AddAction: React.FC<IProposalAction> = (props) => {
                 cursor: "pointer",
               }}
               color="error"
-              onClick={() => props.close()}
+              onClick={() => props.close && props.close()}
             />
           )}
           {props.options !== undefined && props.name !== undefined ? (
@@ -313,11 +315,11 @@ const AddAction: React.FC<IProposalAction> = (props) => {
               </Box>
               <Box sx={{ width: "80%", alignItems: "center" }}>
                 <Header title={props.name} small mb="0" />
-                <Subtitle subtitle={props.description} small />
+                <Subtitle subtitle={props.description ?? ""} small />
               </Box>
               <Button
                 sx={{ ml: "auto", mr: "1rem" }}
-                onClick={() => props.close()}
+                onClick={() => props.close && props.close()}
               >
                 Change
               </Button>

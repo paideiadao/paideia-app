@@ -3,9 +3,7 @@ import * as React from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import { GlobalContext } from "@lib/AppContext";
 import { modalBackground } from "@components/utilities/modalBackground";
-import {
-  Header,
-} from "@components/creation/utilities/HeaderComponents";
+import { Header } from "@components/creation/utilities/HeaderComponents";
 import { deviceWrapper } from "@components/utilities/Style";
 import EditFollow from "./EditFollow";
 import { IDaoUserData } from "@lib/Interfaces";
@@ -46,226 +44,222 @@ const ProfileHeader: React.FC<{
   followed?: boolean;
   data: IDaoUserData;
 }> = (props) => {
-  let globalContext = React.useContext(GlobalContext);
+  const globalContext = React.useContext(GlobalContext);
   const [open, setOpen] = React.useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  return (
-    props.data !== undefined && (
+  return props.data !== undefined ? (
+    <Box
+      sx={{
+        ml: deviceWrapper("0", "1rem"),
+        display: "flex",
+        alignItems: deviceWrapper("center", "flex-start"),
+        mt: ".5rem",
+        flexDirection: deviceWrapper("column", "row"),
+      }}
+    >
+      <Avatar
+        sx={{
+          mr: deviceWrapper("0", ".5rem"),
+          width: deviceWrapper("8rem", "4.5rem"),
+          height: deviceWrapper("8rem", "4.5rem"),
+        }}
+        src={props.data.profile_img_url}
+      ></Avatar>
       <Box
         sx={{
-          ml: deviceWrapper("0", "1rem"),
-          display: "flex",
-          alignItems: deviceWrapper("center", "flex-start"),
-          mt: ".5rem",
-          flexDirection: deviceWrapper("column", "row"),
+          fontSize: "1.3rem",
+          display: deviceWrapper("block", "none"),
+          mx: 1,
+          overflow: "hidden",
         }}
       >
-        <Avatar
-          sx={{
-            mr: deviceWrapper("0", ".5rem"),
-            width: deviceWrapper("8rem", "4.5rem"),
-            height: deviceWrapper("8rem", "4.5rem"),
-          }}
-          src={props.data.profile_img_url}
-        ></Avatar>
+        {snipAddress(props.data.name, 25, 12)}
+      </Box>
+      <Box
+        sx={{
+          display: deviceWrapper("block", "none"),
+          mt: ".5rem",
+          mb: "1.5rem",
+        }}
+      >
+        <EditFollow
+          edit={props.edit ?? false}
+          followed={props.followed ?? false}
+          user_id={props.data.id}
+        />
+      </Box>
+      <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
         <Box
           sx={{
-            fontSize: "1.3rem",
-            display: deviceWrapper("block", "none"),
-            mx: 1,
-            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            width: deviceWrapper("100%", "75%"),
           }}
         >
-          {snipAddress(props.data.name, 25, 12)}
-        </Box>
-        <Box
-          sx={{
-            display: deviceWrapper("block", "none"),
-            mt: ".5rem",
-            mb: "1.5rem",
-          }}
-        >
-          <EditFollow
-            edit={props.edit}
-            followed={props.followed}
-            user_id={props.data.id}
-          />
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
           <Box
             sx={{
+              width: "100%",
+              display: "block",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {props.data.name}
+          </Box>
+          <Box
+            sx={{
+              color: "text.secondary",
+              fontSize: deviceWrapper(".9rem", ".7rem"),
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              width: deviceWrapper("100%", "75%"),
-            }}
-          >
-            <Box
-              sx={{
-                width: "100%",
-                display: "block",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-                {props.data.name}
-            </Box>
-            <Box
-              sx={{
-                color: "text.secondary",
-                fontSize: deviceWrapper(".9rem", ".7rem"),
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                mt: "-.5rem",
-                mb: ".5rem",
-              }}
-            >
-              Lvl {props.data.level} | {levels[props.data.level].name}
-              <Box sx={{ ml: "auto" }}>
-                <Button
-                  onClick={handleOpen}
-                  startIcon={<InfoIcon />}
-                  size="small"
-                >
-                  Learn More
-                </Button>
-              </Box>
-            </Box>
-            <Box sx={{ width: "100%", height: ".5rem", pr: 1 }}>
-              <LinearProgress variant="determinate" value={15} />
-            </Box>
-            <Box sx={{ width: "100%", display: "flex", pr: 1 }}>
-              <Box
-                sx={{ ml: "auto", color: "text.secondary", fontSize: ".7rem" }}
-              >
-                {levels[props.data.level + 1].points -
-                  levels[props.data.level].points}{" "}
-                PTS till next lvl
-              </Box>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              display: deviceWrapper("none", "flex"),
-              height: "100%",
               alignItems: "center",
-              ml: "auto",
+              width: "100%",
+              mt: "-.5rem",
+              mb: ".5rem",
             }}
           >
-            <EditFollow
-              edit={props.edit}
-              followed={props.followed}
-              user_id={props.data.id}
-            />
-          </Box>
-        </Box>
-        <Modal open={open} onClose={handleClose}>
-          <Box
-            sx={{
-              ...modalBackground,
-              backgroundColor: "fileInput.main",
-              width: deviceWrapper("18rem", "30rem"),
-              pb: ".5rem",
-            }}
-          >
-            <Header title="How do levels work?" />
-            <Box
-              sx={{ fontSize: deviceWrapper(".6rem", ".9rem"), mt: ".5rem" }}
-            >
-              We have a level system that easily identifies users that are more
-              engaged members of the community. The way it works is straight
-              forward. Different actions get you points and each time you reach
-              a specific amount of points, you reach a new level.
-            </Box>
-            <Box sx={{ mt: ".5rem" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  mt: ".25rem",
-                  mb: ".25rem",
-                  color: "text.primary",
-                  fontSize: deviceWrapper(".6rem", ".9rem"),
-                }}
-              >
-                <Box>Level</Box>
-                <Box sx={{ ml: "auto" }}>Points needed</Box>
-              </Box>
-              {levels.map((i: ILevel, c: number) => (
-                <Box
-                  key={`level-key-${c}`}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                    mt: ".25rem",
-                    mb: ".25rem",
-                    color: "text.secondary",
-                    fontSize: deviceWrapper(".6rem", ".9rem"),
-                  }}
-                >
-                  <Box>
-                    Level {c} - {i.name}
-                  </Box>
-                  <Box sx={{ ml: "auto" }}>{i.points} Points</Box>
-                </Box>
-              ))}
-            </Box>
-            <Box sx={{ mt: ".5rem" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  mt: ".25rem",
-                  mb: ".25rem",
-                  color: "text.primary",
-                  fontSize: deviceWrapper(".6rem", ".9rem"),
-                }}
-              >
-                <Box>Actions</Box>
-                <Box sx={{ ml: "auto" }}>Points earned</Box>
-              </Box>
-              {actions.map((i: IAction, c: number) => (
-                <Box
-                  key={`action-key-${c}`}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                    mt: ".25rem",
-                    mb: ".25rem",
-                    color: "text.secondary",
-                    fontSize: deviceWrapper(".6rem", ".9rem"),
-                  }}
-                >
-                  <Box>{i.action}</Box>
-                  <Box
-                    sx={{ ml: "auto", minWidth: deviceWrapper("30$", "0%") }}
-                  >
-                    +{i.pointsEarned} points
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-            <Box sx={{ width: "100%", display: "flex", mt: ".5rem" }}>
+            Lvl {props.data.level} | {levels[props.data.level].name}
+            <Box sx={{ ml: "auto" }}>
               <Button
-                variant="text"
-                onClick={handleClose}
-                sx={{ ml: "auto" }}
+                onClick={handleOpen}
+                startIcon={<InfoIcon />}
                 size="small"
               >
-                Got it
+                Learn More
               </Button>
             </Box>
           </Box>
-        </Modal>
+          <Box sx={{ width: "100%", height: ".5rem", pr: 1 }}>
+            <LinearProgress variant="determinate" value={15} />
+          </Box>
+          <Box sx={{ width: "100%", display: "flex", pr: 1 }}>
+            <Box
+              sx={{ ml: "auto", color: "text.secondary", fontSize: ".7rem" }}
+            >
+              {levels[props.data.level + 1].points -
+                levels[props.data.level].points}{" "}
+              PTS till next lvl
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: deviceWrapper("none", "flex"),
+            height: "100%",
+            alignItems: "center",
+            ml: "auto",
+          }}
+        >
+          <EditFollow
+            edit={props.edit ?? false}
+            followed={props.followed ?? false}
+            user_id={props.data.id}
+          />
+        </Box>
       </Box>
-    )
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            ...modalBackground,
+            backgroundColor: "fileInput.main",
+            width: deviceWrapper("18rem", "30rem"),
+            pb: ".5rem",
+          }}
+        >
+          <Header title="How do levels work?" />
+          <Box sx={{ fontSize: deviceWrapper(".6rem", ".9rem"), mt: ".5rem" }}>
+            We have a level system that easily identifies users that are more
+            engaged members of the community. The way it works is straight
+            forward. Different actions get you points and each time you reach a
+            specific amount of points, you reach a new level.
+          </Box>
+          <Box sx={{ mt: ".5rem" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                mt: ".25rem",
+                mb: ".25rem",
+                color: "text.primary",
+                fontSize: deviceWrapper(".6rem", ".9rem"),
+              }}
+            >
+              <Box>Level</Box>
+              <Box sx={{ ml: "auto" }}>Points needed</Box>
+            </Box>
+            {levels.map((i: ILevel, c: number) => (
+              <Box
+                key={`level-key-${c}`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  mt: ".25rem",
+                  mb: ".25rem",
+                  color: "text.secondary",
+                  fontSize: deviceWrapper(".6rem", ".9rem"),
+                }}
+              >
+                <Box>
+                  Level {c} - {i.name}
+                </Box>
+                <Box sx={{ ml: "auto" }}>{i.points} Points</Box>
+              </Box>
+            ))}
+          </Box>
+          <Box sx={{ mt: ".5rem" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                mt: ".25rem",
+                mb: ".25rem",
+                color: "text.primary",
+                fontSize: deviceWrapper(".6rem", ".9rem"),
+              }}
+            >
+              <Box>Actions</Box>
+              <Box sx={{ ml: "auto" }}>Points earned</Box>
+            </Box>
+            {actions.map((i: IAction, c: number) => (
+              <Box
+                key={`action-key-${c}`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  mt: ".25rem",
+                  mb: ".25rem",
+                  color: "text.secondary",
+                  fontSize: deviceWrapper(".6rem", ".9rem"),
+                }}
+              >
+                <Box>{i.action}</Box>
+                <Box sx={{ ml: "auto", minWidth: deviceWrapper("30$", "0%") }}>
+                  +{i.pointsEarned} points
+                </Box>
+              </Box>
+            ))}
+          </Box>
+          <Box sx={{ width: "100%", display: "flex", mt: ".5rem" }}>
+            <Button
+              variant="text"
+              onClick={handleClose}
+              sx={{ ml: "auto" }}
+              size="small"
+            >
+              Got it
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </Box>
+  ) : (
+    <></>
   );
 };
 

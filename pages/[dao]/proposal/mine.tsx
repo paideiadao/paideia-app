@@ -9,7 +9,7 @@ import useSWR from "swr";
 
 const Mine: React.FC = () => {
   const context = React.useContext<IGlobalContext>(GlobalContext);
-  const userData = context.api.daoUserData;
+  const userData = context.api?.daoUserData;
   const { data, error } = useSWR(
     userData?.id && `/proposals/by_user_details_id/${userData?.id}`,
     fetcher,
@@ -22,22 +22,22 @@ const Mine: React.FC = () => {
 
   useDidMountEffect(() => {
     if (error) {
-      context.api.showAlert("Error fetching proposals.", "error");
+      context.api?.showAlert("Error fetching proposals.", "error");
     }
   }, [error]);
 
   return (
     <Layout width={"96%"}>
-      {context.api.daoUserData ? (
+      {context.api?.daoUserData ? (
         <PropsosalListing
           title="My proposals"
           proposals={
             data === undefined
               ? undefined
               : data.filter((i: any) =>
-                  (i.user_details_id === context.api.daoUserData) == null
+                  (i.user_details_id === context.api?.daoUserData) == null
                     ? null
-                    : context.api.daoUserData.id
+                    : context.api?.daoUserData.id
                 )
           }
         />

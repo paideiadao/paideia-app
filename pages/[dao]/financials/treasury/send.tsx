@@ -34,7 +34,7 @@ const Send: React.FC = () => {
     recurring: false,
     firstPayment: new Date(),
     frequency: "Monthly",
-    emissionLengthValue: undefined,
+    emissionLengthValue: 0,
     emissionLength: "Months",
   });
   const treasuryAmount = 50000;

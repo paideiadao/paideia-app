@@ -63,6 +63,7 @@ export function checkCompleteness(_data: ICreationData): boolean {
       );
     }
   }
+  return false;
 }
 
 export function bytesToSize(bytes: any) {

@@ -21,18 +21,33 @@ import { deviceWrapper } from "@components/utilities/Style";
 import Nautilus from "@public/icons/nautilus.png";
 import Ergo from "@public/icons/ergo.png";
 import { isAddressValid } from "@components/wallet/AddWallet";
+import { GlobalContext } from "@lib/AppContext";
 
 // export const getStaticPaths = paths;
 // export const getStaticProps = props;
 
 const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
+  const globalContext = React.useContext(GlobalContext);
   const { wallet, dAppWallet, utxos } = useWallet();
   const { setAddWalletOpen } = useAddWallet();
   const handleClickOpen = () => {
     setAddWalletOpen(true);
   };
   const [show, setShow] = React.useState<boolean>(false);
-  const ticker = "PAI";
+  const ticker =
+    globalContext.api?.daoData?.tokenomics.token_ticker ??
+    globalContext.api?.daoData?.tokenomics.token_name;
+  const [stakeAmount, setStakeAmount] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    if (globalContext.api?.userStakeData) {
+      const stake = globalContext.api.userStakeData;
+      const stakeAmount = stake.stake_keys
+        .map((stake: { stake: number }) => stake.stake)
+        .reduce((a: number, c: number) => a + c, 0);
+      setStakeAmount(stakeAmount);
+    }
+  }, [globalContext.api?.userStakeData]);
 
   return !isAddressValid(wallet) ? (
     <>Error Message Here..</>
@@ -108,7 +123,10 @@ const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
                 sx={{ height: "1.5rem", width: "1.5rem" }}
               />
             }
-            label={utxos && utxos.currentDaoTokens.toLocaleString("en-US") + " " + ticker}
+            label={
+              utxos &&
+              (utxos.currentDaoTokens + stakeAmount).toFixed(2) + " " + ticker
+            }
           />
         </Box>
       </Box>
@@ -132,8 +150,8 @@ const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
         {show && (
           <Box sx={{ width: "100%" }}>
             {dAppWallet.addresses
-              .filter((i: any) => i.name !== wallet)
-              .map((i: any, c: number) => (
+              .filter((i: string) => i !== wallet)
+              .map((i: string, c: number) => (
                 <Box
                   key={`other-wallet-addresses-key-${c}`}
                   sx={{
@@ -143,7 +161,7 @@ const ActiveWallet: React.FC<{ previous?: boolean }> = (props) => {
                     width: "100%",
                   }}
                 >
-                  {i.name}
+                  {i}
                 </Box>
               ))}
           </Box>

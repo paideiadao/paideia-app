@@ -30,6 +30,7 @@ import { fetcher } from "@lib/utilities";
 import { useRouter } from "next/router";
 import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import axios from "axios";
+import { IDaoUserData } from "@lib/Interfaces";
 
 // export const getStaticPaths = paths;
 // export const getStaticProps = props;
@@ -110,19 +111,18 @@ const Members: React.FC = () => {
   });
   const [value, setValue] = useState<number[]>([0, 10]);
   const [daoId, setDaoId] = useState(1);
-  const [data, setData] = useState(undefined)
+  const [data, setData] = useState<IMemberCard[] | null>(null);
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && dao) {
       setDaoId(daoSlugsObject[dao.toString()]);
     }
   }, [router.isReady]);
 
   const [showFilters, setShowFilters] = React.useState<boolean>(false);
-
 
   useEffect(() => {
     let isMounted = true;
@@ -131,13 +131,15 @@ const Members: React.FC = () => {
       axios
         .get(url)
         .then((res) => {
-          if (isMounted) setData(res.data)
+          if (isMounted) setData(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [daoId]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
@@ -284,7 +286,7 @@ const Members: React.FC = () => {
         ))}
       </Box>
       <Grid container spacing={1} sx={{ mt: "1.5rem" }}>
-        {data !== undefined &&
+        {data &&
           data
             .filter(
               (i: IMemberCard) =>

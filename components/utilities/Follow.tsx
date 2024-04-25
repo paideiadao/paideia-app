@@ -60,7 +60,7 @@ const Follow: React.FC<IFollow> = (props) => {
         setFollowed(!followed);
         api.follow(
           !followed ? "follow" : "unfollow",
-          props.user_id ? props.user_id : globalContext.api.daoUserData.id
+          props.user_id ? props.user_id : globalContext.api?.daoUserData.id
         );
       }}
       sx={{

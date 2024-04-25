@@ -24,7 +24,7 @@ const MobileWallet: React.FC<{
   const { wallet } = useWallet();
   return (
     <Box sx={{ width: "100%" }}>
-      {props.qrCode === undefined ? (
+      {props.qrCode === "" ? (
         <>
           <Box
             sx={{
@@ -65,7 +65,7 @@ const MobileWallet: React.FC<{
           </Box>
           <Box sx={{ mt: ".75rem", fontSize: ".9rem" }}>
             Please type your wallet address in the input field in order to
-            connect it to Paideia and access all of Paideia's features.
+            connect it to Paideia and access all of Paideia&apos;s features.
           </Box>
           <TextField
             key="mobile-wallet-input"

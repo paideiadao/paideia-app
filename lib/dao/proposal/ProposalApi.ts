@@ -24,26 +24,33 @@ export interface IProposalEndpointBody {
 }
 
 export default class ProposalApi extends AbstractApi {
-  api: AppApi;
+  api?: AppApi;
   value: IProposal;
   setValue: Function;
   errors: ICreateProposalErrors;
   setErrors: Function;
 
   constructor(
-    api: AppApi,
+    api: AppApi | undefined,
     value: IProposal,
     setValue: Function,
-    errors?: ICreateProposalErrors,
-    setErrors?: Function
+    errors: ICreateProposalErrors | undefined = undefined,
+    setErrors: Function | undefined = undefined
   ) {
     super();
     this.api = api;
     this.value = value;
     this.setValue = setValue;
-    this.errors = errors;
-    this.setErrors = setErrors;
-    this.setAlert = api.setAlert;
+    this.errors = errors ?? {
+      name: false,
+      category: false,
+      voting: false,
+      actionConfig: false,
+      votingDuration: false,
+      activationTime: false,
+    };
+    this.setErrors = setErrors ?? (() => {});
+    this.setAlert = api?.setAlert ?? (() => {});
   }
 
   validData(): Boolean {
@@ -53,14 +60,17 @@ export default class ProposalApi extends AbstractApi {
   cleanData(): IProposalEndpointBody {
     return {
       dao_id: 1,
-      user_details_id: this.api.daoUserData.id,
+      user_details_id: this.api?.daoUserData.id,
       name: this.value.name,
       image_url: "",
       category: this.value.category,
       content: this.value.content,
       voting_system: this.value.voting_system,
       references: this.value.references,
-      actions: this.value.actions.map((i: IProposalAction) => i.data),
+      // @ts-ignore
+      actions: this.value.actions
+        .map((i: IProposalAction) => i.data)
+        .filter((data) => data !== undefined),
       tags: [],
       attachments: [],
       is_proposal: true,

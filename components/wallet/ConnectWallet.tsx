@@ -4,7 +4,7 @@ import AddWallet from "./AddWallet";
 import { useAddWallet } from "./AddWalletContext";
 import { useWallet } from "./WalletContext";
 
-const ConnectWallet: React.FC<{ show?: boolean }> = (props) => {
+const ConnectWallet: React.FC<{ show: boolean }> = (props) => {
   const { wallet } = useWallet();
   const { setAddWalletOpen } = useAddWallet();
   const handleClickOpen = () => {

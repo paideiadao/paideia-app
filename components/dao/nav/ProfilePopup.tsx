@@ -7,7 +7,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import {
   DAPP_CONNECTED,
@@ -16,6 +15,7 @@ import {
 } from "@components/wallet/AddWallet";
 import { useWallet } from "@components/wallet/WalletContext";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import Link from "@components/Link";
 
 interface IProfilePopup {
   open: boolean;
@@ -74,17 +74,17 @@ const ProfilePopupRow: React.FC<IProfilePopupRow> = (props) => {
 const rows: IProfilePopupRow[] = [
   {
     icon: <PersonIcon />,
-    title: "View profile",
+    title: "View Profile",
     link: "/profile",
   },
   {
     icon: <EditIcon />,
-    title: "Edit profile",
+    title: "Edit Profile",
     link: "/profile/edit",
   },
   {
     icon: <EditNotificationsIcon />,
-    title: "Notification settings",
+    title: "Notification Settings",
     link: "/notifications/edit",
   },
   {
@@ -186,7 +186,7 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
             connected: false,
             addresses: [],
           });
-          globalContext.api.setDaoUserData(undefined);
+          globalContext.api?.setDaoUserData(undefined);
           props.close();
         }}
       >

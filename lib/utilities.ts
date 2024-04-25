@@ -58,7 +58,7 @@ interface IUpdateUser {
 export const attrOrUndefined = (
   data: IObj<any>,
   attr: string,
-  extraAttr: string = undefined
+  extraAttr: string | undefined = undefined
 ): any => {
   try {
     if (data === undefined) {
@@ -115,7 +115,7 @@ export interface ILoginResponse {
 
 export const getWsUrl = (): string => {
   // process.env.NODE_ENV == "development"
-  return process.env.WSS_URL;
+  return process.env.WSS_URL ?? "";
 };
 
 export class AbstractApi {
@@ -190,19 +190,6 @@ export class AbstractApi {
     );
   }
 
-  async login(username: string, password: string) {
-    const res: any = await this.post(
-      "/auth/token",
-      { username, password },
-      "logged in.",
-      ""
-    );
-
-    if (res !== false) {
-      localStorage.setItem("jwt_token_login", res.data.access_token);
-    }
-  }
-
   error(err: any): any {
     console.log("func:api_error:", err);
     const bMessage =
@@ -255,7 +242,7 @@ export class AbstractApi {
   async post<T>(
     url: string,
     body: any = undefined,
-    action: string = undefined,
+    action: string | undefined = undefined,
     current: string = ""
   ): Promise<T> {
     return await this.request(url, "POST", body).then(

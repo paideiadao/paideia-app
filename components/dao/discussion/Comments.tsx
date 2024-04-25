@@ -179,7 +179,9 @@ const CommentInput: React.FC<{
               size="small"
               onClick={() => {
                 if (
-                  [undefined, ""].indexOf(localStorage.getItem("alias")) === -1
+                  [undefined, ""].indexOf(
+                    localStorage.getItem("alias") ?? ""
+                  ) === -1
                 )
                   props.set({
                     id: props.length + 1,
@@ -210,16 +212,17 @@ const BaseComment: React.FC<{
   level?: number;
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
+  const router = useRouter();
+  const [filter, setFilter] = React.useState<boolean>(false);
+  const [show, setShow] = React.useState<boolean>(true);
+  const [reply, setReply] = React.useState<boolean>(false);
+
   if (props.comment != undefined) {
     const children = props.data.filter(
       (i: IComment) => i?.parent === props.comment.id
     );
     const level = props.level;
-    const router = useRouter();
     const { dao } = router.query;
-    const [filter, setFilter] = React.useState<boolean>(false);
-    const [show, setShow] = React.useState<boolean>(true);
-    const [reply, setReply] = React.useState<boolean>(false);
     const commentStringArray = props.comment.comment.split("\n\n");
 
     return (
@@ -409,9 +412,9 @@ const BaseComment: React.FC<{
                           userSide={getUserSide(
                             props.comment.likes,
                             props.comment.dislikes,
-                            globalContext.api.daoUserData == null
+                            globalContext.api?.daoUserData == null
                               ? null
-                              : globalContext.api.daoUserData.id
+                              : globalContext.api?.daoUserData.id
                           )}
                           putUrl={`/proposals/comment/like/${props.comment.id}`}
                         />
@@ -423,7 +426,7 @@ const BaseComment: React.FC<{
                       parent={props.comment.id}
                       length={props.data.length}
                       set={(newComment: IComment) => {
-                        props.set(newComment);
+                        props.set !== undefined && props.set(newComment);
                         setShow(true);
                         setReply(false);
                       }}
@@ -462,7 +465,7 @@ const CommentOptions: React.FC<{
 }> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const api = new CommentsApi(globalContext.api, "");
-  const userData = globalContext.api.daoUserData;
+  const userData = globalContext.api?.daoUserData;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [modalOpen, setModalOpen] = React.useState(false);
   const open = Boolean(anchorEl);

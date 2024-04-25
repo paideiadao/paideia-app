@@ -26,6 +26,7 @@ const MultiWalletSelector: React.FC<IMultiWalletSelector> = (props) => {
         {props.wallets.map((i: any, c: number) => {
           return (
             <Box
+              key={`token-holder-wallet-${c}`}
               sx={{
                 display: "flex",
                 alignItems: "center",

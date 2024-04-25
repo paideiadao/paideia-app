@@ -13,7 +13,7 @@ import Support from "./governance/Support";
 
 const Governance: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
-  const data = context.api.data.governance;
+  const data = context.api?.data.governance;
   return (
     <>
       <Header

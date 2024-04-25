@@ -61,7 +61,7 @@ const CreateProposalAddendum: FC = () => {
             onSuccess(res.data.filePath);
           })
           .catch((error) => {
-            globalContext.api.error(
+            globalContext.api?.error(
               "Error " + error.response.status + ": " + error.response.data
             );
           });
@@ -73,15 +73,17 @@ const CreateProposalAddendum: FC = () => {
   const handleSumbit = async () => {
     setLoading(true);
     const api = globalContext.api;
-    try {
-      const res = await api.put<any>(
-        `/proposals/addendum/${parsed_proposal_id}`,
-        addendum
-      );
-      const addendumId = res.data.id;
-      router.push(`/${dao}/proposal/${proposal_id}/addendum/${addendumId}`);
-    } catch (e) {
-      api.error(e);
+    if (api) {
+      try {
+        const res = await api.put<any>(
+          `/proposals/addendum/${parsed_proposal_id}`,
+          addendum
+        );
+        const addendumId = res.data.id;
+        router.push(`/${dao}/proposal/${proposal_id}/addendum/${addendumId}`);
+      } catch (e) {
+        api.error(e);
+      }
     }
     setLoading(false);
   };
@@ -223,7 +225,9 @@ const CreateProposalAddendum: FC = () => {
           sx={{ width: "50%" }}
           loading={loading}
           disabled={
-            addendum.content === "" || addendum.name === "" || !parsed_proposal_id
+            addendum.content === "" ||
+            addendum.name === "" ||
+            !parsed_proposal_id
           }
           onClick={handleSumbit}
         >

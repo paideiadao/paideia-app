@@ -43,7 +43,7 @@ export class Address {
       const pk = ergoTree.slice(6, 72);
       const contentBytes = Buffer.from(pk, "hex");
       const checksum = Buffer.from(
-        blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32),
+        blake.blake2b(Buffer.concat([prefixByte, contentBytes]), undefined, 32),
         "hex"
       );
       const address = Buffer.concat([prefixByte, contentBytes, checksum]).slice(
@@ -56,7 +56,7 @@ export class Address {
       const contentBytes = Buffer.from(ergoTree, "hex");
       const hash = blake.blake2b(
         Buffer.concat([prefixByte, contentBytes]),
-        null,
+        undefined,
         32
       );
       const checksum = Buffer.from(hash, "hex").slice(0, 4);
@@ -72,7 +72,7 @@ export class Address {
     const prefixByte = Buffer.from([network + AddressKind.P2PK]);
     const contentBytes = Buffer.from(pk, "hex");
     const checksum = Buffer.from(
-      blake.blake2b(Buffer.concat([prefixByte, contentBytes]), null, 32),
+      blake.blake2b(Buffer.concat([prefixByte, contentBytes]), undefined, 32),
       "hex"
     );
     const address = Buffer.concat([prefixByte, contentBytes, checksum]).slice(
@@ -118,7 +118,7 @@ export class Address {
     const script = this.addrBytes.slice(0, size - 4);
     const checksum = this.addrBytes.slice(size - 4, size);
     const calculatedChecksum = Buffer.from(
-      blake.blake2b(script, null, 32),
+      blake.blake2b(script, undefined, 32),
       "hex"
     ).slice(0, 4);
     return calculatedChecksum.toString("hex") === checksum.toString("hex");

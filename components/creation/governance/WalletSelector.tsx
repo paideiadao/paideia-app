@@ -1,8 +1,8 @@
-import { Avatar, Box, IconButton, Paper, TextField } from "@mui/material";
+import { Avatar, Box, Paper, TextField } from "@mui/material";
 import * as React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
-import { walletStruct } from "../../../lib/creation/Constants";
+import { walletStruct } from "@lib/creation/Constants";
 import ClearIcon from "@mui/icons-material/Clear";
 import PersonIcon from "@mui/icons-material/Person";
 import { deviceStruct } from "@components/utilities/Style";

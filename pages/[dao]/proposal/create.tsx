@@ -10,7 +10,7 @@ import ProposalApi from "@lib/dao/proposal/ProposalApi";
 import GeneralInformation from "@components/dao/proposal/GeneralInformation";
 import ProposalImage from "@components/dao/proposal/ProposalImage";
 import ProposalVote from "@components/dao/proposal/ProposalVote";
-import Content from "@components/dao/proposal/Context";
+import Content from "@components/dao/proposal/Content";
 import { modalBackground } from "@components/utilities/modalBackground";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PublishIcon from "@mui/icons-material/Publish";
@@ -70,7 +70,7 @@ export interface IProposalAction {
     | undefined;
   icon?: React.ReactNode;
   description?: string;
-  data: ActionType;
+  data?: ActionType;
   close?: () => void;
   c?: number;
   options?: IProposalOption[];
@@ -97,7 +97,7 @@ export type Token = [string, number]; // [tokenId, tokenAmount (not accounting f
 export interface IProposalOption {
   name: string;
   description: string;
-  data: ActionType;
+  data?: ActionType;
   rank: number;
   default?: boolean;
 }
@@ -165,7 +165,7 @@ const CreateProposal: React.FC = () => {
   const [value, setValue] = useState<IProposal>({
     name: "",
     image: {
-      url: getRandomImage(),
+      url: getRandomImage() ?? "",
       file: undefined,
     },
     status: "Draft",
@@ -203,11 +203,10 @@ const CreateProposal: React.FC = () => {
   const [publish, setPublish] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [stake, setStake] = useState<any>({});
-  const tokenomics = context.api.daoData?.tokenomics;
-  const governance = context.api.daoData?.governance;
+  const governance = context.api?.daoData?.governance;
 
   useEffect(() => {
-    if (context.api.userStakeData) {
+    if (context.api?.userStakeData) {
       const stake = context.api.userStakeData;
       setStake(stake);
       if (!stake.stake_keys?.length) {
@@ -216,7 +215,7 @@ const CreateProposal: React.FC = () => {
         );
       }
     }
-  }, [context.api.userStakeData]);
+  }, [context.api?.userStakeData]);
 
   useEffect(() => {
     if (auto_update_config) {
@@ -239,63 +238,65 @@ const CreateProposal: React.FC = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    try {
-      const error = validateErrors(value, governance, errors, setErrors);
-      if (error) {
-        throw "Form Validation Error";
+    if (context.api) {
+      try {
+        const error = validateErrors(value, governance, errors, setErrors);
+        if (error) {
+          throw "Form Validation Error";
+        }
+        const imgUrl = await getBannerUrl();
+        const action =
+          value.actions[0].name === "Send Funds"
+            ? bPaideiaSendFundsBasic(
+                // @ts-ignore
+                value.actions[0].data.recipients[0].address,
+                // @ts-ignore
+                value.actions[0].data.recipients[0].ergs * NERGs,
+                // @ts-ignore
+                value.actions[0].data.recipients[0].tokens,
+                // @ts-ignore
+                value.actions[0].data.activation_time
+              )
+            : value.actions[0].name === "Update DAO Config"
+            ? bPaideiaUpdateDAOConfig(
+                // @ts-ignore
+                value.actions[0].data.config,
+                // @ts-ignore
+                value.actions[0].data.activation_time
+              )
+            : {}; // should never occur
+        const proposal = {
+          dao_id: context.api.daoData?.id,
+          user_details_id: context.api.daoUserData?.id,
+          ...value,
+          image_url: imgUrl,
+          actions: [action],
+          is_proposal: true,
+          stake_key: stake.stake_keys[0].key_id,
+          end_time:
+            new Date().getTime() +
+            // @ts-ignore
+            value.actions[0].data.voting_duration * TIME_MS +
+            BUFFER,
+        };
+        const data = (
+          await context.api.post<any>("/proposals/on_chain_proposal", proposal)
+        ).data;
+        const tx = data.unsigned_transaction;
+        const ergoContext = await getErgoWalletContext();
+        const signed = await ergoContext.sign_tx(tx);
+        const txId = await ergoContext.submit_tx(signed);
+        context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+        setPublish(false);
+        router.push(
+          `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
+            data.proposal.id,
+            data.proposal.name
+          )}`
+        );
+      } catch (e: any) {
+        api.error(e);
       }
-      const imgUrl = await getBannerUrl();
-      const action =
-        value.actions[0].name === "Send Funds"
-          ? bPaideiaSendFundsBasic(
-              // @ts-ignore
-              value.actions[0].data.recipients[0].address,
-              // @ts-ignore
-              value.actions[0].data.recipients[0].ergs * NERGs,
-              // @ts-ignore
-              value.actions[0].data.recipients[0].tokens,
-              // @ts-ignore
-              value.actions[0].data.activation_time
-            )
-          : value.actions[0].name === "Update DAO Config"
-          ? bPaideiaUpdateDAOConfig(
-              // @ts-ignore
-              value.actions[0].data.config,
-              // @ts-ignore
-              value.actions[0].data.activation_time
-            )
-          : {}; // should never occur
-      const proposal = {
-        dao_id: context.api.daoData?.id,
-        user_details_id: context.api.daoUserData?.id,
-        ...value,
-        image_url: imgUrl,
-        actions: [action],
-        is_proposal: true,
-        stake_key: stake.stake_keys[0].key_id,
-        end_time:
-          new Date().getTime() +
-          // @ts-ignore
-          value.actions[0].data.voting_duration * TIME_MS +
-          BUFFER,
-      };
-      const data = (
-        await context.api.post<any>("/proposals/on_chain_proposal", proposal)
-      ).data;
-      const tx = data.unsigned_transaction;
-      const ergoContext = await getErgoWalletContext();
-      const signed = await ergoContext.sign_tx(tx);
-      const txId = await ergoContext.submit_tx(signed);
-      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
-      setPublish(false);
-      router.push(
-        `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
-          data.proposal.id,
-          data.proposal.name
-        )}`
-      );
-    } catch (e: any) {
-      api.error(e);
     }
     setLoading(false);
   };
@@ -307,8 +308,8 @@ const CreateProposal: React.FC = () => {
   };
 
   const getImg = async () => {
-    if (value.image.file === undefined) {
-      const defaultImage = await fetch(value.image.url);
+    if (value.image?.file === undefined) {
+      const defaultImage = await fetch(value.image?.url ?? "");
       const data = await defaultImage.blob();
       const metadata = {
         type: "image/jpeg",
@@ -360,7 +361,7 @@ const CreateProposal: React.FC = () => {
             <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
               Provide users with different options to vote on, and the proposal
               will either be approved or declined. Keep in mind, once you create
-              a proposal, it can't be edited or deleted.
+              a proposal, it can&apos;t be edited or deleted.
             </Box>
           </Box>
           <Box
@@ -458,7 +459,7 @@ const CreateProposal: React.FC = () => {
               You are about to publish a proposal
             </Box>
             <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-              Once published, a proposal can't be edited or deleted.
+              Once published, a proposal can&apos;t be edited or deleted.
             </Box>
             <Box
               sx={{

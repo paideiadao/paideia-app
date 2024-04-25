@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Badge, Box, Button, IconButton } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { Avatar, Badge, Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { ISocialLink } from "@lib/creation/Interfaces";
-import { getUserId, snipAddress } from "@lib/utilities";
+import { snipAddress } from "@lib/utilities";
 import { levels } from "../profile/Header";
 import useDidMountEffect from "@components/utilities/hooks";
-import { FollowMobile } from "@components/utilities/Follow";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import FollowBadge from "@components/utilities/FollowBadge";
 import FollowApi from "@lib/FollowApi";
-import { generateSlug } from "@lib/utilities";
 
 export interface IMemberCard {
   width: any;
@@ -34,9 +30,9 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const [favorited, setFavorited] = React.useState<boolean>(
     props.followers.indexOf(
-      globalContext.api.daoUserData == null
+      globalContext.api?.daoUserData == null
         ? null
-        : globalContext.api.daoUserData.id
+        : globalContext.api?.daoUserData.id
     ) > -1
   );
   const router = useRouter();
@@ -49,7 +45,7 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
 
   useEffect(() => {
     if (router.isReady) {
-      setDaoNameWithLeadingSlash("/" + dao.toString());
+      setDaoNameWithLeadingSlash("/" + (dao ?? "").toString());
     }
   }, [router.isReady]);
 
@@ -66,8 +62,8 @@ const MemberCard: React.FC<IMemberCard> = (props) => {
     >
       <Badge
         badgeContent={
-          globalContext.api.daoUserData != null &&
-          globalContext.api.daoUserData.id !== props.id && (
+          globalContext.api?.daoUserData != null &&
+          globalContext.api?.daoUserData.id !== props.id && (
             <FollowBadge
               onChange={(followed: boolean) => {
                 api.follow(followed ? "follow" : "unfollow", props.id);

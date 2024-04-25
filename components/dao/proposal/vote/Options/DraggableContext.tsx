@@ -67,8 +67,7 @@ const reorder = (
 
 const getItemStyle = (
   isDragging: boolean,
-  draggableStyle: DraggingStyle | NotDraggingStyle,
-  compact: boolean
+  draggableStyle?: DraggingStyle | NotDraggingStyle
 ) => ({
   // some basic styles to make the items look a bit nicer
   // change background colour if dragging
@@ -96,7 +95,7 @@ const getListStyle = (
   borderRadius: ".3rem",
 });
 
-export const getData = (name: string): ActionType => {
+export const getData = (name: string): ActionType | undefined => {
   if (name === "Change DAO's description") {
     return {
       shortDescription: "",
@@ -136,7 +135,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [compact, setCompact] = React.useState<boolean>(false);
   const [items, setItems] = React.useState<IProposalOption[]>(
-    context.api.value.actions[0].options
+    context.api?.value.actions[0].options ?? []
   );
 
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
@@ -269,19 +268,19 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
 
   React.useEffect(() => {
     if (items === undefined) {
-      setItems(context.api.value.actions[0].options);
+      setItems(context.api?.value.actions[0].options ?? []);
     }
-  }, [context.api.value.actions]);
+  }, [context.api?.value.actions]);
 
   useDidMountEffect(() => {
-    setItems(context.api.value.actions[0].options);
+    setItems(context.api?.value.actions[0].options ?? []);
   }, [props.name]);
 
   useDidMountEffect(() => {
-    let tempActions = context.api.value.actions[0];
+    let tempActions = context.api?.value.actions[0] ?? { options: [] };
     let tempItems = items === undefined ? [] : [...items];
     tempActions.options = tempItems;
-    context.api.setValue({
+    context.api?.setValue({
       ...context.api.value,
       actions: [tempActions],
     });
@@ -304,111 +303,108 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
     rank: 2,
     default: true,
   };
-  return (
-    props.name !== undefined &&
-    items !== undefined && (
-      <>
-        <DragDropContext
-          onDragEnd={onDragEnd}
-          onBeforeDragStart={() => {
-            setCompact(true);
+  return props.name !== undefined && items !== undefined ? (
+    <>
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onBeforeDragStart={() => {
+          setCompact(true);
+        }}
+      >
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <Box
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              sx={getListStyle(snapshot.isDraggingOver, compact, items)}
+            >
+              {items.map((item: IProposalOption, index: number) => (
+                <>
+                  <Draggable
+                    key={`temp-index-${index}`}
+                    draggableId={`temp-index-${index}`}
+                    index={index}
+                    isDragDisabled={items.length < 1}
+                  >
+                    {(_provided, snapshot) => {
+                      return (
+                        <Box
+                          ref={_provided.innerRef}
+                          {..._provided.draggableProps}
+                          {..._provided.dragHandleProps}
+                          sx={getItemStyle(
+                            snapshot.isDragging,
+                            _provided.draggableProps.style
+                          )}
+                        >
+                          <DraggableHeader
+                            compact={compact}
+                            item={item}
+                            index={index}
+                            items={items}
+                            snapshot={snapshot}
+                            remove={() => {
+                              let tempItems = [...items];
+                              tempItems.splice(index, 1);
+                              setItems(tempItems);
+                            }}
+                          />
+                          <DraggableCard
+                            set={(val: IProposalOption[]) => setItems(val)}
+                            item={item}
+                            index={index}
+                            items={items}
+                            content={getContent(item, index)}
+                          />
+                        </Box>
+                      );
+                    }}
+                  </Draggable>
+                </>
+              ))}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
+      </DragDropContext>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Button
+          startIcon={<Add />}
+          size="small"
+          onClick={() => {
+            let temp = [...items];
+            temp.push({
+              name: "",
+              description: "",
+              data: getData(props.name),
+              rank: items.length + 1,
+            });
+            setItems(temp);
           }}
         >
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <Box
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                sx={getListStyle(snapshot.isDraggingOver, compact, items)}
-              >
-                {items.map((item: IProposalOption, index: number) => (
-                  <>
-                    <Draggable
-                      key={`temp-index-${index}`}
-                      draggableId={`temp-index-${index}`}
-                      index={index}
-                      isDragDisabled={items.length < 1}
-                    >
-                      {(_provided, snapshot) => {
-                        return (
-                          <Box
-                            ref={_provided.innerRef}
-                            {..._provided.draggableProps}
-                            {..._provided.dragHandleProps}
-                            sx={getItemStyle(
-                              snapshot.isDragging,
-                              _provided.draggableProps.style,
-                              compact
-                            )}
-                          >
-                            <DraggableHeader
-                              compact={compact}
-                              item={item}
-                              index={index}
-                              items={items}
-                              snapshot={snapshot}
-                              remove={() => {
-                                let tempItems = [...items];
-                                tempItems.splice(index, 1);
-                                setItems(tempItems);
-                              }}
-                            />
-                            <DraggableCard
-                              set={(val: IProposalOption[]) => setItems(val)}
-                              item={item}
-                              index={index}
-                              items={items}
-                              content={getContent(item, index)}
-                            />
-                          </Box>
-                        );
-                      }}
-                    </Draggable>
-                  </>
-                ))}
-                {provided.placeholder}
-              </Box>
-            )}
-          </Droppable>
-        </DragDropContext>
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Button
-            startIcon={<Add />}
-            size="small"
-            onClick={() => {
-              let temp = [...items];
-              temp.push({
-                name: "",
-                description: "",
-                data: getData(props.name),
-                rank: items.length + 1,
-              });
-              setItems(temp);
-            }}
-          >
-            Add Another
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            ...getItemStyle(
-              false,
-              { transition: undefined, transform: undefined },
-              compact
-            ),
-            mx: ".5rem",
-          }}
-        >
-          <DraggableHeader
-            item={declineProposal}
-            index={-1}
-            items={items}
-            compact={compact}
-          />
-          <DraggableCard item={declineProposal} index={-1} items={items} />
-        </Box>
-      </>
-    )
+          Add Another
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          ...getItemStyle(false, {
+            transition: undefined,
+            transform: undefined,
+          }),
+          mx: ".5rem",
+        }}
+      >
+        <DraggableHeader
+          item={declineProposal}
+          index={-1}
+          items={items}
+          compact={compact}
+        />
+        <DraggableCard item={declineProposal} index={-1} items={items} />
+      </Box>
+    </>
+  ) : (
+    <></>
   );
 };
 

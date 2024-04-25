@@ -9,11 +9,15 @@ import {
 } from "@lib/creation/Interfaces";
 
 export class CreationApi {
-  api: AbstractApi;
+  api?: AbstractApi;
   data: ICreationData;
   setData: Function;
 
-  constructor(api: AbstractApi, data: ICreationData, setData: Function) {
+  constructor(
+    api: AbstractApi | undefined,
+    data: ICreationData,
+    setData: Function
+  ) {
     this.api = api;
     this.data = data;
     this.setData = setData;
@@ -25,7 +29,7 @@ export class CreationApi {
   // create data checking for the dao paths
   async createDao(draft: boolean = true): Promise<any> {
     const data = this.cleanData(this.data, draft);
-    const res = await this.api.post<any>("/dao", data);
+    const res = await this.api?.post<any>("/dao", data);
     return res;
   }
 

@@ -1,28 +1,47 @@
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { Box, Collapse } from "@mui/material";
 import React from "react";
-import { CreationContext } from "../../../lib/creation/Context";
+import { CreationContext } from "@lib/creation/Context";
 import FileBanner from "../../utilities/FileBanner";
 import { Subheader, Subtitle } from "../utilities/HeaderComponents";
 import LabeledSwitch from "../utilities/LabeledSwitch";
+import { IDesign } from "@lib/creation/Interfaces";
 
 const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
+  const defaultContext = React.useContext(CreationContext);
   const creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
+    props.context === undefined ? defaultContext : props.context;
 
-  const data = creationContext.api.data.design;
-  const setData = (data: any) => {
-    creationContext.api.setData({
+  const data: IDesign = creationContext.api?.data.design ?? {
+    theme: 0,
+    logo: {
+      file: {},
+      url: "",
+    },
+    banner: {
+      show: false,
+      data: {
+        file: {},
+        url: "",
+      },
+    },
+    footer: {
+      show: false,
+      mainText: "",
+      links: [],
+    },
+  };
+  const setData = (data: IDesign) => {
+    creationContext.api?.setData({
       ...creationContext.api.data,
       design: data,
     });
   };
 
-  const [url, setUrl] = React.useState<any>(data.banner.data.url);
+  const [url, setUrl] = React.useState(data.banner.data.url);
 
-  function handleImage(e: any) {
+  // todo: fix this any
+  const handleImage = (e: any) => {
     const fileInput = e.currentTarget.files;
     if (fileInput && fileInput[0]) {
       if (fileInput.length != 1) return;
@@ -58,7 +77,7 @@ const Banner: React.FC<{ context?: IConfigContext }> = (props) => {
         },
       });
     }
-  }
+  };
 
   React.useEffect(() => {
     setData({

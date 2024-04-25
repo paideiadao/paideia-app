@@ -23,7 +23,7 @@ const RecurringForm: React.FC<{ context?: boolean }> = (props) => {
   // }
 
   const handleChange = (event: SelectChangeEvent) => {
-    sendContext.api.setValue({
+    sendContext.api?.setValue({
       ...sendContext.api.value,
       frequency: event.target.value as
         | "Monthly"
@@ -48,7 +48,7 @@ const RecurringForm: React.FC<{ context?: boolean }> = (props) => {
           <AbstractDate
             value={sendContext.api.value.firstPayment}
             setValue={(value: Date) =>
-              sendContext.api.setValue({
+              sendContext.api?.setValue({
                 ...sendContext.api.value,
                 firstPayment: value,
               })
@@ -130,7 +130,7 @@ const RecurringForm: React.FC<{ context?: boolean }> = (props) => {
                       sx={{ height: "100%", color: "text.primary" }}
                       onChange={
                         (e: SelectChangeEvent) =>
-                          sendContext.api.setValue({
+                          sendContext.api?.setValue({
                             ...sendContext.api.value,
                             emissionLength: e.target.value as
                               | "Months"

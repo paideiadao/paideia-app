@@ -22,18 +22,18 @@ const CastVote: React.FC = () => {
     ? (proposal_id as string).split("-").slice(-5).join("-")
     : null;
   const context = useContext<IGlobalContext>(GlobalContext);
-  const [vote, setVote] = useState(null);
+  const [vote, setVote] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
   const [stake, setStake] = useState<any>(null);
 
-  const daoId = context.api.daoData?.id;
+  const daoId = context.api?.daoData?.id;
   const decimalAdjust = Math.pow(
     10,
-    context.api.daoData?.tokenomics?.token_decimals ?? 0
+    context.api?.daoData?.tokenomics?.token_decimals ?? 0
   );
 
   useEffect(() => {
-    if (context.api.userStakeData) {
+    if (context.api?.userStakeData) {
       const stake = context.api.userStakeData;
       setStake(stake);
       if (!stake.stake_keys?.length) {
@@ -42,40 +42,42 @@ const CastVote: React.FC = () => {
         );
       }
     }
-  }, [context.api.userStakeData]);
+  }, [context.api?.userStakeData]);
 
   const handleSubmit = async () => {
     setLoading(true);
     if (vote === null) {
-      context.api.error("Please select the preferred option");
+      context.api?.error("Please select the preferred option");
       setLoading(false);
       return;
     }
-    try {
-      if (!stake.stake_keys?.length) {
-        context.api.error(
-          "Stake key either not present or in use on another transaction, add stake now"
-        );
-        setLoading(false);
-        return;
+    if (context.api) {
+      try {
+        if (!stake.stake_keys?.length) {
+          context.api.error(
+            "Stake key either not present or in use on another transaction, add stake now"
+          );
+          setLoading(false);
+          return;
+        }
+        const stakeKey = stake.stake_keys[0].key_id;
+        const stakeAmount = stake.stake_keys[0].stake * decimalAdjust;
+        const req = {
+          dao_id: daoId,
+          proposal_id: parsed_proposal_id,
+          stake_key: stakeKey,
+          votes: vote ? [0, stakeAmount] : [stakeAmount, 0],
+        };
+        const res = (await context.api.post<any>("/proposals/vote", req)).data;
+        const tx = res.unsigned_transaction;
+        const ergoContext = await getErgoWalletContext();
+        const signed = await ergoContext.sign_tx(tx);
+        const txId = await ergoContext.submit_tx(signed);
+        context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
+        router.back();
+      } catch (e: any) {
+        context.api.error(e);
       }
-      const stakeKey = stake.stake_keys[0].key_id;
-      const stakeAmount = stake.stake_keys[0].stake * decimalAdjust;
-      const req = {
-        dao_id: daoId,
-        proposal_id: parsed_proposal_id,
-        stake_key: stakeKey,
-        votes: vote ? [0, stakeAmount] : [stakeAmount, 0],
-      };
-      const res = (await context.api.post<any>("/proposals/vote", req)).data;
-      const tx = res.unsigned_transaction;
-      const ergoContext = await getErgoWalletContext();
-      const signed = await ergoContext.sign_tx(tx);
-      const txId = await ergoContext.submit_tx(signed);
-      context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
-      router.back();
-    } catch (e: any) {
-      context.api.error(e);
     }
     setLoading(false);
   };

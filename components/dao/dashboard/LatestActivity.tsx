@@ -55,7 +55,7 @@ const LatestActivity: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [data, setData] = useState(undefined);
+  const [data, setData] = useState<IActivity[] | null>(null);
 
   useEffect(() => {
     let isMounted = true;

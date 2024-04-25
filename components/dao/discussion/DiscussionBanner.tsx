@@ -153,7 +153,7 @@ const DiscussionBanner: React.FC<{
                     size="small"
                     onClick={() => {
                       const fileInput = document.getElementById(props.id);
-                      fileInput.click();
+                      fileInput?.click();
                     }}
                   >
                     Replace
@@ -215,7 +215,7 @@ const DiscussionBanner: React.FC<{
                   }}
                   onClick={() => {
                     const fileInput = document.getElementById(props.id);
-                    fileInput.click();
+                    fileInput?.click();
                   }}
                 >
                   browse

@@ -18,19 +18,20 @@ import * as React from "react";
 const Design: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
   const [theme, setTheme] = React.useState<number>(1);
-  const data = context.api.data.design;
+  const data = context.api?.data.design;
   const setData = (data: IDesign) => {
-    context.api.setData({
+    context.api?.setData({
       ...context.api.data,
       design: data,
     });
   };
 
   React.useEffect(() => {
-    setData({
-      ...data,
-      theme: theme,
-    });
+    data &&
+      setData({
+        ...data,
+        theme: theme,
+      });
   }, [theme]);
 
   return (
@@ -54,8 +55,10 @@ const Design: React.FC = () => {
           width: "100%",
         }}
       >
-        {themes.map((i: any) => {
-          return <ThemeCard set={setTheme} theme={theme} i={i} />;
+        {themes.map((i: any, c: number) => {
+          return (
+            <ThemeCard set={setTheme} theme={theme} i={i} key={`theme-${c}`} />
+          );
         })}
       </Box>
       <Logo context={context} />

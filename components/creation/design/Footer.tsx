@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ISocialLink } from "@lib/creation/Interfaces";
+import { IDesign, ISocialLink } from "@lib/creation/Interfaces";
 import { CreationContext } from "@lib/creation/Context";
 import {
   Subheader,
@@ -30,18 +30,36 @@ import { deviceStruct } from "@components/utilities/Style";
 import { IConfigContext } from "@lib/dao/dao-config/ConfigContext";
 
 const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
+  const defaultContext = React.useContext(CreationContext);
   const creationContext =
-    props.context === undefined
-      ? React.useContext(CreationContext)
-      : props.context;
+    props.context === undefined ? defaultContext : props.context;
 
-  const data = creationContext.api.data.design;
+  const data: IDesign = creationContext.api?.data.design ?? {
+    theme: 0,
+    logo: {
+      file: {},
+      url: "",
+    },
+    banner: {
+      show: false,
+      data: {
+        file: {},
+        url: "",
+      },
+    },
+    footer: {
+      show: false,
+      mainText: "",
+      links: [],
+    },
+  };
   const setData = (data: any) => {
-    creationContext.api.setData({
+    creationContext.api?.setData({
       ...creationContext.api.data,
       design: data,
     });
   };
+
   return (
     <Box
       sx={{

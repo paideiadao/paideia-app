@@ -21,8 +21,7 @@ const Member: React.FC = () => {
   // }, [router.isReady]);
 
   const { data: userData, error: userError } = useSWR(
-    member_id !== undefined &&
-      `/users/details_by_slug/${dao}-${member_id}`,
+    member_id !== undefined && `/users/details_by_slug/${dao}-${member_id}`,
     fetcher
   );
 
@@ -51,7 +50,7 @@ const Member: React.FC = () => {
         userData === undefined
           ? undefined
           : userData.followers.indexOf(
-              globalContext.api.daoUserData
+              globalContext.api?.daoUserData
                 ? globalContext.api.daoUserData.id
                 : null
             ) > -1

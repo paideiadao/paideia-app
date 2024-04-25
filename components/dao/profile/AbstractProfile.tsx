@@ -28,7 +28,7 @@ const AbstractProfile: React.FC<IAbstractProfile> = (props) => {
   const [value, setValue] = React.useState("1");
   const context = React.useContext<IGlobalContext>(GlobalContext);
   const tokenId =
-    context.api.daoData?.tokenomics?.token_id ??
+    context.api?.daoData?.tokenomics?.token_id ??
     "1fd6e032e8476c4aa54c18c1a308dce83940e8f4a28f576440513ed7326ad489";
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {

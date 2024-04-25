@@ -17,10 +17,10 @@ const ProposalsListing: React.FC<IProposalsListing> = (props) => {
       />
       {props.proposals.map((i: IProposalCard, c: number) => (
         <ProposalCard
+          {...i}
           c={c}
           key={"proposal-card-key-profile-" + c}
           width={{ xs: "98%", sm: "98%", md: "50%", lg: "33%" }}
-          {...i}
         />
       ))}
     </Box>

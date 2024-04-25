@@ -23,17 +23,18 @@ import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 // abstract: img, name, id
 
 const Reference: React.FC<{ context?: boolean }> = (props) => {
+  const discussionContext =
+    React.useContext<IDiscussionContext>(DiscussionContext);
+  const proposalContext = React.useContext<IProposalContext>(ProposalContext);
   const context =
-    props.context === undefined
-      ? React.useContext<IDiscussionContext>(DiscussionContext)
-      : React.useContext<IProposalContext>(ProposalContext);
+    props.context === undefined ? discussionContext : proposalContext;
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
-  const daoId = appContext.api.daoData?.id;
+  const daoId = appContext.api?.daoData?.id;
 
   const router = useRouter();
   const { r } = router.query;
   const [references, setReferences] = React.useState<string[]>(
-    context.api.value.references
+    context.api?.value.references ?? []
   );
 
   React.useEffect(() => {
@@ -43,8 +44,8 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
   }, [r]);
 
   useDidMountEffect(() => {
-    setReferences(context.api.value.references);
-  }, [context.api.value.references]);
+    setReferences(context.api?.value.references ?? []);
+  }, [context.api?.value.references]);
 
   const { data, error } = useSWR(
     daoId !== undefined && `/proposals/by_dao_id/${daoId}`,
@@ -98,7 +99,7 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
         reason: string,
         details?: string
       ) => {
-        context.api.setValue({ ...context.api.value, references: _value });
+        context.api?.setValue({ ...context.api.value, references: _value });
       }}
       getOptionLabel={(option: any) => option.id.toString()}
       renderOption={(props, option: any) => (
@@ -115,7 +116,7 @@ const Reference: React.FC<{ context?: boolean }> = (props) => {
               temp.push(option.id);
             }
 
-            context.api.setValue({
+            context.api?.setValue({
               ...context.api.value,
               references: temp,
             });

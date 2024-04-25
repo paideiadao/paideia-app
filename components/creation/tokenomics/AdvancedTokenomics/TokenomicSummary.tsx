@@ -2,7 +2,6 @@ import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import * as React from "react";
 import { ITokenHolder, ITokenomics } from "@lib/creation/Interfaces";
 import { IData } from "@lib/Interfaces";
-import { Subheader } from "../../utilities/HeaderComponents";
 import InfoIcon from "@mui/icons-material/Info";
 import { percentage } from "../../../../lib/creation/Utilities";
 import AddIcon from "@mui/icons-material/Add";
@@ -97,10 +96,11 @@ const TokenomicSummary: React.FC<IData<ITokenomics>> = (props) => {
       }}
     >
       {tokenomics.map((i: any, c: number) => {
-        return <TokenomicsRow {...i} />;
+        return <TokenomicsRow {...i} key={`tokenomics-${c}`} />;
       })}
       {distributions.map((i: any, c: number) => (
         <AddDistribution
+          key={`add-distribution-${c}`}
           data={{ ...props }}
           distribution={i}
           close={() => {

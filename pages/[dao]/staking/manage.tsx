@@ -50,7 +50,7 @@ const TokenBanner: React.FC<ITokenBanner> = (props) => {
           fontWeight: 500,
         }}
       >
-        {`${props.ticker.toUpperCase()} tokens staked`}
+        {`${props.ticker?.toUpperCase()} tokens staked`}
       </Box>
     </Box>
   );
@@ -70,35 +70,45 @@ const ManageStake: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (appContext.api.userStakeData) {
+    if (appContext.api?.userStakeData) {
       const stake = appContext.api.userStakeData;
       setStakeState(stake);
       setLoading(false);
     }
-  }, [appContext.api.userStakeData]);
+  }, [appContext.api?.userStakeData]);
 
   useEffect(() => {
     const getData = async () => {
-      const daoId = appContext.api.daoData?.id;
-      const userId = appContext.api.daoUserData?.user_id;
-      try {
-        const res = await appContext.api.post<any>("/staking/user_stake_info", {
-          dao_id: daoId,
-          user_id: userId,
-        });
-        const data: IUserStakeData = res.data;
-        appContext.api.setUserStakeData(data);
-      } catch (e) {
-        console.log(e);
+      const daoId = appContext.api?.daoData?.id;
+      const userId = appContext.api?.daoUserData?.user_id;
+      if (appContext.api) {
+        try {
+          const res = await appContext.api.post<any>(
+            "/staking/user_stake_info",
+            {
+              dao_id: daoId,
+              user_id: userId,
+            }
+          );
+          const data: IUserStakeData = res.data;
+          appContext.api.setUserStakeData(data);
+        } catch (e) {
+          console.log(e);
+        }
       }
     };
-    if (appContext.api.daoData?.id && appContext.api.daoUserData?.user_id) {
+    if (appContext.api?.daoData?.id && appContext.api.daoUserData?.user_id) {
       getData();
     }
-  }, [appContext.api.daoData?.id, appContext.api.daoUserData?.user_id]);
+  }, [appContext.api?.daoData?.id, appContext.api?.daoUserData?.user_id]);
 
   const router = useRouter();
   const { dao } = router.query;
+
+  const ticker =
+    appContext.api?.daoData?.tokenomics.token_ticker ??
+    appContext.api?.daoData?.tokenomics.token_name;
+
   return (
     <Layout width={deviceWrapper("92%", "65%")}>
       <Link href={dao === undefined ? "/dao/staking" : `/${dao}/staking`}>
@@ -122,7 +132,7 @@ const ManageStake: React.FC = () => {
             amount={stakeState?.stake_keys
               ?.map((key: { stake: number }) => key.stake)
               .reduce((a: number, c: number) => a + c, 0)}
-            ticker="PAI"
+            ticker={ticker}
           />
           <TabContext value={value}>
             <Box

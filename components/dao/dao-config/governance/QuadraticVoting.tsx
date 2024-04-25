@@ -11,7 +11,7 @@ import * as React from "react";
 
 const QuadraticVoting: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
-  const data = context.api.data.governance;
+  const data = context.api?.data.governance;
   return (
     <>
       <LearnMore
@@ -25,15 +25,15 @@ const QuadraticVoting: React.FC = () => {
         disabled
         small
         onChange={() =>
-          context.api.setData({
+          context.api?.setData({
             ...context.api.data,
             governance: {
               ...data,
-              quadraticVoting: !data.quadraticVoting,
+              quadraticVoting: data && !data.quadraticVoting,
             },
           })
         }
-        value={data.quadraticVoting}
+        value={data?.quadraticVoting ?? false}
         title="Activate quadratic voting"
       />
     </>

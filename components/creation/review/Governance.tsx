@@ -13,7 +13,7 @@ const Governance: React.FC<{
   handleChange: Function;
   edit: Function;
 }> = (props) => {
-  let data = props.data;
+  const data = props.data;
   return (
     <Accordion
       elevation={0}
