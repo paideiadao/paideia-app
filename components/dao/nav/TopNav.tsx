@@ -161,18 +161,16 @@ const TopNav: React.FC<INav> = (props) => {
     });
   }, [unreadCount]);
 
-  useEffect(() => {
-    if (notificationsError?.response?.status === 401) {
-      globalContext.api?.error(
-        notificationsError.response.data.detail +
-          " - Please reconnect your wallet and refresh"
-      );
-      // setTimeout(() => {
-      //   clearWallet();
-      //   router.reload();
-      // }, 2000);
-    }
-  }, [notificationsError]);
+  // useEffect(() => {
+  //   if (notificationsError?.response?.status === 401) {
+  //     globalContext.api?.error(
+  //       notificationsError.response.data.detail + " - Refreshing your session"
+  //     );
+  //     setTimeout(() => {
+  //       router.reload();
+  //     }, 2000);
+  //   }
+  // }, [notificationsError]);
 
   useEffect(() => {
     if (globalContext.api?.userStakeData) {

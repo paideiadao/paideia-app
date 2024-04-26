@@ -8,10 +8,8 @@ import {
   CapsInfo,
   Header,
 } from "@components/creation/utilities/HeaderComponents";
-import { ITokenHolder } from "@lib/creation/Interfaces";
 import LabeledSwitch from "@components/creation/utilities/LabeledSwitch";
 import { deviceWrapper } from "@components/utilities/Style";
-import MultiTokenHolders from "@components/utilities/MultiTokenHolders";
 import SendApi, { ISendFunds } from "@lib/dao/financials/SendApi";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import RecurringForm from "@components/dao/financials/treasury/RecurringForm";

@@ -198,7 +198,6 @@ const AddAction: React.FC<IProposalAction> = (props) => {
               }}
               placeholder="Search action"
               value={search}
-              // @ts-ignore
               onChange={(
                 event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
               ) => setSearch(event.target.value)}

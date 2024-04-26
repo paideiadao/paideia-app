@@ -14,7 +14,7 @@ import OptionSystemSelector, { OptionType } from "./OptionSystemSelector";
 const Options: React.FC = () => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const actions = context.api?.value.actions ?? [];
-  const optionType = context.api?.value.optionType;
+  const optionType = context.api?.value.option_type;
 
   return (
     <>

@@ -14,6 +14,7 @@ import Layout from "./Layout";
 export interface IVoteDuration {
   voteDuration: number;
   voteDurationUnits: string;
+  activation_time: number;
 }
 
 const VoteDuration: React.FC<IProposalAction> = (props) => {
@@ -21,6 +22,7 @@ const VoteDuration: React.FC<IProposalAction> = (props) => {
   const [value, setValue] = React.useState<IVoteDuration>({
     voteDuration: 0,
     voteDurationUnits: "days",
+    activation_time: 0,
   });
 
   React.useEffect(() => {
