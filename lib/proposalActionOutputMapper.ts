@@ -1,10 +1,10 @@
+import { ISendFundsRecipient } from "@components/dao/proposal/vote/YesNo/Actions/SendFunds";
 import { IConfig } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
-import { ITokenAmountDetails } from "@components/utilities/MultiTokenAmountSelector";
+
+const NERGs = 1000000000;
 
 export const bPaideiaSendFundsBasic = (
-  address: string,
-  nergs: number,
-  tokens: ITokenAmountDetails[],
+  funds: ISendFundsRecipient[],
   activation_time: number
 ): any => {
   return {
@@ -12,20 +12,19 @@ export const bPaideiaSendFundsBasic = (
     action: {
       optionId: 1,
       activationTime: activation_time,
-      outputs: [
-        {
-          address: address,
-          nergs: nergs + 1000000,
-          // tokens: [[token_id, tokens]],
-          tokens: tokens.map((token) => {
+      outputs: funds.map((fundDetails) => {
+        return {
+          address: fundDetails.address,
+          nergs: fundDetails.ergs * NERGs + 1000000,
+          tokens: fundDetails.tokens.map((token) => {
             return [
               token.tokenId,
               Number(token.amount) * Math.pow(10, token.decimals),
             ];
           }),
           registers: [],
-        },
-      ],
+        };
+      }),
       repeats: 0,
       repeatDelay: 0,
     },

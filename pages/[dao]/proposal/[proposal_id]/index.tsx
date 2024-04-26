@@ -58,7 +58,7 @@ const Proposal: React.FC = () => {
     likes: [],
     dislikes: [],
     comments: [],
-    optionType: "one-option",
+    option_type: "one-option",
     tags: [],
     followers: [],
     date: endDate,
@@ -68,6 +68,8 @@ const Proposal: React.FC = () => {
     references_meta: [],
     referenced_meta: [],
     votes: [0, 0],
+    voting_duration: 0,
+    user_followers: [],
   });
 
   const [tab, setTab] = useState("0");
@@ -252,7 +254,7 @@ const Proposal: React.FC = () => {
                     <LikesDislikes
                       likes={value.likes.length}
                       dislikes={value.dislikes.length}
-                      userSide={value.userSide}
+                      userSide={value.user_side}
                       putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
                   </Box>

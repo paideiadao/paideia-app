@@ -14,12 +14,14 @@ import Layout from "./Layout";
 
 export interface ISupport {
   supportNeeded: number;
+  activation_time: number;
 }
 
 const Support: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<ISupport>({
     supportNeeded: 51,
+    activation_time: 0,
   });
 
   React.useEffect(() => {
@@ -88,7 +90,10 @@ const Support: React.FC<IProposalAction> = (props) => {
             type="number"
             value={value.supportNeeded}
             onChange={(e) =>
-              setValue({ supportNeeded: parseFloat(e.target.value) })
+              setValue({
+                supportNeeded: parseFloat(e.target.value),
+                activation_time: 0,
+              })
             }
             InputProps={{
               inputProps: { min: 51, max: 100 },

@@ -17,11 +17,13 @@ import Layout from "./Layout";
 export interface IOptimisticGovernance {
   activated: boolean;
   wallets: IWallet[];
+  activation_time: number;
 }
 
 export const defaultOptimisticGovernanceData = {
   activated: true,
   wallets: [{ alias: "", address: "", img: "" }],
+  activation_time: 0,
 };
 
 const OptimisticGovernance: React.FC<IProposalAction> = (props) => {

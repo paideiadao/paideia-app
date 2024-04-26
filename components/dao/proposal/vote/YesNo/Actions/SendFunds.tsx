@@ -24,7 +24,6 @@ export interface ISendFundsRecipient {
 export interface ISendFunds {
   recipients: ISendFundsRecipient[];
   recurring: boolean;
-  voting_duration: string;
   activation_time: number;
 }
 
@@ -33,12 +32,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
   const [value, setValue] = React.useState<ISendFunds>({
     recipients: [{ address: "", ergs: 0, tokens: [] }],
     recurring: false,
-    voting_duration: (24 * 60 * 60).toString(),
     activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
-  });
-  const [votingDuration, setVotingDuration] = React.useState<any>({
-    duration: 1,
-    unit: "days",
   });
 
   React.useEffect(() => {
@@ -49,20 +43,6 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
       actions: temp,
     });
   }, [value]);
-
-  React.useEffect(() => {
-    const multiplier_map = {
-      seconds: 1,
-      minutes: 60,
-      hours: 60 * 60,
-      days: 60 * 60 * 24,
-      weeks: 60 * 60 * 24 * 7,
-    };
-    // @ts-ignore
-    const multiplier = multiplier_map[votingDuration.unit];
-    const voting_duration = votingDuration.duration * multiplier;
-    setValue({ ...value, voting_duration: voting_duration.toString() });
-  }, [votingDuration]);
 
   return (
     <Layout>
@@ -94,7 +74,7 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
         }
       />
       {context.api?.errors.actionConfig && (
-        <FormHelperText error>
+        <FormHelperText error sx={{ mt: 2 }}>
           Validation failed for receiving wallet
         </FormHelperText>
       )}
@@ -109,39 +89,6 @@ const SendFunds: React.FC<IProposalAction> = (props) => {
         }}
       />
       <CapsInfo title="Configuration" mb="-1rem" />
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          mt: "1rem",
-          pt: "1rem",
-        }}
-      >
-        <Header
-          title="Voting Duration"
-          subtitle="Set how long the voting window should be open"
-        />
-        <FormHelperText error={context.api?.errors.votingDuration}>
-          {context.api?.errors.votingDuration
-            ? "Voting duration cannot be less than minimum in Dao Config"
-            : `Voting Ends at ${new Date(
-                new Date().getTime() +
-                  Number(value.voting_duration) * 1000 +
-                  900 * 1000
-              ).toUTCString()}`}
-        </FormHelperText>
-        <VoteDurationSelector
-          voteDuration={votingDuration.duration}
-          set={(val: number) =>
-            setVotingDuration({ ...votingDuration, duration: val })
-          }
-          voteDurationUnits={votingDuration.unit}
-          setUnits={(val: string) =>
-            setVotingDuration({ ...votingDuration, unit: val })
-          }
-        />
-      </Box>
       <Box
         sx={{
           width: "100%",

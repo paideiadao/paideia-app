@@ -6,7 +6,13 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import { IObj } from "@lib/Interfaces";
-import { Box, Button, FormHelperText, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  FormHelperText,
+  Typography,
+} from "@mui/material";
 import { IProposalAction } from "@pages/[dao]/proposal/create";
 import * as React from "react";
 import Selector from "./vote/Selector";
@@ -14,6 +20,7 @@ import YesNo from "./vote/YesNo/YesNo";
 import AddIcon from "@mui/icons-material/Add";
 import { deviceWrapper } from "@components/utilities/Style";
 import Options from "./vote/Options/Options";
+import VotingDuration from "./vote/VotingDuration";
 
 interface IVoteChoice {
   title: string;
@@ -88,7 +95,6 @@ const ProposalVote: React.FC = () => {
             }}
           >
             <Button
-              disabled={context.api?.value?.actions?.length >= 1}
               endIcon={<AddIcon />}
               onClick={() => {
                 const temp = [...(context.api?.value.actions ?? [])];
@@ -108,9 +114,11 @@ const ProposalVote: React.FC = () => {
         )}
       {context.api?.errors.voting && (
         <FormHelperText sx={{ mt: 1 }} error>
-          Voting or Action not configured
+          Voting system not configured
         </FormHelperText>
       )}
+      <Divider sx={{ mt: 1, pt: 1 }} />
+      <VotingDuration />
     </>
   );
 };

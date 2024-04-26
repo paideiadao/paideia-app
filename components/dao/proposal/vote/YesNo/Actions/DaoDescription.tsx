@@ -9,6 +9,7 @@ import Layout from "./Layout";
 
 export interface IDaoDescription {
   shortDescription: string;
+  activation_time: number;
 }
 
 const DaoDescription: React.FC<IProposalAction> = (props) => {
@@ -16,6 +17,7 @@ const DaoDescription: React.FC<IProposalAction> = (props) => {
 
   const [value, setValue] = React.useState<IDaoDescription>({
     shortDescription: "",
+    activation_time: 0,
   });
 
   React.useEffect(() => {
@@ -52,7 +54,7 @@ const DaoDescription: React.FC<IProposalAction> = (props) => {
         }}
         multiline
         value={value.shortDescription}
-        onChange={(e) => setValue({ shortDescription: e.target.value })}
+        onChange={(e) => setValue({ shortDescription: e.target.value, activation_time: 0 })}
         rows={5}
         sx={{ width: "100%" }}
         FormHelperTextProps={{ sx: { textAlign: "right" } }}

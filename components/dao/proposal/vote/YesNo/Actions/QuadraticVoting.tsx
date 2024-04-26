@@ -13,12 +13,14 @@ import Layout from "./Layout";
 
 export interface IQuadradicVoting {
   isActive: boolean;
+  activation_time: 0;
 }
 
 const QuadraticVoting: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<IQuadradicVoting>({
     isActive: false,
+    activation_time: 0,
   });
 
   React.useEffect(() => {
@@ -53,7 +55,9 @@ const QuadraticVoting: React.FC<IProposalAction> = (props) => {
         small
         title={"Activate quadratic voting"}
         value={value.isActive}
-        onChange={(val: boolean) => setValue({ isActive: val })}
+        onChange={(val: boolean) =>
+          setValue({ isActive: val, activation_time: 0 })
+        }
       />
     </Layout>
   );

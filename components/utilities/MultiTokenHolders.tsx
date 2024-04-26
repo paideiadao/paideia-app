@@ -132,10 +132,9 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
         }}
       >
         <Button
-          disabled
-          variant="text"
+          variant="contained"
           size="small"
-          sx={{ mr: 2 }}
+          sx={{ mr: 2, px: 2 }}
           endIcon={<AddIcon />}
           onClick={() => {
             let temp = [...props.recipients];
@@ -145,8 +144,9 @@ const MultiTokenHolders: React.FC<IMultiTokenHolders> = (props) => {
           Add Another
         </Button>
         <Button
+          variant="contained"
+          sx={{ px: 2 }}
           disabled
-          variant="text"
           size="small"
           endIcon={<FileUploadIcon />}
         >

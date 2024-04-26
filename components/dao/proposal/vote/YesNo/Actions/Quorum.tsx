@@ -13,12 +13,14 @@ import Layout from "./Layout";
 
 export interface IQuorum {
   quorum: number;
+  activation_time: number;
 }
 
 const QuorumAction: React.FC<IProposalAction> = (props) => {
   const context = React.useContext<IProposalContext>(ProposalContext);
   const [value, setValue] = React.useState<IQuorum>({
     quorum: 4,
+    activation_time: 0,
   });
 
   React.useEffect(() => {

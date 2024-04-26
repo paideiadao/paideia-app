@@ -59,6 +59,13 @@ const ActiveProposal: React.FC = () => {
     };
   }, [dao, daoSlugsObject]);
 
+  const sortedData =
+    proposalData?.sort(
+      (a, b) =>
+        Date.parse(a.date?.toString() ?? "") -
+        Date.parse(b.date?.toString() ?? "")
+    ) ?? [];
+
   return (
     <>
       {proposalData === null ? (
@@ -102,7 +109,7 @@ const ActiveProposal: React.FC = () => {
             </Box>
           }
         >
-          {proposalData
+          {sortedData
             .slice()
             .reverse()
             .slice(0, 10)

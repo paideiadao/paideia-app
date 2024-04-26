@@ -28,6 +28,7 @@ export interface ILiquidityPool {
   treasuryAmount: number;
   balance: number;
   contingency: IContingency;
+  activation_time: number;
 }
 
 export interface IContingency {
@@ -51,6 +52,7 @@ export const defaultLiquidityPoolData: ILiquidityPool = {
     balance: 0,
     percentage: 0,
   },
+  activation_time: 0,
 };
 
 const LiquidityPoolAction: React.FC<IProposalAction> = (props) => {
@@ -100,6 +102,7 @@ const LiquidityPoolAction: React.FC<IProposalAction> = (props) => {
         treasuryAmount={value.treasuryAmount}
         balance={value.balance}
         contingency={value.contingency}
+        activation_time={value.activation_time}
       />
       <ButtonGroup variant="outlined" sx={{ width: "100%", mt: ".5rem" }}>
         <Button
