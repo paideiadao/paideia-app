@@ -62,12 +62,14 @@ const AbstractProfile: React.FC<IAbstractProfile> = (props) => {
           <Box sx={{ width: "100%", display: deviceWrapper("block", "none") }}>
             {props.data !== undefined && (
               <AboutUser
+                user_id={props.data.user_id.toString()}
                 token_id={tokenId}
                 followers={props.data.followers}
-                created={0}
+                created={props.data.created}
                 approved={0}
                 bio={props.data.bio}
                 social_links={props.data.social_links}
+                wallet={props.data.address}
               />
             )}
           </Box>
@@ -96,6 +98,7 @@ const AbstractProfile: React.FC<IAbstractProfile> = (props) => {
         <Box sx={{ width: "30%", display: deviceWrapper("none", "block") }}>
           {props.data !== undefined && (
             <AboutUser
+              user_id={props.data.user_id.toString()}
               token_id={tokenId}
               followers={props.data.followers}
               created={props.data.created}
