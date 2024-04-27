@@ -15,7 +15,7 @@ const Following: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
   const { daoSlugsObject } = useDaoSlugs();
-  const [proposalData, setProposalData] = useState<IProposal[]>([]);
+  const [proposalData, setProposalData] = useState<IProposal[] | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -42,7 +42,7 @@ const Following: React.FC = () => {
       <PropsosalListing
         title="Following proposals"
         proposals={
-          proposalData === undefined
+          proposalData === null
             ? undefined
             : proposalData.filter(
                 (i: any) =>
