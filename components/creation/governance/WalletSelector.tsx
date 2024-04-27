@@ -30,6 +30,9 @@ const WalletSelector: React.FC<{
       });
     }
   }, [search]);
+
+  console.log(props);
+
   return (
     <Box
       sx={{
@@ -70,6 +73,7 @@ const WalletSelector: React.FC<{
                   width: "2rem",
                   height: "2rem",
                 }}
+                src={props.data.img !== "" ? props.data.img : undefined}
               >
                 {props.data.img === "" || props.data.img === undefined ? (
                   <PersonIcon color="primary" />
