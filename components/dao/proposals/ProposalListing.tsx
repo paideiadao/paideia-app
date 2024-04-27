@@ -282,7 +282,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 alignItems: "center",
                 justifyContent: "center",
                 width: "100%",
-                mt: "1rem",
+                my: "1rem",
               }}
             >
               <CircularProgress />

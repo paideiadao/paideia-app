@@ -13,6 +13,7 @@ import {
   Fab,
   Slide,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Slider from "@mui/material/Slider";
@@ -286,6 +287,19 @@ const Members: React.FC = () => {
         ))}
       </Box>
       <Grid container spacing={1} sx={{ mt: "1.5rem" }}>
+        {data === null && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              my: "1rem",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
         {data &&
           data
             .filter(

@@ -31,8 +31,6 @@ const WalletSelector: React.FC<{
     }
   }, [search]);
 
-  console.log(props);
-
   return (
     <Box
       sx={{
