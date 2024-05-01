@@ -20,7 +20,7 @@ const CardSlider: FC<SliderProps> = ({
   contained,
   header,
 }) => {
-  const [marginLeftCalc, setMarginLeftCalc] = useState({ px: "0px" });
+  const [marginLeftCalc, setMarginLeftCalc] = useState({ pl: "0px" });
   const [scrollPosition, setScrollPosition] = useState(0);
   const [leftDisabled, setLeftDisabled] = useState(false);
   const [rightDisabled, setRightDisabled] = useState(false);
@@ -68,7 +68,7 @@ const CardSlider: FC<SliderProps> = ({
         pnArrowContainer.getBoundingClientRect().left +
         (addMargin ? addMargin : 0);
     }
-    setMarginLeftCalc({ ...marginLeftCalc, px: margin.toString() + "px" });
+    setMarginLeftCalc({ ...marginLeftCalc, pl: margin.toString() + "px" });
     const containerWidth = document.getElementById("setWidth");
     containerWidth && setSlideDistance(containerWidth.offsetWidth - margin);
   };
@@ -133,12 +133,12 @@ const CardSlider: FC<SliderProps> = ({
 
       const mouseMoveHandler = (e: any) => {
         pnProductNav.scrollLeft =
-          posRef.current.left ?? 0 - (e.clientX - (posRef.current.x ?? 0));
+          posRef.current.left! - (e.clientX - posRef.current.x!)
       };
 
       const mouseUpHandler = (e: any) => {
         pnProductNav.style.cursor = "grab";
-        pnProductNav.style.userSelect = "none";
+        pnProductNav.style.userSelect = "auto";
         document.removeEventListener("mousemove", mouseMoveHandler);
         document.removeEventListener("mouseup", mouseUpHandler);
       };
@@ -186,16 +186,16 @@ const CardSlider: FC<SliderProps> = ({
           sx={
             buttonTop
               ? {
-                  display: "flex",
-                  alignItems: "center",
-                  mt: ".75rem",
-                  mb: ".25rem",
-                  ml: deviceWrapper("0", "-1rem"),
-                  mr: deviceWrapper("0", "-1rem"),
-                }
+                display: "flex",
+                alignItems: "center",
+                mt: ".75rem",
+                mb: ".25rem",
+                ml: deviceWrapper("0", "-1rem"),
+                mr: deviceWrapper("0", "-1rem"),
+              }
               : {
-                  mx: { xs: "24px", sm: "0px" },
-                }
+                mx: { xs: "24px", sm: "0px" },
+              }
           }
         >
           {header}
@@ -226,11 +226,11 @@ const CardSlider: FC<SliderProps> = ({
 
   return (
     <>
-      <Container
+      {/* <Container
         maxWidth="lg"
         id="setWidth"
         sx={{ zIndex: "1", width: "100vw" }}
-      ></Container>
+        ></Container> */}
       {buttonTop && <ButtonBox />}
       <Box
         sx={{
