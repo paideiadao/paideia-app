@@ -180,6 +180,7 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
   const [value, setValue] = React.useState<ILikesDislikes>({
     ...props,
   });
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   const iconFont = {
     xs: ".9rem",
@@ -188,13 +189,21 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
     lg: ".8rem",
     xl: "1rem",
   };
-
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
-
   const api = new LikesDislikesApi(globalContext.api, props.putUrl ?? "");
+
   React.useEffect(() => {
-    setValue({ ...props });
-  }, [props]);
+    if (globalContext.api?.daoUserData && globalContext.api?.daoUserData.id) {
+      setLoading(false);
+    }
+  }, [globalContext.api?.daoUserData]);
+
+  React.useEffect(() => {
+    if (!loading) {
+      setValue({ ...props });
+    }
+  }, [loading]);
+
   return (
     <Box sx={{ display: "flex", alignItems: "center", fontSize: iconFont }}>
       {value.userSide === undefined ? (
