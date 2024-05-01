@@ -61,17 +61,17 @@ interface IAboutUser {
 
 const AboutUser: React.FC<IAboutUser> = (props) => {
   const { wallet, utxos } = useWallet();
-  const [userTokens, setUserTokens] = React.useState<number>(0);
-  const [stakeAmount, setStakeAmount] = React.useState<number>(0);
+  const [userTokens, setUserTokens] = React.useState<number | null>(null);
+  const [stakeAmount, setStakeAmount] = React.useState<number | null>(null);
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
 
   React.useEffect(() => {
     const load = async () => {
       const res = await appContext.api?.daoTokenCheckSingleToken(
-        [props.wallet ?? ""],
+        props.wallet ? [props.wallet] : [],
         props.token_id
       );
-      if (res) {
+      if (res !== undefined) {
         setUserTokens(res);
       } else setUserTokens(utxos.currentDaoTokens);
     };
@@ -223,7 +223,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
             color="primary"
           />
         </Box>
-        {props.wallet && userTokens ? (
+        {props.wallet && userTokens !== null && stakeAmount !== null ? (
           <Chip
             avatar={<Avatar alt={ticker} src={tokenImage} />}
             label={
