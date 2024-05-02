@@ -63,8 +63,8 @@ const AddWallet: React.FC = () => {
     wallet !== "" && !dAppWallet.connected
       ? "mobile"
       : wallet !== "" && dAppWallet.connected
-      ? "nautilus"
-      : "listing"
+        ? "nautilus"
+        : "listing"
   );
 
   // trpc
@@ -186,6 +186,7 @@ const AddWallet: React.FC = () => {
             },
           }
         );
+        console.log(res)
         const user = res.data;
         localStorage.setItem("jwt_token_login", session.data?.user.jwt ?? "");
         localStorage.setItem("user_id", user.id);
@@ -442,8 +443,7 @@ const AddWallet: React.FC = () => {
         `ergoauth://${process.env.ERGOAUTH_DOMAIN?.replace(
           "https://",
           ""
-        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${
-          response.verificationId
+        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${response.verificationId
         }&address=${address}`
       );
     } catch (e: any) {

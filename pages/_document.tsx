@@ -28,11 +28,11 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet"
           />
-          <script
+          {/* <script
             src="https://cdn.tiny.cloud/1/zqjhfpipuc4o31w9futmmrkk1h580wp0khen82rp6wphf1u1/tinymce/6/tinymce.min.js"
             referrerPolicy="origin"
             defer
-          ></script>
+          ></script> */}
         </Head>
         <body>
           <Box sx={{ position: "relative" }}>

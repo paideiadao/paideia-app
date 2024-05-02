@@ -54,16 +54,18 @@ const ProfileHeader: React.FC<{
       sx={{
         ml: deviceWrapper("0", "1rem"),
         display: "flex",
-        alignItems: deviceWrapper("center", "flex-start"),
+        alignItems: "center",
         mt: ".5rem",
         flexDirection: deviceWrapper("column", "row"),
+        // width: "100%"
+        gap: 1
       }}
     >
       <Avatar
         sx={{
           mr: deviceWrapper("0", ".5rem"),
-          width: deviceWrapper("8rem", "4.5rem"),
-          height: deviceWrapper("8rem", "4.5rem"),
+          width: deviceWrapper("8rem", "2.5rem"),
+          height: deviceWrapper("8rem", "2.5rem"),
         }}
         src={props.data.profile_img_url}
       ></Avatar>
@@ -71,8 +73,10 @@ const ProfileHeader: React.FC<{
         sx={{
           fontSize: "1.3rem",
           display: deviceWrapper("block", "none"),
-          mx: 1,
           overflow: "hidden",
+          width: "100%",
+          textAlign: "center",
+          textOverflow: "ellipsis"
         }}
       >
         {snipAddress(props.data.name, 25, 12)}
@@ -90,26 +94,34 @@ const ProfileHeader: React.FC<{
           user_id={props.data.id}
         />
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+      <Box sx={{
+        display: "flex",
+        alignItems: "center",
+        flexGrow: 1,
+        overflow: deviceWrapper("auto", "hidden"),
+        gap: 1
+      }}>
+        {/* <Box
+          sx={{
+            display: "block",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            width: "100%"
+          }}
+        > */}
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            width: deviceWrapper("100%", "75%"),
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            width: "100%",
+            display: deviceWrapper("none", "block")
           }}
         >
-          <Box
-            sx={{
-              width: "100%",
-              display: "block",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {props.data.name}
-          </Box>
-          <Box
+          {props.data.name}
+        </Box>
+        {/* <Box
             sx={{
               color: "text.secondary",
               fontSize: deviceWrapper(".9rem", ".7rem"),
@@ -142,14 +154,14 @@ const ProfileHeader: React.FC<{
                 levels[props.data.level].points}{" "}
               PTS till next lvl
             </Box>
-          </Box>
-        </Box>
+          </Box> 
+        </Box>*/}
         <Box
           sx={{
             display: deviceWrapper("none", "flex"),
             height: "100%",
             alignItems: "center",
-            ml: "auto",
+            flex: "none"
           }}
         >
           <EditFollow
