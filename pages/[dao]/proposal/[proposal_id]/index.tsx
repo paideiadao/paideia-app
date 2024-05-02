@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Fab, Tab } from "@mui/material";
+import { Box, Button, Chip, CircularProgress, Fab, Tab } from "@mui/material";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import Comments, { IComment } from "@components/dao/discussion/Comments";
@@ -547,7 +547,19 @@ const Proposal: React.FC = () => {
             </Button>
           </>
         )}
-        {!loaded && <>Loading here...</>}
+        {!loaded && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              my: 5,
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
       </Layout>
     </ProposalContext.Provider>
   );
