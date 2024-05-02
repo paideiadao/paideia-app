@@ -116,7 +116,7 @@ const TopNav: React.FC<INav> = (props) => {
 
   const { data: apiNotifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
-      `/notificatons/${globalContext.api?.daoUserData?.id}`,
+    `/notificatons/${globalContext.api?.daoUserData?.id}`,
     fetcher
   );
 
@@ -148,10 +148,10 @@ const TopNav: React.FC<INav> = (props) => {
 
   const unreadCount = notifications
     ? notifications
-        .map((notification: { is_read: boolean }) =>
-          notification.is_read ? 0 : 1
-        )
-        .reduce((a: number, c: number) => a + c, 0)
+      .map((notification: { is_read: boolean }) =>
+        notification.is_read ? 0 : 1
+      )
+      .reduce((a: number, c: number) => a + c, 0)
     : null;
 
   useEffect(() => {
@@ -238,18 +238,15 @@ const TopNav: React.FC<INav> = (props) => {
               </Badge>
             </IconButton>
           </Box>
-          {globalContext.api?.daoUserData !== undefined &&
-          globalContext.api.daoUserData.loading === true ? (
-            <Box sx={{ width: { xs: "40px", md: "160px" } }}>
+          {globalContext.api?.daoUserData !== undefined && globalContext.api.daoUserData.loading === true
+            ? <Box sx={{ width: { xs: "40px", md: "160px" } }}>
               <Skeleton
                 variant={desktop ? "rounded" : "circular"}
                 height={40}
               />
             </Box>
-          ) : (
-            globalContext.api?.daoUserData !== undefined &&
-            isAddressValid(wallet) && (
-              <>
+            : globalContext.api?.daoUserData !== undefined && globalContext.api.daoUserData.name && isAddressValid(wallet)
+              ? <>
                 {globalContext.api.daoUserData !== undefined && (
                   <Box
                     sx={{
@@ -290,8 +287,8 @@ const TopNav: React.FC<INav> = (props) => {
                 )}
                 {/* </Link> */}
               </>
-            )
-          )}
+              : <></>
+          }
           <ConnectWallet show={globalContext.api?.daoUserData === undefined} />
         </Box>
         <Box sx={{ position: "relative" }}>

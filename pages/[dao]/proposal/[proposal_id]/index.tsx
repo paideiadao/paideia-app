@@ -1,4 +1,4 @@
-import { Box, Button, Chip, CircularProgress, Fab, Tab } from "@mui/material";
+import { Box, Button, Chip, CircularProgress, Fab, Tab, useTheme } from "@mui/material";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import Comments, { IComment } from "@components/dao/discussion/Comments";
@@ -41,6 +41,7 @@ startDate.setDate(startDate.getDate() - 10);
 
 const Proposal: React.FC = () => {
   const themeContext = useContext(ThemeContext);
+  const theme = useTheme();
   const router = useRouter();
   const { dao, proposal_id } = router.query;
   const parsed_proposal_id = proposal_id
@@ -152,9 +153,8 @@ const Proposal: React.FC = () => {
                     position: "relative",
                     backgroundImage: deviceWrapper(
                       `linear-gradient(
-                  to bottom, transparent, ${
-                    themeContext.theme === DarkTheme ? "black" : "white"
-                  }
+                  to bottom, transparent, ${themeContext.theme === DarkTheme ? "black" : "white"
+                      }
                 ), url(${value.image_url})`,
                       `url('${value.image_url}')`
                     ),
@@ -262,12 +262,12 @@ const Proposal: React.FC = () => {
                         ) > -1
                           ? 1
                           : value.dislikes.indexOf(
-                              context.api?.daoUserData
-                                ? context.api.daoUserData.id
-                                : null
-                            ) > -1
-                          ? 0
-                          : undefined
+                            context.api?.daoUserData
+                              ? context.api.daoUserData.id
+                              : null
+                          ) > -1
+                            ? 0
+                            : undefined
                       }
                       putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
@@ -320,7 +320,7 @@ const Proposal: React.FC = () => {
                         putUrl={"/proposals/follow/" + parsed_proposal_id}
                       />
                     )}
-                    <Link
+                    {/* <Link
                       href={
                         dao === undefined
                           ? `/dao/proposal/${proposal_id}/vote`
@@ -339,7 +339,7 @@ const Proposal: React.FC = () => {
                       >
                         Vote Now
                       </Button>
-                    </Link>
+                    </Link> */}
                   </Box>
                 </Box>
                 <Box
@@ -403,12 +403,12 @@ const Proposal: React.FC = () => {
                         ) > -1
                           ? 1
                           : value.dislikes.indexOf(
-                              context.api?.daoUserData
-                                ? context.api.daoUserData.id
-                                : null
-                            ) > -1
-                          ? 0
-                          : undefined
+                            context.api?.daoUserData
+                              ? context.api.daoUserData.id
+                              : null
+                          ) > -1
+                            ? 0
+                            : undefined
                       }
                       putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
@@ -423,6 +423,7 @@ const Proposal: React.FC = () => {
                   <VoteWidget
                     yes={value.votes ? value.votes[1] / decimalAdjust : 0}
                     no={value.votes ? value.votes[0] / decimalAdjust : 0}
+                    status={value.status}
                   />
                 </Box>
                 <TabContext value={tab}>
@@ -446,23 +447,21 @@ const Proposal: React.FC = () => {
                     >
                       <Tab label="Proposal Info" value="0" />
                       <Tab
-                        label={`Comments | ${
-                          value.comments
-                            .concat(liveComments)
-                            .filter((x) => x)
-                            .filter(
-                              (v, i, a) =>
-                                a.map((comment) => comment.id).indexOf(v.id) ===
-                                i
-                            ).length
-                        }`}
+                        label={`Comments | ${value.comments
+                          .concat(liveComments)
+                          .filter((x) => x)
+                          .filter(
+                            (v, i, a) =>
+                              a.map((comment) => comment.id).indexOf(v.id) ===
+                              i
+                          ).length
+                          }`}
                         value="1"
                       />
                       <Tab
-                        label={`References | ${
-                          (value?.references_meta?.length ?? 0) +
+                        label={`References | ${(value?.references_meta?.length ?? 0) +
                           (value?.referenced_meta?.length ?? 0)
-                        }`}
+                          }`}
                         value="2"
                       />
                       <Tab label="Addendums" value="3" />
@@ -526,25 +525,11 @@ const Proposal: React.FC = () => {
                 <VoteWidget
                   yes={value.votes ? value.votes[1] / decimalAdjust : 0}
                   no={value.votes ? value.votes[0] / decimalAdjust : 0}
+                  status={value.status}
                 />
               </Box>
             </Box>
-            <Button
-              disabled={value.status !== "Active"}
-              size="small"
-              startIcon={<GavelIcon />}
-              sx={{
-                position: "fixed",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                display: deviceWrapper("flex", "none"),
-                borderRadius: 0,
-              }}
-              variant="contained"
-            >
-              Vote Now
-            </Button>
+
           </>
         )}
         {!loaded && (
@@ -561,6 +546,25 @@ const Proposal: React.FC = () => {
           </Box>
         )}
       </Layout>
+      <Button
+        disabled={value.status !== "Active"}
+        // size="small"
+        startIcon={<GavelIcon />}
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          display: deviceWrapper("flex", "none"),
+          borderRadius: 0,
+          "&.Mui-disabled": {
+            backgroundColor: theme.palette.mode === "dark" ? "rgb(46,52,64)" : "grey.400"
+          }
+        }}
+        variant="contained"
+      >
+        Vote Now
+      </Button>
     </ProposalContext.Provider>
   );
 };

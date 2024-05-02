@@ -49,13 +49,16 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
           width: deviceWrapper("80%", "100%"),
           display: "flex",
           flexDirection: deviceWrapper("column", "row"),
+          gap: deviceWrapper(0, 4)
         }}
       >
         <Box
           sx={{
             display: "flex",
+            flex: 1,
+            minWidth: 0,
             alignItems: "center",
-            width: deviceWrapper("100%", "65%"),
+            // width: deviceWrapper("100%", "65%"),
           }}
         >
           <Avatar
@@ -69,7 +72,7 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
           ></Avatar>
           <Box>
             {!props.i.name.includes(" ") &&
-            !["Withdrawal"].includes(props.i.name) ? (
+              !["Withdrawal"].includes(props.i.name) ? (
               <Link
                 sx={{ textDecoration: "none", color: "text.primary" }}
                 href={`/${dao}/members/${props.i.name}`}
@@ -89,22 +92,21 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
             >
               {props.i.action}
             </Box>{" "}
-            {props.i.link ? (
-              <Link
-                sx={{ textDecoration: "none", color: "text.primary" }}
+            {props.i.link
+              ? <Link
+                sx={{
+                  textDecoration: "none", color: "text.primary",
+                  overflowWrap: props.i.value.length > 30 && !props.i.value.includes(" ") ? 'break-word' : 'normal',
+                  wordBreak: props.i.value.length > 30 && !props.i.value.includes(" ") ? 'break-all' : 'normal'
+                }}
                 href={
                   props.i.link ? generateRedirectUrl(props.i, String(dao)) : ""
                 }
               >
-                {props.i.value.length > 120
-                  ? props.i.value.substring(0, 120) + "..."
-                  : props.i.value}
+                {props.i.value}
               </Link>
-            ) : props.i.value.length > 120 ? (
-              props.i.value.substring(0, 120) + "..."
-            ) : (
-              props.i.value
-            )}
+              : props.i.value
+            }
             {props.i.secondary !== undefined && (
               <Box
                 sx={{
@@ -127,11 +129,14 @@ const Activity: React.FC<{ i: IActivity; c: number }> = (props) => {
             color: "text.secondary",
             display: "flex",
             alignItems: "center",
-            mt: deviceWrapper(".0rem", "0"),
+            gap: 1,
+            flexDirection: deviceWrapper("row", "row-reverse"),
+            // mt: deviceWrapper(".0rem", "0"),
+            minWidth: 0,  // Prevent flexbox overflow
           }}
         >
           <CalendarTodayIcon
-            sx={{ mr: ".5rem", fontSize: deviceWrapper("1rem", "1.5rem") }}
+            sx={{ fontSize: deviceWrapper("1rem", "1.5rem") }}
           />
           {dateFormat(props.i.date, "mmm dd, yyyy: h:MM")}
         </Box>
