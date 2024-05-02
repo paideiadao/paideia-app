@@ -3,6 +3,7 @@ import { Header } from "@components/creation/utilities/HeaderComponents";
 import Layout from "@components/dao/Layout";
 import {
   Box,
+  CircularProgress,
   Fab,
   FormControl,
   InputBase,
@@ -236,7 +237,17 @@ const Activities: FC = () => {
             return <Activity i={i} c={c} key={c} />;
           })
       ) : (
-        <>Loading Here...</>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            my: "2rem",
+          }}
+        >
+          <CircularProgress />
+        </Box>
       )}
       <Fab
         color="primary"

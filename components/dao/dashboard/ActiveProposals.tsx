@@ -69,8 +69,16 @@ const ActiveProposal: React.FC = () => {
   return (
     <>
       {proposalData === null ? (
-        <Box>
-          <CircularProgress color="inherit" />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            my: "5rem",
+          }}
+        >
+          <CircularProgress />
         </Box>
       ) : proposalData.length === 0 ? (
         <Box

@@ -83,7 +83,6 @@ export class AppApi extends AbstractApi {
         const sort = Object.values(res.data)[0][0][daoTokenId];
         return sort;
       } catch (e) {
-        console.log(e);
         return 0;
       }
     } else return 0;

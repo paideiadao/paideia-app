@@ -254,7 +254,21 @@ const Proposal: React.FC = () => {
                     <LikesDislikes
                       likes={value.likes.length}
                       dislikes={value.dislikes.length}
-                      userSide={value.user_side}
+                      userSide={
+                        value.likes.indexOf(
+                          context.api?.daoUserData
+                            ? context.api.daoUserData.id
+                            : null
+                        ) > -1
+                          ? 1
+                          : value.dislikes.indexOf(
+                              context.api?.daoUserData
+                                ? context.api.daoUserData.id
+                                : null
+                            ) > -1
+                          ? 0
+                          : undefined
+                      }
                       putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
                   </Box>

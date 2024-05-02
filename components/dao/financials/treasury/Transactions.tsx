@@ -1,5 +1,5 @@
 import Activity, { IActivity } from "@components/dao/activity/Activity";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { Subheader } from "@components/creation/utilities/HeaderComponents";
 import { deviceWrapper } from "@components/utilities/Style";
 import { useContext, useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 const Transactions: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
-  const [transactions, setTransactions] = useState<IActivity[]>([]);
+  const [transactions, setTransactions] = useState<IActivity[] | null>(null);
   const context = useContext<IGlobalContext>(GlobalContext);
   const daoId = context.api?.daoData?.id;
 
@@ -66,9 +66,23 @@ const Transactions: React.FC = () => {
           <Box sx={{ display: deviceWrapper("block", "none") }}>View All</Box>
         </Button>
       </Box>
-      {transactions.map((i: any, c: number) => {
-        return <Activity i={i} c={c} key={`transaction-activity-${c}`} />;
-      })}
+      {transactions ? (
+        transactions.map((i: any, c: number) => {
+          return <Activity i={i} c={c} key={`transaction-activity-${c}`} />;
+        })
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            my: 5,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
     </Box>
   );
 };

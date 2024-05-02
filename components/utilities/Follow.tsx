@@ -6,6 +6,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import useDidMountEffect from "./hooks";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import FollowApi from "@lib/FollowApi";
+import { Favorite, FavoriteBorder } from "@mui/icons-material";
 
 interface IFollow {
   followed: boolean;
@@ -30,16 +31,18 @@ export const FollowMobile: React.FC<IFollow> = (props) => {
         }}
         sx={{
           zIndex: 10,
-          backgroundColor: followed ? "white" : "error.main",
-          color: followed ? "error.light" : "white",
           ":hover": {
-            backgroundColor: followed ? "white" : "error.main",
-            color: followed ? "error.light" : "white",
+            borderColor: "error.light",
+            color: "error.light",
           },
           ...smallStyle,
         }}
       >
-        <FavoriteIcon sx={{ fontSize: "1.2rem" }} />
+        {followed ? (
+          <Favorite sx={{ fontSize: "1rem", fill: "red" }} />
+        ) : (
+          <FavoriteBorder sx={{ fontSize: "1rem", fill: "red" }} />
+        )}
       </Fab>
     </Tooltip>
   );

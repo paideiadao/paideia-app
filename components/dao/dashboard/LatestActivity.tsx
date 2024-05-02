@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, FC } from "react";
 import useDidMountEffect from "@components/utilities/hooks";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { fetcher } from "@lib/utilities";
-import { Box, Button, Avatar } from "@mui/material";
+import { Box, Button, Avatar, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -99,7 +99,17 @@ const LatestActivity: React.FC = () => {
           return <Activity i={i} c={c} key={"latest-activity" + c} />;
         })
       ) : (
-        <>Loading Here</>
+        <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              my: "1rem",
+            }}
+          >
+            <CircularProgress />
+          </Box>
       )}
     </Box>
   );
