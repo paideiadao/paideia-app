@@ -161,7 +161,7 @@ const RecurringForm: React.FC<{ context?: boolean }> = (props) => {
           </FormControl>
         </Box>
       ) : (
-        <>loading here...</>
+        <>Loading here...</>
       )}
     </>
   );

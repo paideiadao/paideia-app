@@ -25,7 +25,7 @@ const ProposalsListing: React.FC<IProposalsListing> = (props) => {
       ))}
     </Box>
   ) : (
-    <>Loading Here</>
+    <>Loading here...</>
   );
 };
 
