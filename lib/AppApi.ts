@@ -1,15 +1,15 @@
-import { AbstractApi, getUserId } from "./utilities";
-import { Theme } from "@mui/material";
+import { IUserStakeData } from "@components/dao/staking/YourStaking";
 import { IAlerts } from "@components/utilities/Alert";
+import { Theme } from "@mui/material";
 import {
+  IDaoMembership,
   IDaoUserData,
   IDaoUserRes,
   IEditUser,
-  ITokenCheckResponse,
   ITokenCheckNew,
-  IDaoMembership,
+  ITokenCheckResponse,
 } from "./Interfaces";
-import { IUserStakeData } from "@components/dao/staking/YourStaking";
+import { AbstractApi, getUserId } from "./utilities";
 
 export class AppApi extends AbstractApi {
   theme: Theme;
@@ -113,10 +113,15 @@ export class AppApi extends AbstractApi {
 
   async getDaoUser(): Promise<IDaoUserRes | null> {
     const userId = getUserId();
+    // if (!userId) {
+    //   const tell = this.get(`/users/me`)
+    //   console.log(tell)
+    // }
     if (userId && this.daoData && this.daoData.id !== undefined) {
-      return this.get<IDaoUserRes>(
+      const result = this.get<IDaoUserRes>(
         `/users/details/${userId}?dao_id=${this.daoData.id}`
       );
+      return result
     }
     return null;
   }
@@ -189,11 +194,17 @@ export class AppApi extends AbstractApi {
       } else if (res?.data) {
         this.setDaoUserData({ ...res.data, loading: false });
       } else {
-        this.setDaoUserData(undefined);
+        this.setDaoUserData({ ...this.daoUserData, loading: false });
         this.error(
           "Please add " + this.daoData.dao_name + " tokens to participate"
         );
       }
+    }
+    else {
+      this.setDaoUserData({ ...this.daoUserData, loading: false });
+      this.error(
+        "Unable to retrieve user account. "
+      );
     }
     return response;
   }
