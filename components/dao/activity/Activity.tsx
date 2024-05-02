@@ -6,7 +6,6 @@ import { deviceWrapper } from "@components/utilities/Style";
 import { generateSlug } from "@lib/utilities";
 import Link from "@components/Link";
 import { useRouter } from "next/router";
-import { shorterString } from "@lib/ShorterString";
 
 export interface IActivity {
   img_url: string;

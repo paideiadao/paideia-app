@@ -36,6 +36,5 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
-server.js
 ssl.crt
 ssl.key
