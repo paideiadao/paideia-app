@@ -129,6 +129,7 @@ const TokenInformation: React.FC<IData<ITokenomics>> = (props) => {
         sx={{ width: "100%", mt: ".5rem", mb: "24px" }}
       >
         <Button
+          disabled
           sx={{
             width: "50%",
             fontSize: ".8rem",

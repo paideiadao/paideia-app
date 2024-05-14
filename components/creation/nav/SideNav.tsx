@@ -15,6 +15,8 @@ import { ThemeContext } from "@lib/ThemeContext";
 import { deviceStruct } from "@components/utilities/Style";
 import { useWallet } from "@components/wallet/WalletContext";
 import ThemeToggle from "@components/dao/nav/ThemeToggle";
+import { useRouter } from "next/router";
+import { DRAFT_DAO_KEY } from "@pages/creation";
 
 interface INavProps {
   value: number;
@@ -23,10 +25,11 @@ interface INavProps {
 }
 
 const Nav: FC<INavProps> = ({ value }) => {
-  let creationContext = React.useContext(ThemeContext);
-  let global = React.useContext(CreationContext);
+  const router = useRouter();
+  const creationContext = React.useContext(ThemeContext);
+  const global = React.useContext(CreationContext);
 
-  let theme = creationContext.theme;
+  const theme = creationContext.theme;
   const [logo, setLogo] = React.useState(
     theme === DarkTheme ? LightLogo : DarkLogo
   );
@@ -109,6 +112,10 @@ const Nav: FC<INavProps> = ({ value }) => {
               <ThemeToggle />
             </Box> */}
             <Button
+              onClick={() => {
+                localStorage.removeItem(DRAFT_DAO_KEY);
+                router.push("/");
+              }}
               variant="outlined"
               color="error"
               endIcon={<DeleteIcon />}

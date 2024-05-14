@@ -22,7 +22,7 @@ import { ITokenHolder, ITokenomics } from "@lib/creation/Interfaces";
 
 const Tokenomics: React.FC = () => {
   const creationContext = React.useContext<ICreationContext>(CreationContext);
-  let data = creationContext.api.data.tokenomics;
+  const data = creationContext.api.data.tokenomics;
   const set = (tokenomicsData: ITokenomics) => {
     creationContext.api.setData({
       ...creationContext.api.data,
@@ -32,10 +32,10 @@ const Tokenomics: React.FC = () => {
     });
   };
 
-  let tokenAmount = data.tokenAmount;
-  let tokenHolders = data.tokenHolders;
-  let distributions = data.distributions;
-  let activateTokenomics = data.activateTokenomics;
+  const tokenAmount = data.tokenAmount;
+  const tokenHolders = data.tokenHolders;
+  const distributions = data.distributions;
+  const activateTokenomics = data.activateTokenomics;
 
   React.useEffect(() => {
     set({
@@ -164,8 +164,8 @@ const Tokenomics: React.FC = () => {
       />
       <Box
         sx={{
-          borderBottom: data.type === "existing" ? "0" : "1px solid",
-          borderBottomColor: "border.main",
+          // borderBottom: data.type === "existing" ? "0" : "1px solid",
+          // borderBottomColor: "border.main",
           pb: "1rem",
         }}
       >
@@ -173,12 +173,12 @@ const Tokenomics: React.FC = () => {
           data={data}
           setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
         />
-        <TokenSymbol
+        {/* <TokenSymbol
           data={data}
           setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
-        />
+        /> */}
       </Box>
-      {data.type !== "existing" && (
+      {/* {data.type !== "existing" && (
         <>
           <Box sx={{ mt: "1rem" }}>
             <Header title="Tokenomics" large />
@@ -219,7 +219,6 @@ const Tokenomics: React.FC = () => {
               </Button>
             </ButtonGroup>
           </Box>
-
           {!activateTokenomics ? (
             <TokenHolders
               data={data}
@@ -238,7 +237,7 @@ const Tokenomics: React.FC = () => {
             </>
           )}
         </>
-      )}
+      )} */}
     </Box>
   );
 };

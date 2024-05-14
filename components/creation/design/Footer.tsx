@@ -135,7 +135,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
             ))}
           </Box>
           <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+            sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 1 }}
           >
             <Button
               sx={{ pr: "0.5rem" }}

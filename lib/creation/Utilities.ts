@@ -22,33 +22,37 @@ export function checkCompleteness(_data: ICreationData): boolean {
     }
     case 1: {
       return (
+        //   _data.tokenomics.tokenTicker === "" ||
+        //   _data.tokenomics.tokenName === "" ||
+        //   _data.tokenomics.tokenImage == -1 ||
+        //   (_data.tokenomics.type === "existing"
+        //     ? false
+        //     : _data.tokenomics.tokenRemaining < 0 ||
+        //       _data.tokenomics.tokenAmount === 0 ||
+        //       _data.tokenomics.tokenHolders.filter((i: ITokenHolder) => {
+        //         return i.alias !== "" && i.balance !== 0;
+        //       }).length === 0 ||
+        //       _data.tokenomics.distributions
+        //         .filter((i: any) => i !== undefined)
+        //         .filter((i: any) => {
+        //           return i.balance === 0;
+        //         }).length !== 0 ||
+        //       _data.tokenomics.distributions
+        //         .filter((i: any) => i !== undefined)
+        //         .filter((i: any) => {
+        //           return i.hasOwnProperty("tokenHolders");
+        //         })
+        //         .filter((i: any) => {
+        //           return (
+        //             i.tokenHolders.filter(
+        //               (i: any) => i.alias === "" || i.balance === 0
+        //             ).length > 0
+        //           );
+        //         }).length !== 0)
+        // );
         _data.tokenomics.tokenTicker === "" ||
         _data.tokenomics.tokenName === "" ||
-        _data.tokenomics.tokenImage == -1 ||
-        (_data.tokenomics.type === "existing"
-          ? false
-          : _data.tokenomics.tokenRemaining < 0 ||
-            _data.tokenomics.tokenAmount === 0 ||
-            _data.tokenomics.tokenHolders.filter((i: ITokenHolder) => {
-              return i.alias !== "" && i.balance !== 0;
-            }).length === 0 ||
-            _data.tokenomics.distributions
-              .filter((i: any) => i !== undefined)
-              .filter((i: any) => {
-                return i.balance === 0;
-              }).length !== 0 ||
-            _data.tokenomics.distributions
-              .filter((i: any) => i !== undefined)
-              .filter((i: any) => {
-                return i.hasOwnProperty("tokenHolders");
-              })
-              .filter((i: any) => {
-                return (
-                  i.tokenHolders.filter(
-                    (i: any) => i.alias === "" || i.balance === 0
-                  ).length > 0
-                );
-              }).length !== 0)
+        _data.tokenomics.tokenId === ""
       );
     }
     case 3: {

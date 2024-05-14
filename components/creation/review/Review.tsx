@@ -10,7 +10,7 @@ import { deviceStruct } from "@components/utilities/Style";
 
 const Review: React.FC = () => {
   const creationContext = React.useContext(CreationContext);
-  let data = creationContext.api.data;
+  const data = creationContext.api.data;
   const [publish, setPublish] = React.useState<boolean>(false);
   return (
     <Box
@@ -62,14 +62,14 @@ const Review: React.FC = () => {
               display: deviceStruct("none", "none", "block", "block", "block"),
             }}
           >
-            Publish as a draft
+            Save
           </Box>
           <Box
             sx={{
               display: deviceStruct("block", "block", "none", "none", "none"),
             }}
           >
-            Publish Draft
+            Save
           </Box>
         </Button>
         <Button
@@ -79,18 +79,6 @@ const Review: React.FC = () => {
         >
           Publish DAO
         </Button>
-      </Box>
-      <Box sx={{ mt: "1rem" }}>
-        <Alert severity="warning" color="warning" sx={{ fontSize: ".8rem" }}>
-          <AlertTitle sx={{ fontSize: ".9rem" }}>Draft publishing</AlertTitle>
-          <Box sx={{ ml: "-1.75rem" }}>
-            Publishing as a draft allows you to see the DAO configuation before
-            committing to it. You will be able to change any configuration
-            (except name and URL). When you publish as a draft the users you
-            whitelisted won&apos;t be notified and nothing will happen until you are
-            ready to do the FINAL publish.
-          </Box>
-        </Alert>
       </Box>
       <Modal
         open={publish}
@@ -107,7 +95,6 @@ const Review: React.FC = () => {
           <Box sx={{ fontSize: "1.1rem", fontWeight: 450 }}>
             You are about to publish the final version of your DAO
           </Box>
-
           <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
             Once you publish the DAO any configuration change would have to be
             done through the proposal system. Also, keep in mind that tokens
@@ -128,10 +115,11 @@ const Review: React.FC = () => {
               </Button>
               <Button
                 onClick={async () => {
-                  const res = await creationContext.api.createDao(false);
-                  if (res) {
-                    Router.push(`/${res.data.dao_name.toLowerCase()}`);
-                  }
+                  creationContext.api.setData({ ...data, isPublished: 1 });
+                  // const res = await creationContext.api.createDao(false);
+                  // if (res) {
+                  //   Router.push(`/${res.data.dao_name.toLowerCase()}`);
+                  // }
                 }}
               >
                 Publish DAO

@@ -153,33 +153,34 @@ const Tokenomics: React.FC<{
         <Box sx={{ width: "100%" }}>
           <Value
             labelWidth="35%"
-            title="Token creation type"
-            value={
-              data.tokenomics.type === "create"
-                ? "Create a new token"
-                : "Use an existing one"
-            }
+            title="Token Creation Type"
+            value={"Use an existing one"}
           />
           <Value
             labelWidth="35%"
-            title="Token name"
+            title="Token Name"
             value={data.tokenomics.tokenName}
           />
           <Value
             labelWidth="35%"
-            title="Token ticker"
+            title="Token Ticker"
             value={data.tokenomics.tokenTicker}
           />
           <Value
             labelWidth="35%"
+            title="Token ID"
+            value={data.tokenomics.tokenId.slice(0, 6) + "..." + data.tokenomics.tokenId.slice(data.tokenomics.tokenId.length - 6, data.tokenomics.tokenId.length)}
+          />
+          {/* <Value
+            labelWidth="35%"
             title="Token amount"
             value={data.tokenomics.tokenAmount}
-          />
-          <Value
+          /> */}
+          {/* <Value
             labelWidth="35%"
             title="Token symbol"
             component={
-              data.tokenomics.tokenImage.file !== null ? (
+              data.tokenomics.tokenImage.file ? (
                 <ImageWrapper
                   size={bytesToSize(data.tokenomics.tokenImage.file.size)}
                   img={data.tokenomics.tokenImage.url}
@@ -189,8 +190,8 @@ const Tokenomics: React.FC<{
                 <></>
               )
             }
-          />
-          {!data.tokenomics.activateTokenomics && (
+          /> */}
+          {/* {!data.tokenomics.activateTokenomics && (
             <Value
               labelWidth="35%"
               title="Token holder addresses"
@@ -201,7 +202,7 @@ const Tokenomics: React.FC<{
             labelWidth="35%"
             title="Tokenomics"
             component={<DistributionListing data={data.tokenomics} />}
-          />
+          /> */}
         </Box>
         <Box
           sx={{

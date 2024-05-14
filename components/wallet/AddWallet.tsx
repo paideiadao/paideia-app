@@ -186,7 +186,6 @@ const AddWallet: React.FC = () => {
             },
           }
         );
-        console.log(res)
         const user = res.data;
         localStorage.setItem("jwt_token_login", session.data?.user.jwt ?? "");
         localStorage.setItem("user_id", user.id);

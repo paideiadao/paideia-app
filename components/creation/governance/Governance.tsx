@@ -35,7 +35,7 @@ const Governance: React.FC = () => {
       }}
     >
       <Box sx={{ textAlign: "left", width: "100%", fontSize: "1.2rem" }}>
-        Governance and voting configuration
+        Governance and Voting Configuration
         <Box sx={{ width: "100%", color: "text.secondary", fontSize: ".8rem" }}>
           You can use the default settings or dive more in deep configure your
           voting system as you wish. You can enable and configure features such
@@ -75,6 +75,7 @@ const Governance: React.FC = () => {
           <Box>Activate optimistic governance</Box>
           <Box sx={{ ml: "auto" }}>
             <Switch
+              disabled
               checked={data.optimisticGovernance}
               onChange={() =>
                 creationContext.api.setData({
@@ -388,6 +389,7 @@ const Governance: React.FC = () => {
           <Box>Activate quadratic voting</Box>
           <Box sx={{ ml: "auto" }}>
             <Switch
+              disabled
               checked={data.quadraticVoting}
               onChange={() =>
                 creationContext.api.setData({
@@ -436,7 +438,7 @@ const Governance: React.FC = () => {
           >
             <Slider
               value={data.supportNeeded}
-              min={51}
+              min={1}
               max={100}
               onChange={(event, newValue) =>
                 creationContext.api.setData({
@@ -471,7 +473,7 @@ const Governance: React.FC = () => {
                 })
               }
               InputProps={{
-                inputProps: { min: 51, max: 100 },
+                inputProps: { min: 1, max: 100 },
                 endAdornment: <Box>%</Box>,
               }}
             />
@@ -503,7 +505,7 @@ const Governance: React.FC = () => {
           >
             <Slider
               value={data.quorum}
-              min={0}
+              min={1}
               max={100}
               onChange={(event, newValue) =>
                 creationContext.api.setData({
@@ -538,13 +540,13 @@ const Governance: React.FC = () => {
                 })
               }
               InputProps={{
-                inputProps: { min: 0, max: 100 },
+                inputProps: { min: 1, max: 100 },
                 endAdornment: <Box>%</Box>,
               }}
             />
           </Box>
         </Box>
-        <Box sx={{ fontSize: ".9rem", fontWeight: 410, mb: "1rem", ml: 1 }}>
+        <Box sx={{ fontSize: ".9rem", fontWeight: 410, my: "1rem" }}>
           How long does the voting period last for?
         </Box>
         <VoteDurationSelector

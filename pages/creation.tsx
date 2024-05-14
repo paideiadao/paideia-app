@@ -20,10 +20,12 @@ import { deviceStruct } from "@components/utilities/Style";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { ICreationData } from "@lib/creation/Interfaces";
 
-export let colorLookup = {
+export const colorLookup = {
   light: "#FFFFFF",
   dark: "#0E1420",
 };
+
+export const DRAFT_DAO_KEY = "draft_dao_982691";
 
 export default function Creation() {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -46,7 +48,7 @@ export default function Creation() {
       quadraticVoting: false,
       timeToChallenge: 0,
       timeToChallengeUnits: "days",
-      quorum: 4,
+      quorum: 10,
       voteDuration: 0,
       voteDurationUnits: "days",
       whitelist: [
@@ -58,7 +60,7 @@ export default function Creation() {
       ],
       amount: "",
       currency: "",
-      supportNeeded: 50,
+      supportNeeded: 10,
     },
     tokenomics: {
       type: "create",
@@ -99,11 +101,11 @@ export default function Creation() {
     },
     isDraft: 0,
     isPublished: 0,
-    review: 0,
+    review: -1,
     draftModal: false,
   });
 
-  let content = [
+  const content = [
     <BasicInformation key={1} />,
     <Tokenomics key={2} />,
     <Governance key={3} />,
@@ -113,6 +115,10 @@ export default function Creation() {
 
   React.useEffect(() => {
     setTheme(localStorage.getItem("theme") === "dark" ? DarkTheme : LightTheme);
+    const draftDao = localStorage.getItem(DRAFT_DAO_KEY);
+    if (draftDao !== null) {
+      setData(JSON.parse(draftDao));
+    }
   }, []);
 
   React.useEffect(() => {
@@ -136,7 +142,7 @@ export default function Creation() {
       ) : (
         <>
           <Nav
-            value={data.review === undefined ? data.navStage : 4}
+            value={data.review === -1 ? data.navStage : 4}
             theme={theme}
             setTheme={setTheme}
           />
@@ -169,14 +175,15 @@ export default function Creation() {
             >
               {content[data.navStage]}
             </Box>
-            {data.review !== undefined && data.navStage !== 4 && (
+            {data.review !== -1 && data.navStage !== 4 && (
               <Box
                 sx={{
                   display: "flex",
                   width: "100%",
                   alignItems: "center",
                   justifyContent: "center",
-                  mt: "1rem",
+                  mt: "2rem",
+                  mb: "1rem",
                 }}
               >
                 <Button
@@ -266,12 +273,11 @@ export default function Creation() {
           }}
         >
           <Box sx={{ fontSize: "1.1rem", fontWeight: 450 }}>
-            You are about to publish your DAO as a draft
+            You are about to save your DAO as a draft
           </Box>
           <Box sx={{ mt: "1rem", fontSize: ".9rem" }}>
-            Please keep in mind that if you continue you won&apos;t be able to change
-            either your DAO&apos;s name or it&apos;s URL. The rest of the properties can
-            be changed though. Also, your tokens won&apos;t be minted or distributed
+            The draft will be saved locally so that you can come back and pick
+            up where you left. Your tokens won&apos;t be minted or distributed
             until you publish the final version.
           </Box>
           <Box
@@ -290,16 +296,23 @@ export default function Creation() {
                 Cancel
               </Button>
               <Button
-                onClick={() =>
+                onClick={() => {
                   setData({
                     ...data,
                     isDraft: 1,
-                    isPublished: 1,
                     draftModal: false,
-                  })
-                }
+                  });
+                  localStorage.setItem(
+                    DRAFT_DAO_KEY,
+                    JSON.stringify({
+                      ...data,
+                      isDraft: 1,
+                      draftModal: false,
+                    })
+                  );
+                }}
               >
-                Publish DAO AS A DRAFT
+                Save DAO AS A DRAFT
               </Button>
             </Box>
           </Box>
