@@ -547,7 +547,7 @@ const Governance: React.FC = () => {
           </Box>
         </Box>
         <Box sx={{ fontSize: ".9rem", fontWeight: 410, my: "1rem" }}>
-          How long does the voting period last for?
+          How long does the minimum voting period last for?
         </Box>
         <VoteDurationSelector
           voteDuration={data.voteDuration}

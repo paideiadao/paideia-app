@@ -39,7 +39,7 @@ const VoteDuration: React.FC<IProposalAction> = (props) => {
       <Header
         title="Vote Duration"
         large
-        subtitle="How long does the voting period last for?"
+        subtitle="How long does the minimum voting period last for?"
         mb="0"
       />
       <Box

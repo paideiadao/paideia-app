@@ -10,9 +10,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { DarkTheme } from "@theme/theme";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { deviceWrapper } from "@components/utilities/Style";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -33,6 +31,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import DarkSwitch from "@components/utilities/DarkSwitch";
+import { useSession } from "next-auth/react";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -41,6 +40,7 @@ export interface INav {
 
 const TopNav: React.FC<INav> = (props) => {
   const theme = useTheme();
+  const session = useSession();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
   const router = useRouter();
   const globalContext = useContext<IGlobalContext>(GlobalContext);
@@ -161,16 +161,17 @@ const TopNav: React.FC<INav> = (props) => {
     });
   }, [unreadCount]);
 
-  // useEffect(() => {
-  //   if (notificationsError?.response?.status === 401) {
-  //     globalContext.api?.error(
-  //       notificationsError.response.data.detail + " - Refreshing your session"
-  //     );
-  //     setTimeout(() => {
-  //       router.reload();
-  //     }, 2000);
-  //   }
-  // }, [notificationsError]);
+  useEffect(() => {
+    if (session.data === null && session.status === "unauthenticated" && notificationsError?.response?.status === 401) {
+      globalContext.api?.error(
+        notificationsError.response.data.detail + " - Please login again."
+      );
+      setTimeout(() => {
+        clearWallet();
+        router.reload();
+      }, 2000);
+    }
+  }, [notificationsError, session]);
 
   useEffect(() => {
     if (globalContext.api?.userStakeData) {
