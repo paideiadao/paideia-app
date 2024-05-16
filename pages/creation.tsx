@@ -60,7 +60,9 @@ export default function Creation() {
       ],
       amount: "",
       currency: "",
-      supportNeeded: 10,
+      supportNeeded: 51,
+      pureParticipationWeight: 25,
+      participationWeight: 25,
     },
     tokenomics: {
       type: "create",
@@ -71,17 +73,16 @@ export default function Creation() {
       tokenImage: -1,
       tokenImageUrl: "",
       tokenRemaining: 0,
-      tokenHolders: [
-        {
-          alias: "",
-          address: "",
-          img: "",
-          balance: 0,
-          percentage: 0,
-        },
-      ],
+      tokenHolders: [],
       activateTokenomics: false,
       distributions: [],
+      stakingConfig: {
+        stakePoolSize: 0,
+        stakingEmissionAmount: 1,
+        stakingEmissionDelay: 2,
+        stakingCycleLength: 864000000,
+        stakingProfitSharePct: 50,
+      },
     },
     design: {
       logo: {

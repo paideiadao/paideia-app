@@ -158,6 +158,18 @@ const Tokenomics: React.FC<{
           />
           <Value
             labelWidth="35%"
+            title="Token ID"
+            value={
+              data.tokenomics.tokenId.slice(0, 6) +
+              "..." +
+              data.tokenomics.tokenId.slice(
+                data.tokenomics.tokenId.length - 6,
+                data.tokenomics.tokenId.length
+              )
+            }
+          />
+          <Value
+            labelWidth="35%"
             title="Token Name"
             value={data.tokenomics.tokenName}
           />
@@ -168,8 +180,28 @@ const Tokenomics: React.FC<{
           />
           <Value
             labelWidth="35%"
-            title="Token ID"
-            value={data.tokenomics.tokenId.slice(0, 6) + "..." + data.tokenomics.tokenId.slice(data.tokenomics.tokenId.length - 6, data.tokenomics.tokenId.length)}
+            title="Stake Pool Size"
+            value={data.tokenomics.stakingConfig.stakePoolSize}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Emission Amount"
+            value={data.tokenomics.stakingConfig.stakingEmissionAmount}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Emission Delay"
+            value={data.tokenomics.stakingConfig.stakingEmissionDelay}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Cycle Length"
+            value={data.tokenomics.stakingConfig.stakingCycleLength}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Profit Share Percentage"
+            value={data.tokenomics.stakingConfig.stakingProfitSharePct}
           />
           {/* <Value
             labelWidth="35%"

@@ -231,16 +231,18 @@ export const LearnMore: React.FC<{
                     }}
                   >
                     <Typography variant="h6">{props.tooltipTitle}</Typography>
-                    <Typography
-                      sx={{
-                        fontSize: ".9rem",
-                        color: "text.secondary",
-                        // width: "100%",
-                        mb: "12px",
-                      }}
-                    >
-                      {props.tooltipText}
-                    </Typography>
+                    {props.tooltipText.split("\\n").map((line) => (
+                      <Typography
+                        sx={{
+                          fontSize: ".9rem",
+                          color: "text.secondary",
+                          // width: "100%",
+                          mb: "12px",
+                        }}
+                      >
+                        {line}
+                      </Typography>
+                    ))}
                     <Box sx={{ width: "100%", display: "flex" }}>
                       {props.tooltipLink && (
                         <Link

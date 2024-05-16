@@ -1,16 +1,11 @@
 import * as React from "react";
-import { Box, Button, ButtonGroup } from "@mui/material";
+import { Box, Button, ButtonGroup, Divider } from "@mui/material";
 import {
   CreationContext,
   ICreationContext,
 } from "../../../lib/creation/Context";
-import { Header, Subheader } from "../utilities/HeaderComponents";
+import { Header } from "../utilities/HeaderComponents";
 import TokenInformation from "./TokenInformation";
-import TokenSymbol from "./TokenSymbol";
-import TokenHolders from "./TokenHolders";
-import AdvancedTokenomics from "./AdvancedTokenomics/AdvancedTokenomics";
-import TokenDistribution from "./TokenDistribution";
-import { ILiquidityInfo } from "./AdvancedTokenomics/Liquidity";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   percentage,
@@ -19,6 +14,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { deviceStruct } from "@components/utilities/Style";
 import { ITokenHolder, ITokenomics } from "@lib/creation/Interfaces";
+import TokenStaking from "./TokenStaking";
 
 const Tokenomics: React.FC = () => {
   const creationContext = React.useContext<ICreationContext>(CreationContext);
@@ -170,6 +166,11 @@ const Tokenomics: React.FC = () => {
         }}
       >
         <TokenInformation
+          data={data}
+          setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
+        />
+        <Divider sx={{ mt: 3 }} />
+        <TokenStaking
           data={data}
           setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
         />

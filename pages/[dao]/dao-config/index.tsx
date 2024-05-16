@@ -34,6 +34,8 @@ const defaultState: IConfigData = {
     amount: "",
     currency: "",
     supportNeeded: 0,
+    pureParticipationWeight: 0,
+    participationWeight: 0,
   },
   design: {
     logo: {
