@@ -601,7 +601,7 @@ const Governance: React.FC = () => {
           container
           spacing={2}
           direction={{ xs: "column", md: "row" }}
-          sx={{ mt: 1 }}
+          sx={{ mt: 1, mb: 2 }}
         >
           <Grid item md={6}>
             <TextField

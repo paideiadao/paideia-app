@@ -191,17 +191,17 @@ const Tokenomics: React.FC<{
           <Value
             labelWidth="35%"
             title="Staking Emission Delay"
-            value={data.tokenomics.stakingConfig.stakingEmissionDelay}
+            value={data.tokenomics.stakingConfig.stakingEmissionDelay + " cycles"}
           />
           <Value
             labelWidth="35%"
-            title="Staking Cycle Length"
+            title="Staking Cycle Length (ms)"
             value={data.tokenomics.stakingConfig.stakingCycleLength}
           />
           <Value
             labelWidth="35%"
             title="Staking Profit Share Percentage"
-            value={data.tokenomics.stakingConfig.stakingProfitSharePct}
+            value={data.tokenomics.stakingConfig.stakingProfitSharePct + "%"}
           />
           {/* <Value
             labelWidth="35%"

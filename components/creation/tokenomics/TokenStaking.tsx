@@ -8,7 +8,7 @@ import React from "react";
 
 const TokenStaking: React.FC<IData<ITokenomics>> = (props) => {
   return (
-    <Box>
+    <Box sx={{ mb: 1 }}>
       <LearnMore
         title="Token Staking Config"
         tooltipTitle="Staking Config"

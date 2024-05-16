@@ -36,7 +36,7 @@ const BasicInformation: React.FC = () => {
           textAlign: "left",
           width: "100%",
           fontSize: "1.2rem",
-          mb: "16px",
+          mb: 1,
         }}
       >
         Basic Information

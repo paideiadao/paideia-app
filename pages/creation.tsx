@@ -49,7 +49,7 @@ export default function Creation() {
       timeToChallenge: 0,
       timeToChallengeUnits: "days",
       quorum: 10,
-      voteDuration: 0,
+      voteDuration: 2,
       voteDurationUnits: "days",
       whitelist: [
         {
@@ -183,8 +183,8 @@ export default function Creation() {
                   width: "100%",
                   alignItems: "center",
                   justifyContent: "center",
-                  mt: "2rem",
-                  mb: "1rem",
+                  mt: ".5rem",
+                  mb: ".5rem",
                 }}
               >
                 <Button
