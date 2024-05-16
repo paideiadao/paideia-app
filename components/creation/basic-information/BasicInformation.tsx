@@ -92,7 +92,7 @@ const BasicInformation: React.FC = () => {
           </Box>
         </Alert>
       </Box>
-      <Box sx={{ width: "100%", mt: 1 }}>
+      <Box sx={{ width: "100%" }}>
         <TextField
           label="DAO Short Description"
           inputProps={{

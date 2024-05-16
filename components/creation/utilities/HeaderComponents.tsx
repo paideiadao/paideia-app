@@ -231,8 +231,9 @@ export const LearnMore: React.FC<{
                     }}
                   >
                     <Typography variant="h6">{props.tooltipTitle}</Typography>
-                    {props.tooltipText.split("\\n").map((line) => (
+                    {props.tooltipText.split("\\n").map((line, index) => (
                       <Typography
+                        key={"header-line-" + index}
                         sx={{
                           fontSize: ".9rem",
                           color: "text.secondary",
