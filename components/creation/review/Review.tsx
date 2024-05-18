@@ -5,13 +5,108 @@ import { CreationContext } from "@lib/creation/Context";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 import ReviewDrawer from "./ReviewDrawer";
 import { modalBackground } from "@components/utilities/modalBackground";
-import Router from "next/router";
 import { deviceStruct } from "@components/utilities/Style";
+import { getErgoWalletContext } from "@components/wallet/AddWallet";
 
 const Review: React.FC = () => {
   const creationContext = React.useContext(CreationContext);
   const data = creationContext.api.data;
+  const api = creationContext.api.api;
   const [publish, setPublish] = React.useState<boolean>(false);
+
+  const getAddressList = (): string[] => {
+    const addressList = localStorage.getItem("wallet_address_list");
+    const address = localStorage.getItem("wallet_address");
+    if (addressList === null && address !== null) {
+      return [address];
+    } else {
+      return JSON.parse(addressList ?? "[]");
+    }
+  };
+
+  const getImageUrl = async (image: File) => {
+    if (!image.name) {
+      throw new Error(
+        "File not defined. If you have restored the page from a save please readd the images in design section."
+      );
+    }
+    const img = await api?.uploadFile(image);
+    return img.data.image_url;
+  };
+
+  const publishDAO = async () => {
+    if (api) {
+      try {
+        const addresses = getAddressList();
+        if (addresses.length === 0) {
+          api.error("Please connect your wallet");
+          return;
+        }
+        const durationMapper = {
+          minutes: 60,
+          hours: 60 * 60,
+          days: 60 * 60 * 24,
+          weeks: 60 * 60 * 24 * 7,
+        };
+        const request = {
+          name: data.basicInformation.daoName,
+          url: data.basicInformation.daoUrl.replace("app.paideia.im/", ""),
+          description: data.basicInformation.shortDescription,
+          tokenomics: {
+            token_id: data.tokenomics.tokenId,
+            token_name: data.tokenomics.tokenName,
+            token_ticker: data.tokenomics.tokenTicker,
+            staking_config: {
+              stake_pool_size: data.tokenomics.stakingConfig.stakePoolSize,
+              staking_emission_amount:
+                data.tokenomics.stakingConfig.stakingEmissionAmount,
+              staking_emission_delay:
+                data.tokenomics.stakingConfig.stakingEmissionDelay,
+              staking_cycle_length:
+                data.tokenomics.stakingConfig.stakingCycleLength,
+              staking_profit_share_pct:
+                data.tokenomics.stakingConfig.stakingProfitSharePct,
+            },
+          },
+          governance: {
+            governance_type: "DEFAULT",
+            quorum: data.governance.quorum * 10,
+            threshold: data.governance.supportNeeded * 10,
+            min_proposal_time:
+              data.governance.voteDuration *
+              1000 *
+              // @ts-ignore
+              durationMapper[data.governance.voteDurationUnits],
+            participation_weight: data.governance.participationWeight,
+            pure_participation_weight: data.governance.pureParticipationWeight,
+          },
+          design: {
+            theme: "default",
+            logo: await getImageUrl(data.design.logo.file),
+            banner_enabled: data.design.banner.show,
+            banner: data.design.banner.show
+              ? await getImageUrl(data.design.banner.data.file)
+              : null,
+            footer_enabled: data.design.footer.show,
+            footer: data.design.footer.show
+              ? data.design.footer.mainText
+              : null,
+          },
+          user_addresses: addresses,
+        };
+        const response = (await api.post<any>("/dao/on_chain_dao", request))
+          .data;
+        const tx = response.unsigned_transaction;
+        const ergoContext = await getErgoWalletContext();
+        const signed = await ergoContext.sign_tx(tx);
+        const txId = await ergoContext.submit_tx(signed);
+        api.showAlert(`Transaction Submitted: ${txId}`, "success");
+      } catch (e) {
+        api.error(e);
+      }
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -116,10 +211,7 @@ const Review: React.FC = () => {
               <Button
                 onClick={async () => {
                   creationContext.api.setData({ ...data, isPublished: 1 });
-                  // const res = await creationContext.api.createDao(false);
-                  // if (res) {
-                  //   Router.push(`/${res.data.dao_name.toLowerCase()}`);
-                  // }
+                  await publishDAO();
                 }}
               >
                 Publish DAO

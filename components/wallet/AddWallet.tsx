@@ -63,8 +63,8 @@ const AddWallet: React.FC = () => {
     wallet !== "" && !dAppWallet.connected
       ? "mobile"
       : wallet !== "" && dAppWallet.connected
-        ? "nautilus"
-        : "listing"
+      ? "nautilus"
+      : "listing"
   );
 
   // trpc
@@ -442,7 +442,8 @@ const AddWallet: React.FC = () => {
         `ergoauth://${process.env.ERGOAUTH_DOMAIN?.replace(
           "https://",
           ""
-        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${response.verificationId
+        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${
+          response.verificationId
         }&address=${address}`
       );
     } catch (e: any) {
@@ -583,6 +584,9 @@ export const isAddressValid = (address: string) => {
 export const getErgoWalletContext = async () => {
   // @ts-ignore
   const walletConnector = window.ergoConnector.nautilus;
+  if (!(await walletConnector.isConnected())) {
+    await walletConnector.connect();
+  }
   const context = await walletConnector.getContext();
   return context;
 };

@@ -3,10 +3,16 @@ import { Box, CircularProgress } from "@mui/material";
 import * as React from "react";
 import DarkLogo from "../../../public/logos/dark_logo.svg";
 import LightLogo from "../../../public/logos/light_logo.svg";
-import { DarkTheme, LightTheme } from "@theme/theme";
+import { DarkTheme } from "@theme/theme";
+import { CreationContext } from "@lib/creation/Context";
+import { useRouter } from "next/router";
 
 const CreationLoading: React.FC = (props) => {
-  let themeContext = React.useContext(ThemeContext);
+  const router = useRouter();
+  const themeContext = React.useContext(ThemeContext);
+  const creationContext = React.useContext(CreationContext);
+  const data = creationContext.api.data;
+  const api = creationContext.api.api;
   const [logo, setLogo] = React.useState(
     themeContext.theme === DarkTheme ? LightLogo : DarkLogo
   );
@@ -14,6 +20,39 @@ const CreationLoading: React.FC = (props) => {
   React.useEffect(() => {
     setLogo(themeContext.theme === DarkTheme ? LightLogo : DarkLogo);
   }, [themeContext.theme]);
+
+  const getDAOCreationStatus = async () => {
+    try {
+      if (api) {
+        const daos = (await api.get<any>("/dao/")).data;
+        const dao = daos.filter(
+          (dao: { dao_url: string }) =>
+            dao.dao_url ===
+            data.basicInformation.daoUrl.replace("app.paideia.im/", "")
+        )[0];
+        if (dao) {
+          return true;
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    return false;
+  };
+
+  React.useEffect(() => {
+    const pollStatus = async () => {
+      const created = await getDAOCreationStatus();
+      if (created) {
+        router.push(
+          `/${data.basicInformation.daoUrl.replace("app.paideia.im/", "")}`
+        );
+      }
+    };
+
+    const interval = setInterval(pollStatus, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -64,7 +103,7 @@ const CreationLoading: React.FC = (props) => {
           }}
         >
           Setting your DAOs governance structure, minting the token, making it
-          look awesome.
+          look awesome!
         </Box>
       </Box>
     </>
