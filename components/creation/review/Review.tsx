@@ -43,6 +43,7 @@ const Review: React.FC = () => {
           return;
         }
         const durationMapper = {
+          seconds: 1,
           minutes: 60,
           hours: 60 * 60,
           days: 60 * 60 * 24,
