@@ -7,9 +7,12 @@ import ReviewDrawer from "./ReviewDrawer";
 import { modalBackground } from "@components/utilities/modalBackground";
 import { deviceStruct } from "@components/utilities/Style";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
+import { DRAFT_DAO_KEY } from "@pages/creation";
+import { useRouter } from "next/router";
 
 const Review: React.FC = () => {
   const creationContext = React.useContext(CreationContext);
+  const router = useRouter();
   const data = creationContext.api.data;
   const api = creationContext.api.api;
   const [publish, setPublish] = React.useState<boolean>(false);
@@ -24,10 +27,19 @@ const Review: React.FC = () => {
     }
   };
 
+  const dAppConnected = () => {
+    const addressList = localStorage.getItem("wallet_address_list");
+    if (addressList !== null) {
+      const parsed: string[] = JSON.parse(addressList);
+      return parsed.length > 0;
+    }
+    return false;
+  };
+
   const getImageUrl = async (image: File) => {
     if (!image.name) {
       throw new Error(
-        "File not defined. If you have restored the page from a save please readd the images in design section."
+        "File not defined. If you have restored the page from a save please re-add the images in design section."
       );
     }
     const img = await api?.uploadFile(image);
@@ -104,6 +116,7 @@ const Review: React.FC = () => {
         api.showAlert(`Transaction Submitted: ${txId}`, "success");
       } catch (e) {
         api.error(e);
+        setTimeout(() => router.reload(), 3000);
       }
     }
   };
@@ -138,10 +151,20 @@ const Review: React.FC = () => {
         subtitle="Check once more that your DAO configuration is correct. Remember, you can always publish it as a draft and review it later on."
       />
       <ReviewDrawer />
+      {!dAppConnected() && (
+        <Box sx={{ mt: 3 }}>
+          <Alert severity="error" color="error" sx={{ fontSize: ".8rem" }}>
+            <AlertTitle sx={{ fontSize: ".9rem" }}>
+              Wallet not connected!
+            </AlertTitle>
+            <Box>Please connect with Nautilus to publish a DAO.</Box>
+          </Alert>
+        </Box>
+      )}
       <Box
         sx={{
           width: "100%",
-          mt: "1rem",
+          mt: dAppConnected() ? "1rem" : -1,
           display: "flex",
           alignItems: "center",
         }}
@@ -169,6 +192,7 @@ const Review: React.FC = () => {
           </Box>
         </Button>
         <Button
+          disabled={!dAppConnected()}
           sx={{ width: "49%", ml: ".5rem" }}
           variant="contained"
           onClick={() => setPublish(true)}
@@ -211,6 +235,13 @@ const Review: React.FC = () => {
               </Button>
               <Button
                 onClick={async () => {
+                  localStorage.setItem(
+                    DRAFT_DAO_KEY,
+                    JSON.stringify({
+                      ...data,
+                      isDraft: 1,
+                    })
+                  );
                   creationContext.api.setData({ ...data, isPublished: 1 });
                   await publishDAO();
                 }}
