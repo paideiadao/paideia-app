@@ -6,6 +6,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import DiamondIcon from "@mui/icons-material/Diamond";
 import GroupsIcon from "@mui/icons-material/Groups";
 import MovingIcon from "@mui/icons-material/Moving";
+import GitHubIcon from '@mui/icons-material/GitHub'; 
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import BalanceIcon from "@mui/icons-material/Balance";
 import Accordion from "@mui/material/Accordion";
@@ -35,6 +36,7 @@ import DarkFooter from "@public/dao/dark-footer.png";
 import { DarkTheme } from "@theme/theme";
 import Image from "next/image";
 import { da } from "date-fns/locale";
+import Button from "@mui/material/Button";
 
 const BasicLink: React.FC<{
   icon: JSX.Element;
@@ -635,6 +637,17 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             )}
       </Box>
       <Box sx={{ zIndex: 1 }}>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<GitHubIcon />}
+          onClick={() => window.open('https://github.com/paideiadao/paideia-app/issues', '_blank')}
+        >
+          Report an Issue
+        </Button>
+      </Box>
+
         <img
           src={
             themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src
