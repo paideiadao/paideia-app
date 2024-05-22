@@ -9,14 +9,12 @@ import { DarkTheme, LightTheme } from "@theme/theme";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Save from "@mui/icons-material/Save";
-import DarkSwitch from "@components/utilities/DarkSwitch";
 import { CreationContext } from "@lib/creation/Context";
 import { ThemeContext } from "@lib/ThemeContext";
 import { deviceStruct } from "@components/utilities/Style";
-import { useWallet } from "@components/wallet/WalletContext";
-import ThemeToggle from "@components/dao/nav/ThemeToggle";
 import { useRouter } from "next/router";
 import { DRAFT_DAO_KEY } from "@pages/creation";
+import TopNav from "@components/dao/nav/TopNav";
 
 interface INavProps {
   value: number;
@@ -28,6 +26,7 @@ const Nav: FC<INavProps> = ({ value }) => {
   const router = useRouter();
   const creationContext = React.useContext(ThemeContext);
   const global = React.useContext(CreationContext);
+  const [showMobile, setShowMobile] = React.useState<boolean>(false);
 
   const theme = creationContext.theme;
   const [logo, setLogo] = React.useState(
@@ -108,9 +107,6 @@ const Nav: FC<INavProps> = ({ value }) => {
             <img src={logo.src} />
           </Box>
           <Box sx={{ ml: "auto", display: "flex", alignItems: "center" }}>
-            {/* <Box sx={{ width: "180px" }}>
-              <ThemeToggle />
-            </Box> */}
             <Button
               onClick={() => {
                 localStorage.removeItem(DRAFT_DAO_KEY);
@@ -135,6 +131,13 @@ const Nav: FC<INavProps> = ({ value }) => {
             >
               Save
             </Button>
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <TopNav
+              showMobile={showMobile}
+              setShowMobile={setShowMobile}
+              reduced
+            />
           </Box>
         </Box>
         <Box

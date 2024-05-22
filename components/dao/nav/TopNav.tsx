@@ -36,6 +36,7 @@ import { useSession } from "next-auth/react";
 export interface INav {
   setShowMobile: (val: boolean) => void;
   showMobile: boolean;
+  reduced?: boolean;
 }
 
 const TopNav: React.FC<INav> = (props) => {
@@ -116,7 +117,7 @@ const TopNav: React.FC<INav> = (props) => {
 
   const { data: apiNotifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
-    `/notificatons/${globalContext.api?.daoUserData?.id}`,
+      `/notificatons/${globalContext.api?.daoUserData?.id}`,
     fetcher
   );
 
@@ -148,10 +149,10 @@ const TopNav: React.FC<INav> = (props) => {
 
   const unreadCount = notifications
     ? notifications
-      .map((notification: { is_read: boolean }) =>
-        notification.is_read ? 0 : 1
-      )
-      .reduce((a: number, c: number) => a + c, 0)
+        .map((notification: { is_read: boolean }) =>
+          notification.is_read ? 0 : 1
+        )
+        .reduce((a: number, c: number) => a + c, 0)
     : null;
 
   useEffect(() => {
@@ -162,7 +163,11 @@ const TopNav: React.FC<INav> = (props) => {
   }, [unreadCount]);
 
   useEffect(() => {
-    if (session.data === null && session.status === "unauthenticated" && notificationsError?.response?.status === 401) {
+    if (
+      session.data === null &&
+      session.status === "unauthenticated" &&
+      notificationsError?.response?.status === 401
+    ) {
       globalContext.api?.error(
         notificationsError.response.data.detail + " - Please login again."
       );
@@ -185,164 +190,246 @@ const TopNav: React.FC<INav> = (props) => {
 
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          p: ".5rem",
-          borderBottom: "1px solid",
-          borderBottomColor: "border.main",
-          display: "flex",
-          backgroundColor: "backgroundColor.main",
-          zIndex: 1000,
-          position: "sticky",
-          top: 0,
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Box sx={{ flexGrow: 1, display: deviceWrapper("flex", "none") }}>
-          <IconButton color="primary" onClick={() => props.setShowMobile(true)}>
-            <MenuIcon color="primary" />
-          </IconButton>
-        </Box>
-        <Box
-          sx={{
-            color: "text.primary",
-            backgroundColor: "backgroundColor.main",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <Box>
-            <DarkSwitch />
-          </Box>
-          <Box sx={{ mr: "0.5rem" }}>
-            <IconButton
-              onClick={handleOpen}
-              sx={{
-                color: theme.palette.text.secondary,
-              }}
-            >
-              <Badge
-                badgeContent={
-                  globalContext.metadata.metadata.unreadNotificationCount
-                }
-                color="primary"
-              >
-                <NotificationsIcon
-                  sx={{
-                    fontSize: "18px",
-                  }}
-                />
-              </Badge>
-            </IconButton>
-          </Box>
-          {globalContext.api?.daoUserData !== undefined && globalContext.api.daoUserData.loading === true
-            ? <Box sx={{ width: { xs: "40px", md: "160px" } }}>
+      {props.reduced ? (
+        <>
+          {globalContext.api?.daoUserData !== undefined &&
+          globalContext.api.daoUserData.loading === true ? (
+            <Box sx={{ width: { xs: "40px", md: "160px" } }}>
               <Skeleton
                 variant={desktop ? "rounded" : "circular"}
                 height={40}
               />
             </Box>
-            : globalContext.api?.daoUserData !== undefined && globalContext.api.daoUserData.name && isAddressValid(wallet)
-              ? <>
-                {globalContext.api.daoUserData !== undefined && (
+          ) : globalContext.api?.daoUserData !== undefined &&
+            globalContext.api.daoUserData.name &&
+            isAddressValid(wallet) ? (
+            <>
+              {globalContext.api.daoUserData !== undefined && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    mr: { xs: "none", md: ".5rem" },
+                  }}
+                  onClick={handleOpenProfile}
+                >
+                  <Avatar
+                    sx={{
+                      mr: { xs: "none", md: ".5rem" },
+                      height: "32px",
+                      width: "32px",
+                    }}
+                    src={globalContext.api.daoUserData.profile_img_url}
+                  ></Avatar>
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      mr: { xs: "none", md: ".5rem" },
+                      display: deviceWrapper("none", "flex"),
+                      flexDirection: "column",
+                      justifyContent: "center",
                     }}
-                    onClick={handleOpenProfile}
                   >
-                    <Avatar
-                      sx={{
-                        mr: { xs: "none", md: ".5rem" },
-                        height: "32px",
-                        width: "32px",
-                      }}
-                      src={globalContext.api.daoUserData.profile_img_url}
-                    ></Avatar>
-                    <Box
-                      sx={{
-                        display: deviceWrapper("none", "flex"),
-                        flexDirection: "column",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Box sx={{ fontSize: ".9rem" }}>
-                        {snipAddress(globalContext.api.daoUserData.name, 25, 5)}
-                      </Box>
-                      <Box sx={{ color: "text.secondary", fontSize: ".7rem" }}>
-                        {parseFloat(
-                          (utxos.currentDaoTokens + stakeAmount).toFixed(0)
-                        ).toLocaleString("en-US")}{" "}
-                        {globalContext.api.daoData.tokenomics.token_ticker ??
-                          "DAO Tokens"}
-                      </Box>
+                    <Box sx={{ fontSize: ".9rem" }}>
+                      {snipAddress(globalContext.api.daoUserData.name, 25, 5)}
+                    </Box>
+                    <Box sx={{ color: "text.secondary", fontSize: ".7rem" }}>
+                      {parseFloat(
+                        (utxos.currentDaoTokens + stakeAmount).toFixed(0)
+                      ).toLocaleString("en-US")}{" "}
+                      {globalContext.api.daoData.tokenomics.token_ticker ??
+                        "DAO Tokens"}
                     </Box>
                   </Box>
-                )}
-                {/* </Link> */}
-              </>
-              : <></>
-          }
+                </Box>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
           <ConnectWallet show={globalContext.api?.daoUserData === undefined} />
-        </Box>
-        <Box sx={{ position: "relative" }}>
-          <ProfilePopup open={openProfile} close={handleCloseProfile} />
-          <NotificationsPopup
-            open={open}
-            close={handleClose}
-            notifications={notifications.slice(0, 10)}
-          />
-        </Box>
-      </Box>
-      <Slide direction="right" in={props.showMobile} mountOnEnter unmountOnExit>
-        <Box
-          sx={{
-            width: "16rem",
-            zIndex: 1000,
-            backgroundColor: "backgroundColor.main",
-            borderRight: "1px solid",
-            borderRightColor: "border.main",
-            color: "text.primary",
-            // borderBottom: "1px solid",
-            height: "100vh",
-            // borderBottomColor: "border.main",
-            position: "fixed",
-            top: 0,
-          }}
-        >
-          <IconButton
-            onClick={() => props.setShowMobile(false)}
+        </>
+      ) : (
+        <>
+          <Box
             sx={{
-              left: ".5rem",
-              top: ".5rem",
-              position: "absolute",
-              zIndex: 1001,
+              width: "100%",
+              p: ".5rem",
+              borderBottom: "1px solid",
+              borderBottomColor: "border.main",
+              display: "flex",
+              backgroundColor: "backgroundColor.main",
+              zIndex: 1000,
+              position: "sticky",
+              top: 0,
+              justifyContent: "flex-end",
+              alignItems: "center",
             }}
           >
-            <CloseIcon />
-          </IconButton>
-          <Box sx={{ width: "100%", position: "relative", height: "100%" }}>
+            <Box sx={{ flexGrow: 1, display: deviceWrapper("flex", "none") }}>
+              <IconButton
+                color="primary"
+                onClick={() => props.setShowMobile(true)}
+              >
+                <MenuIcon color="primary" />
+              </IconButton>
+            </Box>
             <Box
               sx={{
-                flexDirection: "column",
+                color: "text.primary",
+                backgroundColor: "backgroundColor.main",
+                cursor: "pointer",
                 display: "flex",
+                alignItems: "center",
                 height: "100%",
               }}
             >
-              <DaoBio setShowMobile={props.setShowMobile} />
-              <Contents setShowMobile={props.setShowMobile} />
+              <Box>
+                <DarkSwitch />
+              </Box>
+              <Box sx={{ mr: "0.5rem" }}>
+                <IconButton
+                  onClick={handleOpen}
+                  sx={{
+                    color: theme.palette.text.secondary,
+                  }}
+                >
+                  <Badge
+                    badgeContent={
+                      globalContext.metadata.metadata.unreadNotificationCount
+                    }
+                    color="primary"
+                  >
+                    <NotificationsIcon
+                      sx={{
+                        fontSize: "18px",
+                      }}
+                    />
+                  </Badge>
+                </IconButton>
+              </Box>
+              {globalContext.api?.daoUserData !== undefined &&
+              globalContext.api.daoUserData.loading === true ? (
+                <Box sx={{ width: { xs: "40px", md: "160px" } }}>
+                  <Skeleton
+                    variant={desktop ? "rounded" : "circular"}
+                    height={40}
+                  />
+                </Box>
+              ) : globalContext.api?.daoUserData !== undefined &&
+                globalContext.api.daoUserData.name &&
+                isAddressValid(wallet) ? (
+                <>
+                  {globalContext.api.daoUserData !== undefined && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        mr: { xs: "none", md: ".5rem" },
+                      }}
+                      onClick={handleOpenProfile}
+                    >
+                      <Avatar
+                        sx={{
+                          mr: { xs: "none", md: ".5rem" },
+                          height: "32px",
+                          width: "32px",
+                        }}
+                        src={globalContext.api.daoUserData.profile_img_url}
+                      ></Avatar>
+                      <Box
+                        sx={{
+                          display: deviceWrapper("none", "flex"),
+                          flexDirection: "column",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Box sx={{ fontSize: ".9rem" }}>
+                          {snipAddress(
+                            globalContext.api.daoUserData.name,
+                            25,
+                            5
+                          )}
+                        </Box>
+                        <Box
+                          sx={{ color: "text.secondary", fontSize: ".7rem" }}
+                        >
+                          {parseFloat(
+                            (utxos.currentDaoTokens + stakeAmount).toFixed(0)
+                          ).toLocaleString("en-US")}{" "}
+                          {globalContext.api.daoData.tokenomics.token_ticker ??
+                            "DAO Tokens"}
+                        </Box>
+                      </Box>
+                    </Box>
+                  )}
+                  {/* </Link> */}
+                </>
+              ) : (
+                <></>
+              )}
+              <ConnectWallet
+                show={globalContext.api?.daoUserData === undefined}
+              />
+            </Box>
+            <Box sx={{ position: "relative" }}>
+              <ProfilePopup open={openProfile} close={handleCloseProfile} />
+              <NotificationsPopup
+                open={open}
+                close={handleClose}
+                notifications={notifications.slice(0, 10)}
+              />
             </Box>
           </Box>
-          {/* <Footer /> */}
-        </Box>
-      </Slide>
+          <Slide
+            direction="right"
+            in={props.showMobile}
+            mountOnEnter
+            unmountOnExit
+          >
+            <Box
+              sx={{
+                width: "16rem",
+                zIndex: 1000,
+                backgroundColor: "backgroundColor.main",
+                borderRight: "1px solid",
+                borderRightColor: "border.main",
+                color: "text.primary",
+                // borderBottom: "1px solid",
+                height: "100vh",
+                // borderBottomColor: "border.main",
+                position: "fixed",
+                top: 0,
+              }}
+            >
+              <IconButton
+                onClick={() => props.setShowMobile(false)}
+                sx={{
+                  left: ".5rem",
+                  top: ".5rem",
+                  position: "absolute",
+                  zIndex: 1001,
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+              <Box sx={{ width: "100%", position: "relative", height: "100%" }}>
+                <Box
+                  sx={{
+                    flexDirection: "column",
+                    display: "flex",
+                    height: "100%",
+                  }}
+                >
+                  <DaoBio setShowMobile={props.setShowMobile} />
+                  <Contents setShowMobile={props.setShowMobile} />
+                </Box>
+              </Box>
+              {/* <Footer /> */}
+            </Box>
+          </Slide>
+        </>
+      )}
     </>
   );
 };

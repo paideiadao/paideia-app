@@ -9,12 +9,14 @@ import { deviceStruct } from "@components/utilities/Style";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
 import { DRAFT_DAO_KEY } from "@pages/creation";
 import { useRouter } from "next/router";
+import { useWallet } from "@components/wallet/WalletContext";
 
 const Review: React.FC = () => {
   const creationContext = React.useContext(CreationContext);
   const router = useRouter();
   const data = creationContext.api.data;
   const api = creationContext.api.api;
+  const { dAppWallet } = useWallet();
   const [publish, setPublish] = React.useState<boolean>(false);
 
   const getAddressList = (): string[] => {
@@ -28,12 +30,7 @@ const Review: React.FC = () => {
   };
 
   const dAppConnected = () => {
-    const addressList = localStorage.getItem("wallet_address_list");
-    if (addressList !== null) {
-      const parsed: string[] = JSON.parse(addressList);
-      return parsed.length > 0;
-    }
-    return false;
+    return dAppWallet.connected;
   };
 
   const getImageUrl = async (image: File) => {
