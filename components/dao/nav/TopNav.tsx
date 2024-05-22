@@ -7,6 +7,7 @@ import {
   Skeleton,
   useMediaQuery,
   useTheme,
+  Button,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
@@ -214,6 +215,9 @@ const TopNav: React.FC<INav> = (props) => {
             height: "100%",
           }}
         >
+          <Link href="https://docs.ergoplatform.com/eco/paideia/#using-paideia" passHref>
+            <Button color="primary">Getting Started</Button>
+          </Link>
           <Box>
             <DarkSwitch />
           </Box>
