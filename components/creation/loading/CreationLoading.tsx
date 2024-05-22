@@ -103,7 +103,7 @@ const CreationLoading: React.FC = (props) => {
           }}
         >
           Setting your DAOs governance structure, minting the token, making it
-          look awesome!
+          look awesome! It might take upto an hour to complete.
         </Box>
       </Box>
     </>
