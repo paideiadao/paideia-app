@@ -1,4 +1,4 @@
-# Paideia App Frontend
+# Paideia App 
 
 ![paideia-logo](https://user-images.githubusercontent.com/86281023/207105982-b0c74a1d-932b-40fb-bbe8-03b8ede4def9.png)
 
@@ -69,23 +69,11 @@ Contributions are what make the open-source community such an amazing place to l
 
 If you find a bug or have a suggestion for an enhancement, please use the Issues tab on GitHub to submit them. Follow the templates provided for bug reports and feature requests.
 
-## Code of Conduct
 
-Please read [CODE_OF_CONDUCT.md](https://github.com/yourrepository/paideia-app/CODE_OF_CONDUCT.md) for details on our code of conduct.
-
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Acknowledgments
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc.
 
 ## Contact
 
-Project Link: [https://github.com/yourrepository/paideia-app](https://github.com/yourrepository/paideia-app)
+- [Paideia Telegram](https://t.me/@paideiaDAO)
 
 ## Additional Resources
 
