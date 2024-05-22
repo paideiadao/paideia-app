@@ -8,6 +8,8 @@ Welcome to the Paideia App repository. This project uses Next.js, React, and Mat
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+There is also some documentation for using Paideia available on [docs.ergoplatform.com](https://docs.ergoplatform.com/eco/paideia/)
+
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -74,6 +76,7 @@ If you find a bug or have a suggestion for an enhancement, please use the Issues
 ## Contact
 
 - [Paideia Telegram](https://t.me/@paideiaDAO)
+- [Paideia Discord](https://discord.gg/YFq6RUM4Ba)
 
 ## Additional Resources
 
