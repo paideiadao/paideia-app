@@ -68,6 +68,8 @@ export interface IGovernance {
   amount: number | string;
   currency: string;
   supportNeeded: number;
+  pureParticipationWeight: number;
+  participationWeight: number;
 }
 
 export interface ITokenHolder {
@@ -76,6 +78,14 @@ export interface ITokenHolder {
   img: string;
   balance: number;
   percentage: number;
+}
+
+export interface IStakingConfig {
+  stakePoolSize: number;
+  stakingEmissionAmount: number;
+  stakingEmissionDelay: number;
+  stakingCycleLength: number;
+  stakingProfitSharePct: number;
 }
 
 export interface ITokenomics {
@@ -99,4 +109,6 @@ export interface ITokenomics {
     | ILiquidityInfo
     | IStakingInfo
   )[];
+  // staking details
+  stakingConfig: IStakingConfig; 
 }

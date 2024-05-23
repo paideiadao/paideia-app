@@ -58,7 +58,7 @@ const ThemeIndicator: React.FC<{ theme: ITheme }> = (props) => {
 };
 
 const BannerPreview: React.FC<{ data: IFile }> = (props) => {
-  return props.data.file !== null ? (
+  return props.data.file ? (
     <Box sx={{ width: "100%" }}>
       <img
         src={props.data.url}
@@ -231,7 +231,7 @@ const Design: React.FC<{
             labelWidth="26%"
             title="Logo"
             component={
-              data.design.logo.file !== null ? (
+              data.design.logo.file ? (
                 <ImageWrapper
                   size={bytesToSize(data.design.logo.file.size)}
                   img={data.design.logo.url}

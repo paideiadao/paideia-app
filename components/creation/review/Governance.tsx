@@ -30,7 +30,7 @@ const Governance: React.FC<{
       <AccordionSummary expandIcon={<ExpandMoreIcon />} id="governance-header">
         <CheckCircleIcon color="success" sx={{ mr: "1rem" }} />
         <Typography sx={{ width: "100%", flexShrink: 0, fontSize: "1.1rem" }}>
-          3. Governance and voting configuration
+          3. Governance and Voting Configuration
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -71,7 +71,6 @@ const Governance: React.FC<{
               />
             </>
           )}
-
           <Value
             labelWidth="35%"
             title="Quadratic voting"
@@ -98,6 +97,16 @@ const Governance: React.FC<{
               data.governance.voteDurationUnits.charAt(0).toUpperCase() +
               data.governance.voteDurationUnits.slice(1)
             }
+          />
+          <Value
+            labelWidth="35%"
+            title="Pure Participation Weight"
+            value={data.governance.pureParticipationWeight}
+          />
+          <Value
+            labelWidth="35%"
+            title="Participation Weight"
+            value={data.governance.participationWeight}
           />
         </Box>
         <Box

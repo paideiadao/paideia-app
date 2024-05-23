@@ -466,14 +466,14 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
       link: daoName ? `/${daoName}/financials/token` : "",
       links: (
         <>
-          <BasicLink
+          {/* <BasicLink
             icon={<BoltIcon sx={{ opacity: ".8" }} />}
             title={"Token"}
             selected={"Token" === subSelected}
             set={setSubWrapper}
             ml=".5rem"
             link={daoName ? `/${daoName}/financials/token` : ""}
-          />
+          /> */}
           <BasicLink
             icon={<AccountBalanceIcon sx={{ opacity: ".8" }} />}
             title={"Treasury"}
