@@ -70,7 +70,8 @@ const CarouselItem: FC<IItemObject> = ({ item }) => {
   const sizeLg = useMediaQuery(theme.breakpoints.up("lg"));
   const sizeXl = useMediaQuery(theme.breakpoints.up("xl"));
 
-  const rand = randomInteger(1, 18);
+  // const rand = randomInteger(1, 18);
+  const rand = 1
 
   const image = item?.image ? item.image : `/images/placeholder/${rand}.jpg`;
 

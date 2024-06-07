@@ -213,7 +213,7 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
               size="small"
               startIcon={<GavelIcon />}
             >
-              Vote Now
+              Vote now
             </Button>
           </Link>
         </Box>
