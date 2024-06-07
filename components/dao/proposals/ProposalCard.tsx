@@ -509,7 +509,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       )
     );
   }, [globalContext.api?.daoUserData]);
-
   const getFooter = () => {
     const footerFont = {
       xs: "1rem",
@@ -556,28 +555,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       </ButtonBase>
     }
 
-    if (props.status === "Active" || props.status === "Challenged") {
+    if (props.status === "Active" || props.status === "Challenged" || props.status?.includes("Failed") || props.status?.includes("Passed")) {
       return <Wrapper><VoteWidget yes={props.votes["1"] * 0.0001} no={props.votes["0"] * 0.0001} /></Wrapper>
-    } else if (props.status?.includes("Failed")) {
-      return (
-        <Wrapper>
-          <Box sx={{ width: "100%", fontSize: footerFont }}>
-            <Typography sx={{ textAlign: "center", color: "error.light" }}>
-              Vote Failed
-            </Typography>
-          </Box>
-        </Wrapper>
-      );
-    } else if (props.status?.includes("Passed")) {
-      return (
-        <Wrapper>
-          <Box sx={{ width: "100%", fontSize: footerFont }}>
-            <Typography sx={{ textAlign: "center", color: "success.light" }}>
-              Vote Passed!
-            </Typography>
-          </Box>
-        </Wrapper>
-      );
     } else {
       const totalUsers = [
         ...new Set(props.comments.map((item) => item.user_id)),
@@ -614,7 +593,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
         mt: props.scrollable ? ".5rem" : "0",
         minWidth: "280px",
         maxWidth: props.width,
-        height: "100%"
       }}
       id={`proposal-active-${props.c}`}
     >
@@ -647,7 +625,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             </IconButton>
           )
         }
-        sx={{ width: "100%", height: "100%" }}
+        sx={{ width: "100%" }}
       >
         <Box
           sx={{
@@ -656,13 +634,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             borderColor: "border.main",
             borderRadius: ".3rem",
             width: "100%",
-            height: "100%",
-            // ":hover": {
-            //   borderColor: "primary.main",
-            // },
-            display: "flex",
-            flexDirection: "column",
-            flex: "1 1 auto"
+            ":hover": {
+              borderColor: "primary.main",
+            },
           }}
         >
           <Box
@@ -670,135 +644,123 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               borderBottom: "1px solid",
               borderBottomColor: "border.main",
               p: ".5rem",
-              display: "flex",
-              flexDirection: "column",
-              height: "100%"
             }}
           >
-            <Box>
-              <ButtonBase
-                onMouseDown={() => {
-                  setMoved(false);
-                }}
-                onMouseMove={() => {
-                  setMoved(true);
-                }}
-                onMouseUp={() => {
-                  if (!moved) {
-                    router.push(
-                      (dao === undefined ? "" : `/${dao}/`) +
-                      `${!props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
-                    );
-                  }
-                }}
-                draggable="false"
+            <ButtonBase
+              onMouseDown={() => {
+                setMoved(false);
+              }}
+              onMouseMove={() => {
+                setMoved(true);
+              }}
+              onMouseUp={() => {
+                if (!moved) {
+                  router.push(
+                    (dao === undefined ? "" : `/${dao}/`) +
+                    `${!props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}`
+                  );
+                }
+              }}
+              draggable="false"
+              sx={{
+                fontSize: "1rem",
+                width: "100%",
+                height: "100%",
+                borderRadius: "3px",
+                textAlign: "left",
+                alignItems: "left",
+                justifyContent: "left",
+                verticalAlign: "top",
+              }}
+            >
+              <Box
                 sx={{
-                  fontSize: "1rem",
-                  width: "100%",
-                  // height: "100%",
-                  borderRadius: "3px",
-                  textAlign: "left",
-                  alignItems: "left",
-                  justifyContent: "left",
-                  verticalAlign: "top",
-                  mb: 1
+                  cursor: "pointer",
+                  overflowX: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
-                <Box
-                  sx={{
-                    cursor: "pointer",
-                    overflowX: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {props.name.length > 60
-                    ? props.name.substring(0, 60) + "..."
-                    : props.name}
-                </Box>
-              </ButtonBase>
-              <Box sx={{ display: "flex", fontSize: "1rem" }}>
-                <ProposalStatus
-                  status={!props.is_proposal ? "Discussion" : props.status ?? ""}
+                {props.name.length > 60
+                  ? props.name.substring(0, 60) + "..."
+                  : props.name}
+              </Box>
+            </ButtonBase>
+            <Box sx={{ display: "flex", fontSize: "1rem" }}>
+              <ProposalStatus
+                status={!props.is_proposal ? "Discussion" : props.status ?? ""}
+              />
+              <Box sx={{ ml: "auto" }}>
+                <LikesDislikes
+                  likes={props.likes.length}
+                  dislikes={props.dislikes.length}
+                  userSide={getUserSide(
+                    props.likes,
+                    props.dislikes,
+                    !globalContext.api?.daoUserData
+                      ? null
+                      : globalContext.api.daoUserData.id
+                  )}
+                  putUrl={`/proposals/like/${props.id}`}
                 />
-                <Box sx={{ ml: "auto" }}>
-                  <LikesDislikes
-                    likes={props.likes.length}
-                    dislikes={props.dislikes.length}
-                    userSide={getUserSide(
-                      props.likes,
-                      props.dislikes,
-                      !globalContext.api?.daoUserData
-                        ? null
-                        : globalContext.api.daoUserData.id
-                    )}
-                    putUrl={`/proposals/like/${props.id}`}
-                  />
-                </Box>
               </Box>
             </Box>
-            <Box sx={{ flexGrow: 1, mb: 1, }}>
-              <ButtonBase
-                onMouseDown={() => {
-                  setMoved(false);
-                }}
-                onMouseMove={() => {
-                  setMoved(true);
-                }}
-                onMouseUp={() => {
-                  if (!moved) {
-                    router.push(
-                      (dao === undefined ? "" : `/${dao}/`) +
-                      `${!props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
-                    );
-                  }
-                }}
-                draggable="false"
-                sx={{
-                  mt: ".5rem",
-                  minHeight: "7rem",
-                  backgroundColor: "fileInput.outer",
-                  backgroundImage: `url('${props.image_url}')`,
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  width: "100%",
-                  // border: "1px solid",
-                  // borderColor: "border.main",
-                  borderRadius: ".3rem",
-                  p: ".25rem",
-                  position: "relative",
-                  textAlign: "left",
-                  height: "100%"
-                }}
+            <ButtonBase
+              onMouseDown={() => {
+                setMoved(false);
+              }}
+              onMouseMove={() => {
+                setMoved(true);
+              }}
+              onMouseUp={() => {
+                if (!moved) {
+                  router.push(
+                    (dao === undefined ? "" : `/${dao}/`) +
+                    `${!props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}`
+                  );
+                }
+              }}
+              draggable="false"
+              sx={{
+                mt: ".5rem",
+                height: "7rem",
+                backgroundColor: "fileInput.outer",
+                backgroundImage: `url('${props.image_url}')`,
+                backgroundSize: "100%",
+                width: "100%",
+                // border: "1px solid",
+                // borderColor: "border.main",
+                borderRadius: ".3rem",
+                p: ".25rem",
+                position: "relative",
+                textAlign: "left",
+              }}
+            >
+              <Box sx={{ position: "absolute", right: ".3rem" }}>
+                <CountdownTimer widget={props.widget} />
+              </Box>
+              <Box
+                sx={{ position: "absolute", bottom: ".3rem", left: "0.3rem" }}
               >
-                <Box sx={{ position: "absolute", right: ".3rem" }}>
-                  <CountdownTimer widget={props.widget} />
-                </Box>
-                <Box
-                  sx={{ position: "absolute", bottom: ".3rem", left: "0.3rem" }}
-                >
-                  {props.category && (
-                    <Chip
-                      label={props.category}
-                      size="small"
-                      sx={{
-                        fontSize: ".7rem",
-                        color: "primary.main",
-                        backgroundColor: "backgroundColor.main",
-                        border: "1px solid",
-                        borderColor: "primary.main",
-                      }}
-                    />
-                  )}
-                </Box>
-              </ButtonBase>
-            </Box>
+                {props.category && (
+                  <Chip
+                    label={props.category}
+                    size="small"
+                    sx={{
+                      fontSize: ".7rem",
+                      color: "primary.main",
+                      backgroundColor: "backgroundColor.main",
+                      border: "1px solid",
+                      borderColor: "primary.main",
+                    }}
+                  />
+                )}
+              </Box>
+            </ButtonBase>
           </Box>
-          <Box>
-            {getFooter()}
-          </Box>
+
+          {getFooter()}
         </Box>
       </Badge>
     </Box>
