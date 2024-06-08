@@ -44,10 +44,7 @@ export interface IProposalCard {
   category: string;
   widget: any;
   c: number;
-  votes: {
-    "0": number;
-    "1": number;
-  };
+  votes: number[];
   comments: any[];
   users: number;
   date: Date;
@@ -556,7 +553,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
     }
 
     if (props.status === "Active" || props.status === "Challenged") {
-      return <Wrapper><VoteWidget yes={props.votes["1"] * 0.0001} no={props.votes["0"] * 0.0001} /></Wrapper>
+      return <Wrapper><VoteWidget yes={props.votes[1] * 0.0001} no={props.votes[0] * 0.0001} /></Wrapper>
     } else if (props.status?.includes("Failed")) {
       return <Wrapper>
         <Box sx={{ p: ".5rem", display: "flex", alignItems: "center" }}>
