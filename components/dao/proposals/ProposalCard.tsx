@@ -707,7 +707,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                     : props.name}
                 </Box>
               </ButtonBase>
-              <Box sx={{ display: "flex", fontSize: "1rem" }}>
+              <Box sx={{ display: "flex", fontSize: "1rem", mb: "0.5rem" }}>
                 <ProposalStatus
                   status={!props.is_proposal ? "Discussion" : props.status ?? ""}
                 />
@@ -727,7 +727,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ height: "100%", flexGrow: 1, mb: "0.5rem", }}>
+            <Box sx={{ height: "100%", flexGrow: 1, }}>
               <ButtonBase
                 onMouseDown={() => {
                   setMoved(false);
@@ -746,7 +746,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 }}
                 draggable="false"
                 sx={{
-                  mt: ".5rem",
+
                   minHeight: "7rem",
                   height: "100%",
                   backgroundColor: "fileInput.outer",
