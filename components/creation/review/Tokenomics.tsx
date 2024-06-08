@@ -153,33 +153,66 @@ const Tokenomics: React.FC<{
         <Box sx={{ width: "100%" }}>
           <Value
             labelWidth="35%"
-            title="Token creation type"
+            title="Token Creation Type"
+            value={"Use an existing one"}
+          />
+          <Value
+            labelWidth="35%"
+            title="Token ID"
             value={
-              data.tokenomics.type === "create"
-                ? "Create a new token"
-                : "Use an existing one"
+              data.tokenomics.tokenId.slice(0, 6) +
+              "..." +
+              data.tokenomics.tokenId.slice(
+                data.tokenomics.tokenId.length - 6,
+                data.tokenomics.tokenId.length
+              )
             }
           />
           <Value
             labelWidth="35%"
-            title="Token name"
+            title="Token Name"
             value={data.tokenomics.tokenName}
           />
           <Value
             labelWidth="35%"
-            title="Token ticker"
+            title="Token Ticker"
             value={data.tokenomics.tokenTicker}
           />
           <Value
             labelWidth="35%"
-            title="Token amount"
-            value={data.tokenomics.tokenAmount}
+            title="Stake Pool Size"
+            value={data.tokenomics.stakingConfig.stakePoolSize}
           />
           <Value
             labelWidth="35%"
+            title="Staking Emission Amount"
+            value={data.tokenomics.stakingConfig.stakingEmissionAmount}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Emission Delay"
+            value={data.tokenomics.stakingConfig.stakingEmissionDelay + " cycles"}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Cycle Length (ms)"
+            value={data.tokenomics.stakingConfig.stakingCycleLength}
+          />
+          <Value
+            labelWidth="35%"
+            title="Staking Profit Share Percentage"
+            value={data.tokenomics.stakingConfig.stakingProfitSharePct + "%"}
+          />
+          {/* <Value
+            labelWidth="35%"
+            title="Token amount"
+            value={data.tokenomics.tokenAmount}
+          /> */}
+          {/* <Value
+            labelWidth="35%"
             title="Token symbol"
             component={
-              data.tokenomics.tokenImage.file !== null ? (
+              data.tokenomics.tokenImage.file ? (
                 <ImageWrapper
                   size={bytesToSize(data.tokenomics.tokenImage.file.size)}
                   img={data.tokenomics.tokenImage.url}
@@ -189,8 +222,8 @@ const Tokenomics: React.FC<{
                 <></>
               )
             }
-          />
-          {!data.tokenomics.activateTokenomics && (
+          /> */}
+          {/* {!data.tokenomics.activateTokenomics && (
             <Value
               labelWidth="35%"
               title="Token holder addresses"
@@ -201,7 +234,7 @@ const Tokenomics: React.FC<{
             labelWidth="35%"
             title="Tokenomics"
             component={<DistributionListing data={data.tokenomics} />}
-          />
+          /> */}
         </Box>
         <Box
           sx={{

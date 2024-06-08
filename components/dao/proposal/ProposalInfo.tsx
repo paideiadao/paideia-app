@@ -42,7 +42,6 @@ const tokenInfo = async (tokenId: string): Promise<AssetInfo> => {
     );
     return response.data;
   } catch (error) {
-    console.log("There was a problem fetching the asset info:", error);
     throw error;
   }
 };
@@ -268,7 +267,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
       </Box>
       <CapsInfo title="Proposal Actions" />
       {actions?.map((action) => (
-        <Box key={action.actionType}>
+        <Box key={action.actionType} sx={{ mb: 4 }}>
           <Box
             sx={{
               display: "flex",

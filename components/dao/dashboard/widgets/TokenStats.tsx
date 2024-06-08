@@ -16,6 +16,7 @@ const TokenStats: React.FC = () => {
   const { data: tokenStats, error: error } = useSWR(
     tokenomics &&
       tokenomics.token_id &&
+      false && // disabled
       `/assets/token_stats/${tokenomics.token_id}`,
     fetcher
   );

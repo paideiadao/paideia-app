@@ -75,7 +75,7 @@ const ExistingToken: React.FC<IData<ITokenomics>> = (props) => {
         <TextField
           value={data.tokenName}
           sx={{ width: "100%" }}
-          label="Token name"
+          label="Token Name"
           onChange={(e) =>
             props.setData({
               ...data,
@@ -88,7 +88,7 @@ const ExistingToken: React.FC<IData<ITokenomics>> = (props) => {
         <TextField
           value={data.tokenTicker}
           sx={{ width: "100%" }}
-          label="Token ticker"
+          label="Token Ticker"
           onChange={(e) =>
             props.setData({
               ...data,
@@ -118,7 +118,7 @@ const TokenInformation: React.FC<IData<ITokenomics>> = (props) => {
   return (
     <Box>
       <LearnMore
-        title="Token information"
+        title="Token Information"
         // small
         tooltipTitle="Token Information"
         tooltipText="If using an existing token, double check the token ID using ergo explorer. Once set, this cannot be changed. The token you choose will be the governance token for the DAO you create. "
@@ -129,6 +129,7 @@ const TokenInformation: React.FC<IData<ITokenomics>> = (props) => {
         sx={{ width: "100%", mt: ".5rem", mb: "24px" }}
       >
         <Button
+          disabled
           sx={{
             width: "50%",
             fontSize: ".8rem",

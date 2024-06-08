@@ -584,6 +584,9 @@ export const isAddressValid = (address: string) => {
 export const getErgoWalletContext = async () => {
   // @ts-ignore
   const walletConnector = window.ergoConnector.nautilus;
+  if (!(await walletConnector.isConnected())) {
+    await walletConnector.connect();
+  }
   const context = await walletConnector.getContext();
   return context;
 };

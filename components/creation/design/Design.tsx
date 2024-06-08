@@ -148,12 +148,12 @@ export const ThemeCard: React.FC<IThemeCard> = (props) => {
 };
 
 const Design: React.FC = (props) => {
-  let creationContext = React.useContext(CreationContext);
+  const creationContext = React.useContext(CreationContext);
 
   const [theme, setTheme] = React.useState<number>(1);
 
-  let data = creationContext.api.data.design;
-  let setData = (data: any) => {
+  const data = creationContext.api.data.design;
+  const setData = (data: any) => {
     creationContext.api.setData({
       ...creationContext.api.data,
       design: data,

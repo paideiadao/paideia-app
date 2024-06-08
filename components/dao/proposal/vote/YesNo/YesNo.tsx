@@ -1,4 +1,7 @@
-import { Header } from "@components/creation/utilities/HeaderComponents";
+import {
+  Header,
+  Subheader,
+} from "@components/creation/utilities/HeaderComponents";
 import { Box, Button } from "@mui/material";
 import * as React from "react";
 import CheckIcon from "@mui/icons-material/Check";
@@ -25,6 +28,10 @@ const YesNo: React.FC = () => {
         small
         mb=".25rem"
         subtitle="Yes or No proposals allow you to create a chain of actions to be executed if the proposal passes. To add an action, simply click below, decide the type of action you want to create, and fill up the relevant information."
+      />
+      <Subheader
+        title="To create a proposal without any automated actions leave this section empty"
+        small
       />
       {actions.map((i: IProposalAction, c: number) => (
         <AddAction

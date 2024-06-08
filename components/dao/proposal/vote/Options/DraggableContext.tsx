@@ -99,32 +99,36 @@ export const getData = (name: string): ActionType | undefined => {
   if (name === "Change DAO's description") {
     return {
       shortDescription: "",
+      activation_time: 0,
     };
   } else if (name === "Send Funds") {
     return {
       recipients: [{ address: "", ergs: 0, tokens: [] }],
       recurring: false,
       activation_time: 0,
-      voting_duration: "0",
     };
   } else if (name === "Create Liquidity Pool") {
     return defaultLiquidityPoolData;
   } else if (name === "Quadratic Voting") {
     return {
       isActive: false,
+      activation_time: 0,
     };
   } else if (name === "Vote Duration") {
     return {
       voteDuration: 0,
       voteDurationUnits: "weeks",
+      activation_time: 0,
     };
   } else if (name === "Support") {
     return {
       supportNeeded: 51,
+      activation_time: 0,
     };
   } else if (name === "Quorum") {
     return {
       quorum: 4,
+      activation_time: 0,
     };
   } else if (name === "Optimistic Governance") {
     return defaultOptimisticGovernanceData;
@@ -170,6 +174,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             setItems(tempItems);
           }}
           shortDescription={(item.data as IDaoDescription).shortDescription}
+          activation_time={0}
         />
       );
     } else if (props.name === "Send funds") {
@@ -183,7 +188,6 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           recipients={(item.data as ISendFunds).recipients}
           recurring={(item.data as ISendFunds).recurring}
           activation_time={0}
-          voting_duration="0"
         />
       );
     } else if (props.name === "Create liquidity pool") {
@@ -202,6 +206,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           treasuryAmount={(item.data as ILiquidityPool).treasuryAmount}
           balance={(item.data as ILiquidityPool).balance}
           contingency={(item.data as ILiquidityPool).contingency}
+          activation_time={0}
         />
       );
     } else if (props.name === "Quadratic voting") {
@@ -213,6 +218,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             setItems(tempItems);
           }}
           isActive={(item.data as IQuadradicVoting).isActive}
+          activation_time={0}
         />
       );
     } else if (props.name === "Vote duration") {
@@ -225,6 +231,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           }}
           voteDuration={(item.data as IVoteDuration).voteDuration}
           voteDurationUnits={(item.data as IVoteDuration).voteDurationUnits}
+          activation_time={0}
         />
       );
     } else if (props.name === "Support") {
@@ -236,6 +243,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             setItems(tempItems);
           }}
           supportNeeded={(item.data as ISupport).supportNeeded}
+          activation_time={0}
         />
       );
     } else if (props.name === "Quorum") {
@@ -247,6 +255,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
             setItems(tempItems);
           }}
           quorum={(item.data as IQuorum).quorum}
+          activation_time={0}
         />
       );
     } else if (props.name === "Optimistic governance") {
@@ -259,6 +268,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           }}
           wallets={(item.data as IOptimisticGovernance).wallets}
           activated={(item.data as IOptimisticGovernance).activated}
+          activation_time={0}
         />
       );
     } else {

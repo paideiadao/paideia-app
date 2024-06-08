@@ -59,11 +59,26 @@ const ActiveProposal: React.FC = () => {
     };
   }, [dao, daoSlugsObject]);
 
+  const sortedData =
+    proposalData?.sort(
+      (a, b) =>
+        Date.parse(a.date?.toString() ?? "") -
+        Date.parse(b.date?.toString() ?? "")
+    ) ?? [];
+
   return (
     <>
       {proposalData === null ? (
-        <Box>
-          <CircularProgress color="inherit" />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            my: "5rem",
+          }}
+        >
+          <CircularProgress />
         </Box>
       ) : proposalData.length === 0 ? (
         <Box
@@ -102,7 +117,7 @@ const ActiveProposal: React.FC = () => {
             </Box>
           }
         >
-          {proposalData
+          {sortedData
             .slice()
             .reverse()
             .slice(0, 10)

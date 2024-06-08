@@ -12,10 +12,12 @@ import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import GavelIcon from "@mui/icons-material/Gavel";
 
 interface IVoteWidgetProps {
   yes?: number;
   no?: number;
+  status: string;
 }
 
 interface ILastVote {
@@ -29,59 +31,59 @@ export const niceNumber = (number: number) => {
   return Number(number.toFixed(0)).toLocaleString();
 };
 
-const LastVotes: React.FC = () => {
-  const lastVotes: ILastVote[] = [
-    { img: "", name: "John Daonnot", date: new Date(), vote: 1 },
-    { img: "", name: "Lily Evans", date: new Date(), vote: 1 },
-    { img: "", name: "Michael Mirandi", date: new Date(), vote: 0 },
-    { img: "", name: "Jaoquin Cizzin", date: new Date(), vote: 1 },
-  ];
-  return (
-    <>
-      {lastVotes.slice(0, 3).map((i: ILastVote, c: number) => {
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              alignItems: "center",
-              mb: ".5rem",
-            }}
-            key={`last-vote-${c}`}
-          >
-            <Avatar
-              // src={`https://picsum.photos/300/200/?random=${c}`}
-              src={getRandomImage()}
-            />
-            <Box sx={{ ml: ".5rem" }}>
-              {i.name}
-              <Box sx={{ fontSize: ".9rem", color: "text.secondary" }}>
-                {dateFormat(i.date, "mmmm dS, yyyy @ hh:mm")}
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                ml: "auto",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                p: ".2rem",
-                pl: ".5rem",
-                pr: ".5rem",
-                backgroundColor: i.vote === 1 ? "success.light" : "error.light",
-                color: i.vote === 1 ? "black" : "white",
-                borderRadius: "1rem",
-                fontSize: ".8rem",
-              }}
-            >
-              {i.vote === 1 ? "YES" : "NO"}
-            </Box>
-          </Box>
-        );
-      })}
-    </>
-  );
-};
+// const LastVotes: React.FC = () => {
+//   const lastVotes: ILastVote[] = [
+//     { img: "", name: "John Daonnot", date: new Date(), vote: 1 },
+//     { img: "", name: "Lily Evans", date: new Date(), vote: 1 },
+//     { img: "", name: "Michael Mirandi", date: new Date(), vote: 0 },
+//     { img: "", name: "Jaoquin Cizzin", date: new Date(), vote: 1 },
+//   ];
+//   return (
+//     <>
+//       {lastVotes.slice(0, 3).map((i: ILastVote, c: number) => {
+//         return (
+//           <Box
+//             sx={{
+//               display: "flex",
+//               width: "100%",
+//               alignItems: "center",
+//               mb: ".5rem",
+//             }}
+//             key={`last-vote-${c}`}
+//           >
+//             <Avatar
+//               // src={`https://picsum.photos/300/200/?random=${c}`}
+//               src={getRandomImage()}
+//             />
+//             <Box sx={{ ml: ".5rem" }}>
+//               {i.name}
+//               <Box sx={{ fontSize: ".9rem", color: "text.secondary" }}>
+//                 {dateFormat(i.date, "mmmm dS, yyyy @ hh:mm")}
+//               </Box>
+//             </Box>
+//             <Box
+//               sx={{
+//                 ml: "auto",
+//                 display: "flex",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 p: ".2rem",
+//                 pl: ".5rem",
+//                 pr: ".5rem",
+//                 backgroundColor: i.vote === 1 ? "success.light" : "error.light",
+//                 color: i.vote === 1 ? "black" : "white",
+//                 borderRadius: "1rem",
+//                 fontSize: ".8rem",
+//               }}
+//             >
+//               {i.vote === 1 ? "YES" : "NO"}
+//             </Box>
+//           </Box>
+//         );
+//       })}
+//     </>
+//   );
+// };
 
 const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   const context = useContext<IGlobalContext>(GlobalContext);
@@ -158,7 +160,7 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
               title={`Votes: ${niceNumber((props.no ?? 0) + (props.yes ?? 0))}`}
               mb={"0.5rem"}
             />
-            <Button
+            {/* <Button
               sx={{
                 display: deviceWrapper("flex", "none"),
                 ml: "auto",
@@ -168,7 +170,7 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
               size="small"
             >
               View All
-            </Button>
+            </Button> */}
           </Box>
           <VoteWidget yes={props.yes ?? 0} no={props.no ?? 0} />
         </Box>
@@ -194,19 +196,24 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
         >
           <Link
             href={
-              dao === undefined ? `` : `/${dao}/proposal/${proposal_id}/votes`
+              dao === undefined
+                ? `/dao/proposal/${proposal_id}/vote`
+                : `/${dao}/proposal/${proposal_id}/vote`
             }
           >
             <Button
-              disabled
-              size="small"
+              disabled={props.status !== "Active"}
               sx={{
-                borderTopRightRadius: 0,
-                borderTopLeftRadius: 0,
+                // ml: "1rem",
                 width: "100%",
+                borderRadius: "0 0 0.3rem 0.3rem",
+                display: deviceWrapper("none", "flex"),
               }}
+              variant="contained"
+              size="small"
+              startIcon={<GavelIcon />}
             >
-              View All Votes
+              Vote now
             </Button>
           </Link>
         </Box>
@@ -217,9 +224,9 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
           <Typography sx={{ fontSize: "14px", fontWeight: "800" }}>
             {userVoteParsed !== null &&
               "You " +
-                (userVoteParsed
-                  ? "approved the proposal"
-                  : "voted against the proposal")}
+              (userVoteParsed
+                ? "approved the proposal"
+                : "voted against the proposal")}
             {userVoteParsed === null && "You did not vote on this proposal"}
           </Typography>
         </Box>

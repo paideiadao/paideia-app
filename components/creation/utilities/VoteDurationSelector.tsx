@@ -8,7 +8,6 @@ import {
   Box,
   SelectChangeEvent,
 } from "@mui/material";
-import { data } from "jquery";
 import * as React from "react";
 
 interface IVoteDurationSelector {
@@ -21,7 +20,7 @@ interface IVoteDurationSelector {
 const VoteDurationSelector: React.FC<IVoteDurationSelector> = (props) => {
   return (
     <FormControl
-      sx={{ m: 1, width: deviceStruct("100%", "80%", "50%", "50%", "30%") }}
+      sx={{ m: 1, ml: 0, width: deviceStruct("100%", "80%", "50%", "50%", "30%") }}
       variant="outlined"
     >
       <InputLabel htmlFor={`challenge-time-input`}>Vote Duration</InputLabel>

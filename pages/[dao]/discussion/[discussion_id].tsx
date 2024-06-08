@@ -8,6 +8,7 @@ import {
   Modal,
   IconButton,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import * as React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -578,7 +579,17 @@ const Discussion: React.FC = () => {
           </Box>
         </Box>
       ) : (
-        <>Loading here...</>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            my: 5,
+          }}
+        >
+          <CircularProgress />
+        </Box>
       )}
     </Layout>
   );

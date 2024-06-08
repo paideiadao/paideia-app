@@ -26,6 +26,7 @@ const Quorum: React.FC<IwQuorum> = (props) => {
           onChange={(event: Event, newValue: number) =>
             props.set({
               quorum: newValue,
+              activation_time: 0,
             })
           }
         />
@@ -36,6 +37,7 @@ const Quorum: React.FC<IwQuorum> = (props) => {
           onChange={(e) =>
             props.set({
               quorum: parseFloat(e.target.value),
+              activation_time: 0,
             })
           }
           sx={{ width: "15%", ml: "1rem" }}

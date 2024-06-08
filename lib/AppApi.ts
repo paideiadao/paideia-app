@@ -1,15 +1,15 @@
-import { AbstractApi, getUserId } from "./utilities";
-import { Theme } from "@mui/material";
+import { IUserStakeData } from "@components/dao/staking/YourStaking";
 import { IAlerts } from "@components/utilities/Alert";
+import { Theme } from "@mui/material";
 import {
+  IDaoMembership,
   IDaoUserData,
   IDaoUserRes,
   IEditUser,
-  ITokenCheckResponse,
   ITokenCheckNew,
-  IDaoMembership,
+  ITokenCheckResponse,
 } from "./Interfaces";
-import { IUserStakeData } from "@components/dao/staking/YourStaking";
+import { AbstractApi, getUserId } from "./utilities";
 
 export class AppApi extends AbstractApi {
   theme: Theme;
@@ -83,7 +83,6 @@ export class AppApi extends AbstractApi {
         const sort = Object.values(res.data)[0][0][daoTokenId];
         return sort;
       } catch (e) {
-        console.log(e);
         return 0;
       }
     } else return 0;
@@ -114,10 +113,15 @@ export class AppApi extends AbstractApi {
 
   async getDaoUser(): Promise<IDaoUserRes | null> {
     const userId = getUserId();
+    // if (!userId) {
+    //   const tell = this.get(`/users/me`)
+    //   console.log(tell)
+    // }
     if (userId && this.daoData && this.daoData.id !== undefined) {
-      return this.get<IDaoUserRes>(
+      const result = this.get<IDaoUserRes>(
         `/users/details/${userId}?dao_id=${this.daoData.id}`
       );
+      return result;
     }
     return null;
   }
@@ -127,61 +131,70 @@ export class AppApi extends AbstractApi {
     tokenIds: string[]
   ): Promise<IDaoMembership> {
     const tokenCheck = await this.daoTokenCheck(addresses, tokenIds);
-    const sortIndex = [...Object.values(tokenCheck.data)]
+    const sortIndex = [...Object.values(tokenCheck.data)];
 
-    const sort = [...new Set(sortIndex)].map(
-      (item) => {
-        return {
-          token: Object.keys(item[0])[0],
-          value: Object.values(item[0])[0],
-        };
-      }
-    );
-
-    const sort1 = Array.from(
-      sort.reduce(
-        (m, { token, value }) => m.set(token, (m.get(token) || 0) + value),
-        new Map()
-      ),
-      ([token, value]) => ({ token, value })
-    );
-
-    let currentTokens: {
-      token: string;
-      value: number;
+    const sort: {
+      [key: string]: number;
     }[] = [];
+    sortIndex.forEach((index) => {
+      index.forEach((t) => sort.push(t));
+    });
+
+    const sort1 = sort.reduce((m, p) => {
+      const token = Object.keys(p)[0];
+      const value = p[token];
+      m.set(token, (m.get(token) ?? 0) + value);
+      return m;
+    }, new Map<string, number>());
+
+    const currentTokens: {
+      token: string | null;
+      value: number;
+    } = {
+      token: null,
+      value: 0,
+    };
     if (this.daoData?.tokenomics?.token_id) {
-      currentTokens = sort1.filter(
-        (item) => item.token == this.daoData.tokenomics.token_id
-      );
+      const tokenId: string = this.daoData.tokenomics.token_id;
+      currentTokens.token = tokenId;
+      currentTokens.value = sort1.get(tokenId) ?? 0;
     }
 
     // check if user profile for the current dao exists and get the data
     const res = await this.getDaoUser();
 
+    const membershipList: {
+      token: string;
+      value: number;
+    }[] = [];
+    sort1.forEach((value, key) => {
+      membershipList.push({
+        token: key,
+        value: value,
+      });
+    });
     const response = {
-      currentDaoTokens: currentTokens.length > 0 ? currentTokens[0].value : 0,
-      membershipList: sort1,
+      currentDaoTokens: currentTokens.token ? currentTokens.value : 0,
+      membershipList: membershipList,
     };
-
     if (res !== null) {
       if (
         res === undefined &&
         (this.daoUserData === undefined || isEmptyUserData(this.daoUserData))
       ) {
         try {
-          if (response.currentDaoTokens > 0) {
-            // if they have tokens, create the user account
-            const creationRes = await this.post<IDaoUserRes>(
-              "/users/create_user_profile?dao_id=" + this.daoData.id
-            );
-            this.setDaoUserData({ ...creationRes.data, loading: false });
-          } else {
-            this.error(
-              "Please add " + this.daoData.dao_name + " tokens to participate"
-            );
-            this.setDaoUserData({ ...this.daoUserData, loading: false });
-          }
+          // if (response.currentDaoTokens > 0) {
+          // if they have tokens, create the user account
+          const creationRes = await this.post<IDaoUserRes>(
+            "/users/create_user_profile?dao_id=" + this.daoData.id
+          );
+          this.setDaoUserData({ ...creationRes.data, loading: false });
+          // } else {
+          //   this.error(
+          //     "Please add " + this.daoData.dao_name + " tokens to participate"
+          //   );
+          //   this.setDaoUserData({ ...this.daoUserData, loading: false });
+          // }
         } catch (e) {
           console.log(e);
           this.error("Error connecting to DAO");
@@ -190,11 +203,14 @@ export class AppApi extends AbstractApi {
       } else if (res?.data) {
         this.setDaoUserData({ ...res.data, loading: false });
       } else {
-        this.setDaoUserData(undefined);
+        this.setDaoUserData({ ...this.daoUserData, loading: false });
         this.error(
           "Please add " + this.daoData.dao_name + " tokens to participate"
         );
       }
+    } else {
+      this.setDaoUserData({ ...this.daoUserData, loading: false });
+      this.error("Unable to retrieve user account. ");
     }
     return response;
   }

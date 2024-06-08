@@ -142,10 +142,6 @@ const Nautilus: React.FC<{
                                   signedMessage: signedMessage,
                                   proof: proof,
                                 });
-                              localStorage.setItem(
-                                "jwt_token_login",
-                                result.jwt
-                              );
                               localStorage.setItem("user_id", result.id);
                               localStorage.setItem("alias", result.alias);
                               props.setLoading(false);

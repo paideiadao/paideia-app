@@ -27,9 +27,7 @@ import { IFile } from "@lib/creation/Interfaces";
 import { ILiquidityPool } from "@components/dao/proposal/vote/YesNo/Actions/LiquidityPool";
 import { IQuadradicVoting } from "@components/dao/proposal/vote/YesNo/Actions/QuadraticVoting";
 import { IDaoDescription } from "@components/dao/proposal/vote/YesNo/Actions/DaoDescription";
-import VoteDuration, {
-  IVoteDuration,
-} from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
+import { IVoteDuration } from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import { ISupport } from "@components/dao/proposal/vote/YesNo/Actions/Support";
 import { OptionType } from "@components/dao/proposal/vote/Options/OptionSystemSelector";
 import CancelLink from "@components/utilities/CancelLink";
@@ -104,7 +102,6 @@ export interface IProposalOption {
 
 export type VotingType = "yes/no" | "options" | "unselected";
 
-const NERGs = 1000000000;
 const TIME_MS = 1000;
 const BUFFER = 900 * TIME_MS;
 
@@ -130,15 +127,16 @@ export interface IProposal {
   comments: IComment[];
   attachments?: IFile[];
   addendums: IAddendum[];
-  optionType: OptionType;
+  option_type: OptionType;
   is_proposal: boolean;
-  userSide?: number;
+  user_side?: number;
   references_meta?: string[];
   referenced_meta?: string[];
   votes: number[];
   alias?: string;
   profile_img_url?: string;
   user_followers?: number[];
+  voting_duration: number;
 }
 
 export interface ICreateProposalErrors {
@@ -172,7 +170,7 @@ const CreateProposal: React.FC = () => {
     category: "",
     content: "",
     voting_system: auto_update_config ? "yes/no" : "unselected",
-    optionType: "one-option",
+    option_type: "one-option",
     references: [],
     attachments: [],
     comments: [],
@@ -182,7 +180,6 @@ const CreateProposal: React.FC = () => {
             name: "Update DAO Config",
             data: {
               config: [],
-              voting_duration: (24 * 60 * 60).toString(),
               activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
             },
           },
@@ -194,6 +191,7 @@ const CreateProposal: React.FC = () => {
     followers: [],
     is_proposal: true,
     votes: [0, 0],
+    voting_duration: 0,
   });
   const [errors, setErrors] = useState<ICreateProposalErrors>(defaultErrors);
 
@@ -227,7 +225,6 @@ const CreateProposal: React.FC = () => {
             name: "Update DAO Config",
             data: {
               config: [],
-              voting_duration: (24 * 60 * 60).toString(),
               activation_time: Date.now() + 2 * 24 * 60 * 60 * 1000,
             },
           },
@@ -245,39 +242,34 @@ const CreateProposal: React.FC = () => {
           throw "Form Validation Error";
         }
         const imgUrl = await getBannerUrl();
-        const action =
-          value.actions[0].name === "Send Funds"
-            ? bPaideiaSendFundsBasic(
-                // @ts-ignore
-                value.actions[0].data.recipients[0].address,
-                // @ts-ignore
-                value.actions[0].data.recipients[0].ergs * NERGs,
-                // @ts-ignore
-                value.actions[0].data.recipients[0].tokens,
-                // @ts-ignore
-                value.actions[0].data.activation_time
-              )
-            : value.actions[0].name === "Update DAO Config"
-            ? bPaideiaUpdateDAOConfig(
-                // @ts-ignore
-                value.actions[0].data.config,
-                // @ts-ignore
-                value.actions[0].data.activation_time
-              )
-            : {}; // should never occur
+        const actions = value.actions
+          .filter((action) => action.name)
+          .map((action) => {
+            if (action.name === "Send Funds") {
+              // @ts-ignore
+              const data: ISendFunds = action.data;
+              return bPaideiaSendFundsBasic(
+                data.recipients,
+                data.activation_time
+              );
+            }
+            if (action.name === "Update DAO Config") {
+              // @ts-ignore
+              const data: IUpdateConfig = action.data;
+              return bPaideiaUpdateDAOConfig(data.config, data.activation_time);
+            }
+            return null; // should never occur
+          });
         const proposal = {
           dao_id: context.api.daoData?.id,
           user_details_id: context.api.daoUserData?.id,
           ...value,
           image_url: imgUrl,
-          actions: [action],
+          actions: [...actions],
           is_proposal: true,
           stake_key: stake.stake_keys[0].key_id,
           end_time:
-            new Date().getTime() +
-            // @ts-ignore
-            value.actions[0].data.voting_duration * TIME_MS +
-            BUFFER,
+            new Date().getTime() + value.voting_duration * TIME_MS + BUFFER,
         };
         const data = (
           await context.api.post<any>("/proposals/on_chain_proposal", proposal)
@@ -501,59 +493,67 @@ const validateErrors = (
 ) => {
   errors.name = value.name === "";
   errors.category = value.category === "";
-  errors.voting = // @ts-ignore
-    value.actions.length !== 1 ||
-    // @ts-ignore
-    (value.actions[0].name === "Send Funds" &&
-      // @ts-ignore
-      value.actions[0].data?.recipients?.length !== 1);
-  // @ts-ignore
-  if (!errors.voting && value.actions[0].name === "Send Funds") {
-    errors.actionConfig =
-      errors.voting ||
-      // @ts-ignore
-      value.actions[0].data.recipients[0].address === "" ||
-      // @ts-ignore
-      value.actions[0].data.recipients[0].ergs === "" ||
-      // @ts-ignore
-      isNaN(value.actions[0].data.recipients[0].ergs) ||
-      // @ts-ignore
-      value.actions[0].data.recipients[0].tokens.some(
+  errors.voting = value.voting_system !== "yes/no";
+  errors.actionConfig =
+    value.actions
+      .filter((action) => action.name === "Send Funds")
+      .map((action) => {
         // @ts-ignore
-        (token) =>
-          isNaN(token.amount) ||
-          token.amount === "" ||
-          token.amount === "0" ||
-          token.tokenId === ""
+        const data: ISendFunds = action.data;
+        return data;
+      })
+      .map((sendFunds) =>
+        sendFunds.recipients
+          .map(
+            (recipient) =>
+              recipient.address === "" ||
+              recipient.ergs.toString() === "" ||
+              isNaN(recipient.ergs) ||
+              recipient.tokens.some(
+                (token) =>
+                  isNaN(Number(token.amount)) ||
+                  token.amount === "" ||
+                  token.amount === "0" ||
+                  token.tokenId === ""
+              )
+          )
+          .some((error) => error)
+      )
+      .some((error) => error) ||
+    value.actions
+      .filter((action) => action.name === "Update DAO Config")
+      .map((action) => {
+        // @ts-ignore
+        const data: IUpdateConfig = action.data;
+        return data;
+      })
+      .map(
+        (updateConfig) =>
+          updateConfig.config.length === 0 ||
+          updateConfig.config.filter(
+            (config) =>
+              config.action_type === "" ||
+              config.key === "" ||
+              config.type === "" ||
+              config.value === ""
+          ).length > 0
+      )
+      .some((error) => error) ||
+    value.actions
+      .filter((action) => action.name)
+      .some(
+        (action) =>
+          action.name !== "Update DAO Config" && action.name !== "Send Funds"
       );
-  } else if (
-    !errors.voting &&
-    // @ts-ignore
-    value.actions[0].name === "Update DAO Config"
-  ) {
-    // @ts-ignore
-    const actionData: IConfig[] = value.actions[0].data.config;
-    const error =
-      actionData.length === 0 ||
-      actionData.filter(
-        (config) =>
-          config.action_type === "" ||
-          config.key === "" ||
-          config.type === "" ||
-          config.value === ""
-      ).length > 0;
-    errors.actionConfig = errors.voting || error;
-  } else {
-    errors.voting = true; // should never occur
-  }
   if (!errors.voting && !errors.actionConfig) {
     const endTime =
-      new Date().getTime() +
-      // @ts-ignore
-      value.actions[0].data.voting_duration * TIME_MS +
-      BUFFER;
-    // @ts-ignore
-    const actionTime = value.actions[0].data.activation_time;
+      new Date().getTime() + value.voting_duration * TIME_MS + BUFFER;
+    const actionTime = Math.min.apply(
+      null,
+      value.actions
+        .filter((action) => action.name)
+        .map((action) => action?.data?.activation_time ?? 0)
+    );
     errors.activationTime =
       isNaN(actionTime) || isNaN(endTime) || actionTime < endTime;
     errors.votingDuration =

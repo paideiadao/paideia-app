@@ -12,7 +12,9 @@ const QuadraticVoting: React.FC<IwQuadraticVoting> = (props) => {
       small
       title={"Activate quadratic voting"}
       value={props.isActive}
-      onChange={(val: boolean) => props.set({ isActive: val })}
+      onChange={(val: boolean) =>
+        props.set({ isActive: val, activation_time: 0 })
+      }
     />
   );
 };

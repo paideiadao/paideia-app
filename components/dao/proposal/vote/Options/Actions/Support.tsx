@@ -49,7 +49,10 @@ const Support: React.FC<IwSupport> = (props) => {
             type="number"
             value={props.supportNeeded}
             onChange={(e) =>
-              props.set({ supportNeeded: parseFloat(e.target.value) })
+              props.set({
+                supportNeeded: parseFloat(e.target.value),
+                activation_time: 0,
+              })
             }
             InputProps={{
               inputProps: { min: 51, max: 100 },

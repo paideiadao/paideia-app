@@ -1,12 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
+    "dev:local": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "npx prettier --write .",
-    "mobile": "next build && next export && npx cap sync"
+    "mobile": "next build && next export && npx cap sync",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.1",

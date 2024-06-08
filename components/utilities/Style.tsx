@@ -1,19 +1,19 @@
 export const deviceStruct = (
-  xs: string,
-  sm: string,
-  md: string,
-  lg: string,
-  xl: string
+  xs: string | number,
+  sm: string | number,
+  md: string | number,
+  lg: string | number,
+  xl: string | number
 ) => {
   return {
-    xs: xs,
-    sm: sm,
-    md: md,
-    lg: lg,
-    xl: xl,
+    xs,
+    sm,
+    md,
+    lg,
+    xl,
   };
 };
 
-export const deviceWrapper = (mobile: string, desktop: string) => {
+export const deviceWrapper = (mobile: string | number, desktop: string | number) => {
   return deviceStruct(mobile, mobile, desktop, desktop, desktop);
 };

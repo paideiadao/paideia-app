@@ -6,6 +6,7 @@ import { ISocialLink } from "@lib/creation/Interfaces";
 import { useWallet } from "@components/wallet/WalletContext";
 import { getIcon } from "@components/creation/review/Design";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
+import { IUserStakeData } from "../staking/YourStaking";
 
 const UserSocial: React.FC<{ icon: JSX.Element; label: string }> = (props) => {
   return (
@@ -48,6 +49,7 @@ const UserAttr: React.FC<{ label: string }> = (props) => {
 };
 
 interface IAboutUser {
+  user_id: string;
   followers: number[];
   created: number;
   approved: number;
@@ -59,17 +61,17 @@ interface IAboutUser {
 
 const AboutUser: React.FC<IAboutUser> = (props) => {
   const { wallet, utxos } = useWallet();
-  const [userTokens, setUserTokens] = React.useState<number>(0);
-  const [stakeAmount, setStakeAmount] = React.useState<number>(0);
+  const [userTokens, setUserTokens] = React.useState<number | null>(null);
+  const [stakeAmount, setStakeAmount] = React.useState<number | null>(null);
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
 
   React.useEffect(() => {
     const load = async () => {
       const res = await appContext.api?.daoTokenCheckSingleToken(
-        [props.wallet ?? ""],
+        props.wallet ? [props.wallet] : [],
         props.token_id
       );
-      if (res) {
+      if (res !== undefined) {
         setUserTokens(res);
       } else setUserTokens(utxos.currentDaoTokens);
     };
@@ -78,15 +80,31 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
     }
   }, [props.wallet, utxos.currentDaoTokens]);
 
-  // React.useEffect(() => {
-  //   if (appContext.api.userStakeData) {
-  //     const stake = appContext.api.userStakeData;
-  //     const stakeAmount = stake.stake_keys
-  //       .map((stake: { stake: number }) => stake.stake)
-  //       .reduce((a: number, c: number) => a + c, 0);
-  //     setStakeAmount(stakeAmount);
-  //   }
-  // }, [appContext.api.userStakeData]);
+  React.useEffect(() => {
+    const getData = async () => {
+      const daoId = appContext.api?.daoData.id;
+      const userId = props.user_id;
+      try {
+        const res = await appContext.api?.post<any>(
+          "/staking/user_stake_info",
+          {
+            dao_id: daoId,
+            user_id: userId,
+          }
+        );
+        const stake: IUserStakeData = res.data;
+        const stakeAmount = stake.stake_keys
+          .map((stake: { stake: number }) => stake.stake)
+          .reduce((a: number, c: number) => a + c, 0);
+        setStakeAmount(stakeAmount);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    if (appContext.api?.daoData?.id && props.user_id && props.user_id !== "0") {
+      getData();
+    }
+  }, [appContext.api?.daoData?.id, props.user_id]);
 
   const ticker =
     appContext.api?.daoData?.tokenomics.token_ticker ??
@@ -205,7 +223,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
             color="primary"
           />
         </Box>
-        {props.wallet && userTokens ? (
+        {props.wallet && userTokens !== null && stakeAmount !== null ? (
           <Chip
             avatar={<Avatar alt={ticker} src={tokenImage} />}
             label={

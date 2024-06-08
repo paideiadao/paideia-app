@@ -34,6 +34,8 @@ const defaultState: IConfigData = {
     amount: "",
     currency: "",
     supportNeeded: 0,
+    pureParticipationWeight: 0,
+    participationWeight: 0,
   },
   design: {
     logo: {
@@ -193,6 +195,7 @@ const DaoConfig: React.FC = () => {
 
 const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
   const durationMapper = {
+    seconds: 1,
     minutes: 60,
     hours: 60 * 60,
     days: 60 * 60 * 24,
