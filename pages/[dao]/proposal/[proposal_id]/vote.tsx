@@ -224,7 +224,9 @@ const CastVote: React.FC = () => {
           loadingPosition="center"
           onClick={handleSubmit}
         >
-          <Box sx={{ display: deviceWrapper("none", "block") }}>Vote</Box>
+          <Box sx={{
+            // display: deviceWrapper("none", "block") 
+          }}>Vote</Box>
         </LoadingButton>
       </Box>
     </Layout>

@@ -44,8 +44,10 @@ export interface IProposalCard {
   category: string;
   widget: any;
   c: number;
-  yes: number;
-  no: number;
+  votes: {
+    "0": number;
+    "1": number;
+  };
   comments: any[];
   users: number;
   date: Date;
@@ -65,6 +67,8 @@ export const VoteWidget: React.FC<{
           alignItems: "center",
           width: "100%",
           color: "success.light",
+          mb: "0.3rem",
+          fontSize: "0.9rem"
         }}
       >
         {percentage(props.yes / (props.yes + props.no), 0)} YES
@@ -94,11 +98,11 @@ export const VoteWidget: React.FC<{
           display: deviceWrapper("none", "flex"),
           alignItems: "center",
           color: "text.secondary",
-          fontSize: "1rem",
+          fontSize: "0.8rem",
         }}
       >
-        {niceNumber(props.yes)} votes
-        <Box sx={{ ml: "auto" }}>{niceNumber(props.no)} votes</Box>
+        {niceNumber(props.yes ?? 0)} votes
+        <Box sx={{ ml: "auto" }}>{niceNumber(props.no ?? 0)} votes</Box>
       </Box>
     </Box>
   );
@@ -170,8 +174,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-    ? 0
-    : undefined;
+      ? 0
+      : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -481,6 +485,7 @@ const CountdownWidget: React.FC<{ date: Date }> = (props) => {
 };
 
 const ProposalCard: React.FC<IProposalCard> = (props) => {
+  console.log(props)
   const [favorited, setFavorited] = React.useState<boolean>(false);
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
   const [moved, setMoved] = React.useState(false);
@@ -519,65 +524,59 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       lg: ".7rem",
       xl: ".8rem",
     };
-    switch ("Discussion" as string) {
-      case "Challenged": {
-        return <VoteWidget yes={props.yes} no={props.no} />;
-      }
-      case "Passed": {
-        return "text.secondarySuccess";
-      }
-      case "Active": {
-        return <VoteWidget yes={props.yes} no={props.no} />;
-      }
-      case "Discussion": {
-        const totalUsers = [
-          ...new Set(props.comments.map((item) => item.user_id)),
-        ].length;
-        const totalComments = props.comments.length;
-
-        return (
-          <ButtonBase
-            sx={{
-              p: ".5rem",
-              height: "4rem",
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              textAlign: "left",
-            }}
-            draggable="false"
-            onMouseDown={() => {
-              setMoved(false);
-            }}
-            onMouseMove={() => {
-              setMoved(true);
-            }}
-            onMouseUp={() => {
-              if (!moved) {
-                router.push(
-                  (dao === undefined ? "" : `/${dao}/`) +
-                    `${
-                      !props.is_proposal ? "discussion" : "proposal"
-                    }/${generateSlug(props.id, props.name)}?tab=comments`
-                );
-              }
-            }}
-          >
-            <Box sx={{ width: "100%", fontSize: footerFont }}>
-              <Typography sx={{ mb: "4px" }}>Join the Conversation</Typography>
-              <Box sx={{ fontSize: footerSmallFont, color: "text.secondary" }}>
-                {totalComments} comment{totalComments === 1 ? "" : "s"} from{" "}
-                {totalUsers} user{totalUsers === 1 ? "" : "s"}
-              </Box>
-            </Box>
-          </ButtonBase>
-        );
-      }
-      case "Unchallenged": {
-        return <CountdownWidget date={props.date} />;
-      }
+    const Wrapper: React.FC<{ children: React.ReactChild }> = ({ children }) => {
+      return <ButtonBase
+        sx={{
+          p: ".5rem",
+          height: "4rem",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          textAlign: "left",
+        }}
+        draggable="false"
+        onMouseDown={() => {
+          setMoved(false);
+        }}
+        onMouseMove={() => {
+          setMoved(true);
+        }}
+        onMouseUp={() => {
+          if (!moved) {
+            router.push(
+              (dao === undefined ? "" : `/${dao}/`) +
+              `${!props.is_proposal ? "discussion" : "proposal"
+              }/${generateSlug(props.id, props.name)}?tab=comments`
+            );
+          }
+        }}
+      >
+        {children}
+      </ButtonBase>
     }
-  };
+
+    if (props.status === "Active" || props.status === "Challenged" || props.status?.includes("Failed") || props.status?.includes("Passed")) {
+      return <Wrapper><VoteWidget yes={props.votes["1"] * 0.0001} no={props.votes["0"] * 0.0001} /></Wrapper>
+    } else {
+      const totalUsers = [
+        ...new Set(props.comments.map((item) => item.user_id)),
+      ].length;
+      const totalComments = props.comments.length;
+
+      return (
+        <Wrapper>
+          <Box sx={{ width: "100%", fontSize: footerFont }}>
+            <Typography sx={{ mb: "4px" }}>Join the Conversation</Typography>
+            <Box sx={{ fontSize: footerSmallFont, color: "text.secondary" }}>
+              {totalComments} comment{totalComments === 1 ? "" : "s"} from{" "}
+              {totalUsers} user{totalUsers === 1 ? "" : "s"}
+            </Box>
+          </Box>
+        </Wrapper>
+      );
+    }
+    {/* <CountdownWidget date={props.date} />; */ }
+  }
 
   const api = new FollowApi(globalContext.api, "/proposals/follow/" + props.id);
 
@@ -658,9 +657,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                      `${
-                        !props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                    `${!props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
@@ -718,9 +716,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 if (!moved) {
                   router.push(
                     (dao === undefined ? "" : `/${dao}/`) +
-                      `${
-                        !props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                    `${!props.is_proposal ? "discussion" : "proposal"
+                    }/${generateSlug(props.id, props.name)}`
                   );
                 }
               }}
