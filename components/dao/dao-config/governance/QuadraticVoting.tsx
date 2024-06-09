@@ -34,7 +34,7 @@ const QuadraticVoting: React.FC = () => {
           })
         }
         value={data?.quadraticVoting ?? false}
-        title="Activate quadratic voting"
+        title="Activate Quadratic Voting"
       />
     </>
   );

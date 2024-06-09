@@ -54,7 +54,7 @@ const QuorumAction: React.FC<IProposalAction> = (props) => {
       <TextField
         sx={{ width: "100%", mt: "1rem" }}
         label="Action name"
-        value={"Optimistic governance"}
+        value={"Optimistic Governance"}
         InputProps={{
           readOnly: true,
         }}

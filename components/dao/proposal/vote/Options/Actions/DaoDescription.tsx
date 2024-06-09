@@ -9,7 +9,7 @@ interface IwDaoDescription extends IDaoDescription {
 const DaoDescription: React.FC<IwDaoDescription> = (props) => {
   return (
     <TextField
-      label="DAO short description"
+      label="DAO Short Description"
       inputProps={{
         maxLength: 250,
       }}

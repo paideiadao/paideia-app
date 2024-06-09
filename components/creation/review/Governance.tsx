@@ -37,7 +37,7 @@ const Governance: React.FC<{
         <Box sx={{ width: "100%" }}>
           <Value
             labelWidth="35%"
-            title="Optimistic governance"
+            title="Optimistic Governance"
             component={
               <ActiveInactive value={data.governance.optimisticGovernance} />
             }
@@ -73,7 +73,7 @@ const Governance: React.FC<{
           )}
           <Value
             labelWidth="35%"
-            title="Quadratic voting"
+            title="Quadratic Voting"
             component={
               <ActiveInactive value={data.governance.quadraticVoting} />
             }

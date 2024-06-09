@@ -77,7 +77,7 @@ const BasicInformation: React.FC = () => {
       <Box sx={{ width: "100%", mt: 2 }}>
         <TextField
           rows={3}
-          label="DAO short description"
+          label="DAO Short Description"
           inputProps={{
             maxLength: 250,
           }}

@@ -37,7 +37,7 @@ const Design: React.FC = () => {
   return (
     <>
       <Header
-        title="DAO design"
+        title="DAO Design"
         subtitle="Choose the perfect theme for your DAO, add a logo, upload a banner, and create you're own personalilzed footer"
       />
       <LearnMore

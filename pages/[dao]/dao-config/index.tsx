@@ -3,8 +3,8 @@ import BasicInformation from "@components/dao/dao-config/BasicInformation";
 import Design from "@components/dao/dao-config/Design";
 import Governance from "@components/dao/dao-config/Governance";
 import Termination from "@components/dao/dao-config/Termination";
+import Tokenomics from "@components/dao/dao-config/Tokenomics";
 import Layout from "@components/dao/Layout";
-import VoteDuration from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import CancelLink from "@components/utilities/CancelLink";
 import Divider from "@components/utilities/Divider";
 import { deviceWrapper } from "@components/utilities/Style";
@@ -21,6 +21,28 @@ const defaultState: IConfigData = {
     daoName: "",
     daoUrl: "",
     shortDescription: "",
+  },
+  tokenomics: {
+    type: "",
+    tokenName: "",
+    tokenId: "",
+    // check restrictions...
+    tokenTicker: "",
+    tokenAmount: 0,
+    tokenImage: "",
+    tokenImageUrl: "",
+    tokenRemaining: 0,
+    tokenHolders: [],
+    activateTokenomics: false,
+    distributions: [],
+    // staking details
+    stakingConfig: {
+      stakePoolSize: 0,
+      stakingEmissionAmount: 0,
+      stakingEmissionDelay: 0,
+      stakingCycleLength: 0,
+      stakingProfitSharePct: 0,
+    },
   },
   governance: {
     optimisticGovernance: false,
@@ -152,6 +174,8 @@ const DaoConfig: React.FC = () => {
       <Layout>
         <Header title="DAO Config" large />
         <BasicInformation />
+        <Divider />
+        <Tokenomics />
         <Divider />
         <Governance />
         <Divider />

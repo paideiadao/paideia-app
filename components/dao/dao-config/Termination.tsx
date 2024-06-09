@@ -13,7 +13,7 @@ const Termination: React.FC = () => {
     <>
       <Header
         mb=".25rem"
-        title="DAO termination"
+        title="DAO Termination"
         subtitle="If you wish, you can terminate the DAO. This will delete it forever and divides the treasury as decided. You can either send the treasury to whitelisted addresses, or divide equally between all the members of the DAO. Keep in mind that this process would go through a proposal."
       />
       <Link href={`/${dao}/dao-config/terminate`}>

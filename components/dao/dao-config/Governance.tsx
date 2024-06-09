@@ -17,7 +17,7 @@ const Governance: React.FC = () => {
   return (
     <>
       <Header
-        title="Governance and voting configuration"
+        title="Governance and Voting Configuration"
         subtitle="You can use the default settings, or dive more in depth and configure your voting system as you wish. You can enable and configure features such as 'Optimistic governance' or 'Quadratic voting' and edit the support, quorum, and voting times."
         mb=".25rem"
       />
@@ -25,7 +25,7 @@ const Governance: React.FC = () => {
       <Divider m=".5rem" />
       <QuadraticVoting />
       <Divider m=".5rem" />
-      <Header title="Configure voting system" />
+      <Header title="Configure Voting System" />
       <Support />
       <Warning
         title={"Only for single-choice voting"}
