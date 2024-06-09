@@ -13,7 +13,7 @@ import ConfigApi, { IConfigData } from "@lib/dao/dao-config/ConfigApi";
 import { ConfigContext } from "@lib/dao/dao-config/ConfigContext";
 import { fetcher } from "@lib/utilities";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
@@ -220,6 +220,29 @@ const DaoConfig: React.FC = () => {
     }
   }, [daoData, daoConfig]);
 
+  const checkError = () => {
+    return (
+      data?.basicInformation.daoName !== "" &&
+      data?.basicInformation.daoUrl !== "" &&
+      (data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
+      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) <= 10 &&
+      (data?.governance.participationWeight ?? 0) >= 0 &&
+      (data?.governance.participationWeight ?? 0) <= 100 &&
+      (data?.governance.pureParticipationWeight ?? 0) >= 0 &&
+      (data?.governance.pureParticipationWeight ?? 0) <= 100 &&
+      Number(data?.governance.participationWeight ?? 0) +
+        Number(data?.governance.participationWeight ?? 0) >=
+        0 &&
+      Number(data?.governance.participationWeight ?? 0) +
+        Number(data?.governance.pureParticipationWeight ?? 0) <=
+        100
+    );
+  };
+
   const submit = async () => {
     setLoading(true);
     const d = generateDiff(diff, data);
@@ -261,6 +284,7 @@ const DaoConfig: React.FC = () => {
             alignItems: "center",
             width: "100%",
             mt: "1.5rem",
+            mb: "1rem",
           }}
         >
           <CancelLink>
@@ -273,6 +297,7 @@ const DaoConfig: React.FC = () => {
             </Button>
           </CancelLink>
           <LoadingButton
+            disabled={!checkError()}
             loading={loading}
             sx={{ width: "50%" }}
             size="small"

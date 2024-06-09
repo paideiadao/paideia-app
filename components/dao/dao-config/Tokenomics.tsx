@@ -11,6 +11,7 @@ import {
 import {
   Box,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -59,6 +60,17 @@ const Tokenomics: React.FC = () => {
       },
     });
   }, [stakingCycleDuration, stakingCycleDurationUnits]);
+
+  const checkError = () => {
+    return (
+      (data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
+      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) <= 10
+    );
+  };
 
   return (
     <>
@@ -222,6 +234,9 @@ const Tokenomics: React.FC = () => {
           </FormControl>
         </Box>
       </Box>
+      {!checkError() && (
+        <FormHelperText error>Invalid Configuration</FormHelperText>
+      )}
     </>
   );
 };

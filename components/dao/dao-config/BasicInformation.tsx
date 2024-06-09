@@ -4,12 +4,17 @@ import {
   ConfigContext,
   IConfigContext,
 } from "@lib/dao/dao-config/ConfigContext";
-import { Box, TextField } from "@mui/material";
+import { Box, FormHelperText, TextField } from "@mui/material";
 import * as React from "react";
 
 const BasicInformation: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
   const data = context.api?.data.basicInformation;
+
+  const checkError = () => {
+    return data?.daoName !== "" && data?.daoUrl !== "";
+  };
+
   return (
     <>
       <Header
@@ -19,7 +24,6 @@ const BasicInformation: React.FC = () => {
         DAO is about."
         mb=".25rem"
       />
-
       <Box
         sx={{
           width: "100%",
@@ -97,6 +101,9 @@ const BasicInformation: React.FC = () => {
           helperText={`${data?.shortDescription.length}/250`}
         />
       </Box>
+      {!checkError() && (
+        <FormHelperText error>Invalid Configuration</FormHelperText>
+      )}
     </>
   );
 };

@@ -18,6 +18,7 @@ const Termination: React.FC = () => {
       />
       <Link href={`/${dao}/dao-config/terminate`}>
         <Button
+          sx={{ mb: 1 }}
           disabled
           endIcon={<DeleteIcon />}
           color="error"

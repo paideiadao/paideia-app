@@ -3,13 +3,28 @@ import {
   IConfigContext,
   ConfigContext,
 } from "@lib/dao/dao-config/ConfigContext";
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, FormHelperText, Grid, TextField } from "@mui/material";
 import React from "react";
 
 const ParticipationWeight: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
   const data = context.api?.data;
   const setData = context.api?.setData ?? (() => {});
+
+  const checkError = () => {
+    return (
+      (data?.governance.participationWeight ?? 0) >= 0 &&
+      (data?.governance.participationWeight ?? 0) <= 100 &&
+      (data?.governance.pureParticipationWeight ?? 0) >= 0 &&
+      (data?.governance.pureParticipationWeight ?? 0) <= 100 &&
+      Number(data?.governance.participationWeight ?? 0) +
+        Number(data?.governance.participationWeight ?? 0) >=
+        0 &&
+      Number(data?.governance.participationWeight ?? 0) +
+        Number(data?.governance.pureParticipationWeight ?? 0) <=
+        100
+    );
+  };
 
   return (
     <Box
@@ -64,6 +79,9 @@ const ParticipationWeight: React.FC = () => {
           />
         </Grid>
       </Grid>
+      {!checkError() && (
+        <FormHelperText error>Invalid Configuration</FormHelperText>
+      )}
     </Box>
   );
 };
