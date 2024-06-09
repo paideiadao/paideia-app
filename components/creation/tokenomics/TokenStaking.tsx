@@ -18,7 +18,13 @@ import {
 import { LearnMore } from "../utilities/HeaderComponents";
 import React, { useEffect, useState } from "react";
 
-const getUnits = (ms: number) => {
+export const getUnits = (ms: number) => {
+  if (ms === 0) {
+    return {
+      duration: 0,
+      units: "",
+    };
+  }
   const s = Math.floor(ms / 1000);
   if (s % 60 !== 0) {
     return {

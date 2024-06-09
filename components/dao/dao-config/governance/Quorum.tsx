@@ -92,11 +92,13 @@ const Quorum: React.FC = () => {
           />
         </Box>
       </Box>
-      <Header small title="How long does the minimum voting period last for?" />
+      <Box sx={{ fontSize: ".9rem", fontWeight: 410, my: "1rem" }}>
+        How long does the minimum voting period last for?
+      </Box>
       <Box sx={{ mt: ".75rem" }} />
       <FormControl
         sx={{
-          mb: ".5rem",
+          mb: "1rem",
           width: deviceStruct("60%", "60%", "30%", "30%", "30%"),
         }}
         variant="outlined"

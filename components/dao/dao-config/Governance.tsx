@@ -10,6 +10,7 @@ import OptimisticGovernance from "./governance/OptimisticGovernance";
 import QuadraticVoting from "./governance/QuadraticVoting";
 import Quorum from "./governance/Quorum";
 import Support from "./governance/Support";
+import ParticipationWeight from "./governance/ParticipationWeight";
 
 const Governance: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
@@ -34,6 +35,8 @@ const Governance: React.FC = () => {
         }
       />
       <Quorum />
+      <Divider m=".5rem" />
+      <ParticipationWeight />
     </>
   );
 };
