@@ -20,7 +20,7 @@ const OptimisticGovernance: React.FC<IwOptimisticGovernance> = (props) => {
   return (
     <>
       <LabeledSwitch
-        title="Optimistic governance"
+        title="Optimistic Governance"
         subtitle="All proposals are passed by default, unless challenged."
         value={props.activated}
         onChange={() => set({ activated: !props.activated })}

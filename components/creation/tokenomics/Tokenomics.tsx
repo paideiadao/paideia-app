@@ -155,7 +155,7 @@ const Tokenomics: React.FC = () => {
         </Box>
       )}
       <Header
-        title="Token creation and distribution"
+        title="Token Creation and Distribution"
         subtitle="Decide your token name, ticker, and distribution, or bring in an existing token."
       />
       <Box

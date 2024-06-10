@@ -391,7 +391,7 @@ const CountdownTimer: React.FC<{ widget: any }> = (props) => {
   let widget = props.widget;
   return (
     <>
-      {typeof widget === "object" || widget === "DAO termination" ? (
+      {typeof widget === "object" || widget === "DAO Termination" ? (
         <Chip
           icon={
             <Box
@@ -406,7 +406,7 @@ const CountdownTimer: React.FC<{ widget: any }> = (props) => {
               {typeof widget === "object" ? (
                 <AccessTimeFilledIcon sx={{ fontSize: "1rem" }} />
               ) : (
-                widget === "DAO termination" && (
+                widget === "DAO Termination" && (
                   <DeleteIcon sx={{ fontSize: "1rem" }} />
                 )
               )}
@@ -418,10 +418,10 @@ const CountdownTimer: React.FC<{ widget: any }> = (props) => {
             fontSize: ".7rem",
             color: "backgroundColor.main",
             backgroundColor:
-              widget === "DAO termination" ? "error.light" : "tokenAlert.main",
+              widget === "DAO Termination" ? "error.light" : "tokenAlert.main",
             border: "1px solid",
             borderColor:
-              widget === "DAO termination" ? "error.light" : "tokenAlert.main",
+              widget === "DAO Termination" ? "error.light" : "tokenAlert.main",
           }}
         />
       ) : (
