@@ -607,7 +607,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       );
     } else {
       const totalUsers = [
-        ...new Set(props.comments.map((item) => item.user_id)),
+        ...new Set(props.comments.map((item) => item.user_details_id)),
       ].length;
       const totalComments = props.comments.length;
 
