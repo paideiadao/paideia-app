@@ -8,7 +8,6 @@ import {
   TextField,
 } from "@mui/material";
 import * as React from "react";
-import Musk from "../../../../public/profile/musk-full.png";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -19,7 +18,6 @@ import { deviceWrapper } from "@components/utilities/Style";
 import { IFile, ISocialLink } from "@lib/creation/Interfaces";
 import { LoadingButton } from "@mui/lab";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import useDidMountEffect from "@components/utilities/hooks";
 import CancelLink from "@components/utilities/CancelLink";
 
 const BIO_MAX_LENGTH = 250;
@@ -192,7 +190,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
         username: val.name,
         socialLinks: val.social_links,
         img: val.profile_img_url,
-        shortBio: val.bio,
+        shortBio: val.bio ?? "",
       });
     }
   }, [appContext.api?.daoUserData]);
@@ -262,30 +260,34 @@ const Edit: React.FC<{ params: any }> = (props) => {
   const saveChanges = async () => {
     setLoading(true);
 
-    const isValid = validateFormFields();
+    try {
+      const isValid = validateFormFields();
 
-    if (!isValid) {
-      setLoading(false);
-      return;
+      if (!isValid) {
+        setLoading(false);
+        return;
+      }
+
+      const imgRes = await uploadImage();
+      const imgUrl = imgRes?.data?.image_url || "";
+
+      await appContext.api?.editUser({
+        name: value.username,
+        profile_img_url: imgUrl,
+        bio: value.shortBio,
+        social_links: value.socialLinks,
+      });
+
+      appContext.api?.setDaoUserData({
+        ...appContext.api.daoUserData,
+        name: value.username,
+        profile_img_url: imgUrl,
+        bio: value.shortBio,
+        social_links: value.socialLinks,
+      });
+    } catch (e) {
+      appContext.api?.error(e);
     }
-
-    const imgRes = await uploadImage();
-    const imgUrl = imgRes?.data?.image_url || "";
-
-    await appContext.api?.editUser({
-      name: value.username,
-      profile_img_url: imgUrl,
-      bio: value.shortBio,
-      social_links: value.socialLinks,
-    });
-
-    appContext.api?.setDaoUserData({
-      ...appContext.api.daoUserData,
-      name: value.username,
-      profile_img_url: imgUrl,
-      bio: value.shortBio,
-      social_links: value.socialLinks,
-    });
 
     setLoading(false);
   };

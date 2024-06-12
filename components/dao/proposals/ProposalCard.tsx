@@ -65,7 +65,7 @@ export const VoteWidget: React.FC<{
           width: "100%",
           color: "success.light",
           mb: "0.3rem",
-          fontSize: "0.9rem"
+          fontSize: "0.9rem",
         }}
       >
         {percentage(props.yes / (props.yes + props.no), 0)} YES
@@ -171,8 +171,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-      ? 0
-      : undefined;
+    ? 0
+    : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -389,6 +389,7 @@ const CountdownTimer: React.FC<{ widget: any }> = (props) => {
     }
   }, [props.widget]);
   let widget = props.widget;
+
   return (
     <>
       {typeof widget === "object" || widget === "DAO Termination" ? (
@@ -462,6 +463,7 @@ const CountdownWidget: React.FC<{ date: Date }> = (props) => {
       }
     }, 1000);
   }, []);
+
   return (
     <Box
       sx={{
@@ -492,6 +494,10 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       : null;
     return favorites === undefined ? false : favorites.indexOf(userId) > -1;
   };
+  const decimalAdjust = Math.pow(
+    10,
+    globalContext.api?.daoData?.tokenomics?.token_decimals ?? 0
+  );
 
   React.useEffect(() => {
     setFavorited(getFavoritedSide(props.followers));
@@ -520,58 +526,88 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
       lg: ".7rem",
       xl: ".8rem",
     };
-    const Wrapper: React.FC<{ children: React.ReactChild }> = ({ children }) => {
-      return <ButtonBase
-        sx={{
-          p: ".5rem",
-          height: "4rem",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          textAlign: "left",
-        }}
-        draggable="false"
-        onMouseDown={() => {
-          setMoved(false);
-        }}
-        onMouseMove={() => {
-          setMoved(true);
-        }}
-        onMouseUp={() => {
-          if (!moved) {
-            router.push(
-              (dao === undefined ? "" : `/${dao}/`) +
-              `${!props.is_proposal ? "discussion" : "proposal"
-              }/${generateSlug(props.id, props.name)}?tab=comments`
-            );
-          }
-        }}
-      >
-        {children}
-      </ButtonBase>
-    }
+    const Wrapper: React.FC<{ children: React.ReactChild }> = ({
+      children,
+    }) => {
+      return (
+        <ButtonBase
+          sx={{
+            p: ".5rem",
+            height: "4rem",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            textAlign: "left",
+          }}
+          draggable="false"
+          onMouseDown={() => {
+            setMoved(false);
+          }}
+          onMouseMove={() => {
+            setMoved(true);
+          }}
+          onMouseUp={() => {
+            if (!moved) {
+              router.push(
+                (dao === undefined ? "" : `/${dao}/`) +
+                  `${
+                    !props.is_proposal ? "discussion" : "proposal"
+                  }/${generateSlug(props.id, props.name)}?tab=comments`
+              );
+            }
+          }}
+        >
+          {children}
+        </ButtonBase>
+      );
+    };
 
     if (props.status === "Active" || props.status === "Challenged") {
-      return <Wrapper><VoteWidget yes={props.votes[1] * 0.0001} no={props.votes[0] * 0.0001} /></Wrapper>
+      return (
+        <Wrapper>
+          <VoteWidget
+            yes={props.votes[1] / decimalAdjust}
+            no={props.votes[0] / decimalAdjust}
+          />
+        </Wrapper>
+      );
     } else if (props.status?.includes("Failed")) {
-      return <Wrapper>
-        <Box sx={{ p: ".5rem", display: "flex", alignItems: "center" }}>
-          <Typography sx={{ width: "100%", textAlign: "center", color: "error.light", fontSize: footerFont }}>
-            Vote Failed
-          </Typography>
-        </Box>
-      </Wrapper>
+      return (
+        <Wrapper>
+          <Box sx={{ p: ".5rem", display: "flex", alignItems: "center" }}>
+            <Typography
+              sx={{
+                width: "100%",
+                textAlign: "center",
+                color: "error.light",
+                fontSize: footerFont,
+              }}
+            >
+              Vote Failed
+            </Typography>
+          </Box>
+        </Wrapper>
+      );
     } else if (props.status?.includes("Passed")) {
-      return <Wrapper>
-        <Box sx={{ p: ".5rem", display: "flex", alignItems: "center" }}>
-          <Typography sx={{ width: "100%", textAlign: "center", color: "success.light", fontSize: footerFont }}>
-            Vote Passed!
-          </Typography>
-        </Box>
-      </Wrapper>
+      return (
+        <Wrapper>
+          <Box sx={{ p: ".5rem", display: "flex", alignItems: "center" }}>
+            <Typography
+              sx={{
+                width: "100%",
+                textAlign: "center",
+                color: "success.light",
+                fontSize: footerFont,
+              }}
+            >
+              Vote Passed!
+            </Typography>
+          </Box>
+        </Wrapper>
+      );
     } else {
       const totalUsers = [
-        ...new Set(props.comments.map((item) => item.user_id)),
+        ...new Set(props.comments.map((item) => item.user_details_id)),
       ].length;
       const totalComments = props.comments.length;
 
@@ -587,8 +623,10 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
         </Wrapper>
       );
     }
-    {/* <CountdownWidget date={props.date} />; */ }
-  }
+    {
+      /* <CountdownWidget date={props.date} />; */
+    }
+  };
 
   const api = new FollowApi(globalContext.api, "/proposals/follow/" + props.id);
 
@@ -605,7 +643,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
         mt: props.scrollable ? ".5rem" : "0",
         minWidth: "280px",
         maxWidth: props.width,
-        height: "100%"
+        height: "100%",
       }}
       id={`proposal-active-${props.c}`}
     >
@@ -652,7 +690,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               borderColor: "primary.main",
             },
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
           }}
         >
           <Box
@@ -662,7 +700,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               p: ".5rem",
               display: "flex",
               flexDirection: "column",
-              height: "100%"
+              height: "100%",
             }}
           >
             <Box>
@@ -677,8 +715,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                      `${!props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                        `${
+                          !props.is_proposal ? "discussion" : "proposal"
+                        }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
@@ -691,7 +730,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   alignItems: "left",
                   justifyContent: "left",
                   verticalAlign: "top",
-                  mb: "0.3rem"
+                  mb: "0.3rem",
                 }}
               >
                 <Box
@@ -708,7 +747,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               </ButtonBase>
               <Box sx={{ display: "flex", fontSize: "1rem", mb: "0.5rem" }}>
                 <ProposalStatus
-                  status={!props.is_proposal ? "Discussion" : props.status ?? ""}
+                  status={
+                    !props.is_proposal ? "Discussion" : props.status ?? ""
+                  }
                 />
                 <Box sx={{ ml: "auto" }}>
                   <LikesDislikes
@@ -726,7 +767,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ height: "100%", flexGrow: 1, }}>
+            <Box sx={{ height: "100%", flexGrow: 1 }}>
               <ButtonBase
                 onMouseDown={() => {
                   setMoved(false);
@@ -738,14 +779,14 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                      `${!props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                        `${
+                          !props.is_proposal ? "discussion" : "proposal"
+                        }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
                 draggable="false"
                 sx={{
-
                   minHeight: "7rem",
                   height: "100%",
                   backgroundColor: "fileInput.outer",
