@@ -1,11 +1,7 @@
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box } from "@mui/material";
 import * as React from "react";
-import CandlestickChartIcon from "@mui/icons-material/CandlestickChart";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { Header } from "@components/creation/utilities/HeaderComponents";
 // import ChartBase from "./ChartBase";
-import { deviceWrapper } from "@components/utilities/Style";
-import { initialData } from "./data";
 
 interface IChartProps {
   tokenId: string;

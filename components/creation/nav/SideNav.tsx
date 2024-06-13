@@ -15,6 +15,8 @@ import { deviceStruct } from "@components/utilities/Style";
 import { useRouter } from "next/router";
 import { DRAFT_DAO_KEY } from "@pages/creation";
 import TopNav from "@components/dao/nav/TopNav";
+import HomeIcon from '@mui/icons-material/Home';
+import Link from "next/link";
 
 interface INavProps {
   value: number;
@@ -96,6 +98,13 @@ const Nav: FC<INavProps> = ({ value }) => {
             color: "text.primary",
           }}
         >
+          <Box>
+            <Link href="/">
+              <Button variant="outlined" size="small" startIcon={<HomeIcon />}>
+                Home
+              </Button>
+            </Link>
+          </Box>
           <Box
             sx={{
               display: "flex",
