@@ -424,7 +424,6 @@ const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) =>
 };
 
 const ProposalCard: React.FC<IProposalCard> = (props) => {
-  console.log(props)
   const [favorited, setFavorited] = React.useState<boolean>(false);
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
   const [moved, setMoved] = React.useState(false);
