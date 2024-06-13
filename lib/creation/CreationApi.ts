@@ -1,12 +1,11 @@
-import { Theme } from "@mui/material";
 
-import { AbstractApi } from "@lib/utilities";
 import {
   ICreationData,
   ISocialLink,
   ITokenHolder,
   IWallet,
 } from "@lib/creation/Interfaces";
+import { AbstractApi } from "@lib/utilities";
 
 export class CreationApi {
   api?: AbstractApi;
@@ -23,10 +22,6 @@ export class CreationApi {
     this.setData = setData;
   }
 
-  // to do... get authorization token working (store in local storage & post using header)
-  // format data to properly match the endpoint
-  // view in sql
-  // create data checking for the dao paths
   async createDao(draft: boolean = true): Promise<any> {
     const data = this.cleanData(this.data, draft);
     const res = await this.api?.post<any>("/dao", data);

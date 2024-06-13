@@ -30,6 +30,7 @@ import FollowApi from "@lib/FollowApi";
 import { generateSlug } from "@lib/utilities";
 import { SentimentVerySatisfiedOutlined } from "@mui/icons-material";
 import { niceNumber } from "../proposal/VoteWidget";
+import { props } from "@lib/DaoPaths";
 
 export interface IProposalCard {
   id: number;
@@ -48,6 +49,7 @@ export interface IProposalCard {
   comments: any[];
   users: number;
   date: Date;
+  end_date?: Date;
   width: any;
   scrollable?: boolean;
 }
@@ -171,8 +173,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-    ? 0
-    : undefined;
+      ? 0
+      : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -355,131 +357,69 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
   );
 };
 
-const CountdownTimer: React.FC<{ widget: any }> = (props) => {
+const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) => {
   const [time, setTime] = React.useState<string>("");
-  let temp = new Date();
-  temp.setDate(temp.getDate() + 30);
-  var countDownDate = temp.getTime();
+
   React.useEffect(() => {
-    if (typeof props.widget === "object") {
-      var x = setInterval(function () {
-        // Get today's date and time
-        var now = new Date().getTime();
+    if (endDate) {
+      const countDownDate = new Date(endDate).getTime();
 
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
+      const updateCountdown = () => {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
 
-        // Time calculations for days, hours, minutes and seconds
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Display the result in the element with id="demo"
-        setTime(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
-
-        // If the count down is finished, write some text
         if (distance < 0) {
-          clearInterval(x);
           setTime("EXPIRED");
+          return;
         }
-      }, 1000);
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        setTime(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      };
+
+      const interval = setInterval(updateCountdown, 1000);
+
+      updateCountdown(); // Initial call to set the time immediately
+
+      return () => clearInterval(interval);
     }
-  }, [props.widget]);
-  let widget = props.widget;
+  }, [endDate]);
 
   return (
     <>
-      {typeof widget === "object" || widget === "DAO Termination" ? (
+      {endDate ? (
         <Chip
           icon={
             <Box
               sx={{
-                height: "1rem",
-                width: "1rem",
-                display: "flex",
-                alignItems: "center",
-                color: "white",
+                height: '1rem',
+                width: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                color: 'white',
               }}
             >
-              {typeof widget === "object" ? (
-                <AccessTimeFilledIcon sx={{ fontSize: "1rem" }} />
-              ) : (
-                widget === "DAO Termination" && (
-                  <DeleteIcon sx={{ fontSize: "1rem" }} />
-                )
-              )}
+              <AccessTimeFilledIcon sx={{ fontSize: '1rem' }} />
             </Box>
           }
-          label={typeof widget === "object" ? time : widget}
+          label={time}
           size="small"
           sx={{
-            fontSize: ".7rem",
-            color: "backgroundColor.main",
-            backgroundColor:
-              widget === "DAO Termination" ? "error.light" : "tokenAlert.main",
-            border: "1px solid",
-            borderColor:
-              widget === "DAO Termination" ? "error.light" : "tokenAlert.main",
+            fontSize: '.7rem',
+            color: 'backgroundColor.main',
+            backgroundColor: 'tokenAlert.main',
+            border: '1px solid',
+            borderColor: 'tokenAlert.main'
           }}
         />
       ) : (
         <Box></Box>
       )}
     </>
-  );
-};
-
-const CountdownWidget: React.FC<{ date: Date }> = (props) => {
-  const [time, setTime] = React.useState<string>("");
-  React.useEffect(() => {
-    var x = setInterval(function () {
-      let temp = new Date(props.date);
-      temp.setDate(temp.getDate() + 30);
-      var countDownDate = temp.getTime();
-      // Get today's date and time
-      var now = new Date().getTime();
-
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
-
-      // Time calculations for days, hours, minutes and seconds
-      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      // Display the result in the element with id="demo"
-      setTime(days + " days " + hours + " hours " + minutes + " minutes");
-
-      // If the count down is finished, write some text
-      if (distance < 0) {
-        clearInterval(x);
-        setTime("EXPIRED");
-      }
-    }, 1000);
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        fontSize: "1rem",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        height: "100%",
-      }}
-    >
-      {time}
-      <Box sx={{ fontSize: ".7rem", color: "text.secondary" }}>
-        Until proposal passes
-      </Box>
-    </Box>
   );
 };
 
@@ -550,9 +490,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             if (!moved) {
               router.push(
                 (dao === undefined ? "" : `/${dao}/`) +
-                  `${
-                    !props.is_proposal ? "discussion" : "proposal"
-                  }/${generateSlug(props.id, props.name)}?tab=comments`
+                `${!props.is_proposal ? "discussion" : "proposal"
+                }/${generateSlug(props.id, props.name)}?tab=comments`
               );
             }
           }}
@@ -623,9 +562,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
         </Wrapper>
       );
     }
-    {
-      /* <CountdownWidget date={props.date} />; */
-    }
   };
 
   const api = new FollowApi(globalContext.api, "/proposals/follow/" + props.id);
@@ -693,6 +629,7 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             flexDirection: "column",
           }}
         >
+          {/* <CountdownWidget date={props.date} />;  */}
           <Box
             sx={{
               borderBottom: "1px solid",
@@ -715,9 +652,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                        `${
-                          !props.is_proposal ? "discussion" : "proposal"
-                        }/${generateSlug(props.id, props.name)}`
+                      `${!props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
@@ -779,9 +715,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                        `${
-                          !props.is_proposal ? "discussion" : "proposal"
-                        }/${generateSlug(props.id, props.name)}`
+                      `${!props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
@@ -802,8 +737,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   textAlign: "left",
                 }}
               >
-                <Box sx={{ position: "absolute", right: ".3rem" }}>
-                  <CountdownTimer widget={props.widget} />
+                <Box sx={{ position: "absolute", top: "0.4rem", right: ".3rem" }}>
+                  <CountdownTimer endDate={props.end_date} />
                 </Box>
                 <Box
                   sx={{ position: "absolute", bottom: ".3rem", left: "0.3rem" }}
