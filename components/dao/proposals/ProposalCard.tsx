@@ -173,8 +173,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-    ? 0
-    : undefined;
+      ? 0
+      : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -387,8 +387,7 @@ const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) =>
 
       return () => clearInterval(interval);
     }
-  }, [props.widget]);
-  let widget = props.widget;
+  }, [endDate]);
 
   return (
     <>
@@ -424,60 +423,6 @@ const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) =>
   );
 };
 
-<<<<<<< HEAD
-=======
-const CountdownWidget: React.FC<{ date: Date }> = (props) => {
-  const [time, setTime] = React.useState<string>("");
-  React.useEffect(() => {
-    var x = setInterval(function () {
-      let temp = new Date(props.date);
-      temp.setDate(temp.getDate() + 30);
-      var countDownDate = temp.getTime();
-      // Get today's date and time
-      var now = new Date().getTime();
-
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
-
-      // Time calculations for days, hours, minutes and seconds
-      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      // Display the result in the element with id="demo"
-      setTime(days + " days " + hours + " hours " + minutes + " minutes");
-
-      // If the count down is finished, write some text
-      if (distance < 0) {
-        clearInterval(x);
-        setTime("EXPIRED");
-      }
-    }, 1000);
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        fontSize: "1rem",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        height: "100%",
-      }}
-    >
-      {time}
-      <Box sx={{ fontSize: ".7rem", color: "text.secondary" }}>
-        Until proposal passes
-      </Box>
-    </Box>
-  );
-};
-
->>>>>>> bb7aa14 (:fix: VoteWidget)
 const ProposalCard: React.FC<IProposalCard> = (props) => {
   const [favorited, setFavorited] = React.useState<boolean>(false);
   const [userSide, setUserSide] = React.useState<1 | 0 | undefined>(undefined);
@@ -545,14 +490,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             if (!moved) {
               router.push(
                 (dao === undefined ? "" : `/${dao}/`) +
-<<<<<<< HEAD
                 `${!props.is_proposal ? "discussion" : "proposal"
                 }/${generateSlug(props.id, props.name)}?tab=comments`
-=======
-                  `${
-                    !props.is_proposal ? "discussion" : "proposal"
-                  }/${generateSlug(props.id, props.name)}?tab=comments`
->>>>>>> bb7aa14 (:fix: VoteWidget)
               );
             }
           }}
@@ -623,12 +562,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
         </Wrapper>
       );
     }
-<<<<<<< HEAD
-=======
-    {
-      /* <CountdownWidget date={props.date} />; */
-    }
->>>>>>> bb7aa14 (:fix: VoteWidget)
   };
 
   const api = new FollowApi(globalContext.api, "/proposals/follow/" + props.id);
@@ -719,9 +652,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                        `${
-                          !props.is_proposal ? "discussion" : "proposal"
-                        }/${generateSlug(props.id, props.name)}`
+                      `${!props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
@@ -783,9 +715,8 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                        `${
-                          !props.is_proposal ? "discussion" : "proposal"
-                        }/${generateSlug(props.id, props.name)}`
+                      `${!props.is_proposal ? "discussion" : "proposal"
+                      }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
