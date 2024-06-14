@@ -9,6 +9,7 @@ import ProposalContext, {
   IProposalContext,
 } from "@lib/dao/proposal/ProposalContext";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { deviceWrapper } from "@components/utilities/Style";
 
 const Details: React.FC = () => {
   const proposalContext = React.useContext<IProposalContext>(ProposalContext);
@@ -45,6 +46,7 @@ const Details: React.FC = () => {
     }, 1000);
     return () => clearInterval(x);
   }, []);
+
   return (
     <>
       <Overview
@@ -78,6 +80,19 @@ const Details: React.FC = () => {
         >
           <LanIcon sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }} />
           Id: {proposalContext.api?.value.id ?? "-"}
+        </Box>
+        <Box
+          sx={{
+            alignItems: "center",
+            color: "text.secondary",
+            fontSize: ".9rem",
+            mt: ".5rem",
+            display: deviceWrapper("flex", "none"),
+          }}
+        >
+          <CalendarTodayIcon sx={{ mr: ".3rem", fontSize: "1.2rem" }} />
+          Created:{" "}
+          {dateFormat(proposalContext.api?.value.date, "mmmm dS, yyyy")}
         </Box>
         <Box
           sx={{

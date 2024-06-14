@@ -760,7 +760,6 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
               </ButtonBase>
             </Box>
           </Box>
-
           {getFooter()}
         </Box>
       </Badge>
