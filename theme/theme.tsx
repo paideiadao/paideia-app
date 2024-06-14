@@ -240,6 +240,13 @@ export const LightTheme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        },
+      },
+    },
     MuiStepIcon: {
       styleOverrides: {
         root: {
