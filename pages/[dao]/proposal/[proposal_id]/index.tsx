@@ -562,7 +562,7 @@ const Proposal: React.FC = () => {
           }}
           variant="contained"
         >
-          Vote now
+          Vote Now
         </Button>
       </Link>
     </ProposalContext.Provider>
