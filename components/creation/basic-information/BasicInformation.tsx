@@ -36,7 +36,7 @@ const BasicInformation: React.FC = () => {
           textAlign: "left",
           width: "100%",
           fontSize: "1.2rem",
-          mb: "16px",
+          mb: 1,
         }}
       >
         Basic Information
@@ -85,16 +85,16 @@ const BasicInformation: React.FC = () => {
           <AlertTitle sx={{ fontSize: ".9rem" }}>
             You won&apos;t be able to change this once published
           </AlertTitle>
-          <Box sx={{ ml: "-2rem" }}>
+          <Box>
             The name and URL of your DAO can&apos;t be changed even if you publish
             your DAO as a draft. You will be able to review everything later
             before fully committing though.
           </Box>
         </Alert>
       </Box>
-      <Box sx={{ width: "100%", mt: 2 }}>
+      <Box sx={{ width: "100%" }}>
         <TextField
-          label="DAO short description"
+          label="DAO Short Description"
           inputProps={{
             maxLength: 250,
           }}

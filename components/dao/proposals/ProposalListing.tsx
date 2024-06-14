@@ -75,13 +75,13 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
   const categories = (
     props.proposals
       ? [
-          "All",
-          ...props.proposals
-            .map((proposal: { category: string }) => proposal.category)
-            .filter(
-              (v: string, i: number, x: string[]) => v && x.indexOf(v) === i
-            ),
-        ]
+        "All",
+        ...props.proposals
+          .map((proposal: { category: string }) => proposal.category)
+          .filter(
+            (v: string, i: number, x: string[]) => v && x.indexOf(v) === i
+          ),
+      ]
       : ["All"]
   ).map((category: string) => {
     return {
@@ -307,23 +307,23 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                 filters.sortBy === ""
                   ? true
                   : filters.sortBy === "Most Recent"
-                  ? new Date(b.date).getTime() - new Date(a.date).getTime()
-                  : true
+                    ? new Date(b.date).getTime() - new Date(a.date).getTime()
+                    : true
               )
               .filter((i: any) => {
                 return (
                   (filters.proposalStatus === "" ||
-                  filters.proposalStatus === "All"
+                    filters.proposalStatus === "All"
                     ? true
                     : i.status === filters.proposalStatus ||
-                      i.status
-                        .toLowerCase()
-                        .includes(filters.proposalStatus.toLowerCase())) &&
+                    i.status
+                      .toLowerCase()
+                      .includes(filters.proposalStatus.toLowerCase())) &&
                   (filters.search === ""
                     ? true
                     : i.name
-                        .toLowerCase()
-                        .includes(filters.search.toLowerCase())) &&
+                      .toLowerCase()
+                      .includes(filters.search.toLowerCase())) &&
                   (filters.categories.indexOf("All") > -1
                     ? true
                     : filters.categories.indexOf(i.category) > -1)
@@ -336,6 +336,7 @@ const ProposalListing: React.FC<IProposalListing> = (props) => {
                   sm={6}
                   lg={4}
                   xl={3}
+                  alignItems="stretch"
                   key={"proposal-card-key-" + c + i.id}
                 >
                   <ProposalCard

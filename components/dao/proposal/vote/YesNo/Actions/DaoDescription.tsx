@@ -48,7 +48,7 @@ const DaoDescription: React.FC<IProposalAction> = (props) => {
       />
 
       <TextField
-        label="DAO short description"
+        label="DAO Short Description"
         inputProps={{
           maxLength: 250,
         }}

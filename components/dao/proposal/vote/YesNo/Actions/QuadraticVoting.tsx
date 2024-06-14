@@ -53,7 +53,7 @@ const QuadraticVoting: React.FC<IProposalAction> = (props) => {
       <CapsInfo title="Configuration" mb=".5rem" />
       <LabeledSwitch
         small
-        title={"Activate quadratic voting"}
+        title={"Activate Quadratic Voting"}
         value={value.isActive}
         onChange={(val: boolean) =>
           setValue({ isActive: val, activation_time: 0 })

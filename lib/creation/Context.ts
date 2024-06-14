@@ -21,7 +21,7 @@ export const CreationContext = React.createContext({
         quadraticVoting: false,
         timeToChallenge: 0,
         timeToChallengeUnits: "days",
-        quorum: 4,
+        quorum: 10,
         voteDuration: 0,
         voteDurationUnits: "days",
         whitelist: [
@@ -33,7 +33,9 @@ export const CreationContext = React.createContext({
         ],
         amount: "",
         currency: "",
-        supportNeeded: 50,
+        supportNeeded: 51,
+        pureParticipationWeight: 0,
+        participationWeight: 0,
       },
       tokenomics: {
         type: "create",
@@ -55,6 +57,13 @@ export const CreationContext = React.createContext({
         ],
         activateTokenomics: false,
         distributions: [],
+        stakingConfig: {
+          stakePoolSize: 0,
+          stakingEmissionAmount: 0,
+          stakingEmissionDelay: 0,
+          stakingCycleLength: 0,
+          stakingProfitSharePct: 0,
+        },
       },
       design: {
         logo: {

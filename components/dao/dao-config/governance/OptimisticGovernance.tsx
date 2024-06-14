@@ -28,7 +28,7 @@ const OptimisticGovernance: React.FC = () => {
   return (
     <>
       <LearnMore
-        title="Optimistic governance"
+        title="Optimistic Governance"
         tooltipTitle="Optimistic Governance"
         tooltipText="Choose this option if you'd like to whitelist individual wallets so that only those wallets can make proposals. All proposals will pass, unless a DAO member challenges that proposal. Choosing this option means that proposals will require collateral, and if the proposal is successfully challenged, IE DAO members vote it down after someone challenges it, that collateral is lost and distributed to the voters. This prevents corrupt individuals from draining the DAO or behaving in a way that is not in members' best interestes. Optimistic governance can make the DAO more agile and focused, as there is less engagement required from most members. "
         tooltipLink="https://docs.paideia.im/governance-structures#_yj9ebg49un1g"
@@ -47,7 +47,7 @@ const OptimisticGovernance: React.FC = () => {
           })
         }
         value={data?.optimisticGovernance ?? false}
-        title="Activate optimistic governance"
+        title="Activate Optimistic Governance"
       />
       <Collapse in={data && data.optimisticGovernance}>
         <LearnMore

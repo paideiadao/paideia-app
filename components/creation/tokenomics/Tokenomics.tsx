@@ -1,16 +1,11 @@
 import * as React from "react";
-import { Box, Button, ButtonGroup } from "@mui/material";
+import { Box, Button, ButtonGroup, Divider } from "@mui/material";
 import {
   CreationContext,
   ICreationContext,
 } from "../../../lib/creation/Context";
-import { Header, Subheader } from "../utilities/HeaderComponents";
+import { Header } from "../utilities/HeaderComponents";
 import TokenInformation from "./TokenInformation";
-import TokenSymbol from "./TokenSymbol";
-import TokenHolders from "./TokenHolders";
-import AdvancedTokenomics from "./AdvancedTokenomics/AdvancedTokenomics";
-import TokenDistribution from "./TokenDistribution";
-import { ILiquidityInfo } from "./AdvancedTokenomics/Liquidity";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   percentage,
@@ -19,10 +14,11 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { deviceStruct } from "@components/utilities/Style";
 import { ITokenHolder, ITokenomics } from "@lib/creation/Interfaces";
+import TokenStaking from "./TokenStaking";
 
 const Tokenomics: React.FC = () => {
   const creationContext = React.useContext<ICreationContext>(CreationContext);
-  let data = creationContext.api.data.tokenomics;
+  const data = creationContext.api.data.tokenomics;
   const set = (tokenomicsData: ITokenomics) => {
     creationContext.api.setData({
       ...creationContext.api.data,
@@ -32,10 +28,10 @@ const Tokenomics: React.FC = () => {
     });
   };
 
-  let tokenAmount = data.tokenAmount;
-  let tokenHolders = data.tokenHolders;
-  let distributions = data.distributions;
-  let activateTokenomics = data.activateTokenomics;
+  const tokenAmount = data.tokenAmount;
+  const tokenHolders = data.tokenHolders;
+  const distributions = data.distributions;
+  const activateTokenomics = data.activateTokenomics;
 
   React.useEffect(() => {
     set({
@@ -159,13 +155,13 @@ const Tokenomics: React.FC = () => {
         </Box>
       )}
       <Header
-        title="Token creation and distribution"
+        title="Token Creation and Distribution"
         subtitle="Decide your token name, ticker, and distribution, or bring in an existing token."
       />
       <Box
         sx={{
-          borderBottom: data.type === "existing" ? "0" : "1px solid",
-          borderBottomColor: "border.main",
+          // borderBottom: data.type === "existing" ? "0" : "1px solid",
+          // borderBottomColor: "border.main",
           pb: "1rem",
         }}
       >
@@ -173,12 +169,17 @@ const Tokenomics: React.FC = () => {
           data={data}
           setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
         />
-        <TokenSymbol
+        <Divider sx={{ mt: 3 }} />
+        <TokenStaking
           data={data}
           setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
         />
+        {/* <TokenSymbol
+          data={data}
+          setData={(tokenomicsData: ITokenomics) => set(tokenomicsData)}
+        /> */}
       </Box>
-      {data.type !== "existing" && (
+      {/* {data.type !== "existing" && (
         <>
           <Box sx={{ mt: "1rem" }}>
             <Header title="Tokenomics" large />
@@ -219,7 +220,6 @@ const Tokenomics: React.FC = () => {
               </Button>
             </ButtonGroup>
           </Box>
-
           {!activateTokenomics ? (
             <TokenHolders
               data={data}
@@ -238,7 +238,7 @@ const Tokenomics: React.FC = () => {
             </>
           )}
         </>
-      )}
+      )} */}
     </Box>
   );
 };

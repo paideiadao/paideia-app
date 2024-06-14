@@ -10,6 +10,63 @@ export function checkCompleteness(_data: ICreationData): boolean {
         _data.basicInformation.shortDescription === ""
       );
     }
+    case 1: {
+      return (
+        //   _data.tokenomics.tokenTicker === "" ||
+        //   _data.tokenomics.tokenName === "" ||
+        //   _data.tokenomics.tokenImage == -1 ||
+        //   (_data.tokenomics.type === "existing"
+        //     ? false
+        //     : _data.tokenomics.tokenRemaining < 0 ||
+        //       _data.tokenomics.tokenAmount === 0 ||
+        //       _data.tokenomics.tokenHolders.filter((i: ITokenHolder) => {
+        //         return i.alias !== "" && i.balance !== 0;
+        //       }).length === 0 ||
+        //       _data.tokenomics.distributions
+        //         .filter((i: any) => i !== undefined)
+        //         .filter((i: any) => {
+        //           return i.balance === 0;
+        //         }).length !== 0 ||
+        //       _data.tokenomics.distributions
+        //         .filter((i: any) => i !== undefined)
+        //         .filter((i: any) => {
+        //           return i.hasOwnProperty("tokenHolders");
+        //         })
+        //         .filter((i: any) => {
+        //           return (
+        //             i.tokenHolders.filter(
+        //               (i: any) => i.alias === "" || i.balance === 0
+        //             ).length > 0
+        //           );
+        //         }).length !== 0)
+        // );
+        _data.tokenomics.tokenTicker === "" ||
+        _data.tokenomics.tokenName === "" ||
+        _data.tokenomics.tokenId === "" ||
+        // @ts-ignore
+        _data.tokenomics.stakingConfig.stakePoolSize === "" ||
+        // @ts-ignore
+        _data.tokenomics.stakingConfig.stakingEmissionAmount === "" ||
+        // @ts-ignore
+        _data.tokenomics.stakingConfig.stakingEmissionDelay === "" ||
+        // @ts-ignore
+        _data.tokenomics.stakingConfig.stakingCycleLength === "" ||
+        // @ts-ignore
+        _data.tokenomics.stakingConfig.stakingProfitSharePct === "" ||
+        isNaN(_data.tokenomics.stakingConfig.stakePoolSize) ||
+        isNaN(_data.tokenomics.stakingConfig.stakingEmissionAmount) ||
+        isNaN(_data.tokenomics.stakingConfig.stakingEmissionDelay) ||
+        isNaN(_data.tokenomics.stakingConfig.stakingCycleLength) ||
+        isNaN(_data.tokenomics.stakingConfig.stakingProfitSharePct) ||
+        _data.tokenomics.stakingConfig.stakePoolSize < 0 ||
+        _data.tokenomics.stakingConfig.stakingEmissionAmount < 0 ||
+        _data.tokenomics.stakingConfig.stakingEmissionDelay < 1 ||
+        _data.tokenomics.stakingConfig.stakingEmissionDelay > 10 ||
+        _data.tokenomics.stakingConfig.stakingCycleLength < 0 ||
+        _data.tokenomics.stakingConfig.stakingProfitSharePct < 0 ||
+        _data.tokenomics.stakingConfig.stakingProfitSharePct > 100
+      );
+    }
     case 2: {
       return (
         (_data.governance.optimisticGovernance
@@ -17,38 +74,18 @@ export function checkCompleteness(_data: ICreationData): boolean {
             _data.governance.amount === "" ||
             _data.governance.amount === 0 ||
             _data.governance.currency === ""
-          : false) || _data.governance.voteDuration === 0
-      );
-    }
-    case 1: {
-      return (
-        _data.tokenomics.tokenTicker === "" ||
-        _data.tokenomics.tokenName === "" ||
-        _data.tokenomics.tokenImage == -1 ||
-        (_data.tokenomics.type === "existing"
-          ? false
-          : _data.tokenomics.tokenRemaining < 0 ||
-            _data.tokenomics.tokenAmount === 0 ||
-            _data.tokenomics.tokenHolders.filter((i: ITokenHolder) => {
-              return i.alias !== "" && i.balance !== 0;
-            }).length === 0 ||
-            _data.tokenomics.distributions
-              .filter((i: any) => i !== undefined)
-              .filter((i: any) => {
-                return i.balance === 0;
-              }).length !== 0 ||
-            _data.tokenomics.distributions
-              .filter((i: any) => i !== undefined)
-              .filter((i: any) => {
-                return i.hasOwnProperty("tokenHolders");
-              })
-              .filter((i: any) => {
-                return (
-                  i.tokenHolders.filter(
-                    (i: any) => i.alias === "" || i.balance === 0
-                  ).length > 0
-                );
-              }).length !== 0)
+          : false) ||
+          isNaN(_data.governance.voteDuration) ||
+          _data.governance.voteDuration === 0 ||
+          isNaN(_data.governance.pureParticipationWeight) ||
+          isNaN(_data.governance.participationWeight) ||
+          // @ts-ignore
+          _data.governance.pureParticipationWeight === "" ||
+          // @ts-ignore
+          _data.governance.participationWeight === "" ||
+          _data.governance.pureParticipationWeight < 0 ||
+          _data.governance.participationWeight < 0 ||
+          (Number(_data.governance.pureParticipationWeight) + Number(_data.governance.participationWeight)) > 100
       );
     }
     case 3: {

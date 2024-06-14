@@ -43,9 +43,15 @@ const allowedKeys = [
   "im.paideia.dao.name",
   "im.paideia.dao.desc",
   "im.paideia.dao.url",
+  "im.paideia.staking.emission.amount",
+  "im.paideia.staking.emission.delay",
+  "im.paideia.staking.cyclelength",
+  "im.paideia.staking.profit.sharepct",
   "im.paideia.dao.threshold",
   "im.paideia.dao.quorum",
   "im.paideia.dao.min.proposal.time",
+  "im.paideia.staking.weight.participation",
+  "im.paideia.staking.weight.pureparticipation",
   "im.paideia.dao.theme",
   "im.paideia.dao.logo",
   "im.paideia.dao.banner",
@@ -53,15 +59,21 @@ const allowedKeys = [
   "im.paideia.dao.footer",
   "im.paideia.dao.footer.enabled",
 ];
-const allowedTypes = ["Long", "String", "Boolean"];
+const allowedTypes = ["Long", "String", "Boolean", "Byte"];
 
 const types = {
   "im.paideia.dao.name": "String",
   "im.paideia.dao.url": "String",
   "im.paideia.dao.desc": "String",
+  "im.paideia.staking.emission.amount": "Long",
+  "im.paideia.staking.emission.delay": "Long",
+  "im.paideia.staking.cyclelength": "Long",
+  "im.paideia.staking.profit.sharepct": "Byte",
   "im.paideia.dao.threshold": "Long",
   "im.paideia.dao.quorum": "Long",
   "im.paideia.dao.min.proposal.time": "Long",
+  "im.paideia.staking.weight.participation": "Byte",
+  "im.paideia.staking.weight.pureparticipation": "Byte",
   "im.paideia.dao.theme": "String",
   "im.paideia.dao.logo": "String",
   "im.paideia.dao.banner": "String",

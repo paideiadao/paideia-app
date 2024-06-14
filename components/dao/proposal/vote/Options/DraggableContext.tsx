@@ -96,7 +96,7 @@ const getListStyle = (
 });
 
 export const getData = (name: string): ActionType | undefined => {
-  if (name === "Change DAO's description") {
+  if (name === "Change DAO's Description") {
     return {
       shortDescription: "",
       activation_time: 0,
@@ -165,7 +165,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
     if (item.data === undefined) {
       return undefined;
     }
-    if (props.name === "Change DAO's description") {
+    if (props.name === "Change DAO's Description") {
       return (
         <DaoDescription
           set={(val: string) => {
@@ -177,7 +177,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           activation_time={0}
         />
       );
-    } else if (props.name === "Send funds") {
+    } else if (props.name === "Send Funds") {
       return (
         <SendFunds
           set={(val: ISendFunds) => {
@@ -190,7 +190,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           activation_time={0}
         />
       );
-    } else if (props.name === "Create liquidity pool") {
+    } else if (props.name === "Create Liquidity Pool") {
       return (
         <LiquidityPool
           set={(val: ILiquidityPool) => {
@@ -209,7 +209,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           activation_time={0}
         />
       );
-    } else if (props.name === "Quadratic voting") {
+    } else if (props.name === "Quadratic Voting") {
       return (
         <QuadraticVoting
           set={(val: IQuadradicVoting) => {
@@ -221,7 +221,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           activation_time={0}
         />
       );
-    } else if (props.name === "Vote duration") {
+    } else if (props.name === "Vote Duration") {
       return (
         <VoteDuration
           set={(val: IVoteDuration) => {
@@ -258,7 +258,7 @@ const DraggableContext: React.FC<{ name: string }> = (props) => {
           activation_time={0}
         />
       );
-    } else if (props.name === "Optimistic governance") {
+    } else if (props.name === "Optimistic Governance") {
       return (
         <OptimisticGovernance
           set={(val: IOptimisticGovernance) => {

@@ -43,7 +43,7 @@ const OptimisticGovernance: React.FC<IProposalAction> = (props) => {
   return (
     <Layout>
       <Header
-        title="Optimistic governance"
+        title="Optimistic Governance"
         large
         mb="0"
         subtitle="Turn on or off optimistic governance and or edit the whitelisted members."
@@ -62,7 +62,7 @@ const OptimisticGovernance: React.FC<IProposalAction> = (props) => {
       <TextField
         sx={{ width: "100%", mt: "1rem" }}
         label="Action name"
-        value={"Optimistic governance"}
+        value={"Optimistic Governance"}
         InputProps={{
           readOnly: true,
         }}

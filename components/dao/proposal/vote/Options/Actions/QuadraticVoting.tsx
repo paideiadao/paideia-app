@@ -10,7 +10,7 @@ const QuadraticVoting: React.FC<IwQuadraticVoting> = (props) => {
   return (
     <LabeledSwitch
       small
-      title={"Activate quadratic voting"}
+      title={"Activate Quadratic Voting"}
       value={props.isActive}
       onChange={(val: boolean) =>
         props.set({ isActive: val, activation_time: 0 })

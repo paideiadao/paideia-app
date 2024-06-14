@@ -546,25 +546,33 @@ const Proposal: React.FC = () => {
           </Box>
         )}
       </Layout>
-      <Button
-        disabled={value.status !== "Active"}
-        // size="small"
-        startIcon={<GavelIcon />}
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          display: deviceWrapper("flex", "none"),
-          borderRadius: 0,
-          "&.Mui-disabled": {
-            backgroundColor: theme.palette.mode === "dark" ? "rgb(46,52,64)" : "grey.400"
-          }
-        }}
-        variant="contained"
+      <Link
+        href={
+          dao === undefined
+            ? `/dao/proposal/${proposal_id}/vote`
+            : `/${dao}/proposal/${proposal_id}/vote`
+        }
       >
-        Vote Now
-      </Button>
+        <Button
+          disabled={value.status !== "Active"}
+          // size="small"
+          startIcon={<GavelIcon />}
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            width: "100%",
+            display: deviceWrapper("flex", "none"),
+            borderRadius: 0,
+            "&.Mui-disabled": {
+              backgroundColor: theme.palette.mode === "dark" ? "rgb(46,52,64)" : "grey.400"
+            }
+          }}
+          variant="contained"
+        >
+          Vote now
+        </Button>
+      </Link>
     </ProposalContext.Provider>
   );
 };

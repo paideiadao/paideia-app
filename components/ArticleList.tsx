@@ -103,7 +103,8 @@ const ArticleCard: FC<IArticleCard> = ({ article }) => {
   const randomInteger = (min: number, max: number) => {
     return (min + Math.random() * (max - min)).toFixed();
   };
-  const rand = randomInteger(1, 18);
+  // const rand = randomInteger(1, 18);
+  const rand = 1;
   const router = useRouter();
 
   return (
@@ -135,7 +136,7 @@ const ArticleCard: FC<IArticleCard> = ({ article }) => {
                 layout="fill"
                 sizes="30vw"
                 objectFit="cover"
-                // height={188}
+              // height={188}
               />
             ) : (
               <Image
@@ -144,7 +145,7 @@ const ArticleCard: FC<IArticleCard> = ({ article }) => {
                 layout="fill"
                 sizes="30vw"
                 objectFit="cover"
-                // height={188}
+              // height={188}
               />
             )}
             {article?.category && (

@@ -9,7 +9,6 @@ export const steps = [
     title: "Basic Information",
     label: "Pick your name and url",
   },
-
   {
     title: "Tokenomics",
     label: "Mint and configure your token",

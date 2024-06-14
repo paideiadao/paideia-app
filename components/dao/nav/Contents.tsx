@@ -547,38 +547,38 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     globalContext.api?.daoUserData === undefined
       ? undefined
       : {
-          icon: <SettingsIcon sx={{ opacity: ".8" }} />,
-          label: "Settings",
-          link: "",
-          links: (
-            <>
-              <BasicLink
-                icon={<PersonIcon sx={{ opacity: ".8" }} />}
-                title={"Edit profile"}
-                selected={"Edit profile" === subSelected}
-                set={setSubWrapper}
-                ml=".5rem"
-                link={daoName ? `/${daoName}/profile/edit` : ""}
-              />
-              <BasicLink
-                icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
-                title={"Notifications"}
-                selected={"Notifications" === subSelected}
-                set={setSubWrapper}
-                ml=".5rem"
-                link={daoName ? `/${daoName}/notifications/edit` : ""}
-              />
-              <BasicLink
-                icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
-                title={"Wallet"}
-                selected={"Wallet" === subSelected}
-                set={setSubWrapper}
-                ml=".5rem"
-                link={daoName ? `/${daoName}/wallet` : ""}
-              />
-            </>
-          ),
-        },
+        icon: <SettingsIcon sx={{ opacity: ".8" }} />,
+        label: "Settings",
+        link: "",
+        links: (
+          <>
+            <BasicLink
+              icon={<PersonIcon sx={{ opacity: ".8" }} />}
+              title={"Edit profile"}
+              selected={"Edit profile" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/profile/edit` : ""}
+            />
+            <BasicLink
+              icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
+              title={"Notifications"}
+              selected={"Notifications" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/notifications/edit` : ""}
+            />
+            <BasicLink
+              icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
+              title={"Wallet"}
+              selected={"Wallet" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/wallet` : ""}
+            />
+          </>
+        ),
+      },
     {
       icon: <DisplaySettingsIcon sx={{ opacity: ".8" }} />,
       label: "DAO Config",

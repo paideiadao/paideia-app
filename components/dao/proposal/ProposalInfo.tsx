@@ -42,7 +42,6 @@ const tokenInfo = async (tokenId: string): Promise<AssetInfo> => {
     );
     return response.data;
   } catch (error) {
-    console.log("There was a problem fetching the asset info:", error);
     throw error;
   }
 };

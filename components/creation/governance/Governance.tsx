@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   Box,
   Button,
+  Grid,
   IconButton,
   OutlinedInput,
   Select,
@@ -23,7 +24,7 @@ import VoteDurationSelector from "../utilities/VoteDurationSelector";
 
 const Governance: React.FC = () => {
   const creationContext = React.useContext(CreationContext);
-  let data = creationContext.api.data.governance;
+  const data = creationContext.api.data.governance;
   return (
     <Box
       sx={{
@@ -35,7 +36,7 @@ const Governance: React.FC = () => {
       }}
     >
       <Box sx={{ textAlign: "left", width: "100%", fontSize: "1.2rem" }}>
-        Governance and voting configuration
+        Governance and Voting Configuration
         <Box sx={{ width: "100%", color: "text.secondary", fontSize: ".8rem" }}>
           You can use the default settings or dive more in deep configure your
           voting system as you wish. You can enable and configure features such
@@ -54,7 +55,7 @@ const Governance: React.FC = () => {
         }}
       >
         <LearnMore
-          title="Optimistic governance"
+          title="Optimistic Governance"
           tooltipTitle="Optimistic Governance"
           tooltipText="Choose this option if you'd like to whitelist individual wallets so that only those wallets can make proposals. All proposals will pass, unless a DAO member challenges that proposal. Choosing this option means that proposals will require collateral, and if the proposal is successfully challenged, IE DAO members vote it down after someone challenges it, that collateral is lost and distributed to the voters. This prevents corrupt individuals from draining the DAO or behaving in a way that is not in members' best interestes. Optimistic governance can make the DAO more agile and focused, as there is less engagement required from most members. "
           tooltipLink="https://docs.paideia.im/governance-structures#_yj9ebg49un1g"
@@ -72,9 +73,10 @@ const Governance: React.FC = () => {
             mt: 2,
           }}
         >
-          <Box>Activate optimistic governance</Box>
+          <Box>Activate Optimistic Governance</Box>
           <Box sx={{ ml: "auto" }}>
             <Switch
+              disabled
               checked={data.optimisticGovernance}
               onChange={() =>
                 creationContext.api.setData({
@@ -210,7 +212,7 @@ const Governance: React.FC = () => {
                 Add Another <AddIcon />
               </Button>
               <Button variant="text" size="small">
-                Add from file <FileUploadIcon />
+                Add from File <FileUploadIcon />
               </Button>
             </Box>
             <LearnMore
@@ -220,7 +222,6 @@ const Governance: React.FC = () => {
               tooltipText="All proposals in Optimistic Governance require collateral. If the proposal is challenged, and is then voted down, the collateral is distributed to those who voted. A challenger must also submit equal collateral. If the challenge does not pass, and DAO members vote to pass the proposal, the challenger's collateral is distributed to voters. "
               // tooltipLink="/here"
             />
-
             <Box
               sx={{
                 width: "100%",
@@ -277,7 +278,6 @@ const Governance: React.FC = () => {
               tooltipText="All proposals pass in Optimistic Governance, unless challenged. DAO members need enough time to assess each proposal to make sure it's agreeable. This is the length of time each proposal can be challenged before it passes. "
               // tooltipLink="/here"
             />
-
             <Box
               sx={{
                 display: "flex",
@@ -366,7 +366,7 @@ const Governance: React.FC = () => {
         }}
       >
         <LearnMore
-          title="Quadratic voting"
+          title="Quadratic Voting"
           tooltipTitle="Quadratic Voting"
           tooltipText="This counting method attempts to give less weight to votes from large holders, AKA whales. 10 votes from 10 addresses will count for more than 10 votes from one address. "
           tooltipLink="https://wtfisqf.com/"
@@ -385,9 +385,10 @@ const Governance: React.FC = () => {
             mt: 2,
           }}
         >
-          <Box>Activate quadratic voting</Box>
+          <Box>Activate Quadratic Voting</Box>
           <Box sx={{ ml: "auto" }}>
             <Switch
+              disabled
               checked={data.quadraticVoting}
               onChange={() =>
                 creationContext.api.setData({
@@ -405,11 +406,28 @@ const Governance: React.FC = () => {
       <Box
         sx={{
           pb: "1rem",
-          mb: "1rem",
+          borderBottom: "1px solid",
+          borderBottomColor: "border.main",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box>Configure voting system</Box>
+          <Box
+            sx={{
+              color: "text.primary",
+              fontSize: deviceStruct(
+                "1.05rem",
+                "1.05rem",
+                "1.1rem",
+                "1.1rem",
+                "1.1rem"
+              ),
+              fontWeight: 400,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Configure Voting System
+          </Box>
         </Box>
         <LearnMore
           small
@@ -418,7 +436,6 @@ const Governance: React.FC = () => {
           tooltipText="Allows you to require more votes in favor to pass proposals. For example, if you set this to 60%, and 100 votes are cast, 60 votes in favor would be required for a proposal to pass. "
           //tooltipLink="/here"
         />
-
         <Box
           sx={{
             display: "flex",
@@ -436,7 +453,7 @@ const Governance: React.FC = () => {
           >
             <Slider
               value={data.supportNeeded}
-              min={51}
+              min={1}
               max={100}
               onChange={(event, newValue) =>
                 creationContext.api.setData({
@@ -471,7 +488,7 @@ const Governance: React.FC = () => {
                 })
               }
               InputProps={{
-                inputProps: { min: 51, max: 100 },
+                inputProps: { min: 1, max: 100 },
                 endAdornment: <Box>%</Box>,
               }}
             />
@@ -485,7 +502,6 @@ const Governance: React.FC = () => {
           tooltipText="Do not set this too high. Quorum means the number of voters required for any vote to pass. If you have 1000 vote tokens distributed, and quorum is set to 50%, at least 500 votes must be cast before any proposal passes. If you have many inactive members, it could mean the DAO can no longer pass any proposals. Be cautious with this setting. "
           // tooltipLink="/here"
         />
-
         <Box
           sx={{
             display: "flex",
@@ -503,7 +519,7 @@ const Governance: React.FC = () => {
           >
             <Slider
               value={data.quorum}
-              min={0}
+              min={1}
               max={100}
               onChange={(event, newValue) =>
                 creationContext.api.setData({
@@ -538,14 +554,14 @@ const Governance: React.FC = () => {
                 })
               }
               InputProps={{
-                inputProps: { min: 0, max: 100 },
+                inputProps: { min: 1, max: 100 },
                 endAdornment: <Box>%</Box>,
               }}
             />
           </Box>
         </Box>
-        <Box sx={{ fontSize: ".9rem", fontWeight: 410, mb: "1rem", ml: 1 }}>
-          How long does the voting period last for?
+        <Box sx={{ fontSize: ".9rem", fontWeight: 410, my: "1rem" }}>
+          How long does the minimum voting period last for?
         </Box>
         <VoteDurationSelector
           voteDuration={data.voteDuration}
@@ -569,6 +585,59 @@ const Governance: React.FC = () => {
             })
           }
         />
+      </Box>
+      <Box
+        sx={{
+          mb: 1,
+        }}
+      >
+        <LearnMore
+          title="Participation Weight"
+          tooltipText="Pure Participation Weight: Percentage defining how much participation in governance is weighted in reward distribution, 0 to 100.\n
+          Participation Weight: Percentage defining how much used votes are weighted in reward distribution, 0 to 100.\n
+          These two should not exceed 100 combined. Remaining percentage is rewards distributed based on staked amount."
+        />
+        <Grid
+          container
+          spacing={2}
+          direction={{ xs: "column", md: "row" }}
+          sx={{ mt: 1, mb: 2 }}
+        >
+          <Grid item md={6}>
+            <TextField
+              type="number"
+              value={data.pureParticipationWeight}
+              sx={{ width: "100%" }}
+              label="Pure Participation Weight"
+              onChange={(e) =>
+                creationContext.api.setData({
+                  ...creationContext.api.data,
+                  governance: {
+                    ...data,
+                    pureParticipationWeight: e.target.value,
+                  },
+                })
+              }
+            />
+          </Grid>
+          <Grid item md={6}>
+            <TextField
+              type="number"
+              value={data.participationWeight}
+              sx={{ width: "100%" }}
+              label="Participation Weight"
+              onChange={(e) =>
+                creationContext.api.setData({
+                  ...creationContext.api.data,
+                  governance: {
+                    ...data,
+                    participationWeight: e.target.value,
+                  },
+                })
+              }
+            />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

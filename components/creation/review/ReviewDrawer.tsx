@@ -160,8 +160,8 @@ export const ImageWrapper: React.FC<{
 };
 
 const ReviewDrawer: React.FC = () => {
-  let creationContext = React.useContext(CreationContext);
-  let data = creationContext.api.data;
+  const creationContext = React.useContext(CreationContext);
+  const data = creationContext.api.data;
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const setNavStage = (stage: number) => {

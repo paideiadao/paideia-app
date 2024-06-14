@@ -3,24 +3,48 @@ import BasicInformation from "@components/dao/dao-config/BasicInformation";
 import Design from "@components/dao/dao-config/Design";
 import Governance from "@components/dao/dao-config/Governance";
 import Termination from "@components/dao/dao-config/Termination";
+import Tokenomics from "@components/dao/dao-config/Tokenomics";
 import Layout from "@components/dao/Layout";
-import VoteDuration from "@components/dao/proposal/vote/YesNo/Actions/VoteDuration";
 import CancelLink from "@components/utilities/CancelLink";
 import Divider from "@components/utilities/Divider";
 import { deviceWrapper } from "@components/utilities/Style";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ConfigApi, { IConfigData } from "@lib/dao/dao-config/ConfigApi";
 import { ConfigContext } from "@lib/dao/dao-config/ConfigContext";
+import { fetcher } from "@lib/utilities";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
 
 const defaultState: IConfigData = {
   basicInformation: {
     daoName: "",
     daoUrl: "",
     shortDescription: "",
+  },
+  tokenomics: {
+    type: "",
+    tokenName: "",
+    tokenId: "",
+    // check restrictions...
+    tokenTicker: "",
+    tokenAmount: 0,
+    tokenImage: "",
+    tokenImageUrl: "",
+    tokenRemaining: 0,
+    tokenHolders: [],
+    activateTokenomics: false,
+    distributions: [],
+    // staking details
+    stakingConfig: {
+      stakePoolSize: 0,
+      stakingEmissionAmount: 0,
+      stakingEmissionDelay: 0,
+      stakingCycleLength: 0,
+      stakingProfitSharePct: 0,
+    },
   },
   governance: {
     optimisticGovernance: false,
@@ -34,6 +58,8 @@ const defaultState: IConfigData = {
     amount: "",
     currency: "",
     supportNeeded: 0,
+    pureParticipationWeight: 0,
+    participationWeight: 0,
   },
   design: {
     logo: {
@@ -64,8 +90,13 @@ const DaoConfig: React.FC = () => {
   const router = useRouter();
   const { dao } = router.query;
 
+  const { data: daoConfig, error: daoConfigError } = useSWR(
+    dao && `/dao/${dao}/config`,
+    fetcher
+  );
+
   useEffect(() => {
-    if (daoData) {
+    if (daoData && daoConfig && !daoConfigError) {
       setData({
         ...data,
         basicInformation: {
@@ -73,12 +104,45 @@ const DaoConfig: React.FC = () => {
           daoUrl: daoData.dao_url,
           shortDescription: daoData.dao_short_description,
         },
+        tokenomics: {
+          ...data.tokenomics,
+          stakingConfig: {
+            ...data.tokenomics.stakingConfig,
+            stakingEmissionAmount: daoConfig
+              ? Number(
+                  daoConfig["im.paideia.staking.emission.amount"]?.value
+                ) ?? 0
+              : 0,
+            stakingEmissionDelay: daoConfig
+              ? Number(daoConfig["im.paideia.staking.emission.delay"]?.value) ??
+                0
+              : 0,
+            stakingCycleLength: daoConfig
+              ? Number(daoConfig["im.paideia.staking.cyclelength"]?.value) ?? 0
+              : 0,
+            stakingProfitSharePct: daoConfig
+              ? Number(
+                  daoConfig["im.paideia.staking.profit.sharepct"]?.value
+                ) ?? 0
+              : 0,
+          },
+        },
         governance: {
           ...data.governance,
           supportNeeded: daoData.governance.support_needed / 10,
           quorum: daoData.governance.quorum / 10,
           voteDuration: daoData.governance.vote_duration__sec / 60,
           voteDurationUnits: "minutes",
+          participationWeight: daoConfig
+            ? Number(
+                daoConfig["im.paideia.staking.weight.participation"]?.value
+              ) ?? 0
+            : 0,
+          pureParticipationWeight: daoConfig
+            ? Number(
+                daoConfig["im.paideia.staking.weight.pureparticipation"]?.value
+              ) ?? 0
+            : 0,
         },
         design: {
           ...data.design,
@@ -100,12 +164,45 @@ const DaoConfig: React.FC = () => {
           daoUrl: daoData.dao_url,
           shortDescription: daoData.dao_short_description,
         },
+        tokenomics: {
+          ...data.tokenomics,
+          stakingConfig: {
+            ...data.tokenomics.stakingConfig,
+            stakingEmissionAmount: daoConfig
+              ? Number(
+                  daoConfig["im.paideia.staking.emission.amount"]?.value
+                ) ?? 0
+              : 0,
+            stakingEmissionDelay: daoConfig
+              ? Number(daoConfig["im.paideia.staking.emission.delay"]?.value) ??
+                0
+              : 0,
+            stakingCycleLength: daoConfig
+              ? Number(daoConfig["im.paideia.staking.cyclelength"]?.value) ?? 0
+              : 0,
+            stakingProfitSharePct: daoConfig
+              ? Number(
+                  daoConfig["im.paideia.staking.profit.sharepct"]?.value
+                ) ?? 0
+              : 0,
+          },
+        },
         governance: {
           ...data.governance,
           supportNeeded: daoData.governance.support_needed / 10,
           quorum: daoData.governance.quorum / 10,
           voteDuration: daoData.governance.vote_duration__sec / 60,
           voteDurationUnits: "minutes",
+          participationWeight: daoConfig
+            ? Number(
+                daoConfig["im.paideia.staking.weight.participation"]?.value
+              ) ?? 0
+            : 0,
+          pureParticipationWeight: daoConfig
+            ? Number(
+                daoConfig["im.paideia.staking.weight.pureparticipation"]?.value
+              ) ?? 0
+            : 0,
         },
         design: {
           ...data.design,
@@ -121,7 +218,30 @@ const DaoConfig: React.FC = () => {
         },
       });
     }
-  }, [daoData]);
+  }, [daoData, daoConfig]);
+
+  const checkError = () => {
+    return (
+      data?.basicInformation.daoName !== "" &&
+      data?.basicInformation.daoUrl !== "" &&
+      (data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
+      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) <= 10 &&
+      (data?.governance.participationWeight ?? 0) >= 0 &&
+      (data?.governance.participationWeight ?? 0) <= 100 &&
+      (data?.governance.pureParticipationWeight ?? 0) >= 0 &&
+      (data?.governance.pureParticipationWeight ?? 0) <= 100 &&
+      Number(data?.governance.participationWeight ?? 0) +
+        Number(data?.governance.participationWeight ?? 0) >=
+        0 &&
+      Number(data?.governance.participationWeight ?? 0) +
+        Number(data?.governance.pureParticipationWeight ?? 0) <=
+        100
+    );
+  };
 
   const submit = async () => {
     setLoading(true);
@@ -151,6 +271,8 @@ const DaoConfig: React.FC = () => {
         <Header title="DAO Config" large />
         <BasicInformation />
         <Divider />
+        <Tokenomics />
+        <Divider />
         <Governance />
         <Divider />
         <Design />
@@ -162,6 +284,7 @@ const DaoConfig: React.FC = () => {
             alignItems: "center",
             width: "100%",
             mt: "1.5rem",
+            mb: "1rem",
           }}
         >
           <CancelLink>
@@ -174,6 +297,7 @@ const DaoConfig: React.FC = () => {
             </Button>
           </CancelLink>
           <LoadingButton
+            disabled={!checkError()}
             loading={loading}
             sx={{ width: "50%" }}
             size="small"
@@ -193,6 +317,7 @@ const DaoConfig: React.FC = () => {
 
 const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
   const durationMapper = {
+    seconds: 1,
     minutes: 60,
     hours: 60 * 60,
     days: 60 * 60 * 24,
@@ -223,6 +348,26 @@ const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
       currentState.basicInformation.shortDescription
         ? null
         : currentState.basicInformation.shortDescription,
+    "im.paideia.staking.emission.amount":
+      initState.tokenomics.stakingConfig.stakingEmissionAmount ===
+      currentState.tokenomics.stakingConfig.stakingEmissionAmount
+        ? null
+        : currentState.tokenomics.stakingConfig.stakingEmissionAmount,
+    "im.paideia.staking.emission.delay":
+      initState.tokenomics.stakingConfig.stakingEmissionDelay ===
+      currentState.tokenomics.stakingConfig.stakingEmissionDelay
+        ? null
+        : currentState.tokenomics.stakingConfig.stakingEmissionDelay,
+    "im.paideia.staking.cyclelength":
+      initState.tokenomics.stakingConfig.stakingCycleLength ===
+      currentState.tokenomics.stakingConfig.stakingCycleLength
+        ? null
+        : currentState.tokenomics.stakingConfig.stakingCycleLength,
+    "im.paideia.staking.profit.sharepct":
+      initState.tokenomics.stakingConfig.stakingProfitSharePct ===
+      currentState.tokenomics.stakingConfig.stakingProfitSharePct
+        ? null
+        : currentState.tokenomics.stakingConfig.stakingProfitSharePct,
     "im.paideia.dao.threshold":
       initState.governance.supportNeeded ===
       currentState.governance.supportNeeded
@@ -232,6 +377,16 @@ const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
       initState.governance.quorum === currentState.governance.quorum
         ? null
         : currentState.governance.quorum * 10,
+    "im.paideia.staking.weight.participation":
+      initState.governance.participationWeight ===
+      currentState.governance.participationWeight
+        ? null
+        : currentState.governance.participationWeight,
+    "im.paideia.staking.weight.pureparticipation":
+      initState.governance.pureParticipationWeight ===
+      currentState.governance.pureParticipationWeight
+        ? null
+        : currentState.governance.pureParticipationWeight,
     "im.paideia.dao.min.proposal.time": voteDurationDiff,
     "im.paideia.dao.banner.enabled":
       initState.design.banner.show === currentState.design.banner.show

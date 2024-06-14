@@ -23,6 +23,7 @@ export default function Help() {
         Learn more about DAOs
       </Box>
       <Button
+        disabled
         variant="contained"
         sx={{
           fontWeight: 450,
