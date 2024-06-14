@@ -7,6 +7,7 @@ import {
   Skeleton,
   useMediaQuery,
   useTheme,
+  Button,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
@@ -190,11 +191,73 @@ const TopNav: React.FC<INav> = (props) => {
 
   return (
     <>
+---
+      <Box
+        sx={{
+          width: "100%",
+          p: ".5rem",
+          borderBottom: "1px solid",
+          borderBottomColor: "border.main",
+          display: "flex",
+          backgroundColor: "backgroundColor.main",
+          zIndex: 1000,
+          position: "sticky",
+          top: 0,
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ flexGrow: 1, display: deviceWrapper("flex", "none") }}>
+          <IconButton color="primary" onClick={() => props.setShowMobile(true)}>
+            <MenuIcon color="primary" />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            color: "text.primary",
+            backgroundColor: "backgroundColor.main",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <Link href="https://docs.ergoplatform.com/eco/paideia/#using-paideia" passHref>
+            <Button color="primary">Getting Started</Button>
+          </Link>
+          <Box>
+            <DarkSwitch />
+          </Box>
+          <Box sx={{ mr: "0.5rem" }}>
+            <IconButton
+              onClick={handleOpen}
+              sx={{
+                color: theme.palette.text.secondary,
+              }}
+            >
+              <Badge
+                badgeContent={
+                  globalContext.metadata.metadata.unreadNotificationCount
+                }
+                color="primary"
+              >
+                <NotificationsIcon
+                  sx={{
+                    fontSize: "18px",
+                  }}
+                />
+              </Badge>
+            </IconButton>
+          </Box>
+          {globalContext.api?.daoUserData !== undefined && globalContext.api.daoUserData.loading === true
+            ? <Box sx={{ width: { xs: "40px", md: "160px" } }}>
+---
       {props.reduced ? (
         <>
           {globalContext.api?.daoUserData !== undefined &&
           globalContext.api.daoUserData.loading === true ? (
             <Box sx={{ width: { xs: "40px", md: "160px" } }}>
+---
               <Skeleton
                 variant={desktop ? "rounded" : "circular"}
                 height={40}
