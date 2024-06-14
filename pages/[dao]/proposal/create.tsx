@@ -137,6 +137,7 @@ export interface IProposal {
   profile_img_url?: string;
   user_followers?: number[];
   voting_duration: number;
+  end_date?: Date;
 }
 
 export interface ICreateProposalErrors {

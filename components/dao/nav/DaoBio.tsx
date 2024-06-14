@@ -126,7 +126,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                 <img src={selectedDao.logo_url} />
               </Avatar>
             )}
-            <Box>
+            <Box sx={{ overflowX: "hidden" }}>
               <Box sx={{ fontSize: ".7rem" }}>{selectedDao.dao_name}</Box>
               <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
                 app.paideia.im/{selectedDao.dao_url}
@@ -281,7 +281,6 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
                 )}
               </Box>
             </>
-
             <Button
               size="small"
               sx={{
@@ -294,7 +293,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
               }}
               href="/"
             >
-              View complete dao list
+              View Complete Dao List
             </Button>
           </Box>
         </ClickAwayListener>
@@ -341,9 +340,14 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
           src={props.data.logo_url}
           sx={{ width: "1.5rem", height: "1.5rem" }}
         />
-        <Box sx={{ fontSize: ".7rem", ml: ".5rem" }}>
+        <Box sx={{ fontSize: ".7rem", ml: ".5rem", overflowX: "hidden" }}>
           {props.data.dao_name}
-          <Box sx={{ fontSize: ".6rem", color: "text.secondary" }}>
+          <Box
+            sx={{
+              fontSize: ".6rem",
+              color: "text.secondary",
+            }}
+          >
             app.paideia.im/{props.data.dao_url}
           </Box>
         </Box>
@@ -355,7 +359,8 @@ const DaoSelect: FC<IDaoSelect> = (props) => {
       </Box>
       {!props.inWallet && (
         <Box sx={{ fontSize: ".57rem", color: "error.main" }}>
-          You don&apos;t have any {props.data.token_ticker ?? "tokens"} in your wallet
+          You don&apos;t have any {props.data.token_ticker ?? "tokens"} in your
+          wallet
         </Box>
       )}
     </>

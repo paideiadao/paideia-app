@@ -354,7 +354,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
 
   const getSubSelected = (): string => {
     if (path.includes("profile/edit")) {
-      return "Edit profile";
+      return "Edit Profile";
     } else if (path.includes("notifications/edit")) {
       return "Notifications";
     } else if (path.includes("/wallet")) {
@@ -554,8 +554,8 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
           <>
             <BasicLink
               icon={<PersonIcon sx={{ opacity: ".8" }} />}
-              title={"Edit profile"}
-              selected={"Edit profile" === subSelected}
+              title={"Edit Profile"}
+              selected={"Edit Profile" === subSelected}
               set={setSubWrapper}
               ml=".5rem"
               link={daoName ? `/${daoName}/profile/edit` : ""}
