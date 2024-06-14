@@ -33,6 +33,7 @@ import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import DarkSwitch from "@components/utilities/DarkSwitch";
 import { useSession } from "next-auth/react";
+import Link from "@components/Link";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -191,73 +192,11 @@ const TopNav: React.FC<INav> = (props) => {
 
   return (
     <>
----
-      <Box
-        sx={{
-          width: "100%",
-          p: ".5rem",
-          borderBottom: "1px solid",
-          borderBottomColor: "border.main",
-          display: "flex",
-          backgroundColor: "backgroundColor.main",
-          zIndex: 1000,
-          position: "sticky",
-          top: 0,
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
-        <Box sx={{ flexGrow: 1, display: deviceWrapper("flex", "none") }}>
-          <IconButton color="primary" onClick={() => props.setShowMobile(true)}>
-            <MenuIcon color="primary" />
-          </IconButton>
-        </Box>
-        <Box
-          sx={{
-            color: "text.primary",
-            backgroundColor: "backgroundColor.main",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <Link href="https://docs.ergoplatform.com/eco/paideia/#using-paideia" passHref>
-            <Button color="primary">Getting Started</Button>
-          </Link>
-          <Box>
-            <DarkSwitch />
-          </Box>
-          <Box sx={{ mr: "0.5rem" }}>
-            <IconButton
-              onClick={handleOpen}
-              sx={{
-                color: theme.palette.text.secondary,
-              }}
-            >
-              <Badge
-                badgeContent={
-                  globalContext.metadata.metadata.unreadNotificationCount
-                }
-                color="primary"
-              >
-                <NotificationsIcon
-                  sx={{
-                    fontSize: "18px",
-                  }}
-                />
-              </Badge>
-            </IconButton>
-          </Box>
-          {globalContext.api?.daoUserData !== undefined && globalContext.api.daoUserData.loading === true
-            ? <Box sx={{ width: { xs: "40px", md: "160px" } }}>
----
       {props.reduced ? (
         <>
           {globalContext.api?.daoUserData !== undefined &&
           globalContext.api.daoUserData.loading === true ? (
             <Box sx={{ width: { xs: "40px", md: "160px" } }}>
----
               <Skeleton
                 variant={desktop ? "rounded" : "circular"}
                 height={40}
@@ -346,6 +285,11 @@ const TopNav: React.FC<INav> = (props) => {
                 height: "100%",
               }}
             >
+              <Button color="primary" variant="outlined" sx={{ mr: 1 }}>
+                <Link href="https://docs.ergoplatform.com/eco/paideia/#using-paideia">
+                  Getting Started
+                </Link>
+              </Button>
               <Box>
                 <DarkSwitch />
               </Box>
