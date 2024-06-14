@@ -6,6 +6,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import DiamondIcon from "@mui/icons-material/Diamond";
 import GroupsIcon from "@mui/icons-material/Groups";
 import MovingIcon from "@mui/icons-material/Moving";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import BalanceIcon from "@mui/icons-material/Balance";
 import Accordion from "@mui/material/Accordion";
@@ -35,6 +36,7 @@ import DarkFooter from "@public/dao/dark-footer.png";
 import { DarkTheme } from "@theme/theme";
 import Image from "next/image";
 import { da } from "date-fns/locale";
+import Button from "@mui/material/Button";
 
 const BasicLink: React.FC<{
   icon: JSX.Element;
@@ -352,7 +354,7 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
 
   const getSubSelected = (): string => {
     if (path.includes("profile/edit")) {
-      return "Edit profile";
+      return "Edit Profile";
     } else if (path.includes("notifications/edit")) {
       return "Notifications";
     } else if (path.includes("/wallet")) {
@@ -545,38 +547,38 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
     globalContext.api?.daoUserData === undefined
       ? undefined
       : {
-        icon: <SettingsIcon sx={{ opacity: ".8" }} />,
-        label: "Settings",
-        link: "",
-        links: (
-          <>
-            <BasicLink
-              icon={<PersonIcon sx={{ opacity: ".8" }} />}
-              title={"Edit profile"}
-              selected={"Edit profile" === subSelected}
-              set={setSubWrapper}
-              ml=".5rem"
-              link={daoName ? `/${daoName}/profile/edit` : ""}
-            />
-            <BasicLink
-              icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
-              title={"Notifications"}
-              selected={"Notifications" === subSelected}
-              set={setSubWrapper}
-              ml=".5rem"
-              link={daoName ? `/${daoName}/notifications/edit` : ""}
-            />
-            <BasicLink
-              icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
-              title={"Wallet"}
-              selected={"Wallet" === subSelected}
-              set={setSubWrapper}
-              ml=".5rem"
-              link={daoName ? `/${daoName}/wallet` : ""}
-            />
-          </>
-        ),
-      },
+          icon: <SettingsIcon sx={{ opacity: ".8" }} />,
+          label: "Settings",
+          link: "",
+          links: (
+            <>
+              <BasicLink
+                icon={<PersonIcon sx={{ opacity: ".8" }} />}
+                title={"Edit Profile"}
+                selected={"Edit Profile" === subSelected}
+                set={setSubWrapper}
+                ml=".5rem"
+                link={daoName ? `/${daoName}/profile/edit` : ""}
+              />
+              <BasicLink
+                icon={<EditNotificationsIcon sx={{ opacity: ".8" }} />}
+                title={"Notifications"}
+                selected={"Notifications" === subSelected}
+                set={setSubWrapper}
+                ml=".5rem"
+                link={daoName ? `/${daoName}/notifications/edit` : ""}
+              />
+              <BasicLink
+                icon={<AccountBalanceWalletIcon sx={{ opacity: ".8" }} />}
+                title={"Wallet"}
+                selected={"Wallet" === subSelected}
+                set={setSubWrapper}
+                ml=".5rem"
+                link={daoName ? `/${daoName}/wallet` : ""}
+              />
+            </>
+          ),
+        },
     {
       icon: <DisplaySettingsIcon sx={{ opacity: ".8" }} />,
       label: "DAO Config",
@@ -635,6 +637,24 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             )}
       </Box>
       <Box sx={{ zIndex: 1 }}>
+        {router.isReady && router.pathname !== "/" && (
+          <Box sx={{ p: 2, display: "flex", justifyContent: "center" }}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="primary"
+              startIcon={<GitHubIcon />}
+              onClick={() =>
+                window.open(
+                  "https://github.com/paideiadao/paideia-app/issues",
+                  "_blank"
+                )
+              }
+            >
+              Report an Issue
+            </Button>
+          </Box>
+        )}
         <img
           src={
             themeContext.theme === DarkTheme ? DarkFooter.src : LightFooter.src

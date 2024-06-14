@@ -296,14 +296,14 @@ const Edit: React.FC<{ params: any }> = (props) => {
     <Layout>
       {appContext.api?.daoUserData !== undefined && (
         <>
-          <Header title="Edit profile" large />
+          <Header title="Edit Profile" large />
           <ProfileEditImage
             set={(val: IFile) => setValue({ ...value, img: val })}
             img={value.img as string}
           />
           <TextField
             value={value.username}
-            label="User name"
+            label="User Name"
             sx={{ width: "100%", mt: ".5rem" }}
             onChange={(e) => onChange("username", e.target.value)}
             error={!!formErrors.username}
@@ -311,7 +311,7 @@ const Edit: React.FC<{ params: any }> = (props) => {
           />
           <TextField
             value={value.shortBio}
-            label="Short bio"
+            label="Short Bio"
             sx={{ width: "100%", mt: "1rem" }}
             minRows={2}
             onChange={(e) => onChange("shortBio", e.target.value)}

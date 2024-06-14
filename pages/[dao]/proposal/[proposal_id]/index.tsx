@@ -513,15 +513,7 @@ const Proposal: React.FC = () => {
                   ml: "1.5rem",
                 }}
               >
-                <Overview
-                  proposal
-                  userDetailId={value.user_details_id ?? 0}
-                  alias={value.alias ?? ""}
-                  img={value.profile_img_url ?? ""}
-                  followers={value.user_followers ?? []}
-                  created={value.created ?? 0}
-                  level={0}
-                />
+                <Details />
                 <VoteWidget
                   yes={value.votes ? value.votes[1] / decimalAdjust : 0}
                   no={value.votes ? value.votes[0] / decimalAdjust : 0}

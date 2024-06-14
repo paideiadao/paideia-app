@@ -351,7 +351,7 @@ const fetchAssetInfo = async (token: TokenDetails): Promise<AssetInfo> => {
     const assetInfo = await tokenInfo(token.tokenId);
     return assetInfo;
   } catch (error) {
-    console.log("Failed to fetch asset info:", error);
+    console.log(error);
     return {
       name: "",
       description: "",

@@ -7,6 +7,7 @@ import {
   Skeleton,
   useMediaQuery,
   useTheme,
+  Button,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
@@ -32,6 +33,7 @@ import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
 import DarkSwitch from "@components/utilities/DarkSwitch";
 import { useSession } from "next-auth/react";
+import Link from "@components/Link";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -283,6 +285,11 @@ const TopNav: React.FC<INav> = (props) => {
                 height: "100%",
               }}
             >
+              <Button color="primary" variant="outlined" sx={{ mr: 1 }}>
+                <Link href="https://docs.ergoplatform.com/eco/paideia/#using-paideia">
+                  Getting Started
+                </Link>
+              </Button>
               <Box>
                 <DarkSwitch />
               </Box>

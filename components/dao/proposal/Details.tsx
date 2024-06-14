@@ -15,39 +15,46 @@ const Details: React.FC = () => {
   const [time, setTime] = React.useState<string>("");
 
   React.useEffect(() => {
-    var x = setInterval(function () {
+    if (!proposalContext.api?.value.end_date) {
+      setTime("N/A");
+      return;
+    }
+    const x = setInterval(function () {
       // Get today's date and time
-      let now = new Date().getTime();
+      const now = new Date().getTime();
       // Find the distance between now and the count down date
-      var distance = now;
+      const distance =
+        new Date(
+          proposalContext.api?.value.end_date?.toString() ?? 0
+        ).getTime() - now;
 
       // Time calculations for days, hours, minutes and seconds
-      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours = Math.floor(
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
         (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
       // Display the result in the element with id="demo"
-      setTime(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+      setTime(days + "d " + hours + "h " + minutes + "m " + seconds + "s");
 
       // If the count down is finished, write some text
       if (distance < 0) {
-        clearInterval(x);
         setTime("EXPIRED");
       }
     }, 1000);
+    return () => clearInterval(x);
   }, []);
   return (
     <>
       <Overview
         proposal
-        userDetailId={0}
-        alias={""}
+        userDetailId={proposalContext.api?.value.user_details_id ?? 0}
+        alias={proposalContext.api?.value.alias ?? ""}
         level={0}
-        img={""}
-        followers={[]}
-        created={0}
+        img={proposalContext.api?.value.profile_img_url ?? ""}
+        followers={proposalContext.api?.value.user_followers ?? []}
+        created={proposalContext.api?.value.created ?? 0}
       />
       <Box
         sx={{
@@ -57,10 +64,10 @@ const Details: React.FC = () => {
           border: 1,
           borderColor: "border.main",
           p: ".5rem",
+          mb: "1rem",
         }}
       >
         <CapsInfo title="Details" mb={"0.5rem"} />
-
         <Box
           sx={{
             display: "flex",
@@ -70,21 +77,7 @@ const Details: React.FC = () => {
           }}
         >
           <LanIcon sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }} />
-          ID: {"proposal_id_here"}
-        </Box>
-
-        <Box
-          sx={{
-            alignItems: "center",
-            color: "text.secondary",
-            fontSize: ".9rem",
-            display: "flex",
-            mt: ".5rem",
-          }}
-        >
-          <CalendarTodayIcon sx={{ mr: ".3rem", fontSize: "1.2rem" }} />
-          Created:{" "}
-          {dateFormat(proposalContext.api?.value.date, "mmmm dS, yyyy")}
+          Id: {proposalContext.api?.value.id ?? "-"}
         </Box>
         <Box
           sx={{
@@ -96,7 +89,7 @@ const Details: React.FC = () => {
           }}
         >
           <AccessTimeIcon sx={{ mr: ".3rem", fontSize: "1.2rem" }} />
-          Reamining: {time}
+          Remaining: {time}
         </Box>
       </Box>
     </>

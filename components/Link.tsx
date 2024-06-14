@@ -90,6 +90,7 @@ const Link = React.forwardRef<HTMLAnchorElement, ILinkProps>((props, ref) => {
         target="_blank"
         rel="noopener"
         {...other}
+        underline="none"
       />
     );
   }
