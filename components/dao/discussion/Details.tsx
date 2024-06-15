@@ -5,20 +5,19 @@ import LanIcon from "@mui/icons-material/Lan";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import dateFormat from "dateformat";
 import { Overview, State } from "@components/dao/discussion/Widgets";
-import { useRouter } from "next/router";
+import { IProposal } from "@pages/[dao]/proposal/create";
 
-const Details: React.FC<{ date: Date }> = (props) => {
-  const router = useRouter();
-  const { discussion_id } = router.query;
+const Details: React.FC<{ data: IProposal }> = (props) => {
   return (
     <>
       <Overview
-        userDetailId={0}
-        alias={""}
+        userDetailId={props.data.user_details_id ?? 0}
+        alias={props.data.alias ?? ""}
         level={0}
-        img={""}
-        followers={[]}
-        created={0}
+        img={props.data.profile_img_url ?? ""}
+        // @ts-ignore
+        followers={props.data.followers ?? []}
+        created={props.data.created ?? 0}
       />
       <Box
         sx={{
@@ -41,7 +40,7 @@ const Details: React.FC<{ date: Date }> = (props) => {
           }}
         >
           <LanIcon sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }} />
-          ID: {discussion_id}
+          Id: {props.data.id}
         </Box>
         <Box
           sx={{
@@ -53,7 +52,7 @@ const Details: React.FC<{ date: Date }> = (props) => {
           }}
         >
           <CalendarTodayIcon sx={{ mr: ".3rem", fontSize: "1.2rem" }} />
-          Created: {dateFormat(props.date, "mmmm dS, yyyy")}
+          Created: {dateFormat(props.data.date, "mmmm dS, yyyy")}
         </Box>
       </Box>
       <State />
