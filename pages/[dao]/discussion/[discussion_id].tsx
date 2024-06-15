@@ -554,7 +554,7 @@ const Discussion: React.FC = () => {
                 />
               </TabPanel>
               <TabPanel value="4" sx={{ pl: 0, pr: 0 }}>
-                <Details date={data.date} />
+                <Details data={data} />
               </TabPanel>
             </TabContext>
           </Box>
@@ -567,15 +567,7 @@ const Discussion: React.FC = () => {
               ml: "1.5rem",
             }}
           >
-            <Overview
-              userDetailId={data.user_details_id}
-              alias={data.alias}
-              img={data.profile_img_url}
-              followers={data.user_followers}
-              created={data.created}
-              level={0}
-            />
-            <State />
+            <Details data={data} />
           </Box>
         </Box>
       ) : (
