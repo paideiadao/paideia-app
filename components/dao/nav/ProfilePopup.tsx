@@ -190,7 +190,7 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
           props.close();
         }}
       >
-        Disconnect wallet
+        Disconnect Wallet
       </Button>
       {/* </Box>
       </Box> */}

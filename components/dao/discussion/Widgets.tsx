@@ -49,7 +49,7 @@ export const Overview: React.FC<{
               {snipAddress(props.alias, 25, 10)}
             </Box>
             <Box sx={{ fontSize: ".8rem", color: "text.secondary" }}>
-              Level {props.level} | Philosopher
+              Level {props.level} | Citizen
             </Box>
           </Box>
         </Box>
