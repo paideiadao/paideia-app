@@ -75,7 +75,7 @@ export const VoteWidget: React.FC<{
           {percentage(props.no / (props.yes + props.no), 0)} NO
         </Box>
       </Box>
-      <Box sx={{ width: "100%", height: ".4rem", display: "flex" }}>
+      <Box sx={{ width: "100%", height: ".4rem", display: "flex", my: 0.5 }}>
         <Box
           sx={{
             width: percentage(props.yes / (props.yes + props.no)),
@@ -94,7 +94,7 @@ export const VoteWidget: React.FC<{
       <Box
         sx={{
           width: "100%",
-          display: deviceWrapper("none", "flex"),
+          display: "flex",
           alignItems: "center",
           color: "text.secondary",
           fontSize: "0.8rem",
