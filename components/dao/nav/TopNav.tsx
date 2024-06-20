@@ -290,30 +290,32 @@ const TopNav: React.FC<INav> = (props) => {
                   Getting Started
                 </Link>
               </Button>
-              <Box>
+              <Box sx={{ mr: globalContext.api?.daoUserData !== undefined ? null : "0.5rem" }}>
                 <DarkSwitch />
               </Box>
-              <Box sx={{ mr: "0.5rem" }}>
-                <IconButton
-                  onClick={handleOpen}
-                  sx={{
-                    color: theme.palette.text.secondary,
-                  }}
-                >
-                  <Badge
-                    badgeContent={
-                      globalContext.metadata.metadata.unreadNotificationCount
-                    }
-                    color="primary"
+              {globalContext.api?.daoUserData !== undefined && (
+                <Box sx={{ mr: "0.5rem" }}>
+                  <IconButton
+                    onClick={handleOpen}
+                    sx={{
+                      color: theme.palette.text.secondary,
+                    }}
                   >
-                    <NotificationsIcon
-                      sx={{
-                        fontSize: "18px",
-                      }}
-                    />
-                  </Badge>
-                </IconButton>
-              </Box>
+                    <Badge
+                      badgeContent={
+                        globalContext.metadata.metadata.unreadNotificationCount
+                      }
+                      color="primary"
+                    >
+                      <NotificationsIcon
+                        sx={{
+                          fontSize: "18px",
+                        }}
+                      />
+                    </Badge>
+                  </IconButton>
+                </Box>
+              )}
               {globalContext.api?.daoUserData !== undefined &&
               globalContext.api.daoUserData.loading === true ? (
                 <Box sx={{ width: { xs: "40px", md: "160px" } }}>

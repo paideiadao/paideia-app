@@ -522,14 +522,16 @@ const Contents: React.FC<ISideNavComponent> = (props) => {
             ml=".5rem"
             link={daoName ? `/${daoName}/staking` : ""}
           />
-          <BasicLink
-            icon={<TransformIcon sx={{ opacity: ".8" }} />}
-            title={"Manage Stake"}
-            selected={"Manage Stake" === subSelected}
-            set={setSubWrapper}
-            ml=".5rem"
-            link={daoName ? `/${daoName}/staking/manage` : ""}
-          />
+          {globalContext.api?.daoUserData && (
+            <BasicLink
+              icon={<TransformIcon sx={{ opacity: ".8" }} />}
+              title={"Manage Stake"}
+              selected={"Manage Stake" === subSelected}
+              set={setSubWrapper}
+              ml=".5rem"
+              link={daoName ? `/${daoName}/staking/manage` : ""}
+            />
+          )}
         </>
       ),
     },

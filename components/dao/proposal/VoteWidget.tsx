@@ -202,7 +202,7 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
             }
           >
             <Button
-              disabled={props.status !== "Active"}
+              disabled={props.status !== "Active" || !context.api?.daoUserData}
               sx={{
                 // ml: "1rem",
                 width: "100%",
@@ -224,9 +224,9 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
           <Typography sx={{ fontSize: "14px", fontWeight: "800" }}>
             {userVoteParsed !== null &&
               "You " +
-              (userVoteParsed
-                ? "approved the proposal"
-                : "voted against the proposal")}
+                (userVoteParsed
+                  ? "approved the proposal"
+                  : "voted against the proposal")}
             {userVoteParsed === null && "You did not vote on this proposal"}
           </Typography>
         </Box>

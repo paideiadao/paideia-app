@@ -217,6 +217,7 @@ const CastVote: React.FC = () => {
           </Button>
         </CancelLink>
         <LoadingButton
+          disabled={!context.api?.daoUserData}
           variant="contained"
           sx={{ width: "49%" }}
           size="small"
@@ -224,9 +225,15 @@ const CastVote: React.FC = () => {
           loadingPosition="center"
           onClick={handleSubmit}
         >
-          <Box sx={{
-            // display: deviceWrapper("none", "block") 
-          }}>Vote</Box>
+          <Box
+            sx={
+              {
+                // display: deviceWrapper("none", "block")
+              }
+            }
+          >
+            Vote
+          </Box>
         </LoadingButton>
       </Box>
     </Layout>

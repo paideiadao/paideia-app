@@ -2,8 +2,11 @@ import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import { Box } from "@mui/material";
 import * as React from "react";
 import LanIcon from "@mui/icons-material/Lan";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import dateFormat from "dateformat";
 import { Overview, State } from "@components/dao/discussion/Widgets";
 import { IProposal } from "@pages/[dao]/proposal/create";
+import { deviceWrapper } from "@components/utilities/Style";
 
 const Details: React.FC<{ data: IProposal }> = (props) => {
   return (
@@ -39,6 +42,18 @@ const Details: React.FC<{ data: IProposal }> = (props) => {
         >
           <LanIcon sx={{ opacity: ".8", fontSize: "1rem", mr: ".3rem" }} />
           Id: {props.data.id}
+        </Box>
+        <Box
+          sx={{
+            alignItems: "center",
+            color: "text.secondary",
+            fontSize: ".9rem",
+            display: deviceWrapper("flex", "none"),
+            mt: ".5rem",
+          }}
+        >
+          <CalendarTodayIcon sx={{ mr: ".3rem", fontSize: "1.2rem" }} />
+          Created: {dateFormat(props.data.date, "mmmm dS, yyyy")}
         </Box>
       </Box>
       <State />
