@@ -4,10 +4,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Accordion, Box, Button, Typography } from "@mui/material";
 import {
-  ActiveInactive,
-  ImageWrapper,
   Value,
-  WalletListing,
 } from "./ReviewDrawer";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
@@ -170,22 +167,12 @@ const Tokenomics: React.FC<{
           />
           <Value
             labelWidth="35%"
-            title="Token Name"
-            value={data.tokenomics.tokenName}
-          />
-          <Value
-            labelWidth="35%"
-            title="Token Ticker"
-            value={data.tokenomics.tokenTicker}
-          />
-          <Value
-            labelWidth="35%"
             title="Stake Pool Size"
             value={data.tokenomics.stakingConfig.stakePoolSize}
           />
           <Value
             labelWidth="35%"
-            title="Staking Emission Amount"
+            title="Staking Emission Amount (Decimal Adjusted)"
             value={data.tokenomics.stakingConfig.stakingEmissionAmount}
           />
           <Value

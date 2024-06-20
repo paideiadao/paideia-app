@@ -10,9 +10,10 @@ import * as React from "react";
 const BasicInformation: React.FC = () => {
   const context = React.useContext<IConfigContext>(ConfigContext);
   const data = context.api?.data.basicInformation;
+  const loaded = context.api?.data.loaded;
 
   const checkError = () => {
-    return data?.daoName !== "" && data?.daoUrl !== "";
+    return data?.daoName !== "" && data?.daoUrl !== "" || !loaded;
   };
 
   return (

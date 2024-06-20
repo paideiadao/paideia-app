@@ -71,32 +71,6 @@ const ExistingToken: React.FC<IData<ITokenomics>> = (props) => {
           }
         />
       </Grid>
-      <Grid item md={6}>
-        <TextField
-          value={data.tokenName}
-          sx={{ width: "100%" }}
-          label="Token Name"
-          onChange={(e) =>
-            props.setData({
-              ...data,
-              tokenName: e.target.value,
-            })
-          }
-        />
-      </Grid>
-      <Grid item md={6}>
-        <TextField
-          value={data.tokenTicker}
-          sx={{ width: "100%" }}
-          label="Token Ticker"
-          onChange={(e) =>
-            props.setData({
-              ...data,
-              tokenTicker: e.target.value,
-            })
-          }
-        />
-      </Grid>
     </Grid>
   );
 };

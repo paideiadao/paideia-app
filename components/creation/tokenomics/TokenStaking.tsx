@@ -122,7 +122,7 @@ const TokenStaking: React.FC<IData<ITokenomics>> = (props) => {
             type="number"
             value={props.data.stakingConfig.stakingEmissionAmount}
             sx={{ width: "100%" }}
-            label="Emission Amount"
+            label="Emission Amount (Decimal Adjusted)"
             onChange={(e) =>
               props.setData({
                 ...props.data,

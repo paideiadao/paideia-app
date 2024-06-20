@@ -156,6 +156,7 @@ const DaoConfig: React.FC = () => {
             mainText: daoData.design.footer_text,
           },
         },
+        loaded: true,
       });
       setDiff({
         ...defaultState,
@@ -216,6 +217,7 @@ const DaoConfig: React.FC = () => {
             mainText: daoData.design.footer_text,
           },
         },
+        loaded: true,
       });
     }
   }, [daoData, daoConfig]);

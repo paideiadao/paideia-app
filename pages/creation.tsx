@@ -66,9 +66,9 @@ export default function Creation() {
     },
     tokenomics: {
       type: "create",
-      tokenName: "",
+      tokenName: "__default",
       tokenId: "",
-      tokenTicker: "",
+      tokenTicker: "__default",
       tokenAmount: 0,
       tokenImage: -1,
       tokenImageUrl: "",
