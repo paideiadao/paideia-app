@@ -23,7 +23,7 @@ export const StakingActivity: React.FC = () => {
     <Box>
       <Subheader title="Activity" />
       {[].map((i: any, c: number) => {
-        return <Activity i={i} c={c} key="activity-dummy"/>;
+        return <Activity i={i} c={c} key="activity-dummy" />;
       })}
     </Box>
   );
@@ -72,7 +72,11 @@ const Staking: React.FC = () => {
                 : `/${dao}/staking/manage`
             }
           >
-            <Button variant="contained" size="small">
+            <Button
+              variant="contained"
+              size="small"
+              disabled={!appContext.api?.daoUserData}
+            >
               Manage Stake{" "}
               <img
                 src={Coin.src}

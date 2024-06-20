@@ -1,4 +1,12 @@
-import { Box, Button, Chip, CircularProgress, Fab, Tab, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Fab,
+  Tab,
+  useTheme,
+} from "@mui/material";
 import Layout from "@components/dao/Layout";
 import { deviceWrapper } from "@components/utilities/Style";
 import Comments, { IComment } from "@components/dao/discussion/Comments";
@@ -153,8 +161,9 @@ const Proposal: React.FC = () => {
                     position: "relative",
                     backgroundImage: deviceWrapper(
                       `linear-gradient(
-                  to bottom, transparent, ${themeContext.theme === DarkTheme ? "black" : "white"
-                      }
+                  to bottom, transparent, ${
+                    themeContext.theme === DarkTheme ? "black" : "white"
+                  }
                 ), url(${value.image_url})`,
                       `url('${value.image_url}')`
                     ),
@@ -262,12 +271,12 @@ const Proposal: React.FC = () => {
                         ) > -1
                           ? 1
                           : value.dislikes.indexOf(
-                            context.api?.daoUserData
-                              ? context.api.daoUserData.id
-                              : null
-                          ) > -1
-                            ? 0
-                            : undefined
+                              context.api?.daoUserData
+                                ? context.api.daoUserData.id
+                                : null
+                            ) > -1
+                          ? 0
+                          : undefined
                       }
                       putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
@@ -320,26 +329,6 @@ const Proposal: React.FC = () => {
                         putUrl={"/proposals/follow/" + parsed_proposal_id}
                       />
                     )}
-                    {/* <Link
-                      href={
-                        dao === undefined
-                          ? `/dao/proposal/${proposal_id}/vote`
-                          : `/${dao}/proposal/${proposal_id}/vote`
-                      }
-                    >
-                      <Button
-                        disabled={value.status !== "Active"}
-                        sx={{
-                          ml: "1rem",
-                          display: deviceWrapper("none", "flex"),
-                        }}
-                        variant="contained"
-                        size="small"
-                        startIcon={<GavelIcon />}
-                      >
-                        Vote Now
-                      </Button>
-                    </Link> */}
                   </Box>
                 </Box>
                 <Box
@@ -403,12 +392,12 @@ const Proposal: React.FC = () => {
                         ) > -1
                           ? 1
                           : value.dislikes.indexOf(
-                            context.api?.daoUserData
-                              ? context.api.daoUserData.id
-                              : null
-                          ) > -1
-                            ? 0
-                            : undefined
+                              context.api?.daoUserData
+                                ? context.api.daoUserData.id
+                                : null
+                            ) > -1
+                          ? 0
+                          : undefined
                       }
                       putUrl={`/proposals/like/${parsed_proposal_id}`}
                     />
@@ -447,21 +436,23 @@ const Proposal: React.FC = () => {
                     >
                       <Tab label="Proposal Info" value="0" />
                       <Tab
-                        label={`Comments | ${value.comments
-                          .concat(liveComments)
-                          .filter((x) => x)
-                          .filter(
-                            (v, i, a) =>
-                              a.map((comment) => comment.id).indexOf(v.id) ===
-                              i
-                          ).length
-                          }`}
+                        label={`Comments | ${
+                          value.comments
+                            .concat(liveComments)
+                            .filter((x) => x)
+                            .filter(
+                              (v, i, a) =>
+                                a.map((comment) => comment.id).indexOf(v.id) ===
+                                i
+                            ).length
+                        }`}
                         value="1"
                       />
                       <Tab
-                        label={`References | ${(value?.references_meta?.length ?? 0) +
+                        label={`References | ${
+                          (value?.references_meta?.length ?? 0) +
                           (value?.referenced_meta?.length ?? 0)
-                          }`}
+                        }`}
                         value="2"
                       />
                       <Tab label="Addendums" value="3" />
@@ -521,7 +512,6 @@ const Proposal: React.FC = () => {
                 />
               </Box>
             </Box>
-
           </>
         )}
         {!loaded && (
@@ -546,7 +536,7 @@ const Proposal: React.FC = () => {
         }
       >
         <Button
-          disabled={value.status !== "Active"}
+          disabled={value.status !== "Active" || !context.api?.daoUserData}
           // size="small"
           startIcon={<GavelIcon />}
           sx={{
@@ -557,8 +547,9 @@ const Proposal: React.FC = () => {
             display: deviceWrapper("flex", "none"),
             borderRadius: 0,
             "&.Mui-disabled": {
-              backgroundColor: theme.palette.mode === "dark" ? "rgb(46,52,64)" : "grey.400"
-            }
+              backgroundColor:
+                theme.palette.mode === "dark" ? "rgb(46,52,64)" : "grey.400",
+            },
           }}
           variant="contained"
         >
