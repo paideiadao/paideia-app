@@ -93,7 +93,7 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
         <Box sx={{ width: "100%", color: "text.primary" }}>
           <TextField
             label="Footer Text"
-            value={data.footer.mainText}
+            value={data.footer.mainText ?? ""}
             sx={{ width: "100%", mb: "1rem" }}
             onChange={(e: any) =>
               setData({

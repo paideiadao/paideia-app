@@ -13,16 +13,17 @@ const ParticipationWeight: React.FC = () => {
 
   const checkError = () => {
     return (
-      (data?.governance.participationWeight ?? 0) >= 0 &&
-      (data?.governance.participationWeight ?? 0) <= 100 &&
-      (data?.governance.pureParticipationWeight ?? 0) >= 0 &&
-      (data?.governance.pureParticipationWeight ?? 0) <= 100 &&
-      Number(data?.governance.participationWeight ?? 0) +
-        Number(data?.governance.participationWeight ?? 0) >=
-        0 &&
-      Number(data?.governance.participationWeight ?? 0) +
-        Number(data?.governance.pureParticipationWeight ?? 0) <=
-        100
+      ((data?.governance.participationWeight ?? 0) >= 0 &&
+        (data?.governance.participationWeight ?? 0) <= 100 &&
+        (data?.governance.pureParticipationWeight ?? 0) >= 0 &&
+        (data?.governance.pureParticipationWeight ?? 0) <= 100 &&
+        Number(data?.governance.participationWeight ?? 0) +
+          Number(data?.governance.participationWeight ?? 0) >=
+          0 &&
+        Number(data?.governance.participationWeight ?? 0) +
+          Number(data?.governance.pureParticipationWeight ?? 0) <=
+          100) ||
+      !data?.loaded
     );
   };
 

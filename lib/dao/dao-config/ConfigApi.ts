@@ -12,6 +12,7 @@ export interface IConfigData {
   tokenomics: ITokenomics;
   governance: IGovernance;
   design: IDesign;
+  loaded?: boolean;
 }
 
 export default class ConfigApi extends AbstractApi {

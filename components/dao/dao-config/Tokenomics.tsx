@@ -4,6 +4,7 @@ import {
   LearnMore,
 } from "@components/creation/utilities/HeaderComponents";
 import { deviceStruct } from "@components/utilities/Style";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import {
   ConfigContext,
   IConfigContext,
@@ -23,6 +24,7 @@ import {
 import * as React from "react";
 
 const Tokenomics: React.FC = () => {
+  const appContext = React.useContext<IGlobalContext>(GlobalContext);
   const context = React.useContext<IConfigContext>(ConfigContext);
   const data = context.api?.data;
   const setData = context.api?.setData ?? (() => {});
@@ -63,12 +65,13 @@ const Tokenomics: React.FC = () => {
 
   const checkError = () => {
     return (
-      (data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
-      (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
-      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
-      (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
-      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
-      (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) <= 10
+      ((data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
+        (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
+        (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
+        (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
+        (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
+        (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) <= 10) ||
+      !data?.loaded
     );
   };
 
@@ -98,7 +101,13 @@ const Tokenomics: React.FC = () => {
           <Grid item md={6}>
             <TextField
               type="number"
-              value={data?.tokenomics.stakingConfig.stakingEmissionAmount}
+              value={
+                (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) /
+                Math.pow(
+                  10,
+                  appContext.api?.daoData?.tokenomics?.token_decimals ?? 0
+                )
+              }
               sx={{ width: "100%" }}
               label="Emission Amount"
               onChange={(e) =>
@@ -108,7 +117,13 @@ const Tokenomics: React.FC = () => {
                     ...data?.tokenomics,
                     stakingConfig: {
                       ...data?.tokenomics.stakingConfig,
-                      stakingEmissionAmount: e.target.value,
+                      stakingEmissionAmount:
+                        Number(e.target.value) *
+                        Math.pow(
+                          10,
+                          appContext.api?.daoData?.tokenomics?.token_decimals ??
+                            0
+                        ),
                     },
                   },
                 })
