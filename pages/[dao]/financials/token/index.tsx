@@ -53,10 +53,10 @@ const Token: React.FC = () => {
         </Link>
       </Box>
       {tokenomics && <>
-        <InfoGrid data={tokenStats} tokenId={tokenomics.token_id} />
+        <InfoGrid data={tokenStats} tokenId={tokenomics.token_id} ticker={tokenomics.token_ticker} />
         <Chart tokenId={tokenomics.token_id} />
-        <Statistics data={tokenStats} tokenId={tokenomics.token_id} />
-        <Markets data={tokenStats} tokenId={tokenomics.token_id} />
+        <Statistics data={tokenStats} tokenId={tokenomics.token_id} ticker={tokenomics.token_ticker} />
+        <Markets data={tokenStats} tokenId={tokenomics.token_id} ticker={tokenomics.token_ticker} />
       </>}
     </Layout>
   );
