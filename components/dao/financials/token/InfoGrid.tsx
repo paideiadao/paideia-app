@@ -56,7 +56,7 @@ const InfoCard: React.FC<IInfoCard> = (props) => {
 };
 
 const InfoGrid: React.FC<any> = (props) => {
-  const ticker = props.data?.token_name ?? "Token";
+  const ticker = props.ticker ?? props.data?.token_name ?? "Token";
   const tempDate = new Date();
   const infoCards: IInfoCard[] = [
     {

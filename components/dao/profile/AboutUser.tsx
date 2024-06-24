@@ -145,7 +145,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
           >
             Followers
             <Box sx={{ color: "text.primary", fontSize: "1.1rem" }}>
-              {props.followers.length}
+              {props.followers?.length}
             </Box>
           </Box>
           <Box
@@ -194,7 +194,7 @@ const AboutUser: React.FC<IAboutUser> = (props) => {
           <UserAttr label="Yes person" />
         </Box> */}
         <Box sx={{ width: "100%" }}>
-          {props.social_links.map((i: ISocialLink, c: number) => {
+          {props.social_links?.map((i: ISocialLink, c: number) => {
             return (
               <UserSocial
                 label={i.address}

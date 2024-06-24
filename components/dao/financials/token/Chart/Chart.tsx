@@ -19,7 +19,7 @@ const Chart: React.FC<IChartProps> = ({ tokenId }) => {
       }}
     >
       <Box sx={{ mb: 1 }}>
-        <Header title="Price chart" />
+        <Header title="Price Chart" />
       </Box>
       <Box sx={{
         borderRadius: ".4rem",

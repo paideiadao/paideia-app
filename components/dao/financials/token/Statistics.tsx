@@ -66,7 +66,7 @@ const StatisticsCard: React.FC<{ title: string | JSX.Element; c: number }> = (
 };
 
 const Statistics: React.FC<any> = (props) => {
-  const ticker = props.data?.token_name ?? "Token";
+  const ticker = props.ticker ?? props.data?.token_ticker ?? "Token";
   return (
     <Box>
       <Header title={`${ticker} Statistics`} />
@@ -409,7 +409,7 @@ const Statistics: React.FC<any> = (props) => {
           </Box>
         </StatisticsCard>
       </StatisticsRow>
-      <StatisticsRow title={`${ticker} supply`}>
+      <StatisticsRow title={`${ticker} Supply`}>
         <StatisticsCard title="Total Supply" c={0}>
           <Box
             sx={{

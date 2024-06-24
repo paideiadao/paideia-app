@@ -30,7 +30,7 @@ const Token: React.FC = () => {
   return (
     <Layout width={deviceWrapper("94%", "97%")}>
       <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
-        <Header title="Token Information - (Coming Soon)" large />
+        <Header title="Token Information - Beta" large />
         <Link
           href={
             dao === undefined
@@ -53,10 +53,10 @@ const Token: React.FC = () => {
         </Link>
       </Box>
       {tokenomics && <>
-        <InfoGrid data={tokenStats} tokenId={tokenomics.token_id} />
+        <InfoGrid data={tokenStats} tokenId={tokenomics.token_id} ticker={tokenomics.token_ticker} />
         <Chart tokenId={tokenomics.token_id} />
-        <Statistics data={tokenStats} tokenId={tokenomics.token_id} />
-        <Markets data={tokenStats} tokenId={tokenomics.token_id} />
+        <Statistics data={tokenStats} tokenId={tokenomics.token_id} ticker={tokenomics.token_ticker} />
+        <Markets data={tokenStats} tokenId={tokenomics.token_id} ticker={tokenomics.token_ticker} />
       </>}
     </Layout>
   );
