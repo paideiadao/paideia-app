@@ -173,8 +173,8 @@ export const getUserSide = (
   return likes.indexOf(userId) > -1
     ? 1
     : dislikes.indexOf(userId) > -1
-      ? 0
-      : undefined;
+    ? 0
+    : undefined;
 };
 
 // userSide, undefined for no vote, 0 for dislike, 1 for like
@@ -208,156 +208,162 @@ export const LikesDislikes: React.FC<ILikesDislikes> = (props) => {
   }, [loading]);
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", fontSize: iconFont }}>
-      {value.userSide === undefined ? (
-        <>
-          <ButtonBase
-            draggable="false"
-            onClick={() => {
-              api.like();
-              setValue({
-                ...value,
-                userSide: 1,
-                likes: value.likes + 1,
-              });
-            }}
-          >
-            <ThumbUpOffAltIcon
-              sx={{
-                ml: ".2rem",
-                mr: ".1rem",
-                fontSize: iconFont,
-                // cursor: "pointer",
-              }}
-            />
-            {value.likes}
-          </ButtonBase>
-          <ButtonBase
-            draggable="false"
-            onClick={() => {
-              api.dislike();
-              setValue({
-                ...value,
-                userSide: 0,
-                dislikes: value.dislikes + 1,
-              });
-            }}
-          >
-            <ThumbDownOffAltIcon
-              sx={{
-                mr: ".1rem",
-                fontSize: iconFont,
-                // cursor: "pointer",
-                ml: ".4rem",
-              }}
-            />
-            {value.dislikes}
-          </ButtonBase>
-        </>
-      ) : value.userSide === 0 ? (
-        <>
-          <ButtonBase
-            draggable="false"
-            onClick={() => {
-              api.like();
-              setValue({
-                ...value,
-                userSide: 1,
-                likes: value.likes + 1,
-                dislikes: value.dislikes - 1,
-              });
-            }}
-          >
-            <ThumbUpOffAltIcon
-              sx={{
-                ml: ".2rem",
-                mr: ".1rem",
-                fontSize: iconFont,
-                // cursor: "pointer",
-              }}
-            />
-            {value.likes}
-          </ButtonBase>
-          <ButtonBase
-            draggable="false"
-            onClick={() => {
-              api.remove();
-              setValue({
-                ...value,
-                userSide: undefined,
-                likes: value.likes,
-                dislikes: value.dislikes - 1,
-              });
-            }}
-          >
-            <ThumbDownIcon
-              sx={{
-                mr: ".1rem",
-                ml: ".4rem",
-                fontSize: iconFont,
-                // cursor: "pointer",
-                color: "error.light",
-              }}
-            />
-            <Box sx={{ color: "error.light", display: "inline" }}>
-              {value.dislikes}
-            </Box>
-          </ButtonBase>
-        </>
-      ) : (
-        <>
-          <ButtonBase
-            draggable="false"
-            onClick={() => {
-              api.remove();
-              setValue({
-                ...value,
-                userSide: undefined,
-                likes: value.likes - 1,
-                dislikes: value.dislikes,
-              });
-            }}
-          >
-            <ThumbUpIcon
-              sx={{
-                ml: ".2rem",
-                mr: ".1rem",
-                fontSize: iconFont,
-                color: "success.light",
-                cursor: "pointer",
-              }}
-            />
-            <Box sx={{ color: "success.light" }}>{value.likes}</Box>
-          </ButtonBase>
-          <ButtonBase
-            draggable="false"
-            onClick={() => {
-              api.dislike();
-              setValue({
-                ...value,
-                userSide: 0,
-                dislikes: value.dislikes + 1,
-                likes: value.likes - 1,
-              });
-            }}
-          >
-            <ThumbDownOffAltIcon
-              sx={{
-                mr: ".1rem",
-                fontSize: iconFont,
-                cursor: "pointer",
-                ml: ".4rem",
-              }}
-            />
-            {value.dislikes}
-          </ButtonBase>
-        </>
-      )}
-    </Box>
+    <>
+      {globalContext.api?.daoUserData ? (
+        <Box sx={{ display: "flex", alignItems: "center", fontSize: iconFont }}>
+          {value.userSide === undefined ? (
+            <>
+              <ButtonBase
+                draggable="false"
+                onClick={() => {
+                  api.like();
+                  setValue({
+                    ...value,
+                    userSide: 1,
+                    likes: value.likes + 1,
+                  });
+                }}
+              >
+                <ThumbUpOffAltIcon
+                  sx={{
+                    ml: ".2rem",
+                    mr: ".1rem",
+                    fontSize: iconFont,
+                    // cursor: "pointer",
+                  }}
+                />
+                {value.likes}
+              </ButtonBase>
+              <ButtonBase
+                draggable="false"
+                onClick={() => {
+                  api.dislike();
+                  setValue({
+                    ...value,
+                    userSide: 0,
+                    dislikes: value.dislikes + 1,
+                  });
+                }}
+              >
+                <ThumbDownOffAltIcon
+                  sx={{
+                    mr: ".1rem",
+                    fontSize: iconFont,
+                    // cursor: "pointer",
+                    ml: ".4rem",
+                  }}
+                />
+                {value.dislikes}
+              </ButtonBase>
+            </>
+          ) : value.userSide === 0 ? (
+            <>
+              <ButtonBase
+                draggable="false"
+                onClick={() => {
+                  api.like();
+                  setValue({
+                    ...value,
+                    userSide: 1,
+                    likes: value.likes + 1,
+                    dislikes: value.dislikes - 1,
+                  });
+                }}
+              >
+                <ThumbUpOffAltIcon
+                  sx={{
+                    ml: ".2rem",
+                    mr: ".1rem",
+                    fontSize: iconFont,
+                    // cursor: "pointer",
+                  }}
+                />
+                {value.likes}
+              </ButtonBase>
+              <ButtonBase
+                draggable="false"
+                onClick={() => {
+                  api.remove();
+                  setValue({
+                    ...value,
+                    userSide: undefined,
+                    likes: value.likes,
+                    dislikes: value.dislikes - 1,
+                  });
+                }}
+              >
+                <ThumbDownIcon
+                  sx={{
+                    mr: ".1rem",
+                    ml: ".4rem",
+                    fontSize: iconFont,
+                    // cursor: "pointer",
+                    color: "error.light",
+                  }}
+                />
+                <Box sx={{ color: "error.light", display: "inline" }}>
+                  {value.dislikes}
+                </Box>
+              </ButtonBase>
+            </>
+          ) : (
+            <>
+              <ButtonBase
+                draggable="false"
+                onClick={() => {
+                  api.remove();
+                  setValue({
+                    ...value,
+                    userSide: undefined,
+                    likes: value.likes - 1,
+                    dislikes: value.dislikes,
+                  });
+                }}
+              >
+                <ThumbUpIcon
+                  sx={{
+                    ml: ".2rem",
+                    mr: ".1rem",
+                    fontSize: iconFont,
+                    color: "success.light",
+                    cursor: "pointer",
+                  }}
+                />
+                <Box sx={{ color: "success.light" }}>{value.likes}</Box>
+              </ButtonBase>
+              <ButtonBase
+                draggable="false"
+                onClick={() => {
+                  api.dislike();
+                  setValue({
+                    ...value,
+                    userSide: 0,
+                    dislikes: value.dislikes + 1,
+                    likes: value.likes - 1,
+                  });
+                }}
+              >
+                <ThumbDownOffAltIcon
+                  sx={{
+                    mr: ".1rem",
+                    fontSize: iconFont,
+                    cursor: "pointer",
+                    ml: ".4rem",
+                  }}
+                />
+                {value.dislikes}
+              </ButtonBase>
+            </>
+          )}
+        </Box>
+      ) : null}
+    </>
   );
 };
 
-const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) => {
+const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({
+  endDate,
+}) => {
   const [time, setTime] = React.useState<string>("");
 
   React.useEffect(() => {
@@ -374,7 +380,9 @@ const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) =>
         }
 
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
@@ -396,24 +404,24 @@ const CountdownTimer: React.FC<{ endDate: Date | undefined }> = ({ endDate }) =>
           icon={
             <Box
               sx={{
-                height: '1rem',
-                width: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                color: 'white',
+                height: "1rem",
+                width: "1rem",
+                display: "flex",
+                alignItems: "center",
+                color: "white",
               }}
             >
-              <AccessTimeFilledIcon sx={{ fontSize: '1rem' }} />
+              <AccessTimeFilledIcon sx={{ fontSize: "1rem" }} />
             </Box>
           }
           label={time}
           size="small"
           sx={{
-            fontSize: '.7rem',
-            color: 'backgroundColor.main',
-            backgroundColor: 'tokenAlert.main',
-            border: '1px solid',
-            borderColor: 'tokenAlert.main'
+            fontSize: ".7rem",
+            color: "backgroundColor.main",
+            backgroundColor: "tokenAlert.main",
+            border: "1px solid",
+            borderColor: "tokenAlert.main",
           }}
         />
       ) : (
@@ -490,8 +498,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
             if (!moved) {
               router.push(
                 (dao === undefined ? "" : `/${dao}/`) +
-                `${!props.is_proposal ? "discussion" : "proposal"
-                }/${generateSlug(props.id, props.name)}?tab=comments`
+                  `${
+                    !props.is_proposal ? "discussion" : "proposal"
+                  }/${generateSlug(props.id, props.name)}?tab=comments`
               );
             }
           }}
@@ -652,8 +661,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                      `${!props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                        `${
+                          !props.is_proposal ? "discussion" : "proposal"
+                        }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
@@ -715,8 +725,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   if (!moved) {
                     router.push(
                       (dao === undefined ? "" : `/${dao}/`) +
-                      `${!props.is_proposal ? "discussion" : "proposal"
-                      }/${generateSlug(props.id, props.name)}`
+                        `${
+                          !props.is_proposal ? "discussion" : "proposal"
+                        }/${generateSlug(props.id, props.name)}`
                     );
                   }
                 }}
@@ -737,7 +748,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   textAlign: "left",
                 }}
               >
-                <Box sx={{ position: "absolute", top: "0.4rem", right: ".3rem" }}>
+                <Box
+                  sx={{ position: "absolute", top: "0.4rem", right: ".3rem" }}
+                >
                   <CountdownTimer endDate={props.end_date} />
                 </Box>
                 <Box

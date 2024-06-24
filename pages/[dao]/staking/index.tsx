@@ -8,7 +8,7 @@ import GeneralInfo from "@components/dao/staking/GeneralInfo";
 import YourStaking, {
   IUserStakeData,
 } from "@components/dao/staking/YourStaking";
-import { Avatar, Box, Button } from "@mui/material";
+import { Avatar, Box, Button, Tooltip } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -72,21 +72,41 @@ const Staking: React.FC = () => {
                 : `/${dao}/staking/manage`
             }
           >
-            <Button
-              variant="contained"
-              size="small"
-              disabled={!appContext.api?.daoUserData}
-            >
-              Manage Stake{" "}
-              <img
-                src={Coin.src}
-                style={{
-                  marginLeft: ".5rem",
-                  filter:
-                    themeContext.theme === LightTheme ? "invert(100%)" : "",
-                }}
-              />
-            </Button>
+            {appContext.api?.daoUserData ? (
+              <Button variant="contained" size="small">
+                Manage Stake{" "}
+                <img
+                  src={Coin.src}
+                  style={{
+                    marginLeft: ".5rem",
+                    filter:
+                      themeContext.theme === LightTheme ? "invert(100%)" : "",
+                  }}
+                />
+              </Button>
+            ) : (
+              <Tooltip
+                title="Connect wallet to manage stake"
+                arrow
+                placement="left"
+              >
+                <span style={{ marginLeft: "auto" }}>
+                  <Button variant="contained" size="small" disabled>
+                    Manage Stake{" "}
+                    <img
+                      src={Coin.src}
+                      style={{
+                        marginLeft: ".5rem",
+                        filter:
+                          themeContext.theme === LightTheme
+                            ? "invert(100%)"
+                            : "",
+                      }}
+                    />
+                  </Button>
+                </span>
+              </Tooltip>
+            )}
           </Link>
         </Box>
       </Box>
