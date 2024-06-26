@@ -63,8 +63,8 @@ const AddWallet: React.FC = () => {
     wallet !== "" && !dAppWallet.connected
       ? "mobile"
       : wallet !== "" && dAppWallet.connected
-      ? "nautilus"
-      : "listing"
+        ? "nautilus"
+        : "listing"
   );
 
   // trpc
@@ -442,8 +442,7 @@ const AddWallet: React.FC = () => {
         `ergoauth://${process.env.ERGOAUTH_DOMAIN?.replace(
           "https://",
           ""
-        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${
-          response.verificationId
+        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${response.verificationId
         }&address=${address}`
       );
     } catch (e: any) {
@@ -582,13 +581,28 @@ export const isAddressValid = (address: string) => {
 };
 
 export const getErgoWalletContext = async () => {
-  // @ts-ignore
-  const walletConnector = window.ergoConnector.nautilus;
-  if (!(await walletConnector.isConnected())) {
-    await walletConnector.connect();
+  try {
+    // @ts-ignore
+    const walletConnector = window.ergoConnector.nautilus;
+    let context;
+
+    try {
+      context = await walletConnector.getContext();
+    } catch (contextError) {
+      console.log('No context available, attempting to connect...');
+      await walletConnector.connect();
+      context = await walletConnector.getContext(); // Try to get context again after connecting
+    }
+
+    if (!context) {
+      throw new Error('Failed to obtain context even after connecting.');
+    }
+
+    return context;
+  } catch (error) {
+    console.error('Error retrieving the wallet context:', error);
+    throw error; // Re-throw the error if you want the caller to handle it.
   }
-  const context = await walletConnector.getContext();
-  return context;
 };
 
 export default AddWallet;
