@@ -30,7 +30,7 @@ const Mine: React.FC = () => {
     <Layout width={"96%"}>
       {context.api?.daoUserData ? (
         <PropsosalListing
-          title="My proposals"
+          title="My Proposals"
           proposals={
             data === undefined
               ? undefined

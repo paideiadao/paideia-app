@@ -20,7 +20,7 @@ const All: React.FC = () => {
 
   return (
     <Layout width={"96%"}>
-      <PropsosalListing title="All proposals" proposals={proposalData} />
+      <PropsosalListing title="All Proposals" proposals={proposalData} />
     </Layout>
   );
 };

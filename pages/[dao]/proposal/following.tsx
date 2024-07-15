@@ -40,7 +40,7 @@ const Following: React.FC = () => {
   return (
     <Layout width={"96%"}>
       <PropsosalListing
-        title="Following proposals"
+        title="Following Proposals"
         proposals={
           proposalData === null
             ? undefined

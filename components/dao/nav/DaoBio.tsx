@@ -293,7 +293,7 @@ export const DaoSelector: FC<IDaoSelector> = (props) => {
               }}
               href="/"
             >
-              View Complete Dao List
+              VIEW COMPLETE DAO LIST
             </Button>
           </Box>
         </ClickAwayListener>
