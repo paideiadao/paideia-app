@@ -57,7 +57,6 @@ const InfoCard: React.FC<IInfoCard> = (props) => {
 
 const InfoGrid: React.FC<any> = (props) => {
   const ticker = props.ticker ?? props.data?.token_name ?? "Token";
-  const tempDate = new Date();
   const infoCards: IInfoCard[] = [
     {
       value: safeFormattedString(
@@ -94,7 +93,7 @@ const InfoGrid: React.FC<any> = (props) => {
       title: `All Time High`,
     },
     {
-      value: "N/A",
+      value: safeFormattedString(props.data?.market_cap.market_cap, "$", 0),
       widget: <></>,
       title: `Market Cap`,
     },
@@ -114,9 +113,11 @@ const InfoGrid: React.FC<any> = (props) => {
       title: `Fully Diluted Market Cap`,
     },
     {
-      value: "N/A",
-      widget: <></>,
-      title: `Volume (24hrs)`,
+      value: safeFormattedString(
+        props.data?.token_price_history_summary.hour_24.volume, "", 4
+      ),
+      widget: <TimeWidget amount={24} unit="hrs" />,
+      title: `Volume`,
     },
     {
       value: safeFormattedString(

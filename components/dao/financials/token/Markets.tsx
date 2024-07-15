@@ -54,8 +54,8 @@ const Markets: React.FC<any> = (props) => {
         pairs: market.pair,
         source: market.source,
         price: market.price,
-        volume: "N/A",
-        liquidity: "N/A",
+        volume: Math.floor(market.volume * 100) / 100,
+        liquidity: "Data Unavailable",
       };
     }) ?? [];
   return (

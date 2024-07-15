@@ -18,7 +18,6 @@ const StatisticsRow: React.FC<{ title: string; secondRow?: JSX.Element }> = (
         sx={{
           display: "flex",
           alignItems: "center",
-          mt: ".5rem",
           flexWrap: deviceWrapper("wrap", "nowrap"),
         }}
       >
@@ -93,7 +92,15 @@ const Statistics: React.FC<any> = (props) => {
             />
           </Box>
         </StatisticsCard>
-        <StatisticsCard title="Price Change" c={1}>
+        <StatisticsCard
+          c={3}
+          title={
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ mr: "0" }}>Price Change</Box>
+              <TimeWidget amount={24} unit="hrs" small />
+            </Box>
+          }
+        >
           <Box
             sx={{
               fontSize: deviceWrapper(".75rem", "1rem"),
@@ -143,8 +150,20 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            <Box sx={{ mr: ".5rem" }}>N/A</Box>
-            {/* <PerformanceWidget value={0.21} invert /> */}
+            <Box sx={{ mr: ".5rem" }}>
+              {safeFormattedString(
+                props.data?.token_price_history_summary.hour_24.volume,
+                ""
+              )}
+            </Box>
+            <PerformanceWidget
+              value={
+                (props.data?.token_price_history_summary.hour_24.volume -
+                  props.data?.token_price_history_summary.yesterday.volume) /
+                props.data?.token_price_history_summary.yesterday.volume
+              }
+              invert
+            />
           </Box>
         </StatisticsCard>
       </StatisticsRow>
@@ -157,11 +176,12 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            <Box sx={{ mr: ".5rem" }}>N/A</Box>
-            {/* <PerformanceWidget value={data.marketCapPercentage} invert /> */}
+            <Box sx={{ mr: ".5rem" }}>
+              {safeFormattedString(props.data?.market_cap.market_cap, "$", 0)}
+            </Box>
           </Box>
         </StatisticsCard>
-        <StatisticsCard title="Volume / Market cap" c={1}>
+        <StatisticsCard title="Volume / Market Cap" c={1}>
           <Box
             sx={{
               fontSize: deviceWrapper(".75rem", "1rem"),
@@ -169,7 +189,13 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            <Box sx={{ mr: ".5rem" }}>N/A</Box>
+            <Box sx={{ mr: ".5rem" }}>
+              {safeFormattedString(
+                props.data?.token_price_history_summary.hour_24.volume /
+                  props.data?.market_cap.market_cap,
+                ""
+              )}
+            </Box>
           </Box>
         </StatisticsCard>
         <StatisticsCard title="Fully Diluted Market Cap" c={2}>
@@ -319,9 +345,9 @@ const Statistics: React.FC<any> = (props) => {
               >
                 <PerformanceWidget
                   value={
-                    (props.data?.token_price_history_summary.all_time.close ??
-                      0) /
-                    (props.data?.token_price_history_summary.all_time.open ?? 1)
+                    props.data?.token_price_history_summary.all_time.close /
+                      props.data?.token_price_history_summary.all_time.open -
+                    1
                   }
                   invert
                   places={2}
@@ -418,7 +444,7 @@ const Statistics: React.FC<any> = (props) => {
               alignItems: "center",
             }}
           >
-            N/A
+            {safeFormattedString(props.data?.token_supply.total_supply, "")}
           </Box>
         </StatisticsCard>
         <StatisticsCard title="Max Supply" c={1}>
