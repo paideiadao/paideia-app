@@ -38,11 +38,13 @@ const Dashboard: React.FC = () => {
         sx={{
           mb: ".5rem",
           borderBottom: "1px solid",
+          maxHeight: "25vh",
+          overflowY: "hidden",
           borderBottomColor: "border.main",
           display: deviceWrapper("none", "block"),
         }}
       >
-        {daoData.design ? (
+        {daoData.design?.banner_url ? (
           <img src={daoData.design.banner_url} style={{ width: "100%" }} />
         ) : null}
       </Box>
@@ -60,7 +62,7 @@ const Dashboard: React.FC = () => {
             sx={{
               width: "100%",
               // display: deviceWrapper("-webkit-box", "flex"),
-              display: 'none',
+              display: "none",
               alignItems: "center",
               overflowX: "auto",
             }}
