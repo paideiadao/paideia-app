@@ -90,7 +90,7 @@ const TokenStats: React.FC = () => {
             borderColor: "border.main",
           }}
         >
-          Market cap
+          Market Cap
           <Box sx={{ fontSize: "1rem", color: "text.primary" }}>
             $
             {tokenStats?.market_cap.diluted_market_cap.toLocaleString(

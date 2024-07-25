@@ -289,7 +289,7 @@ const Statistics: React.FC<any> = (props) => {
               flexWrap: deviceWrapper("wrap", "nowrap"),
             }}
           >
-            <StatisticsCard title="Alll time high" c={0}>
+            <StatisticsCard title="All Time High" c={0}>
               <Box
                 sx={{
                   fontSize: deviceWrapper(".75rem", "1rem"),
@@ -312,7 +312,7 @@ const Statistics: React.FC<any> = (props) => {
                 </Box>
               </Box>
             </StatisticsCard>
-            <StatisticsCard title="All time low" c={1}>
+            <StatisticsCard title="All Time Low" c={1}>
               <Box
                 sx={{
                   fontSize: deviceWrapper(".75rem", "1rem"),
