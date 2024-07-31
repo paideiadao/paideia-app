@@ -17,6 +17,8 @@ import CancelLink from "@components/utilities/CancelLink";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { useContext, useState } from "react";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
+import { trpc } from "@utils/trpc";
+import ErgoPayModal from "@components/wallet/ErgoPayModal";
 
 interface IStakeState {
   stake: any;
@@ -24,7 +26,7 @@ interface IStakeState {
 
 const WithdrawForm: React.FC<IStakeState> = (props) => {
   const appContext = useContext<IGlobalContext>(GlobalContext);
-  const { wallet } = useWallet();
+  const { wallet, mobileWallet, dAppWallet } = useWallet();
   const ticker =
     appContext.api?.daoData?.tokenomics.token_ticker ??
     appContext.api?.daoData?.tokenomics.token_name;
@@ -39,10 +41,13 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
   const totalKeys = props.stake?.stake_keys?.length;
 
   const [value, setValue] = useState<number>(Math.min(maxStake, 100));
+  const [ergoPayUrl, setErgoPayUrl] = useState<string | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(parseFloat(event.target.value));
   };
+
+  const ergopay = trpc.transaction.generateErgoPayQrCode.useMutation();
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -61,10 +66,17 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
         },
       });
       const tx = res.data.unsigned_transaction;
-      const context = await getErgoWalletContext();
-      const signed = await context.sign_tx(tx);
-      const txId = await context.submit_tx(signed);
-      appContext.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
+      if (mobileWallet.connected) {
+        const url = await ergopay.mutateAsync({ unsignedTransaction: tx });
+        setErgoPayUrl(url.qrCode);
+      } else if (dAppWallet.connected) {
+        const context = await getErgoWalletContext();
+        const signed = await context.sign_tx(tx);
+        const txId = await context.submit_tx(signed);
+        appContext.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
+      } else {
+        appContext.api?.error("Wallet not Connected");
+      }
     } catch (e: any) {
       appContext.api?.error(e);
     }
@@ -148,6 +160,12 @@ const WithdrawForm: React.FC<IStakeState> = (props) => {
           {!loading ? "Withdraw" : <CircularProgress size={26} />}
         </Button>
       </Box>
+      <ErgoPayModal
+        url={ergoPayUrl}
+        handleClose={() => {
+          setErgoPayUrl(null);
+        }}
+      />
     </Box>
   );
 };
