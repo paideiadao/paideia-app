@@ -24,6 +24,7 @@ import { LoadingButton } from "@mui/lab";
 export const WALLET_ADDRESS = "wallet_address";
 export const WALLET_ADDRESS_LIST = "wallet_address_list";
 export const DAPP_CONNECTED = "dapp_connected";
+export const MOBILE_CONNECTED = "mobile_connected";
 
 /**
  * Note on es-lint disable line:
@@ -63,8 +64,8 @@ const AddWallet: React.FC = () => {
     wallet !== "" && !dAppWallet.connected
       ? "mobile"
       : wallet !== "" && dAppWallet.connected
-        ? "nautilus"
-        : "listing"
+      ? "nautilus"
+      : "listing"
   );
 
   // trpc
@@ -227,6 +228,12 @@ const AddWallet: React.FC = () => {
         ),
       });
     }
+    if (localStorage.getItem(MOBILE_CONNECTED)) {
+      setMobileWallet({
+        connected:
+          localStorage.getItem(MOBILE_CONNECTED) === "true" ? true : false,
+      });
+    }
 
     setInit(true);
   }, []);
@@ -241,12 +248,16 @@ const AddWallet: React.FC = () => {
         dAppWallet.connected ? "true" : "false"
       );
       localStorage.setItem(
+        MOBILE_CONNECTED,
+        mobileWallet.connected ? "true" : "false"
+      );
+      localStorage.setItem(
         WALLET_ADDRESS_LIST,
         JSON.stringify(dAppWallet.addresses)
       );
       dAppRefresh();
     }
-  }, [dAppWallet, init]);
+  }, [dAppWallet, mobileWallet, init]);
 
   React.useEffect(() => {
     // setLoading(false)
@@ -269,6 +280,7 @@ const AddWallet: React.FC = () => {
     localStorage.setItem(WALLET_ADDRESS, "");
     localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
     localStorage.setItem(DAPP_CONNECTED, "false");
+    localStorage.setItem(MOBILE_CONNECTED, "false");
     localStorage.setItem("jwt_token_login", "");
     localStorage.setItem("user_id", "");
     localStorage.setItem("alias", "");
@@ -442,7 +454,8 @@ const AddWallet: React.FC = () => {
         `ergoauth://${process.env.ERGOAUTH_DOMAIN?.replace(
           "https://",
           ""
-        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${response.verificationId
+        ).replace("http://", "")}/api/ergo-auth/request?verificationId=${
+          response.verificationId
         }&address=${address}`
       );
     } catch (e: any) {
@@ -589,18 +602,18 @@ export const getErgoWalletContext = async () => {
     try {
       context = await walletConnector.getContext();
     } catch (contextError) {
-      console.log('No context available, attempting to connect...');
+      console.log("No context available, attempting to connect...");
       await walletConnector.connect();
       context = await walletConnector.getContext(); // Try to get context again after connecting
     }
 
     if (!context) {
-      throw new Error('Failed to obtain context even after connecting.');
+      throw new Error("Failed to obtain context even after connecting.");
     }
 
     return context;
   } catch (error) {
-    console.error('Error retrieving the wallet context:', error);
+    console.error("Error retrieving the wallet context:", error);
     throw error; // Re-throw the error if you want the caller to handle it.
   }
 };
