@@ -108,6 +108,10 @@ const AddWallet: React.FC = () => {
         if (data?.status === "SIGNED") {
           localStorage.setItem("wallet_address", defaultAddress ?? walletInput);
           handleSubmitWallet(defaultAddress ?? walletInput);
+          setDAppWallet({
+            connected: false,
+            addresses: [],
+          });
           setMobileWallet({
             connected: true,
           });
@@ -248,16 +252,24 @@ const AddWallet: React.FC = () => {
         dAppWallet.connected ? "true" : "false"
       );
       localStorage.setItem(
-        MOBILE_CONNECTED,
-        mobileWallet.connected ? "true" : "false"
-      );
-      localStorage.setItem(
         WALLET_ADDRESS_LIST,
         JSON.stringify(dAppWallet.addresses)
       );
       dAppRefresh();
     }
-  }, [dAppWallet, mobileWallet, init]);
+  }, [dAppWallet, init]);
+
+  /**
+   * update persist storage
+   */
+  React.useEffect(() => {
+    if (init) {
+      localStorage.setItem(
+        MOBILE_CONNECTED,
+        mobileWallet.connected ? "true" : "false"
+      );
+    }
+  }, [mobileWallet, init]);
 
   React.useEffect(() => {
     // setLoading(false)
@@ -405,6 +417,9 @@ const AddWallet: React.FC = () => {
       setDAppWallet({
         connected: true,
         addresses: addresses,
+      });
+      setMobileWallet({
+        connected: false,
       });
     } catch (e: any) {
       globalContext.api?.error("Error logging in with Nautilus Wallet");

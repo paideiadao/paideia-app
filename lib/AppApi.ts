@@ -210,7 +210,7 @@ export class AppApi extends AbstractApi {
       }
     } else {
       this.setDaoUserData({ ...this.daoUserData, loading: false });
-      this.error("Unable to retrieve user account. ");
+      this.error("Unable to retrieve user account. Retrying...");
     }
     return response;
   }
