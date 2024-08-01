@@ -17,6 +17,8 @@ import CancelLink from "@components/utilities/CancelLink";
 import { useContext, useState } from "react";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
+import { trpc } from "@utils/trpc";
+import ErgoPayModal from "@components/wallet/ErgoPayModal";
 
 interface IStakeState {
   stake: any;
@@ -26,11 +28,12 @@ const FEE_ADJUSTMENT = 0.1;
 
 const StakingForm: React.FC<IStakeState> = (props) => {
   const appContext = useContext<IGlobalContext>(GlobalContext);
-  const { wallet, utxos } = useWallet();
+  const { wallet, utxos, mobileWallet, dAppWallet } = useWallet();
 
   const available = utxos.currentDaoTokens;
   const [value, setValue] = useState<number>(Math.min(available, 100));
   const [loading, setLoading] = useState<boolean>(false);
+  const [ergoPayUrl, setErgoPayUrl] = useState<string | null>(null);
 
   const ticker =
     appContext.api?.daoData?.tokenomics.token_ticker ??
@@ -40,15 +43,24 @@ const StakingForm: React.FC<IStakeState> = (props) => {
     setValue(parseFloat(event.target.value));
   };
 
+  const ergopay = trpc.transaction.generateErgoPayQrCode.useMutation();
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const stakeKey = props.stake?.stake_keys?.[0]?.key_id;
       const tx = (await get_tx(stakeKey)).unsigned_transaction;
-      const context = await getErgoWalletContext();
-      const signed = await context.sign_tx(tx);
-      const txId = await context.submit_tx(signed);
-      appContext.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
+      if (mobileWallet.connected) {
+        const url = await ergopay.mutateAsync({ unsignedTransaction: tx });
+        setErgoPayUrl(url.qrCode);
+      } else if (dAppWallet.connected) {
+        const context = await getErgoWalletContext();
+        const signed = await context.sign_tx(tx);
+        const txId = await context.submit_tx(signed);
+        appContext.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
+      } else {
+        appContext.api?.error("Wallet not Connected");
+      }
     } catch (e: any) {
       appContext.api?.error(e);
     }
@@ -147,6 +159,12 @@ const StakingForm: React.FC<IStakeState> = (props) => {
           {!loading ? "Stake" : <CircularProgress size={26} />}
         </Button>
       </Box>
+      <ErgoPayModal
+        url={ergoPayUrl}
+        handleClose={() => {
+          setErgoPayUrl(null);
+        }}
+      />
     </Box>
   );
 };

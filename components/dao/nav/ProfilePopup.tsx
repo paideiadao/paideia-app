@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
 import {
   DAPP_CONNECTED,
+  MOBILE_CONNECTED,
   WALLET_ADDRESS,
   WALLET_ADDRESS_LIST,
 } from "@components/wallet/AddWallet";
@@ -95,7 +96,7 @@ const rows: IProfilePopupRow[] = [
 ];
 
 export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
-  const { setWallet, setDAppWallet } = useWallet();
+  const { setWallet, setDAppWallet, setMobileWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   return (
     <Dialog
@@ -178,6 +179,7 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
           localStorage.setItem(WALLET_ADDRESS, "");
           localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
           localStorage.setItem(DAPP_CONNECTED, "false");
+          localStorage.setItem(MOBILE_CONNECTED, "false");
           localStorage.setItem("jwt_token_login", "");
           localStorage.setItem("user_id", "");
           localStorage.setItem("alias", "");
@@ -185,6 +187,9 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
           setDAppWallet({
             connected: false,
             addresses: [],
+          });
+          setMobileWallet({
+            connnected: false,
           });
           globalContext.api?.setDaoUserData(undefined);
           props.close();

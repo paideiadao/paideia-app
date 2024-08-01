@@ -1,6 +1,6 @@
 import Layout from "@components/dao/Layout";
 import { useRouter } from "next/router";
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import {
   Header,
   Subtitle,
@@ -14,6 +14,9 @@ import CancelLink from "@components/utilities/CancelLink";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { getErgoWalletContext } from "@components/wallet/AddWallet";
+import { useWallet } from "@components/wallet/WalletContext";
+import { trpc } from "@utils/trpc";
+import ErgoPayModal from "@components/wallet/ErgoPayModal";
 
 const CastVote: React.FC = () => {
   const router = useRouter();
@@ -44,6 +47,10 @@ const CastVote: React.FC = () => {
     }
   }, [context.api?.userStakeData]);
 
+  const { mobileWallet, dAppWallet } = useWallet();
+  const [ergoPayUrl, setErgoPayUrl] = useState<string | null>(null);
+  const ergopay = trpc.transaction.generateErgoPayQrCode.useMutation();
+
   const handleSubmit = async () => {
     setLoading(true);
     if (vote === null) {
@@ -70,11 +77,18 @@ const CastVote: React.FC = () => {
         };
         const res = (await context.api.post<any>("/proposals/vote", req)).data;
         const tx = res.unsigned_transaction;
-        const ergoContext = await getErgoWalletContext();
-        const signed = await ergoContext.sign_tx(tx);
-        const txId = await ergoContext.submit_tx(signed);
-        context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
-        router.back();
+        if (mobileWallet.connected) {
+          const url = await ergopay.mutateAsync({ unsignedTransaction: tx });
+          setErgoPayUrl(url.qrCode);
+        } else if (dAppWallet.connected) {
+          const context = await getErgoWalletContext();
+          const signed = await context.sign_tx(tx);
+          const txId = await context.submit_tx(signed);
+          context.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
+          router.back();
+        } else {
+          context.api?.error("Wallet not Connected");
+        }
       } catch (e: any) {
         context.api.error(e);
       }
@@ -236,6 +250,12 @@ const CastVote: React.FC = () => {
           </Box>
         </LoadingButton>
       </Box>
+      <ErgoPayModal
+        url={ergoPayUrl}
+        handleClose={() => {
+          setErgoPayUrl(null);
+        }}
+      />
     </Layout>
   );
 };

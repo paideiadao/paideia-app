@@ -12,7 +12,6 @@ import StakingForm from "@components/dao/staking/StakingForm";
 import WithdrawForm from "@components/dao/staking/WithdrawForm";
 import { deviceWrapper } from "@components/utilities/Style";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
-import { useWallet } from "@components/wallet/WalletContext";
 import { useContext, useEffect, useState } from "react";
 import { IUserStakeData } from "@components/dao/staking/YourStaking";
 
@@ -59,7 +58,6 @@ const TokenBanner: React.FC<ITokenBanner> = (props) => {
 const ManageStake: React.FC = () => {
   const tabStyle = { pl: 0, pr: 0 };
   const appContext = useContext<IGlobalContext>(GlobalContext);
-  const { utxos } = useWallet();
   const [loading, setLoading] = useState<boolean>(false);
   const [value, setValue] = useState<string>("Stake Tokens");
   const [stakeState, setStakeState] = useState<any>({});

@@ -6,3 +6,10 @@ export const paideiaApi = axios.create({
     "Content-type": "application/json",
   },
 });
+
+export const explorerApi = axios.create({
+  baseURL: `${process.env.EXPLORER_API}`,
+  headers: {
+    "Content-type": "application/json",
+  },
+});

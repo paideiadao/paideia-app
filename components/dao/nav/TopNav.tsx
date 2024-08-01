@@ -21,6 +21,7 @@ import { useWallet } from "@components/wallet/WalletContext";
 import ConnectWallet from "@components/wallet/ConnectWallet";
 import {
   DAPP_CONNECTED,
+  MOBILE_CONNECTED,
   WALLET_ADDRESS,
   WALLET_ADDRESS_LIST,
   isAddressValid,
@@ -71,6 +72,7 @@ const TopNav: React.FC<INav> = (props) => {
     localStorage.setItem(WALLET_ADDRESS, "");
     localStorage.setItem(WALLET_ADDRESS_LIST, "[]");
     localStorage.setItem(DAPP_CONNECTED, "false");
+    localStorage.setItem(MOBILE_CONNECTED, "false");
     localStorage.setItem("jwt_token_login", "");
     localStorage.setItem("user_id", "");
     localStorage.setItem("alias", "");

@@ -90,3 +90,10 @@ model LoginRequest {
 
     @@map("login_requests")
 }
+
+model ErgoPayRequest {
+    id        String @id @default(cuid())
+    reducedTx String @map("reduced_tx")
+
+    @@map("ergopay_requests")
+}

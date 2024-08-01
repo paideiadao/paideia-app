@@ -27,6 +27,8 @@ const nextConfig = {
     VERCEL_URL: process.env.VERCEL_URL,
     AUTH_DOMAIN: process.env.AUTH_DOMAIN,
     ERGOAUTH_DOMAIN: process.env.ERGOAUTH_DOMAIN,
+    ERGOPAY_DOMAIN: process.env.ERGOPAY_DOMAIN,
+    EXPLORER_API: process.env.EXPLORER_API,
     PAIDEIA_API_SECRET: process.env.PAIDEIA_API_SECRET,
   },
   images: {

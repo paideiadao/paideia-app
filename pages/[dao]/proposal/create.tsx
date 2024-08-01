@@ -42,6 +42,9 @@ import {
   IConfig,
   IUpdateConfig,
 } from "@components/dao/proposal/vote/YesNo/Actions/UpdateConfig";
+import { trpc } from "@utils/trpc";
+import { useWallet } from "@components/wallet/WalletContext";
+import ErgoPayModal from "@components/wallet/ErgoPayModal";
 
 export type ActionType =
   | IOptimisticGovernance
@@ -234,6 +237,10 @@ const CreateProposal: React.FC = () => {
     }
   }, [auto_update_config]);
 
+  const { mobileWallet, dAppWallet } = useWallet();
+  const [ergoPayUrl, setErgoPayUrl] = useState<string | null>(null);
+  const ergopay = trpc.transaction.generateErgoPayQrCode.useMutation();
+
   const handleSubmit = async () => {
     setLoading(true);
     if (context.api) {
@@ -276,17 +283,25 @@ const CreateProposal: React.FC = () => {
           await context.api.post<any>("/proposals/on_chain_proposal", proposal)
         ).data;
         const tx = data.unsigned_transaction;
-        const ergoContext = await getErgoWalletContext();
-        const signed = await ergoContext.sign_tx(tx);
-        const txId = await ergoContext.submit_tx(signed);
-        context.api.showAlert(`Transaction Submitted: ${txId}`, "success");
-        setPublish(false);
-        router.push(
-          `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
-            data.proposal.id,
-            data.proposal.name
-          )}`
-        );
+        if (mobileWallet.connected) {
+          const url = await ergopay.mutateAsync({ unsignedTransaction: tx });
+          setPublish(false);
+          setErgoPayUrl(url.qrCode);
+        } else if (dAppWallet.connected) {
+          const context = await getErgoWalletContext();
+          const signed = await context.sign_tx(tx);
+          const txId = await context.submit_tx(signed);
+          context.api?.showAlert(`Transaction Submitted: ${txId}`, "success");
+          setPublish(false);
+          router.push(
+            `/${dao === undefined ? "" : dao}/proposal/${generateSlug(
+              data.proposal.id,
+              data.proposal.name
+            )}`
+          );
+        } else {
+          context.api?.error("Wallet not Connected");
+        }
       } catch (e: any) {
         api.error(e);
       }
@@ -481,6 +496,12 @@ const CreateProposal: React.FC = () => {
             </Box>
           </Box>
         </Modal>
+        <ErgoPayModal
+          url={ergoPayUrl}
+          handleClose={() => {
+            setErgoPayUrl(null);
+          }}
+        />
       </Layout>
     </ProposalContext.Provider>
   );
