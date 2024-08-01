@@ -96,7 +96,7 @@ const rows: IProfilePopupRow[] = [
 ];
 
 export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
-  const { setWallet, setDAppWallet } = useWallet();
+  const { setWallet, setDAppWallet, setMobileWallet } = useWallet();
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   return (
     <Dialog
@@ -187,6 +187,9 @@ export const ProfilePopup: React.FC<IProfilePopup> = (props) => {
           setDAppWallet({
             connected: false,
             addresses: [],
+          });
+          setMobileWallet({
+            connnected: false,
           });
           globalContext.api?.setDaoUserData(undefined);
           props.close();
