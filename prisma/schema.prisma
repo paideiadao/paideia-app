@@ -97,3 +97,28 @@ model ErgoPayRequest {
 
     @@map("ergopay_requests")
 }
+
+model UserDetails {
+    userDetailsId       String                @id @map("user_details_id")
+    name                String
+    dao                 String
+    profileImageUrl     String?               @map("profile_image_url")
+    TransactionActivity TransactionActivity[]
+
+    @@map("user_details_cache")
+}
+
+model TransactionActivity {
+    id            String      @id @default(cuid())
+    userDetailsId String      @map("user_details_id")
+    userDetails   UserDetails @relation(fields: [userDetailsId], references: [userDetailsId], onDelete: Cascade)
+    transactionId String      @map("transaction_id")
+    href          String?
+    action        String
+    value         String?
+    category      String // enum maybe?
+    confirmed     Boolean     @default(false)
+    date          DateTime    @default(now()) @map("date")
+
+    @@map("transaction_activity")
+}

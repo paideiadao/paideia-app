@@ -35,6 +35,7 @@ import useSWR from "swr";
 import DarkSwitch from "@components/utilities/DarkSwitch";
 import { useSession } from "next-auth/react";
 import Link from "@components/Link";
+import { trpc } from "@utils/trpc";
 
 export interface INav {
   setShowMobile: (val: boolean) => void;
@@ -88,10 +89,28 @@ const TopNav: React.FC<INav> = (props) => {
     return () => window.removeEventListener("resize", closeNavOnResize);
   }, []);
 
+  const userCache = trpc.userCache.updateCache.useMutation();
+  useEffect(() => {
+    if (
+      globalContext.api?.daoUserData?.name &&
+      globalContext.api?.daoData?.dao_url
+    ) {
+      userCache.mutate({
+        name: globalContext.api.daoUserData.name,
+        dao: globalContext.api.daoData.dao_url,
+        profileImageUrl: globalContext.api?.daoUserData.profile_img_url,
+      });
+    }
+  }, [
+    globalContext.api?.daoUserData?.name,
+    globalContext.api?.daoUserData?.profile_img_url,
+    globalContext.api?.daoData?.dao_url,
+  ]);
+
   useEffect(() => {
     if (dAppWallet.connected) {
       if (dao !== undefined && dao !== "") {
-        if (globalContext.api?.daoUserData != undefined) {
+        if (globalContext.api?.daoUserData) {
           globalContext.api.setDaoUserData({
             ...globalContext.api.daoUserData,
             loading: true,
@@ -292,7 +311,14 @@ const TopNav: React.FC<INav> = (props) => {
                   Getting Started
                 </Link>
               </Button>
-              <Box sx={{ mr: globalContext.api?.daoUserData !== undefined ? null : "0.5rem" }}>
+              <Box
+                sx={{
+                  mr:
+                    globalContext.api?.daoUserData !== undefined
+                      ? null
+                      : "0.5rem",
+                }}
+              >
                 <DarkSwitch />
               </Box>
               {globalContext.api?.daoUserData !== undefined && (
