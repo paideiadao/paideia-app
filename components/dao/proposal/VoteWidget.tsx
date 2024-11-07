@@ -1,12 +1,22 @@
-import { FC, useContext, useState, useEffect } from "react";
+import {
+  // FC,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { CapsInfo } from "@components/creation/utilities/HeaderComponents";
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import {
+  // Avatar,
+  Box,
+  Button,
+  Typography,
+} from "@mui/material";
 import { VoteWidget } from "../proposals/ProposalCard";
-import dateFormat from "dateformat";
+// import dateFormat from "dateformat";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { deviceWrapper } from "@components/utilities/Style";
-import { getRandomImage } from "@components/utilities/images";
+// import { getRandomImage } from "@components/utilities/images";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import { fetcher } from "@lib/utilities";
 import useSWR from "swr";
@@ -85,7 +95,7 @@ export const niceNumber = (number: number) => {
 //   );
 // };
 
-const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
+const PaideiaVoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   const context = useContext<IGlobalContext>(GlobalContext);
   const governance = context.api?.daoData?.governance;
   const daoId = context.api?.daoData?.id;
@@ -268,4 +278,4 @@ const _VoteWidget: React.FC<IVoteWidgetProps> = (props) => {
   );
 };
 
-export default _VoteWidget;
+export default PaideiaVoteWidget;

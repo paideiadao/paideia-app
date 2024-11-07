@@ -43,7 +43,11 @@ const StyledTab = styled((props: any) => <Tab {...props} variant="outlined" />)(
   })
 );
 
-function TabPanel(props: any) {
+const TabPanel: React.FC<{
+  value: number;
+  index: number;
+  children: React.ReactNode;
+}> = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -57,7 +61,7 @@ function TabPanel(props: any) {
       {value === index && children}
     </Box>
   );
-}
+};
 
 TabPanel.propTypes = {
   children: PropTypes.node,
@@ -93,7 +97,7 @@ export default function PillTabs({ tabs }: { tabs: ITab[] }) {
         </StyledTabs>
       </Box>
       {tabs.map((tab: ITab, i: number) => (
-        <TabPanel value={value} index={i} key={i}>
+        <TabPanel value={value} index={i} key={`${i}-key`}>
           <Typography>{tab.title}</Typography>
           <Typography>{tab.content}</Typography>
           <Button href={tab.link}>Learn More</Button>
