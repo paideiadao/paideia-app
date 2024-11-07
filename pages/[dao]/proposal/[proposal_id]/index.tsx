@@ -30,7 +30,7 @@ import ProposalApi from "@lib/dao/proposal/ProposalApi";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import ProposalInfo from "@components/dao/proposal/ProposalInfo";
 import Addendums from "@components/dao/proposal/Addendums";
-import VoteWidget from "@components/dao/proposal/VoteWidget";
+import PaideiaVoteWidget from "@components/dao/proposal/VoteWidget";
 import Link from "next/link";
 import { getRandomImage } from "@components/utilities/images";
 import BackLink from "@components/utilities/BackLink";
@@ -409,7 +409,7 @@ const Proposal: React.FC = () => {
                     display: deviceWrapper("block", "none"),
                   }}
                 >
-                  <VoteWidget
+                  <PaideiaVoteWidget
                     yes={value.votes ? value.votes[1] / decimalAdjust : 0}
                     no={value.votes ? value.votes[0] / decimalAdjust : 0}
                     status={value.status}
@@ -505,7 +505,7 @@ const Proposal: React.FC = () => {
                 }}
               >
                 <Details />
-                <VoteWidget
+                <PaideiaVoteWidget
                   yes={value.votes ? value.votes[1] / decimalAdjust : 0}
                   no={value.votes ? value.votes[0] / decimalAdjust : 0}
                   status={value.status}
