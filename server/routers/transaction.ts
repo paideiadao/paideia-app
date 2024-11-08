@@ -5,6 +5,7 @@ import {
   BlockHeaders,
   ErgoBoxes,
   ErgoStateContext,
+  Parameters,
   PreHeader,
   ReducedTransaction,
   UnsignedTransaction,
@@ -97,7 +98,8 @@ const getErgoStateContext = async () => {
   const res = await getExplorerBlockHeaders();
   const block_headers = BlockHeaders.from_json(res);
   const pre_header = PreHeader.from_block_header(block_headers.get(0));
-  return new ErgoStateContext(pre_header, block_headers);
+  const parameters = Parameters.default_parameters();
+  return new ErgoStateContext(pre_header, block_headers, parameters);
 };
 
 const getExplorerBlockHeaders = async () => {
