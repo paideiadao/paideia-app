@@ -43,7 +43,7 @@
     "dateformat": "^5.0.3",
     "easymde": "^2.18.0",
     "elliptic": "^6.5.4",
-    "ergo-lib-wasm-nodejs": "^0.26.0",
+    "ergo-lib-wasm-nodejs": "^0.28.0",
     "framer-motion": "^6.5.1",
     "jsonwebtoken": "^9.0.2",
     "jsx-runtime": "^1.2.0",
