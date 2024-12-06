@@ -58,6 +58,9 @@ const allowedKeys = [
   "im.paideia.dao.banner.enabled",
   "im.paideia.dao.footer",
   "im.paideia.dao.footer.enabled",
+  "im.paideia.fees.createdao.paideia",
+  "im.paideia.fees.emit.paideia",
+  "im.paideia.fees.createproposal.paideia"
 ];
 const allowedTypes = ["Long", "String", "Boolean", "Byte"];
 
@@ -80,6 +83,9 @@ const types = {
   "im.paideia.dao.banner.enabled": "Boolean",
   "im.paideia.dao.footer": "String",
   "im.paideia.dao.footer.enabled": "Boolean",
+  "im.paideia.fees.createdao.paideia": "Long",
+  "im.paideia.fees.emit.paideia": "Long",
+  "im.paideia.fees.createproposal.paideia": "Long"
 };
 
 const UpdateConfig: React.FC<IProposalAction> = (props) => {
@@ -119,17 +125,17 @@ const UpdateConfig: React.FC<IProposalAction> = (props) => {
       try {
         const cfg = query.auto_update_config
           ? Object.keys(types)
-              .filter((type) => query[type])
-              .map((key) => {
-                return {
-                  action_type: "",
-                  key: key,
-                  // @ts-ignore
-                  type: types[key],
-                  // @ts-ignore
-                  value: query[key].toString(),
-                };
-              })
+            .filter((type) => query[type])
+            .map((key) => {
+              return {
+                action_type: "",
+                key: key,
+                // @ts-ignore
+                type: types[key],
+                // @ts-ignore
+                value: query[key].toString(),
+              };
+            })
           : [];
         const daoConfig = (
           await context.api?.get<any>(`/dao/${query.dao}/config`)
