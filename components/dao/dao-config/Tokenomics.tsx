@@ -27,7 +27,7 @@ const Tokenomics: React.FC = () => {
   const appContext = React.useContext<IGlobalContext>(GlobalContext);
   const context = React.useContext<IConfigContext>(ConfigContext);
   const data = context.api?.data;
-  const setData = context.api?.setData ?? (() => {});
+  const setData = context.api?.setData ?? (() => { });
 
   const [stakingCycleDuration, setStakingCycleDuration] =
     React.useState<number>(
@@ -66,7 +66,7 @@ const Tokenomics: React.FC = () => {
   const checkError = () => {
     return (
       ((data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
-        (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
+        (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) >= 0 &&
         (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
         (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
         (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
@@ -122,7 +122,7 @@ const Tokenomics: React.FC = () => {
                         Math.pow(
                           10,
                           appContext.api?.daoData?.tokenomics?.token_decimals ??
-                            0
+                          0
                         ),
                     },
                   },
