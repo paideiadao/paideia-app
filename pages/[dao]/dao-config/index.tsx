@@ -110,20 +110,20 @@ const DaoConfig: React.FC = () => {
             ...data.tokenomics.stakingConfig,
             stakingEmissionAmount: daoConfig
               ? Number(
-                  daoConfig["im.paideia.staking.emission.amount"]?.value
-                ) ?? 0
+                daoConfig["im.paideia.staking.emission.amount"]?.value
+              ) ?? 0
               : 0,
             stakingEmissionDelay: daoConfig
               ? Number(daoConfig["im.paideia.staking.emission.delay"]?.value) ??
-                0
+              0
               : 0,
             stakingCycleLength: daoConfig
               ? Number(daoConfig["im.paideia.staking.cyclelength"]?.value) ?? 0
               : 0,
             stakingProfitSharePct: daoConfig
               ? Number(
-                  daoConfig["im.paideia.staking.profit.sharepct"]?.value
-                ) ?? 0
+                daoConfig["im.paideia.staking.profit.sharepct"]?.value
+              ) ?? 0
               : 0,
           },
         },
@@ -135,13 +135,13 @@ const DaoConfig: React.FC = () => {
           voteDurationUnits: "minutes",
           participationWeight: daoConfig
             ? Number(
-                daoConfig["im.paideia.staking.weight.participation"]?.value
-              ) ?? 0
+              daoConfig["im.paideia.staking.weight.participation"]?.value
+            ) ?? 0
             : 0,
           pureParticipationWeight: daoConfig
             ? Number(
-                daoConfig["im.paideia.staking.weight.pureparticipation"]?.value
-              ) ?? 0
+              daoConfig["im.paideia.staking.weight.pureparticipation"]?.value
+            ) ?? 0
             : 0,
         },
         design: {
@@ -171,20 +171,20 @@ const DaoConfig: React.FC = () => {
             ...data.tokenomics.stakingConfig,
             stakingEmissionAmount: daoConfig
               ? Number(
-                  daoConfig["im.paideia.staking.emission.amount"]?.value
-                ) ?? 0
+                daoConfig["im.paideia.staking.emission.amount"]?.value
+              ) ?? 0
               : 0,
             stakingEmissionDelay: daoConfig
               ? Number(daoConfig["im.paideia.staking.emission.delay"]?.value) ??
-                0
+              0
               : 0,
             stakingCycleLength: daoConfig
               ? Number(daoConfig["im.paideia.staking.cyclelength"]?.value) ?? 0
               : 0,
             stakingProfitSharePct: daoConfig
               ? Number(
-                  daoConfig["im.paideia.staking.profit.sharepct"]?.value
-                ) ?? 0
+                daoConfig["im.paideia.staking.profit.sharepct"]?.value
+              ) ?? 0
               : 0,
           },
         },
@@ -196,13 +196,13 @@ const DaoConfig: React.FC = () => {
           voteDurationUnits: "minutes",
           participationWeight: daoConfig
             ? Number(
-                daoConfig["im.paideia.staking.weight.participation"]?.value
-              ) ?? 0
+              daoConfig["im.paideia.staking.weight.participation"]?.value
+            ) ?? 0
             : 0,
           pureParticipationWeight: daoConfig
             ? Number(
-                daoConfig["im.paideia.staking.weight.pureparticipation"]?.value
-              ) ?? 0
+              daoConfig["im.paideia.staking.weight.pureparticipation"]?.value
+            ) ?? 0
             : 0,
         },
         design: {
@@ -227,7 +227,7 @@ const DaoConfig: React.FC = () => {
       data?.basicInformation.daoName !== "" &&
       data?.basicInformation.daoUrl !== "" &&
       (data?.tokenomics.stakingConfig.stakingCycleLength ?? 0) > 0 &&
-      (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) > 0 &&
+      (data?.tokenomics.stakingConfig.stakingEmissionAmount ?? 0) >= 0 &&
       (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) >= 0 &&
       (data?.tokenomics.stakingConfig.stakingProfitSharePct ?? 0) <= 100 &&
       (data?.tokenomics.stakingConfig.stakingEmissionDelay ?? 0) >= 1 &&
@@ -237,11 +237,11 @@ const DaoConfig: React.FC = () => {
       (data?.governance.pureParticipationWeight ?? 0) >= 0 &&
       (data?.governance.pureParticipationWeight ?? 0) <= 100 &&
       Number(data?.governance.participationWeight ?? 0) +
-        Number(data?.governance.participationWeight ?? 0) >=
-        0 &&
+      Number(data?.governance.participationWeight ?? 0) >=
+      0 &&
       Number(data?.governance.participationWeight ?? 0) +
-        Number(data?.governance.pureParticipationWeight ?? 0) <=
-        100
+      Number(data?.governance.pureParticipationWeight ?? 0) <=
+      100
     );
   };
 
@@ -328,17 +328,17 @@ const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
   const voteDurationDiff =
     initState.governance.voteDuration !==
       currentState.governance.voteDuration ||
-    initState.governance.voteDurationUnits !==
+      initState.governance.voteDurationUnits !==
       currentState.governance.voteDurationUnits
       ? currentState.governance.voteDuration *
-        1000 *
-        // @ts-ignore
-        durationMapper[currentState.governance.voteDurationUnits]
+      1000 *
+      // @ts-ignore
+      durationMapper[currentState.governance.voteDurationUnits]
       : null;
   return {
     "im.paideia.dao.name":
       initState.basicInformation.daoName ===
-      currentState.basicInformation.daoName
+        currentState.basicInformation.daoName
         ? null
         : currentState.basicInformation.daoName,
     "im.paideia.dao.url":
@@ -347,32 +347,32 @@ const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
         : currentState.basicInformation.daoUrl,
     "im.paideia.dao.desc":
       initState.basicInformation.shortDescription ===
-      currentState.basicInformation.shortDescription
+        currentState.basicInformation.shortDescription
         ? null
         : currentState.basicInformation.shortDescription,
     "im.paideia.staking.emission.amount":
       initState.tokenomics.stakingConfig.stakingEmissionAmount ===
-      currentState.tokenomics.stakingConfig.stakingEmissionAmount
+        currentState.tokenomics.stakingConfig.stakingEmissionAmount
         ? null
         : currentState.tokenomics.stakingConfig.stakingEmissionAmount,
     "im.paideia.staking.emission.delay":
       initState.tokenomics.stakingConfig.stakingEmissionDelay ===
-      currentState.tokenomics.stakingConfig.stakingEmissionDelay
+        currentState.tokenomics.stakingConfig.stakingEmissionDelay
         ? null
         : currentState.tokenomics.stakingConfig.stakingEmissionDelay,
     "im.paideia.staking.cyclelength":
       initState.tokenomics.stakingConfig.stakingCycleLength ===
-      currentState.tokenomics.stakingConfig.stakingCycleLength
+        currentState.tokenomics.stakingConfig.stakingCycleLength
         ? null
         : currentState.tokenomics.stakingConfig.stakingCycleLength,
     "im.paideia.staking.profit.sharepct":
       initState.tokenomics.stakingConfig.stakingProfitSharePct ===
-      currentState.tokenomics.stakingConfig.stakingProfitSharePct
+        currentState.tokenomics.stakingConfig.stakingProfitSharePct
         ? null
         : currentState.tokenomics.stakingConfig.stakingProfitSharePct,
     "im.paideia.dao.threshold":
       initState.governance.supportNeeded ===
-      currentState.governance.supportNeeded
+        currentState.governance.supportNeeded
         ? null
         : currentState.governance.supportNeeded * 10,
     "im.paideia.dao.quorum":
@@ -381,12 +381,12 @@ const generateDiff = (initState: IConfigData, currentState: IConfigData) => {
         : currentState.governance.quorum * 10,
     "im.paideia.staking.weight.participation":
       initState.governance.participationWeight ===
-      currentState.governance.participationWeight
+        currentState.governance.participationWeight
         ? null
         : currentState.governance.participationWeight,
     "im.paideia.staking.weight.pureparticipation":
       initState.governance.pureParticipationWeight ===
-      currentState.governance.pureParticipationWeight
+        currentState.governance.pureParticipationWeight
         ? null
         : currentState.governance.pureParticipationWeight,
     "im.paideia.dao.min.proposal.time": voteDurationDiff,
