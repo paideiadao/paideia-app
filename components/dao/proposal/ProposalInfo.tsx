@@ -104,6 +104,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           background: "rgba(120,120,120,0.08)",
           p: 2,
           borderRadius: "8px",
+          width: "100%",
         }}
       >
         <Box
@@ -216,7 +217,15 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           }}
         >
           <Typography sx={{ fontWeight: 700 }}>Key:</Typography>
-          <Typography>{update.key}</Typography>
+          <Typography
+            sx={{
+              wordBreak: "break-all",
+              textAlign: "right",
+              mb: mobile ? 1 : 0,
+            }}
+          >
+            {update.key}
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -227,7 +236,15 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           }}
         >
           <Typography sx={{ fontWeight: 700 }}>Value:</Typography>
-          <Typography>{update.value}</Typography>
+          <Typography
+            sx={{
+              wordBreak: "break-all",
+              textAlign: "right",
+              mb: mobile ? 1 : 0,
+            }}
+          >
+            {update.value}
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -238,7 +255,15 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           }}
         >
           <Typography sx={{ fontWeight: 700 }}>Type:</Typography>
-          <Typography>{update.valueType}</Typography>
+          <Typography
+            sx={{
+              wordBreak: "break-all",
+              textAlign: "right",
+              mb: mobile ? 1 : 0,
+            }}
+          >
+            {update.valueType}
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -249,7 +274,15 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
           }}
         >
           <Typography sx={{ fontWeight: 700 }}>Action:</Typography>
-          <Typography>{update.action}</Typography>
+          <Typography
+            sx={{
+              wordBreak: "break-all",
+              textAlign: "right",
+              mb: mobile ? 1 : 0,
+            }}
+          >
+            {update.action}
+          </Typography>
         </Box>
       </Paper>
     );
