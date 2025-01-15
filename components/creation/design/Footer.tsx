@@ -102,57 +102,59 @@ const Footer: React.FC<{ context?: IConfigContext }> = (props) => {
               })
             }
           />
-          <Subheader title="Social Links" small />
-          <Box sx={{ mt: ".5rem" }}>
-            {data.footer.links.map((i: ISocialLink, c: number) => (
-              <SocialRow
-                c={c}
-                data={i}
-                key={`social-link-${c}`}
-                set={(m: any) => {
-                  const temp = [...data.footer.links];
-                  temp[c] = m;
-                  setData({
-                    ...data,
-                    footer: {
-                      ...data.footer,
-                      links: temp,
-                    },
-                  });
-                }}
-                delete={(m: any) => {
-                  const temp = [...data.footer.links];
-                  temp.splice(c, 1);
-                  setData({
-                    ...data,
-                    footer: {
-                      ...data.footer,
-                      links: temp,
-                    },
-                  });
-                }}
-              />
-            ))}
-          </Box>
-          <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 2 }}
-          >
-            <Button
-              sx={{ pr: "0.5rem" }}
-              disabled
-              size="small"
-              onClick={() => {
-                const temp = [...data.footer.links];
-                temp.push({
-                  socialNetwork: "",
-                  address: "",
-                });
-                setData({ ...data, footer: { ...data.footer, links: temp } });
-              }}
+          <Box sx={{ display: "none" }}>
+            <Subheader title="Social Links" small />
+            <Box sx={{ mt: ".5rem" }}>
+              {data.footer.links.map((i: ISocialLink, c: number) => (
+                <SocialRow
+                  c={c}
+                  data={i}
+                  key={`social-link-${c}`}
+                  set={(m: any) => {
+                    const temp = [...data.footer.links];
+                    temp[c] = m;
+                    setData({
+                      ...data,
+                      footer: {
+                        ...data.footer,
+                        links: temp,
+                      },
+                    });
+                  }}
+                  delete={(m: any) => {
+                    const temp = [...data.footer.links];
+                    temp.splice(c, 1);
+                    setData({
+                      ...data,
+                      footer: {
+                        ...data.footer,
+                        links: temp,
+                      },
+                    });
+                  }}
+                />
+              ))}
+            </Box>
+            <Box
+              sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 2 }}
             >
-              <AddIcon sx={{ mr: ".5rem" }} />
-              Add {data.footer.links.length > 0 ? "Another" : ""}
-            </Button>
+              <Button
+                sx={{ pr: "0.5rem" }}
+                disabled
+                size="small"
+                onClick={() => {
+                  const temp = [...data.footer.links];
+                  temp.push({
+                    socialNetwork: "",
+                    address: "",
+                  });
+                  setData({ ...data, footer: { ...data.footer, links: temp } });
+                }}
+              >
+                <AddIcon sx={{ mr: ".5rem" }} />
+                Add {data.footer.links.length > 0 ? "Another" : ""}
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Collapse>

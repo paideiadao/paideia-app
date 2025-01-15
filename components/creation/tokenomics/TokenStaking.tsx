@@ -14,6 +14,7 @@ import {
   OutlinedInput,
   InputLabel,
   SelectChangeEvent,
+  Tooltip,
 } from "@mui/material";
 import { LearnMore } from "../utilities/HeaderComponents";
 import React, { useEffect, useState } from "react";
@@ -88,11 +89,11 @@ const TokenStaking: React.FC<IData<ITokenomics>> = (props) => {
         title="Token Staking Config"
         tooltipTitle="Staking Config"
         tooltipText="
-        Stake Pool Size: Number of governance tokens to lock into the stake pool, 0 or more.\n
         Emission Amount: Amount of governance tokens distributed to stakers every staking cycle.\n
         Emission Delay: Delay for rewards to be distributed to stakers (staker first gets reward after so many cycles), 1 to 10.\n
         Profit Share Percentage: Amount of DAO profit to share with stakers, 0 to 100.\n
-        Staking Cycle Duration: Length of a staking cycle, reward and profit is shared every cycle.\n"
+        Staking Cycle Duration: Length of a staking cycle, reward and profit is shared every cycle.\n
+        These values can be changed through proposals once the DAO is live."
       />
       <Grid
         container
@@ -101,139 +102,120 @@ const TokenStaking: React.FC<IData<ITokenomics>> = (props) => {
         sx={{ mt: 1 }}
       >
         <Grid item md={6}>
-          <TextField
-            type="number"
-            value={props.data.stakingConfig.stakePoolSize}
-            sx={{ width: "100%" }}
-            label="Stake Pool Size"
-            onChange={(e) =>
-              props.setData({
-                ...props.data,
-                stakingConfig: {
-                  ...props.data.stakingConfig,
-                  stakePoolSize: e.target.value,
-                },
-              })
-            }
-          />
+          <Tooltip title="Amount of governance tokens distributed to stakers every staking cycle.">
+            <TextField
+              type="number"
+              value={props.data.stakingConfig.stakingEmissionAmount}
+              sx={{ width: "100%" }}
+              label="Emission Amount"
+              onChange={(e) =>
+                props.setData({
+                  ...props.data,
+                  stakingConfig: {
+                    ...props.data.stakingConfig,
+                    stakingEmissionAmount: e.target.value,
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Grid>
         <Grid item md={6}>
-          <TextField
-            type="number"
-            value={props.data.stakingConfig.stakingEmissionAmount}
-            sx={{ width: "100%" }}
-            label="Emission Amount (Decimal Adjusted)"
-            onChange={(e) =>
-              props.setData({
-                ...props.data,
-                stakingConfig: {
-                  ...props.data.stakingConfig,
-                  stakingEmissionAmount: e.target.value,
-                },
-              })
-            }
-          />
+          <Tooltip title="Delay for rewards to be distributed to stakers (staker first gets reward after so many cycles), 1 to 10. Keep it at 1 if in doubt.">
+            <TextField
+              value={props.data.stakingConfig.stakingEmissionDelay}
+              sx={{ width: "100%" }}
+              label="Emission Delay"
+              onChange={(e) =>
+                props.setData({
+                  ...props.data,
+                  stakingConfig: {
+                    ...props.data.stakingConfig,
+                    stakingEmissionDelay: e.target.value,
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Grid>
         <Grid item md={6}>
-          <TextField
-            value={props.data.stakingConfig.stakingEmissionDelay}
-            sx={{ width: "100%" }}
-            label="Emission Delay"
-            onChange={(e) =>
-              props.setData({
-                ...props.data,
-                stakingConfig: {
-                  ...props.data.stakingConfig,
-                  stakingEmissionDelay: e.target.value,
-                },
-              })
-            }
-          />
+          <Tooltip title="Amount of DAO profit to share with stakers, 0 to 100. The rest goes to the DAO treasury.">
+            <TextField
+              value={props.data.stakingConfig.stakingProfitSharePct}
+              sx={{ width: "100%" }}
+              label="Profit Share Percentage"
+              onChange={(e) =>
+                props.setData({
+                  ...props.data,
+                  stakingConfig: {
+                    ...props.data.stakingConfig,
+                    stakingProfitSharePct: e.target.value,
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Grid>
         <Grid item md={6}>
-          <TextField
-            value={props.data.stakingConfig.stakingProfitSharePct}
-            sx={{ width: "100%" }}
-            label="Profit Share Percentage"
-            onChange={(e) =>
-              props.setData({
-                ...props.data,
-                stakingConfig: {
-                  ...props.data.stakingConfig,
-                  stakingProfitSharePct: e.target.value,
-                },
-              })
-            }
-          />
-        </Grid>
-      </Grid>
-      <Box
-        sx={{
-          mt: 2,
-        }}
-      >
-        <Box sx={{ fontSize: ".9rem", fontWeight: 410, my: "1rem" }}>
-          How long does a staking cycle last?
-        </Box>
-        <FormControl
-          sx={{
-            m: 1,
-            ml: 0,
-            width: deviceStruct("100%", "80%", "50%", "50%", "30%"),
-          }}
-          variant="outlined"
-        >
-          <InputLabel htmlFor={`challenge-time-input-cycle`}>
-            Staking Cycle Duration
-          </InputLabel>
-          <OutlinedInput
-            notched
-            id={`challenge-time-input-cycle`}
-            type="number"
-            value={stakingCycleDuration === 0 ? "" : stakingCycleDuration}
-            onChange={(e) =>
-              setStakingCycleDuration(parseFloat(e.target.value))
-            }
-            endAdornment={
-              <Box
-                sx={{
-                  height: "100%",
-                  width: "100%",
-                  backgroundColor: "backgroundColor.main",
-                  color: "text.primary",
-                  lineHeight: "350%",
-                  textAlign: "center",
-                  borderRadius: "0 .3rem .3rem 0",
-                  mr: "-.8rem",
-                  ml: ".5rem",
-                  display: "flex",
-                }}
-              >
-                <FormControl fullWidth>
-                  <Select
-                    labelId="currency-select-label"
-                    id="currency-select"
-                    variant="outlined"
-                    value={stakingCycleDurationUnits}
-                    sx={{ height: "100%", color: "text.primary" }}
-                    onChange={(e: SelectChangeEvent<string>) =>
-                      setStakingCycleDurationUnits(e.target.value)
-                    }
+          <Tooltip title="Length of a staking cycle, reward and profit is shared every cycle. A small fee is paid to Paideia every cycle, so don't set it lower than 5 days unless you have a good reason.">
+            <FormControl
+              sx={{
+                m: 0,
+                ml: 0,
+                width: "100%" //deviceStruct("100%", "80%", "50%", "50%", "30%"),
+              }}
+              variant="outlined"
+            >
+              <InputLabel htmlFor={`challenge-time-input-cycle`}>
+                Staking Cycle Duration
+              </InputLabel>
+              <OutlinedInput
+                notched
+                id={`challenge-time-input-cycle`}
+                sx={{ width: "100%" }}
+                type="number"
+                value={stakingCycleDuration === 0 ? "" : stakingCycleDuration}
+                onChange={(e) =>
+                  setStakingCycleDuration(parseFloat(e.target.value))
+                }
+                endAdornment={
+                  <Box
+                    sx={{
+                      height: "100%",
+                      width: "100%",
+                      backgroundColor: "backgroundColor.main",
+                      color: "text.primary",
+                      lineHeight: "350%",
+                      textAlign: "center",
+                      borderRadius: "0 .3rem .3rem 0",
+                      mr: "-.8rem",
+                      ml: ".5rem",
+                      display: "flex",
+                    }}
                   >
-                    <MenuItem value="seconds">Seconds</MenuItem>
-                    <MenuItem value="minutes">Minutes</MenuItem>
-                    <MenuItem value="hours">Hours</MenuItem>
-                    <MenuItem value="days">Days</MenuItem>
-                    <MenuItem value="weeks">Weeks</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            }
-            label="Staking Cycle Duration"
-          />
-        </FormControl>
-      </Box>
-    </Box>
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="currency-select-label"
+                        id="currency-select"
+                        variant="outlined"
+                        value={stakingCycleDurationUnits}
+                        sx={{ height: "100%", color: "text.primary" }}
+                        onChange={(e: SelectChangeEvent<string>) =>
+                          setStakingCycleDurationUnits(e.target.value)
+                        }
+                      >
+                        <MenuItem value="days">Days</MenuItem>
+                        <MenuItem value="weeks">Weeks</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                }
+                label="Staking Cycle Duration"
+              />
+            </FormControl>
+          </Tooltip>
+        </Grid>
+      </Grid></Box>
   );
 };
 

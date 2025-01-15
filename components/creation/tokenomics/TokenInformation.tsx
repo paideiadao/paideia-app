@@ -95,8 +95,8 @@ const TokenInformation: React.FC<IData<ITokenomics>> = (props) => {
         title="Token Information"
         // small
         tooltipTitle="Token Information"
-        tooltipText="If using an existing token, double check the token ID using ergo explorer. Once set, this cannot be changed. The token you choose will be the governance token for the DAO you create. "
-        // tooltipLink="/here"
+        tooltipText="Token creation not supported yet so you need to use an existing token, double check the token ID using ergo explorer. Once set, this cannot be changed. The token you choose will be the governance token for the DAO you create. "
+      // tooltipLink="/here"
       />
       <ButtonGroup
         variant="outlined"

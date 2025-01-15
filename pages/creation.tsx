@@ -78,8 +78,8 @@ export default function Creation() {
       distributions: [],
       stakingConfig: {
         stakePoolSize: 0,
-        stakingEmissionAmount: 1,
-        stakingEmissionDelay: 2,
+        stakingEmissionAmount: 0,
+        stakingEmissionDelay: 1,
         stakingCycleLength: 864000000,
         stakingProfitSharePct: 50,
       },
