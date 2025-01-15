@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AlertTitle, Box, Grid } from "@mui/material";
+import { AlertTitle, Box, Grid, Tooltip } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
 import { CreationContext } from "@lib/creation/Context";
@@ -16,7 +16,7 @@ const BasicInformation: React.FC = () => {
       ...creationContext.api.data,
       basicInformation: {
         ...data,
-        daoUrl: clean === "" ? clean : "app.paideia.im/" + clean,
+        daoUrl: clean,
       },
     });
   }, [data.daoName]);
@@ -48,36 +48,40 @@ const BasicInformation: React.FC = () => {
       </Box>
       <Grid container spacing={2} direction={{ xs: "column", md: "row" }}>
         <Grid item md={6}>
-          <TextField
-            label="DAO Name"
-            sx={{ width: "100%" }}
-            value={data.daoName}
-            onChange={(e) =>
-              creationContext.api.setData({
-                ...creationContext.api.data,
-                basicInformation: {
-                  ...data,
-                  daoName: e.target.value,
-                },
-              })
-            }
-          />
+          <Tooltip title="The name of the DAO to be created, will be used in minted tokens so keep it short and sweet!">
+            <TextField
+              label="DAO Name"
+              sx={{ width: "100%" }}
+              value={data.daoName}
+              onChange={(e) =>
+                creationContext.api.setData({
+                  ...creationContext.api.data,
+                  basicInformation: {
+                    ...data,
+                    daoName: e.target.value,
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Grid>
         <Grid item md={6}>
-          <TextField
-            label="DAO URL"
-            sx={{ width: "100%" }}
-            value={data.daoUrl}
-            onChange={(e) =>
-              creationContext.api.setData({
-                ...creationContext.api.data,
-                basicInformation: {
-                  ...data,
-                  daoUrl: e.target.value,
-                },
-              })
-            }
-          />
+          <Tooltip title="The url to reach the DAO, must start with https://app.paideia.im/">
+            <TextField
+              label="DAO URL"
+              sx={{ width: "100%" }}
+              value={"https://app.paideia.im/" + data.daoUrl}
+              onChange={(e) =>
+                creationContext.api.setData({
+                  ...creationContext.api.data,
+                  basicInformation: {
+                    ...data,
+                    daoUrl: e.target.value.replaceAll("https://app.paideia.im/", ""),
+                  },
+                })
+              }
+            />
+          </Tooltip>
         </Grid>
       </Grid>
       <Box sx={{ width: "100%", mt: 2 }}>
@@ -93,27 +97,29 @@ const BasicInformation: React.FC = () => {
         </Alert>
       </Box>
       <Box sx={{ width: "100%" }}>
-        <TextField
-          label="DAO Short Description"
-          inputProps={{
-            maxLength: 250,
-          }}
-          multiline
-          value={data.shortDescription}
-          onChange={(e) =>
-            creationContext.api.setData({
-              ...creationContext.api.data,
-              basicInformation: {
-                ...data,
-                shortDescription: e.target.value,
-              },
-            })
-          }
-          rows={5}
-          sx={{ width: "100%" }}
-          FormHelperTextProps={{ sx: { textAlign: "right" } }}
-          helperText={`${data.shortDescription.length}/250`}
-        />
+        <Tooltip title="Description which will be shown on your DAO page (can be changed through proposal once the DAO is live)">
+          <TextField
+            label="DAO Short Description"
+            inputProps={{
+              maxLength: 250,
+            }}
+            multiline
+            value={data.shortDescription}
+            onChange={(e) =>
+              creationContext.api.setData({
+                ...creationContext.api.data,
+                basicInformation: {
+                  ...data,
+                  shortDescription: e.target.value,
+                },
+              })
+            }
+            rows={5}
+            sx={{ width: "100%" }}
+            FormHelperTextProps={{ sx: { textAlign: "right" } }}
+            helperText={`${data.shortDescription.length}/250`}
+          />
+        </Tooltip>
       </Box>
     </Box>
   );

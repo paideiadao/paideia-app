@@ -20,16 +20,16 @@ const DistributionListing: React.FC<{ data: ITokenomics }> = (props) => {
   let tokenomics = [
     !props.data.activateTokenomics
       ? {
-          title: "Token holders",
-          subtitle: `${props.data.tokenHolders.length} holders`,
-          balance: tokenHolderBalance,
-          tokenTicker: props.data.tokenTicker,
-          percentage: percentage(
-            tokenHolderBalance / props.data.tokenAmount,
-            2,
-            false
-          ),
-        }
+        title: "Token holders",
+        subtitle: `${props.data.tokenHolders.length} holders`,
+        balance: tokenHolderBalance,
+        tokenTicker: props.data.tokenTicker,
+        percentage: percentage(
+          tokenHolderBalance / props.data.tokenAmount,
+          2,
+          false
+        ),
+      }
       : undefined,
     {
       title: "Unassigned tokens",
@@ -164,11 +164,6 @@ const Tokenomics: React.FC<{
                 data.tokenomics.tokenId.length
               )
             }
-          />
-          <Value
-            labelWidth="35%"
-            title="Stake Pool Size"
-            value={data.tokenomics.stakingConfig.stakePoolSize}
           />
           <Value
             labelWidth="35%"

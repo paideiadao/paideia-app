@@ -35,49 +35,51 @@ const Governance: React.FC<{
       </AccordionSummary>
       <AccordionDetails>
         <Box sx={{ width: "100%" }}>
-          <Value
-            labelWidth="35%"
-            title="Optimistic Governance"
-            component={
-              <ActiveInactive value={data.governance.optimisticGovernance} />
-            }
-          />
-          {data.governance.optimisticGovernance && (
-            <>
-              <Value
-                labelWidth="35%"
-                title="White listed members"
-                component={<WalletListing data={data.governance.whitelist} />}
-              />
-              <Value
-                labelWidth="35%"
-                title="Collateral amount"
-                value={data.governance.amount}
-              />
-              <Value
-                labelWidth="35%"
-                title="Collateral currency"
-                value={data.governance.currency}
-              />
-              <Value
-                labelWidth="35%"
-                title="Challenge time"
-                value={
-                  data.governance.timeToChallenge +
-                  " " +
-                  data.governance.timeToChallengeUnits.charAt(0).toUpperCase() +
-                  data.governance.timeToChallengeUnits.slice(1)
-                }
-              />
-            </>
-          )}
-          <Value
-            labelWidth="35%"
-            title="Quadratic Voting"
-            component={
-              <ActiveInactive value={data.governance.quadraticVoting} />
-            }
-          />
+          <Box sx={{ display: "none" }}>
+            <Value
+              labelWidth="35%"
+              title="Optimistic Governance"
+              component={
+                <ActiveInactive value={data.governance.optimisticGovernance} />
+              }
+            />
+            {data.governance.optimisticGovernance && (
+              <>
+                <Value
+                  labelWidth="35%"
+                  title="White listed members"
+                  component={<WalletListing data={data.governance.whitelist} />}
+                />
+                <Value
+                  labelWidth="35%"
+                  title="Collateral amount"
+                  value={data.governance.amount}
+                />
+                <Value
+                  labelWidth="35%"
+                  title="Collateral currency"
+                  value={data.governance.currency}
+                />
+                <Value
+                  labelWidth="35%"
+                  title="Challenge time"
+                  value={
+                    data.governance.timeToChallenge +
+                    " " +
+                    data.governance.timeToChallengeUnits.charAt(0).toUpperCase() +
+                    data.governance.timeToChallengeUnits.slice(1)
+                  }
+                />
+              </>
+            )}
+            <Value
+              labelWidth="35%"
+              title="Quadratic Voting"
+              component={
+                <ActiveInactive value={data.governance.quadraticVoting} />
+              }
+            />
+          </Box>
           <Value
             labelWidth="35%"
             title="Support"
