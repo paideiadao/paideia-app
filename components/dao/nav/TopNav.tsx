@@ -121,7 +121,7 @@ const TopNav: React.FC<INav> = (props) => {
 
   const { data: apiNotifications, error: notificationsError } = useSWR(
     globalContext.api?.daoUserData?.id &&
-      `/notificatons/${globalContext.api?.daoUserData?.id}`,
+    `/notificatons/${globalContext.api?.daoUserData?.id}`,
     fetcher
   );
 
@@ -153,10 +153,10 @@ const TopNav: React.FC<INav> = (props) => {
 
   const unreadCount = notifications
     ? notifications
-        .map((notification: { is_read: boolean }) =>
-          notification.is_read ? 0 : 1
-        )
-        .reduce((a: number, c: number) => a + c, 0)
+      .map((notification: { is_read: boolean }) =>
+        notification.is_read ? 0 : 1
+      )
+      .reduce((a: number, c: number) => a + c, 0)
     : null;
 
   useEffect(() => {
@@ -197,7 +197,7 @@ const TopNav: React.FC<INav> = (props) => {
       {props.reduced ? (
         <>
           {globalContext.api?.daoUserData !== undefined &&
-          globalContext.api.daoUserData.loading === true ? (
+            globalContext.api.daoUserData.loading === true ? (
             <Box sx={{ width: { xs: "40px", md: "160px" } }}>
               <Skeleton
                 variant={desktop ? "rounded" : "circular"}
@@ -292,6 +292,11 @@ const TopNav: React.FC<INav> = (props) => {
                   Getting Started
                 </Link>
               </Button>
+              <Button color="primary" variant="outlined" sx={{ mr: 1 }}>
+                <Link href="https://app.paideia.im/creation">
+                  Create DAO
+                </Link>
+              </Button>
               <Box sx={{ mr: globalContext.api?.daoUserData !== undefined ? null : "0.5rem" }}>
                 <DarkSwitch />
               </Box>
@@ -319,7 +324,7 @@ const TopNav: React.FC<INav> = (props) => {
                 </Box>
               )}
               {globalContext.api?.daoUserData !== undefined &&
-              globalContext.api.daoUserData.loading === true ? (
+                globalContext.api.daoUserData.loading === true ? (
                 <Box sx={{ width: { xs: "40px", md: "160px" } }}>
                   <Skeleton
                     variant={desktop ? "rounded" : "circular"}
