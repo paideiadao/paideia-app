@@ -65,8 +65,8 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
       const amounts: { [key: string]: string } = {};
       const infos: Record<string, AssetInfo | null> = {};
       if (!actions) return;
-      for (const action of actions) {
-        for (const output of action.action?.outputs ?? []) {
+      for (const [i_action, action] of actions.entries()) {
+        for (const [i_output, output] of action.action?.outputs.entries() ?? []) {
           if (output.tokens) {
             for (const tokenArray of output.tokens) {
               const tokenDetails = generateTokenDetails(tokenArray);
@@ -75,12 +75,12 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
                 infos[tokenDetails.tokenId] = assetInfo;
 
                 if (assetInfo) {
-                  amounts[tokenDetails.tokenId] = adjustAmount(
+                  amounts[i_action + i_output + tokenDetails.tokenId] = adjustAmount(
                     tokenDetails.amount,
                     assetInfo.decimals
                   ).toString();
                 } else {
-                  amounts[tokenDetails.tokenId] =
+                  amounts[i_action + i_output + tokenDetails.tokenId] =
                     tokenDetails.amount.toString(); // Without decimals
                 }
               }
@@ -95,7 +95,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
     fetchAllTokenDescriptions();
   }, [actions]);
 
-  const renderOutput = (output: any) => {
+  const renderOutput = (output: any, action_ix: number, output_ix: number) => {
     return (
       <Paper
         key={output.address}
@@ -180,7 +180,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
                 >
                   <Typography>Amount:</Typography>
                   <Typography>
-                    {tokenAmounts[tokenId] || "Loading..."}
+                    {tokenAmounts[action_ix + output_ix + tokenId] || "Loading..."}
                   </Typography>
                 </Box>
                 {!tokenInfos[tokenId] && (
@@ -299,7 +299,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
         )}
       </Box>
       <CapsInfo title="Proposal Actions" />
-      {actions?.map((action) => (
+      {actions?.map((action, action_ix) => (
         <Box key={action.actionType} sx={{ mb: 4 }}>
           <Box
             sx={{
@@ -361,7 +361,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
             </Typography>
           </Box>
           <Box>
-            {action.action?.outputs?.map((output) => renderOutput(output))}
+            {action.action?.outputs?.map((output, output_ix) => renderOutput(output, action_ix, output_ix))}
             {action.action &&
               concatUpdates(action.action).map((update) =>
                 renderUpdate(update)
