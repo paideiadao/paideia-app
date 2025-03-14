@@ -28,9 +28,9 @@ type AssetInfo = {
   name: string;
   description: string;
   decimals: number;
-  totalMinted: number;
-  nftType: string;
-  extraMetaData: Record<string, any>;
+  minted: number;
+  token_type: string;
+  token_meta_data: any;
 };
 
 const NERGS = 1000 * 1000 * 1000;
@@ -38,7 +38,7 @@ const NERGS = 1000 * 1000 * 1000;
 const tokenInfo = async (tokenId: string): Promise<AssetInfo> => {
   try {
     const response = await axios.get(
-      `https://api.ergopad.io/asset/info/${tokenId}`
+      `https://api.cruxfinance.io/crux/asset_info/${tokenId}`
     );
     return response.data;
   } catch (error) {
@@ -389,9 +389,9 @@ const fetchAssetInfo = async (token: TokenDetails): Promise<AssetInfo> => {
       name: "",
       description: "",
       decimals: 0,
-      totalMinted: 0,
-      nftType: "",
-      extraMetaData: {},
+      minted: 0,
+      token_type: "Unknown",
+      token_meta_data: {},
     };
   }
 };
