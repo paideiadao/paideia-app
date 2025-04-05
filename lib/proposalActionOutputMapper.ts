@@ -15,11 +15,11 @@ export const bPaideiaSendFundsBasic = (
       outputs: funds.map((fundDetails) => {
         return {
           address: fundDetails.address,
-          nergs: fundDetails.ergs * NERGs + 1000000,
+          nergs: Math.round(fundDetails.ergs * NERGs) + 1000000,
           tokens: fundDetails.tokens.map((token) => {
             return [
               token.tokenId,
-              Number(token.amount) * Math.pow(10, token.decimals),
+              Math.round(Number(token.amount) * Math.pow(10, token.decimals)),
             ];
           }),
           registers: [],
