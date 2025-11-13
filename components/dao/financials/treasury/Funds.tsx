@@ -73,7 +73,7 @@ const Funds: React.FC<any> = ({ treasuryData }) => {
       const ergs =
         treasuryData.balance.confirmed.nanoErgs / (1000 * 1000 * 1000);
       const price = (
-        await context.api?.get<any>("https://api.ergopad.io/asset/price/ergo")
+        await context.api?.get<any>("https://api.cruxfinance.io/coingecko/erg_price")
       ).data.price;
       setFunds([
         {
