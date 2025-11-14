@@ -93,6 +93,9 @@ importers:
       classnames:
         specifier: ^2.3.1
         version: 2.5.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       cookies-next:
         specifier: ^4.1.1
         version: 4.3.0
@@ -120,6 +123,9 @@ importers:
       jsx-runtime:
         specifier: ^1.2.0
         version: 1.2.0
+      nanoid:
+        specifier: ^5.1.6
+        version: 5.1.6
       next:
         specifier: 12.2.6
         version: 12.2.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -135,6 +141,9 @@ importers:
       prisma:
         specifier: ^5.11.0
         version: 5.22.0
+      prop-types:
+        specifier: ^15.8.1
+        version: 15.8.1
       react:
         specifier: ^17.0.2
         version: 17.0.2
@@ -152,7 +161,7 @@ importers:
         version: 8.0.7(@types/react@17.0.2)(react@17.0.2)
       react-material-ui-carousel:
         specifier: ^3.4.2
-        version: 3.4.2(3pp5gw7co3brbkgu5wd7rfwsdi)
+        version: 3.4.2(fd6d48c7274a9156e048b2530b5bce97)
       react-qr-code:
         specifier: ^2.0.7
         version: 2.0.15(react@17.0.2)
@@ -214,6 +223,9 @@ importers:
       '@types/node':
         specifier: ^17.0.23
         version: 17.0.45
+      '@types/prop-types':
+        specifier: ^15.7.15
+        version: 15.7.15
       '@types/react':
         specifier: 17.0.2
         version: 17.0.2
@@ -223,6 +235,9 @@ importers:
       '@types/react-slick':
         specifier: ^0.23.8
         version: 0.23.13
+      '@types/react-transition-group':
+        specifier: ^4.4.12
+        version: 4.4.12(@types/react@17.0.2)
       '@types/scheduler':
         specifier: ^0.16.2
         version: 0.16.8
@@ -960,8 +975,8 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/prop-types@15.7.13':
-    resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
+  '@types/prop-types@15.7.15':
+    resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
 
   '@types/react-beautiful-dnd@13.1.8':
     resolution: {integrity: sha512-E3TyFsro9pQuK4r8S/OL6G99eq7p8v29sX0PM7oT8Z+PJfZvSQTx4zTQbUJ+QZXioAF0e7TGBEcA1XhYhCweyQ==}
@@ -975,8 +990,10 @@ packages:
   '@types/react-syntax-highlighter@15.5.13':
     resolution: {integrity: sha512-uLGJ87j6Sz8UaBAooU0T6lWJ0dBmjZgN1PZTrj05TNql2/XpC6+4HhMT5syIdFUUt+FASfCeLLv4kBygNU+8qA==}
 
-  '@types/react-transition-group@4.4.11':
-    resolution: {integrity: sha512-RM05tAniPZ5DZPzzNFP+DmrcOdD0efDUxMy3145oljWSl3x9ZV5vhme98gTxFrj2lhXvmGNnUiuDyJgY9IKkNA==}
+  '@types/react-transition-group@4.4.12':
+    resolution: {integrity: sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==}
+    peerDependencies:
+      '@types/react': 17.0.2
 
   '@types/react@17.0.2':
     resolution: {integrity: sha512-Xt40xQsrkdvjn1EyWe1Bc0dJLcil/9x2vAuW7ya+PuQip4UYUaXyhzWmAbwRsdMgwOFHpfp7/FFZebDU6Y8VHA==}
@@ -2370,6 +2387,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.6:
+    resolution: {integrity: sha512-c7+7RQ+dMB5dPwwCp4ee1/iV/q2P6aK1mTZcfr1BTuVlyW9hJYiMPybJCcnBlQtuSmTIWNeazm/zqNoZSSElBg==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
 
@@ -3677,7 +3699,7 @@ snapshots:
       '@mui/types': 7.2.19(@types/react@17.0.2)
       '@mui/utils': 5.16.6(@types/react@17.0.2)(react@17.0.2)
       '@popperjs/core': 2.11.8
-      '@types/react-transition-group': 4.4.11
+      '@types/react-transition-group': 4.4.12(@types/react@17.0.2)
       clsx: 2.1.1
       csstype: 3.1.3
       prop-types: 15.8.1
@@ -3734,7 +3756,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.26.0
       '@mui/types': 7.2.19(@types/react@17.0.2)
-      '@types/prop-types': 15.7.13
+      '@types/prop-types': 15.7.15
       clsx: 2.1.1
       prop-types: 15.8.1
       react: 17.0.2
@@ -3784,7 +3806,7 @@ snapshots:
       '@mui/material': 5.16.7(@emotion/react@11.13.3(@types/react@17.0.2)(react@17.0.2))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@17.0.2)(react@17.0.2))(@types/react@17.0.2)(react@17.0.2))(@types/react@17.0.2)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@mui/system': 5.16.7(@emotion/react@11.13.3(@types/react@17.0.2)(react@17.0.2))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@17.0.2)(react@17.0.2))(@types/react@17.0.2)(react@17.0.2))(@types/react@17.0.2)(react@17.0.2)
       '@mui/utils': 5.16.6(@types/react@17.0.2)(react@17.0.2)
-      '@types/react-transition-group': 4.4.11
+      '@types/react-transition-group': 4.4.12(@types/react@17.0.2)
       clsx: 1.2.1
       prop-types: 15.8.1
       react: 17.0.2
@@ -4017,7 +4039,7 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/prop-types@15.7.13': {}
+  '@types/prop-types@15.7.15': {}
 
   '@types/react-beautiful-dnd@13.1.8':
     dependencies:
@@ -4038,13 +4060,13 @@ snapshots:
     dependencies:
       '@types/react': 17.0.2
 
-  '@types/react-transition-group@4.4.11':
+  '@types/react-transition-group@4.4.12(@types/react@17.0.2)':
     dependencies:
       '@types/react': 17.0.2
 
   '@types/react@17.0.2':
     dependencies:
-      '@types/prop-types': 15.7.13
+      '@types/prop-types': 15.7.15
       csstype: 3.1.3
 
   '@types/scheduler@0.16.8': {}
@@ -4632,7 +4654,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.0)
       eslint-plugin-react: 7.37.2(eslint@8.57.0)
       eslint-plugin-react-hooks: 5.0.0-canary-7118f5dd7-20230705(eslint@8.57.0)
@@ -4657,20 +4679,20 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.17.1
       eslint: 8.57.0
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.8.1
       is-bun-module: 1.2.1
       is-glob: 4.0.3
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
       - eslint-import-resolver-node
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -4681,7 +4703,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -4692,7 +4714,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3)(eslint@8.57.0)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@4.9.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -5748,6 +5770,8 @@ snapshots:
 
   nanoid@3.3.7: {}
 
+  nanoid@5.1.6: {}
+
   napi-build-utils@1.0.2: {}
 
   native-run@2.0.1:
@@ -6093,7 +6117,7 @@ snapshots:
   react-markdown@8.0.7(@types/react@17.0.2)(react@17.0.2):
     dependencies:
       '@types/hast': 2.3.10
-      '@types/prop-types': 15.7.13
+      '@types/prop-types': 15.7.15
       '@types/react': 17.0.2
       '@types/unist': 2.0.11
       comma-separated-tokens: 2.0.3
@@ -6112,7 +6136,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-material-ui-carousel@3.4.2(3pp5gw7co3brbkgu5wd7rfwsdi):
+  react-material-ui-carousel@3.4.2(fd6d48c7274a9156e048b2530b5bce97):
     dependencies:
       '@emotion/react': 11.13.3(@types/react@17.0.2)(react@17.0.2)
       '@emotion/styled': 11.13.0(@emotion/react@11.13.3(@types/react@17.0.2)(react@17.0.2))(@types/react@17.0.2)(react@17.0.2)
