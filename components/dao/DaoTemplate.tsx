@@ -13,6 +13,7 @@ import { useDaoSlugs } from "@hooks/useDaoSlugs";
 import { useWallet } from "@components/wallet/WalletContext";
 import ErrorPage from "@components/error/ErrorPage";
 import { IUserStakeData } from "./staking/YourStaking";
+import SecurityUpgradeBanner from "@components/dao/SecurityUpgradeBanner";
 
 const DaoTemplate: React.FC = (props) => {
   const globalContext = React.useContext<IGlobalContext>(GlobalContext);
@@ -134,6 +135,10 @@ const DaoTemplate: React.FC = (props) => {
             }}
           >
             <TopNav showMobile={showMobile} setShowMobile={setShowMobile} />
+            <SecurityUpgradeBanner
+              status={daoData?.security_upgrade}
+              daoSlug={daoSlug}
+            />
             <Box sx={{ width: "100%" }} onClick={() => setShowMobile(false)}>
               {daoError ? (
                 <ErrorPage

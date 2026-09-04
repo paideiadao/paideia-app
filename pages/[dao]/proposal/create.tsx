@@ -68,6 +68,7 @@ export interface IProposalAction {
     | "Support"
     | "Quorum"
     | "Optimistic Governance"
+    | "Security Upgrade"
     | undefined;
   icon?: React.ReactNode;
   description?: string;
@@ -262,6 +263,11 @@ const CreateProposal: React.FC = () => {
               );
             }
             if (action.name === "Update DAO Config") {
+              // @ts-ignore
+              const data: IUpdateConfig = action.data;
+              return bPaideiaUpdateDAOConfig(data.config, data.activation_time);
+            }
+            if (action.name === "Security Upgrade") {
               // @ts-ignore
               const data: IUpdateConfig = action.data;
               return bPaideiaUpdateDAOConfig(data.config, data.activation_time);
@@ -543,7 +549,11 @@ const validateErrors = (
       )
       .some((error) => error) ||
     value.actions
-      .filter((action) => action.name === "Update DAO Config")
+      .filter(
+        (action) =>
+          action.name === "Update DAO Config" ||
+          action.name === "Security Upgrade"
+      )
       .map((action) => {
         // @ts-ignore
         const data: IUpdateConfig = action.data;
@@ -565,7 +575,9 @@ const validateErrors = (
       .filter((action) => action.name)
       .some(
         (action) =>
-          action.name !== "Update DAO Config" && action.name !== "Send Funds"
+          action.name !== "Update DAO Config" &&
+          action.name !== "Send Funds" &&
+          action.name !== "Security Upgrade"
       );
   if (!errors.voting && !errors.actionConfig) {
     const endTime =

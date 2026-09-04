@@ -29,6 +29,9 @@ import { deviceWrapper } from "@components/utilities/Style";
 import ActionSelect from "./ActionSelect";
 import { getData } from "../Options/DraggableContext";
 import UpdateConfig from "./Actions/UpdateConfig";
+import SecurityUpgrade from "./Actions/SecurityUpgrade";
+import SecurityIcon from "@mui/icons-material/Security";
+import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 
 export interface IActionType {
   title:
@@ -41,6 +44,7 @@ export interface IActionType {
     | "Quorum"
     | "Optimistic Governance"
     | "Update DAO Config"
+    | "Security Upgrade"
     | undefined;
   subtitle: string;
   icon: JSX.Element;
@@ -56,6 +60,8 @@ const renderDisplay = (display: string, props: IProposalAction) => {
       return <SendFunds {...props} />;
     case "Update DAO Config":
       return <UpdateConfig {...props} />;
+    case "Security Upgrade":
+      return <SecurityUpgrade {...props} />;
     case "Create Liquidity Pool":
       return <LiquidityPool {...props} />;
     case "Change DAO's Description":
@@ -72,6 +78,7 @@ const renderDisplay = (display: string, props: IProposalAction) => {
 };
 
 const AddAction: React.FC<IProposalAction> = (props) => {
+  const globalContext = React.useContext<IGlobalContext>(GlobalContext);
   const actionTypes: IActionType[] = [
     {
       title: "Send Funds",
@@ -85,6 +92,17 @@ const AddAction: React.FC<IProposalAction> = (props) => {
       icon: <SettingsIcon />,
       mostCommon: true,
     },
+    ...(globalContext.api?.daoData?.security_upgrade?.needed
+      ? [
+          {
+            title: "Security Upgrade" as const,
+            subtitle:
+              "Upgrade this DAO's governance contracts to the patched (1.1.0) versions",
+            icon: <SecurityIcon />,
+            mostCommon: true,
+          },
+        ]
+      : []),
     // {
     //   title: "Create Liquidity Pool",
     //   subtitle: "Create a liquidity pool with a set amount of tokens",
