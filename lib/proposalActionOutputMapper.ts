@@ -40,11 +40,10 @@ export const bPaideiaUpdateDAOConfig = (
     action: {
       optionId: 1,
       activationTime: activation_time,
+      // A removal is a key deletion; paideia-api's UpdateConfigAction.remove is List[str].
       remove: config
         .filter((cfg) => cfg.action_type === "remove")
-        .map((cfg) => {
-          return { key: cfg.key, valueType: cfg.type, value: cfg.value };
-        }),
+        .map((cfg) => cfg.key),
       update: config
         .filter((cfg) => cfg.action_type === "update")
         .map((cfg) => {
