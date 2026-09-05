@@ -142,6 +142,7 @@ export interface IProposal {
   user_followers?: number[];
   voting_duration: number;
   end_date?: Date;
+  box_id?: string;
 }
 
 export interface ICreateProposalErrors {

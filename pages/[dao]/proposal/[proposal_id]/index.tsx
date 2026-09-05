@@ -35,6 +35,7 @@ import Link from "next/link";
 import { getRandomImage } from "@components/utilities/images";
 import BackLink from "@components/utilities/BackLink";
 import Details from "@components/dao/proposal/Details";
+import RetrySubmit from "@components/dao/proposal/RetrySubmit";
 import Follow, { FollowMobile } from "@components/utilities/Follow";
 import useSWR from "swr";
 import { attrOrUndefined, fetcher, getWsUrl } from "@lib/utilities";
@@ -415,6 +416,7 @@ const Proposal: React.FC = () => {
                     status={value.status}
                   />
                 </Box>
+                <RetrySubmit />
                 <TabContext value={tab}>
                   <Box
                     sx={{
