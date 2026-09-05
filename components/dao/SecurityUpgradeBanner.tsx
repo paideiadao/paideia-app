@@ -6,6 +6,7 @@ import { generateSlug } from "@lib/utilities";
 export interface ISecurityUpgradeProposalRef {
   proposalIndex: number;
   name: string;
+  proposalId?: string;
 }
 
 export interface ISecurityUpgradeStatus {
@@ -42,8 +43,11 @@ const SecurityUpgradeBanner: React.FC<ISecurityUpgradeBanner> = ({
       ? status.staleDefaults.join(", ")
       : null;
 
+  // proposal pages are keyed by the api's proposal id; the on-chain index is not a route
   const href = active
-    ? `/${daoSlug}/proposal/${generateSlug(active.proposalIndex, active.name)}`
+    ? active.proposalId
+      ? `/${daoSlug}/proposal/${generateSlug(active.proposalId, active.name)}`
+      : `/${daoSlug}/proposals`
     : `/${daoSlug}/proposal/create`;
 
   return (
