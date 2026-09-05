@@ -66,7 +66,7 @@ const ProposalInfo: React.FC<ProposalInfoProps> = ({ content, actions }) => {
       const infos: Record<string, AssetInfo | null> = {};
       if (!actions) return;
       for (const [i_action, action] of actions.entries()) {
-        for (const [i_output, output] of action.action?.outputs.entries() ?? []) {
+        for (const [i_output, output] of (action.action?.outputs ?? []).entries()) {
           if (output.tokens) {
             for (const tokenArray of output.tokens) {
               const tokenDetails = generateTokenDetails(tokenArray);
