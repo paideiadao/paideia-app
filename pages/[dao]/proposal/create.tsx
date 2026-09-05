@@ -251,6 +251,10 @@ const CreateProposal: React.FC = () => {
           throw "Form Validation Error";
         }
         const imgUrl = await getBannerUrl();
+        // computed once so the proposal's end_time and any vote-end-activated
+        // action carry the identical timestamp
+        const endTime =
+          new Date().getTime() + value.voting_duration * TIME_MS + BUFFER;
         const actions = value.actions
           .filter((action) => action.name)
           .map((action) => {
@@ -270,7 +274,9 @@ const CreateProposal: React.FC = () => {
             if (action.name === "Security Upgrade") {
               // @ts-ignore
               const data: IUpdateConfig = action.data;
-              return bPaideiaUpdateDAOConfig(data.config, data.activation_time);
+              // activate as soon as the vote has ended; the manifest's own
+              // activationTime is a placeholder (0)
+              return bPaideiaUpdateDAOConfig(data.config, endTime);
             }
             return null; // should never occur
           });
@@ -282,8 +288,7 @@ const CreateProposal: React.FC = () => {
           actions: [...actions],
           is_proposal: true,
           stake_key: stake.stake_keys[0].key_id,
-          end_time:
-            new Date().getTime() + value.voting_duration * TIME_MS + BUFFER,
+          end_time: endTime,
         };
         const data = (
           await context.api.post<any>("/proposals/on_chain_proposal", proposal)
@@ -566,8 +571,9 @@ const validateErrors = (
             (config) =>
               config.action_type === "" ||
               config.key === "" ||
-              config.type === "" ||
-              config.value === ""
+              // a removal is a key deletion: it carries no type/value by design
+              (config.action_type !== "remove" &&
+                (config.type === "" || config.value === ""))
           ).length > 0
       )
       .some((error) => error) ||
@@ -586,7 +592,12 @@ const validateErrors = (
       null,
       value.actions
         .filter((action) => action.name)
-        .map((action) => action?.data?.activation_time ?? 0)
+        // a Security Upgrade activates exactly when the vote ends (see handleSubmit)
+        .map((action) =>
+          action.name === "Security Upgrade"
+            ? endTime
+            : action?.data?.activation_time ?? 0
+        )
     );
     errors.activationTime =
       isNaN(actionTime) || isNaN(endTime) || actionTime < endTime;

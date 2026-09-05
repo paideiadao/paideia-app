@@ -64,8 +64,9 @@ const SecurityUpgrade: React.FC<IProposalAction> = (props) => {
         ];
         setValue({
           config,
-          activation_time:
-            manifest.activationTime ?? Date.now() + 2 * 24 * 60 * 60 * 1000,
+          // placeholder only: the create page substitutes the proposal's end
+          // time at submit, so the upgrade performs as soon as the vote ends
+          activation_time: Date.now(),
         });
       } catch (e) {
         console.log(e);
@@ -97,7 +98,8 @@ const SecurityUpgrade: React.FC<IProposalAction> = (props) => {
       {value.config.length > 0 ? (
         <Box sx={{ fontSize: ".9rem" }}>
           This will upgrade the following contract config keys to their
-          patched (1.1.0) values:
+          patched (1.1.0) values. The upgrade executes as soon as the vote
+          ends and passes:
           <Box component="ul" sx={{ mt: ".5rem", mb: 0, pl: "1.25rem" }}>
             {value.config.map((cfg, index) => (
               <Box component="li" key={`security-upgrade-key-${index}`}>
