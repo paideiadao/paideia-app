@@ -11,6 +11,7 @@ export interface ISecurityUpgradeProposalRef {
 export interface ISecurityUpgradeStatus {
   needed: boolean;
   staleContracts: string[];
+  staleDefaults?: string[];
   activeProposal?: ISecurityUpgradeProposalRef | null;
 }
 
@@ -36,6 +37,10 @@ const SecurityUpgradeBanner: React.FC<ISecurityUpgradeBanner> = ({
     status.staleContracts && status.staleContracts.length > 0
       ? status.staleContracts.join(", ")
       : "governance contracts";
+  const staleDefaults =
+    status.staleDefaults && status.staleDefaults.length > 0
+      ? status.staleDefaults.join(", ")
+      : null;
 
   const href = active
     ? `/${daoSlug}/proposal/${generateSlug(active.proposalIndex, active.name)}`
@@ -61,6 +66,9 @@ const SecurityUpgradeBanner: React.FC<ISecurityUpgradeBanner> = ({
         {active
           ? "An upgrade proposal is open — cast your vote to apply the patched contracts."
           : "Open a governance proposal to upgrade to the patched (1.1.0) contracts."}
+        {staleDefaults
+          ? ` Default templates still to update: ${staleDefaults}.`
+          : null}
       </Alert>
     </Box>
   );
