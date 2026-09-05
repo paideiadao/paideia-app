@@ -399,8 +399,12 @@ const fetchAssetInfo = async (token: TokenDetails): Promise<AssetInfo> => {
 const concatUpdates = (action: IAction) => {
   if (!action) return [];
   // @ts-ignore
-  const remove = (action?.remove ?? []).map((config) => {
-    return { ...config, action: "remove" };
+  // a removal is a key deletion: the api carries it as a bare key string
+  // (older rows may still hold {key, valueType, value} objects)
+  const remove = (action?.remove ?? []).map((config: any) => {
+    return typeof config === "string"
+      ? { key: config, valueType: "", value: "", action: "remove" }
+      : { ...config, action: "remove" };
   });
   // @ts-ignore
   const update = (action?.update ?? []).map((config) => {
