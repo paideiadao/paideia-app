@@ -321,23 +321,11 @@ const CreateProposal: React.FC = () => {
     setLoading(false);
   };
 
+  // Without a custom image, store "" and let the views fall back to the
+  // bundled placeholder instead of uploading the placeholder itself.
   const getBannerUrl = async () => {
-    const image = await getImg();
-    const imgRes = await api.uploadFile(image);
-    return imgRes.data.image_url;
-  };
-
-  const getImg = async () => {
-    if (value.image?.file === undefined) {
-      const defaultImage = await fetch(value.image?.url ?? "");
-      const data = await defaultImage.blob();
-      const metadata = {
-        type: "image/jpeg",
-      };
-      return new File([data], "test.jpg", metadata);
-    } else {
-      return value.image.file;
-    }
+    if (value.image?.file === undefined) return "";
+    return await api.tryUploadFile(value.image.file);
   };
 
   return (

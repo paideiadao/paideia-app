@@ -165,8 +165,8 @@ const Proposal: React.FC = () => {
                   to bottom, transparent, ${
                     themeContext.theme === DarkTheme ? "black" : "white"
                   }
-                ), url(${value.image_url})`,
-                      `url('${value.image_url}')`
+                ), url(${value.image_url || getRandomImage()})`,
+                      `url('${value.image_url || getRandomImage()}')`
                     ),
                     p: ".75rem",
                     maxHeight: "30rem",

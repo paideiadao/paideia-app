@@ -41,6 +41,7 @@ import Details from "@components/dao/discussion/Details";
 import useDidMountEffect from "@components/utilities/hooks";
 import { GlobalContext, IGlobalContext } from "@lib/AppContext";
 import CommentsApi from "@lib/CommentsApi";
+import { getRandomImage } from "@components/utilities/images";
 
 const Discussion: React.FC = () => {
   const themeContext = React.useContext(ThemeContext);
@@ -140,8 +141,8 @@ const Discussion: React.FC = () => {
                   to bottom, transparent, ${
                     themeContext.theme === DarkTheme ? "black" : "white"
                   }
-                ), url(${data.image_url})`,
-                  `url(${data.image_url})`
+                ), url(${data.image_url || getRandomImage()})`,
+                  `url(${data.image_url || getRandomImage()})`
                 ),
                 backgroundSize: "100% 100%",
                 p: "1rem",

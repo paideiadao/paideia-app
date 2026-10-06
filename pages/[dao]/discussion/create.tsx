@@ -202,24 +202,11 @@ const CreateDiscussion: React.FC = () => {
                     if (!loading) {
                       setLoading(true);
                       try {
-                        let image;
-                        if (value.image?.file === undefined) {
-                          const defaultImage = await fetch(
-                            value.image?.url ?? ""
-                          );
-                          const data = await defaultImage.blob();
-                          const metadata = {
-                            type: "image/jpeg",
-                          };
-                          image = new File([data], "test.jpg", metadata);
-                        } else {
-                          image = value.image.file;
-                        }
-                        const imgRes = await api.uploadFile(image);
-                        const res = await api.create(
-                          imgRes.data.image_url,
-                          daoId
-                        );
+                        const imageUrl =
+                          value.image?.file === undefined
+                            ? ""
+                            : await api.tryUploadFile(value.image.file);
+                        const res = await api.create(imageUrl, daoId);
                         if (res?.status == 200) {
                           router.push(
                             `/${

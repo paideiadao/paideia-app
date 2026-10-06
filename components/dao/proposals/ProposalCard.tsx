@@ -736,7 +736,9 @@ const ProposalCard: React.FC<IProposalCard> = (props) => {
                   minHeight: "7rem",
                   height: "100%",
                   backgroundColor: "fileInput.outer",
-                  backgroundImage: `url('${props.image_url}')`,
+                  backgroundImage: `url('${
+                    props.image_url || getRandomImage()
+                  }')`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
