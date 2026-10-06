@@ -154,6 +154,21 @@ export class AbstractApi {
     );
   }
 
+  // Image hosting is best-effort: on failure, warn and return "" so the
+  // proposal or discussion still gets created, just without an image.
+  async tryUploadFile(file: File): Promise<string> {
+    try {
+      const res = await this.uploadFile(file);
+      return res.data.image_url ?? "";
+    } catch (e) {
+      this.showAlert(
+        "Image upload is unavailable, continuing without the image.",
+        "warning"
+      );
+      return "";
+    }
+  }
+
   async changeAddress(address: string): Promise<any> {
     const data = await this.post<{ data: ISigningMessage }>(
       "/users/change_primary_address",
